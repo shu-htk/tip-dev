@@ -1,0 +1,6 @@
+title "Reading test.csv"
+read v test.csv (fs:",")
+xlab "1st column data" 
+ylab "2nd and 3rd column data" 
+plot v1 v2 (lc:red)
+plot v1 v3 (lc:blue rp:1)

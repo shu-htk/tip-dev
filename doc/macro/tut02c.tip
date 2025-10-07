@@ -1,0 +1,9 @@
+title "Drawing fill box, line and text"
+read x,y test.csv (fs:",")
+xlab "x" ; ylab "y1, y2" 
+plot x y1 (lc:red)
+plot x y2 (lc:blue rp:1)
+opt (rc:1)
+fbox 0.80 0.95 0.80 0.95 (ft:solid)
+line 0.82 0.86 0.90 0.90 (lc:red);  text 0.88 0.90 "y1"
+line 0.82 0.86 0.85 0.85 (lc:blue); text 0.88 0.85 "y2"

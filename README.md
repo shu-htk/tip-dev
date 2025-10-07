@@ -18,3 +18,19 @@ basically it works on Linux, Windows (WSL, cygwin) and so on.
 - save to pdf or png file
 
 and so on
+
+## Install
+
+- [how to install](doc/install.md)
+
+## Tutorial
+
+- [tutorial](doc/tutorial.md)
+
+## Macro Examples
+
+- [macro examples](doc/examples.md)
+
+## Command Reference
+
+- [command reference](doc/reference.md)

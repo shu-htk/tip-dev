@@ -1,0 +1,20 @@
+opt (ts:1.2)
+@ nx = 3
+@ ny = 4
+@ nn = [nx]*[ny]
+
+for bo (1) ;# box drawing order: 0=horizontal, 1=vertical
+# clear all
+ if [bo]==0
+   title "Horizontal Order"
+ else
+   title "Vertical Order"
+ fi
+ div [nx] [ny] (bo:[bo])
+ do n 1 [nn]
+   box 0 2 0 2
+   text 1 1 "[n]" (ts:2)
+#   wait 0.1
+ end
+# if [bo]==0; wait 0; fi
+end

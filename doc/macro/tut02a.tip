@@ -1,0 +1,5 @@
+set x=range(100,1,100)
+set bg=random(100,gaus,0.1,-0.2)
+set y1=sin(x)
+set y2=0.3*cos(0.5*x)+bg
+write x,y1,y2 test.csv (fs:",")

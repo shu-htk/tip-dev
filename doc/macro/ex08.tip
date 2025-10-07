@@ -1,0 +1,34 @@
+opt (gd:1 lc:red sc:red)
+@ pi2 = 3.14159265*2
+@ MHz = e6
+@ us = e-6
+@ freq = 1.234567[MHz]
+#@ freq = 2.34567[MHz]
+@ amp = 1.5
+@ f0 = [freq]-0.05[MHz]
+@ f1 = [freq]+0.1[MHz]
+
+set t = range(10001,0,100[us]) ;# dt=0.01us, full_scale=100us
+set bg = random(10001,gaus,0.1,0.5) ;# background noise(sgm=0.1 ofst=0.5)
+set v = [amp]*sin([freq]*[pi2]*t) + bg
+
+div 2 2
+#viewport 0.15 0.95 0.15 0.9 0.7
+title "frequency=[freq](Hz) FFT plot with BH window"
+xlab "frequency (Hz)"
+fplot t v (xt:1[MHz] xr:0,10[MHz] fw:bh ys:log bp:1) # bh=Blackman-Harris
+
+title "frequency=[freq](Hz) FFT fitting by gaussian"
+xlab "frequency (Hz)"
+plot v_fx v_fy (cc:"[f0]<v_fx<[f1]" ys:lin lw:0 st:star bp:2)
+fbox 0.45 0.98 0.50 0.95 (ft:solid fc:white lc:black rc:1)
+fit v_fx_cut v_fy_cut g (cp:0.45,0.9 rc:1 ts:0.8 lc:green cf:c)
+
+div 1 2
+#viewport 0.08 0.97 0.1 0.95 0.75
+viewport 0.08 0.97 0.1 0.95 0.3
+title "frequency=[freq](Hz) time domain sinusoidal fitting"
+xlab "time (sec)"
+plot t v (xt:1[us] lw:0 st:dot xr:0,20[us] bp:2)
+fbox 0.6 0.95 0.48 0.95 (ft:solid fc:white lc:black rc:1)
+fit t v s (fq:[c1] fr:0,12[us] lc:green cp:0.6,0.9 rc:1 ts:0.8)

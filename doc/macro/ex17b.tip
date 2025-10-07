@@ -1,0 +1,34 @@
+opt (gd:1)
+div 1 3
+
+@ n = 5000 ;# number of data
+@ ts1 = "2020-01-01 00:00:00" ;# string of the start time (local time)
+@ ts2 = "2024-12-31 23:59:59" ;# string of the end time (local time)
+@ t1 = time([ts1])            ;# convert ts1 to the unix epoch time (UTC)
+@ t2 = time([ts2])            ;# convert ts2 to the unix epoch time (UTC)
+
+opt (sd:0)                    ;# set random seed 0 (fixed to compare ex17a)
+set t = range([n],[t1],[t2])  ;# ranged data of the unix time from t1 to t2
+set v = random([n],exp)       ;# dummy data (random exponetial) for y-axis
+
+set year = time(t,year)       ;# convert the unix time to years(local time)
+title "[ts1] - [ts2] (x-axis is year)"
+plot year v (xn:6)
+
+set ts = time(t,str)         ;# convert the unix time to string (local time)
+cut t,v "2022<=year<2023"    ;# choose the year from 2022-1-1 to 2022-12-31
+set mon = time(t_cut,mon)    ;# conver the unix time to the month in 2022
+title "cut by '2022<=year<2023' (x-axis is month)"
+plot mon v_cut (xt:1 xn:1)
+@ x=1.3
+for name (Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec)
+ text [x] -0.3 "[name]" (tc:red); ++x
+end
+
+cut t,v "ts==2022-04-*"     ;# choose 2022-4 by the time string
+@ day_sec = 24*3600
+set day = time(t_cut,day) ;# convert the unix time to the day in April
+title "cut by 'ts==2022-04-*' (x-axis is day)"
+plot day v_cut (xt:1 xn:1 st:star ym:0.2)
+line 7 13 0 0 (lc:red ae:3) ; # draw arrow from 7th to 13th day
+text 7.5 -0.4 "7th to 13th days" (tc:red)

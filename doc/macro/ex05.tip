@@ -1,0 +1,18 @@
+title "Greek letters and some Font effects"
+div 1 1
+opt (gd:0 lw:2)
+box 0 14 0 10
+@ clist = "A B C D E F G H I K L M N O P Q R S T U W X Y Z "
+@ clist += "a b c d e f g h i k l m n o p q r s t u w x y z"
+@ n=0
+for c ([clist])
+ @ x = 1+[n]%12
+ @ y = 9-floor([n]/12)
+ text [x] [y] "#g[c]"
+ ++n
+end
+text 2 4.5 "y=x#u2 (superscript)#d"
+text 7 4.5 "y=F#dn (subscript)#u"
+text 2 3 "#fn Normal (sans-serif) Font : #ga #gb #gg sin(2#gp#gH)"
+text 2 2 "#fr Roman (serif) Font : #ga #gb #gg sin(2#gp#gH)"
+text 2 1 "#fi Italic Font : #ga #gb #gg sin(2#gp#gH)"

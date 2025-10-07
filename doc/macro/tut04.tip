@@ -1,0 +1,5 @@
+title "2D-Histogram of gaus.dist (sigm=5,mean=10 and sigm=8,mean=20)"
+zlab "Num of entries"
+set x = random(100000,gaus,5,10)
+set y = random(100000,gaus,8,20)
+hplot2 x y (nx:30 ny:30)

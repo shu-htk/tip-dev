@@ -1,0 +1,59 @@
+# ex07b
+```
+opt (gd:1 lw:0 lc:green st:dot rc:1)
+viewport 0.15 0.97 0.15 0.9 0.72
+
+fmt %.6f
+@ ndata = 1000 ; # number of data
+@ sigm = 0.05  ; # sigma of random gaussian
+set bg = random([ndata],gaus,[sigm]) ; # background noise (random gaussian)
+
+div 2 2
+
+title "Exponential Fitting" ;#------------------------------------------------
+@ p0 = 3
+@ p1 = -1.2
+set x = range([ndata],0,2)
+set y = [p0]*exp([p1]*x) + bg
+plot x y
+fit x y exp (cp:0.5,0.8 ts:0.8 cf:c)
+print input  p0=[p0] p1=[p1]\n
+print fitted c0=[c0] c1=[c1]\n
+
+title "Logarithm Fitting" ;#------------------------------------------------
+@ p0 = 1
+@ p1 = 0.1
+set x = range([ndata],0,5)
+set y = [p0]+log(x+[p1]) + bg
+plot x y
+fit x y log (cp:0.5,0.5 ts:0.8 cf:c)
+print input  p0=[p0] p1=[p1]\n
+print fitted c0=[c0] c1=[c1]\n
+
+title "Sinusoidal Fitting" ;#------------------------------------------------
+@ pi2 = 3.14159265*2
+@ p0 = 0
+@ p1 = 1
+@ p2 = 1
+@ p3 = 0.6
+set x = range([ndata],-1,1)
+set y = [p0] + [p1]*sin([pi2]*[p3]*x) + [p2]*cos([pi2]*[p3]*x) + bg
+plot x y (yr:-2,4)
+fit x y sin (fq:[p3] cp:0.1,0.9 ts:0.8 cf:c)
+print input  p0=[p0] p1=[p1] p2=[p2] p3=[p3]\n
+print fitted c0=[c0] c1=[c1] c2=[c2] c3=[c3]\n
+
+title "Circular Fitting" ;#------------------------------------------------
+@ p0 = 0
+@ p1 = 0
+@ p2 = 1.8
+set t = range([ndata],0,[pi2])
+set bg2 = random([ndata],gaus,[sigm]) ; # bg2 is not correrated to bg
+set x = [p2]*cos(t) + [p0] + bg
+set y = [p2]*sin(t) + [p1] + bg2
+plot x y
+fit x y circ (cp:0.25,0.7 ts:0.8 cf:c)
+print input  p0=[p0] p1=[p1] p2=[p2]\n
+print fitted c0=[c0] c1=[c1] c2=[c2]\n
+```
+![](fig/ex07b.png)

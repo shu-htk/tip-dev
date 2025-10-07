@@ -1,0 +1,6 @@
+title "Histogram of gaussian distribution (sigm=5,mean=10)"
+ylab "Num of entries"
+set x = random(100000,gaus,5,10)
+hplot x (nb:50)
+hfit x gaus (lc:green cp:0.03,0.9 rc:1 ts:0.8)
+stat x (cp:0.03,0.6 rc:1 ts:0.8)

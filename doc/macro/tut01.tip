@@ -1,0 +1,5 @@
+title "Plotting the data and fitting the curve"
+set x = {1,2,3,4,5,6,7,8,9,10}
+set y = 2*x*x
+plot x y (lw:0 st:star sc:red gd:1)
+fit x y quad (cp:1,200 lc:blue)
