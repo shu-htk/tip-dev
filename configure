@@ -1,0 +1,188 @@
+#!/bin/bash
+
+# targets w/o plplot
+t1=(my_macro)
+
+# targets with plplot and Epics
+t2=(tip)
+
+# default insltall dir
+#install_dir=/usr/local/bin
+install_dir=$HOME/bin
+
+echo "mkdir bin, include/thl"
+mkdir -p bin
+mkdir -p include/thl
+
+echo "cp c++03 files"
+cp -p src/c++03/*.cc src
+cp -p include/c++03/*.hh include/thl
+
+if [ ! -e bin/check_c++11 ] ; then
+  echo "generating src/check_c++11.cc"
+  cat << END > src/check_c++11.cc
+#include <cstdio>
+int main() {
+  if(__cplusplus >= 201103L) printf("post11\n"); else printf("pre11\n");
+}
+END
+  echo "check if c++11 avalable"
+  g++ -o bin/check_c++11 src/check_c++11.cc
+fi
+cpp11=`bin/check_c++11`
+if [ $cpp11 == "post11" ] ; then
+  echo "cp c++11 files"
+  cp -p src/c++11/*.cc src
+  cp -p include/c++11/*.hh include/thl
+fi
+
+rm -f Makefile
+
+# headers
+grep '^#2:' $0 | sed "s/#2://g" > Makefile.2
+
+# headers for PLPLOT
+pkg=null
+pkg_path=null
+
+# seach PLPLOT in you home diectory or old plplot-path
+for d in $HOME/plplot/lib /usr/lib /usr/local/lib
+do
+  for f in plplot plplotd
+  do
+    if [ -e $d/pkgconfig/$f.pc ] ; then
+      pkg=$f
+      pkg_path=$d
+    fi
+  done
+done
+if [ -e $HOME/plplot/include/plplot ] ; then
+ if [ ! -e $HOME/plplot/include/plplot/plplot ] ; then
+   ln -s $HOME/plplot/include/plplot $HOME/plplot/include/plplot/plplot
+ fi
+fi
+
+# seach PLPLOT in standard path of package manager (debian, red-hat)
+if [ $pkg_path == null ] ; then
+  for d in /usr/lib/x86_64-linux-gnu /usr/lib64
+  do
+    if [ -e $d/pkgconfig/plplot.pc ] ; then
+      pkg=plplot
+      pkg_path=$d
+    fi
+  done
+fi
+
+if [ $pkg != null ] ; then
+  ver=`grep Version $pkg_path/pkgconfig/$pkg.pc | awk '{print $2}'`
+  v1=`echo $ver | awk -F . '{print $1}'`
+  v2=`echo $ver | awk -F . '{print $2}'`
+  v3=`echo $ver | awk -F . '{print $3}'`
+  opt=`echo $v2 | awk '{if($1>12) print 1;else print 0;}'`
+  echo "PLPLOT: Version $ver (Major=$v1 Mid=$v2 Minor=$v3) new=$opt"
+  grep '^#3:' $0 | sed "s/#3://g" | sed "s|%BASE|$pkg_path|g" >> Makefile.2
+  grep '^#31:' $0 | sed "s/#31://g"|sed "s|%PKG|$pkg|g" |sed "s|%OPT|$opt|g" \
+   >> Makefile.2
+  echo PLPLOT: $pkg_path/pkgconfig/$pkg.pc
+fi
+
+# headers for EPICS
+if [ -e $EPICS_BASE/include/cadef.h ] ; then
+  grep '^#32:' $0 | sed "s/#32://g" >> Makefile.2
+  base_ver=`grep ^BASE_ $EPICS_BASE/configure/CONFIG_BASE_VERSION | awk -F= '{if($2 ~ /YES/) print $1}'`
+  echo "EPICS $base_ver"
+fi
+
+# complie
+targets=""
+for t in ${t1[@]}
+do
+  grep '^#41:' $0 | sed "s/#41://g" | sed "s|%TGT|$t|g" >> Makefile.2
+  targets="$targets bin/$t"
+done
+
+if [ $pkg != null ] ; then
+  for t in ${t2[@]}
+  do
+    if [ -e $EPICS_BASE/include/cadef.h ] ; then
+      grep '^#43:' $0 | sed "s/#43://g" | sed "s|%TGT|$t|g" >> Makefile.2
+    else
+      grep '^#42:' $0 | sed "s/#42://g" | sed "s|%TGT|$t|g" >> Makefile.2
+    fi
+    targets="$targets bin/$t"
+  done
+else
+    echo " ***************************************************"
+    echo " tip wll not be compiled because PLPLOT is not found."
+    echo " ***************************************************"
+fi
+
+# install
+echo "INSTALL_DIR: $install_dir"
+grep '^#5:' $0 | sed "s/#5://g" \
+    | sed "s|%INSTALL_DIR|$install_dir|g" \
+    | sed "s|%REP|${PWD##*/}|g" >> Makefile.2
+
+# targets
+echo TARGETS: $targets
+grep '^#1:' $0 | sed "s/#1://g" | sed "s|%TARGETS|$targets|g" > Makefile.1
+clk=`grep -c clock_gettime /usr/include/time.h`
+if [ $clk -ne 0 ] ; then
+ echo "found clock_gettime"
+ grep '^#12:' $0 | sed "s/#12://g" >> Makefile.1
+fi
+
+cat Makefile.1 Makefile.2 > Makefile
+rm Makefile.1 Makefile.2
+
+echo "** configure normal end **"
+
+#1:TARGETS = %TARGETS
+#1:all: $(TARGETS) 
+#1:CC=g++
+##1:CC=clang++
+#1:TAG = $(shell git describe --tags --always)
+#1:LOG = $(shell git log -1 --pretty=format:'%h, %ad, %an' --date=iso)
+##1:CFLG = -Wall -std=c++11
+#1:CFLG = -Wall
+#1:CFLG += -D GIT_VER="\"$(TAG) $(LOG)\""
+#12:CFLG += -D USE_CLOCK_GETTIME
+
+#2:INC = -I./include
+#2:LIB = -lreadline
+#21:LIB += -ltermcap
+#22:LIB += -lrt
+# libtermcap.so should be linked for readline in old system
+# librt.so should be linked for clock_gettime() in old system
+
+#3:PKG_CONFIG_ENV = PKG_CONFIG_PATH=%BASE/pkgconfig
+#3:RPATHLMD = -Wl,-rpath -Wl,%BASE
+#31:INC_PL = `$(PKG_CONFIG_ENV) pkg-config --cflags %PKG`
+#31:INC_PL += -D PLPLOT_OPTION_NEW=%OPT
+#31:LIB_PL = $(RPATHLMD) `$(PKG_CONFIG_ENV) pkg-config --libs %PKG`
+
+#32:include $(EPICS_BASE)/configure/CONFIG_BASE_VERSION
+#32:INC_CA = -I$(EPICS_BASE)/include/compiler/gcc
+#32:INC_CA += -I$(EPICS_BASE)/include/os/Linux -I$(EPICS_BASE)/include 
+#32:INC_CA += -D USE_EPICS_CA=1 -D EPICS_VER="\"$(EPICS_VERSION_NUMBER)\""
+#32:LIB_CA = -L$(EPICS_BASE)/lib/$(EPICS_HOST_ARCH)
+#32:LIB_CA += -Wl,-rpath,$(EPICS_BASE)/lib/$(EPICS_HOST_ARCH)
+#32:LIB_CA += -lca -lCom
+
+#4:
+#41:bin/%TGT: src/%TGT.cc include/thl/*.hh
+#41:	$(CC) $(CFLG) -o $@ src/%TGT.cc $(INC) $(LIB)
+#42:bin/%TGT: src/%TGT.cc include/thl/*.hh
+#42:	$(CC) $(CFLG) -o $@ src/%TGT.cc $(INC_PL) $(INC) $(LIB_PL) $(LIB)
+#43:bin/%TGT: src/%TGT.cc include/thl/*.hh
+#43:	$(CC) $(CFLG) -o $@ src/%TGT.cc $(INC_PL) $(INC_CA) $(INC) $(LIB_PL) $(LIB_CA) $(LIB)
+
+#5:
+#5:INSTALL_DIR = %INSTALL_DIR
+#5:install: $(TARGETS) $(INSTALL_DIR)
+#5:	cp -p $(TARGETS) $(INSTALL_DIR)
+#5:
+#5:clean:
+#5:	rm -fr $(TARGETS) *~
+#5:distclean:
+#5:	rm -fr bin src/*.cc include/thl .*_history

@@ -1,1 +1,20 @@
-# tip-dev
+# tip - tiny interactive plot
+
+`tip` is a command line based graph drawing tool.
+it is written by C++ depends on the libraly of
+[PLPLOT](https://plplot.sourceforge.net/)
+and [GNU readline](https://cgit.git.savannah.gnu.org/cgit/readline.git), 
+basically it works on Linux, Windows (WSL, cygwin) and so on.
+
+## Features
+
+- plot the curve in 2D and 3D
+- plot the histogram in 2D and 3D
+- plot the FFT power spectrum
+- data fitting to the curve and the histogram
+- data sorting, filtering
+- control (`for`,`do`,`while`,`end`,`if`,`elif`,`else`,`fi`)
+- execute macro file
+- save to pdf or png file
+
+and so on

@@ -1,0 +1,4 @@
+bin/
+Makefile
+*~
+.*_history
