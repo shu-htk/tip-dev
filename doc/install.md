@@ -32,7 +32,7 @@ access to https://github.com/shu-htk/tip-dev
 
 extract downloaded zip file
 
-then do,
+then do
 ```
 $ cd tip-dev
 $ ./configure
@@ -41,11 +41,6 @@ $ make
 the executable is comipled and output to `./bin/tip`
 
 to copy the executable file to `$HOME/bin`
-if there is not $HOME/bin
-```
-$ mkdir ~/bin
-```
-after that,
 ```
 $ make install
 ```
