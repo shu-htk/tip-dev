@@ -1,6 +1,6 @@
 # Install
 
-## Install PLPLOT, GNU-readline
+## (1) Install PLPLOT, GNU-readline
 
 - Ubuntu 24.04
 ```
@@ -24,7 +24,7 @@ sudo dnf install plplot-devel
 sudo dnf install readline-devel
 ```
 
-## configure, make tip executable
+## (2) configure and make tip executable
 
 access to https://github.com/shu-htk/tip-dev
 
@@ -32,27 +32,22 @@ access to https://github.com/shu-htk/tip-dev
 
 extract downloaded zip file
 
-if there is not $HOME/bin
-```
-$ mkdir ~/bin
-```
 then do,
 ```
 $ cd tip-dev
 $ ./configure
 $ make
 ```
-the executable is comipled and output to ./bin/tip
+the executable is comipled and output to `./bin/tip`
 
-to copy the executable file to $HOME/bin
-
+to copy the executable file to `$HOME/bin`
+if there is not $HOME/bin
+```
+$ mkdir ~/bin
+```
+after that,
 ```
 $ make install
 ```
-
-
-
-
-
 
 
