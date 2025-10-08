@@ -93,6 +93,9 @@ if [ -e $EPICS_BASE/include/cadef.h ] ; then
   echo "EPICS $base_ver"
 fi
 
+# make version file
+grep '^#40:' $0 | sed "s/#40://g" >> Makefile.2
+
 # complie
 targets=""
 for t in ${t1[@]}
@@ -138,14 +141,16 @@ rm Makefile.1 Makefile.2
 echo "** configure normal end **"
 
 #1:TARGETS = %TARGETS
-#1:all: $(TARGETS) 
+#1:all: version $(TARGETS)
 #1:CC=g++
 ##1:CC=clang++
-#1:TAG = $(shell git describe --tags --always)
-#1:LOG = $(shell git log -1 --pretty=format:'%h, %ad, %an' --date=iso)
+##1:TAG = $(shell git describe --tags --always)
+##1:LOG = $(shell git log -1 --pretty=format:'%h, %ad, %an' --date=iso)
+#1:GIT_VER = $(shell cat version.txt)
 ##1:CFLG = -Wall -std=c++11
 #1:CFLG = -Wall
-#1:CFLG += -D GIT_VER="\"$(TAG) $(LOG)\""
+##1:CFLG += -D GIT_VER="\"$(TAG) $(LOG)\""
+#1:CFLG += -D GIT_VER="\"$(GIT_VER)\""
 #12:CFLG += -D USE_CLOCK_GETTIME
 
 #2:INC = -I./include
@@ -170,6 +175,8 @@ echo "** configure normal end **"
 #32:LIB_CA += -lca -lCom
 
 #4:
+#40:version:
+#40:	script/make_ver.sh
 #41:bin/%TGT: src/%TGT.cc include/thl/*.hh
 #41:	$(CC) $(CFLG) -o $@ src/%TGT.cc $(INC) $(LIB)
 #42:bin/%TGT: src/%TGT.cc include/thl/*.hh
@@ -186,4 +193,4 @@ echo "** configure normal end **"
 #5:clean:
 #5:	rm -fr $(TARGETS) *~
 #5:distclean:
-#5:	rm -fr bin src/*.cc include/thl .*_history
+#5:	rm -fr bin src/*.cc include/thl Makefile .*_history *~

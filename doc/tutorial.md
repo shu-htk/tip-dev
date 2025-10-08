@@ -28,7 +28,7 @@ tip> fit x y quad (cp:1,200 lc:blue)
 
 arguments between the bracket '(' and ')' are options.
 
-`(lw:0)` set the line with 0, i.e. not drawing the line.  
+`(lw:0)` set the line width 0, i.e. not draw the line.  
 `(st:star)` set the symbol's style 'star shape'. [see symbols](#symbols)  
 `(sc:red)` set the symbol's color red. [see colors](#colors)  
 `(gd:1)` set the flag to draw the grid lines in the graph.  
@@ -129,8 +129,8 @@ like `xlab "x"; ylab "y1, y2"`
 `text` is command to draw the text.  
 `(ft:solid)` set the fill-area-style "solid".  
 `(rc:1)` is option to set the flag of relative axis coordinate.  
-where relative axis coordinate means that it is defined from 0.0 to 1.0
-for both of x-axis and y-axis.
+where relative axis coordinate means that the axis-range is defined
+from 0.0 to 1.0 for both of x-axis and y-axis.
 
 ## Histogram 1D
 
