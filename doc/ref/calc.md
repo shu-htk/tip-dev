@@ -1,0 +1,4 @@
+# calc
+```
+usage: calc [expression]
+```

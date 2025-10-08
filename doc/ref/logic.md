@@ -1,0 +1,4 @@
+# logic
+```
+usage: logic [expression]
+```

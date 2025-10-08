@@ -1,0 +1,11 @@
+# text
+```
+usage: text x y "strings" [(opt)]
+escape sequences in the text strings:
+ #u  : switch to the superscript (ended with #d)
+ #d  : switch to the subscript (ended with #u)
+ #g  : next one character become Greek
+ #fn : switch to normal (sans-serif) font
+ #fr : switch to Roman (serif) font
+ #fi : switch to Italic font
+```
