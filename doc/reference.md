@@ -1,6 +1,57 @@
 # Command Reference
 
-## command of control (MacroTool)
+## command line options from the shell
+
+```
+$ tip -h
+usage: tip [options]
+
+options:(where arg is option's argument)
+ -h : show help message (also '--help')
+ -v : show version (also '--version')
+ -t arg: set window title (default is "tip")
+ -g arg: set window geometry size (default is "800x600")
+ -d arg: set drawing device (default is "xcairo")
+ -e arg : execute a macro file
+ --pdf arg : graph is drawn in pdf file (window is not open)
+ --png arg : graph is drawn in png file (window is not open)
+```
+
+## syntacs of the tip interpriter
+
+### multiple commands in a line separating by ";"
+```
+tip> plot x y1; plot x y2 (rp:1)
+```
+
+### comment out the line
+
+put the "#" at the head of the line
+```
+tip> # comment out this line
+```
+
+to comment out from the middle of the line, put ";" before "#"
+```
+tip> plot x y ;# plotting data x and y  
+```
+
+## macro variable
+
+if there is macro variable in the brackets "[" and "]" it is  
+replaced to the value before parsing the command line  
+```
+tip> @ n=1
+tip> @ func = sin
+tip> @ x[n] = [func]([n])  ;# this is parsed as @ x1 = sin(1)
+tip> ls *
+n : number [1]
+x1 : number [0.84147098481]
+func : string [sin]
+```
+see also [command @](ref/var.md).
+
+### commands of MacroTool
 - [@](ref/var.md) : define numerical or string variable
 - [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical variable
 - [for,do,while,end](ref/loop.md) : for, do, while loop
@@ -13,7 +64,7 @@
 - [logic](ref/logic.md) : evaluate the logic expression
 - q : quit the tip interpriter
 
-## command of tip
+### commands of tip
 - [arc](ref/arc.md) : draw a circle in 2D-graph
 - [box](ref/box.md) : draw the axis of 2D-graph in the box shape
 - [box3](ref/box3.md) : draw the axes of 3D-graph
