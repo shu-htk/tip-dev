@@ -15,7 +15,7 @@ tip> while
 usage: while expr; ...; end
 ```
 
-- example of for
+- example of for loop
 ```
 tip> for func (sin cos)
 loop>  @ x=[func](1)      ;# prompt changed to "loop>" until "end" 
@@ -26,15 +26,25 @@ cos(1)=0.54030230587
 tip> 
 ```
 
-- example of do
+- example of do loop
+
+incremental loop with continue and break
 ```
-tip> do x 0 1 0.3
-loop>  prn [x]
+tip> do n 0 10
+loop> if 1<[n]<5; continue; fi
+loop> if [n]>7; break; fi
+loop> prn [n]
 loop> end
 0
-0.3
-0.6
-0.9
+1
+5
+6
+7
+```
+see also [if,fi](if_fi.md) and [logic](logic.md)
+
+decremental loop
+```
 tip> do x 1 0 -0.3; prn [x]; end   ;# write it in one line
 1
 0.7
@@ -42,22 +52,17 @@ tip> do x 1 0 -0.3; prn [x]; end   ;# write it in one line
 0.1
 ```
 
-- example of while
+- example of while loop
 ```
-tip> @ n=1
-tip> while [n]<5
-loop>  prn [n]
-loop>  ++n
+tip> @ n=0
+tip> @ s=a
+tip> while [s]!=aaaa
+loop>  if [n]>100; break; fi  ;# in case bad condition, avoid infinity loop
+loop>  prn [s]
+loop>  @ s=[s]a
 loop> end
-1
-2
-3
-4
-tip> @ n=5; while [n]>0; prn [n]; --n; end
-5
-4
-3
-2
-1
+a
+aa
+aaa
 ```
-see also [logic](logic.md)
+see also [if,fi](if_fi.md) and [logic](logic.md)
