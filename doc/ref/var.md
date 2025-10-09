@@ -32,7 +32,7 @@ sin(3.14/2)=1.00
 ```
 see also [print](print.md) and [fmt](fmt.md)
 
-using operator "+=" "-=" "*=" "/="
+using operator +=  -=  *=  /=
 ```
 tip> @ x = 1.23
 tip> prn [x]
@@ -53,7 +53,7 @@ tip> prn [x]
 
 - define string variable
 
-if left value is not start from digit it is defined as string
+if expression is not starting from digit it is defined as string
 ```
 tip> @ a = Hello
 tip> @ b = World!
