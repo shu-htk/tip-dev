@@ -28,13 +28,18 @@ sudo dnf install readline-devel
 
 access to https://github.com/shu-htk/tip-dev
 
-> "Code" Tab -> "Code" button ->  "Download zip"
+from the "Code" button, choose "Download zip"
 
-extract downloaded zip file
+copy downloaded zip file (tip-dev-main.zip) to your working directry
+
+extract zip file
+```
+unzip tip-dev-main.zip
+```
 
 then do
 ```
-$ cd tip-dev
+$ cd tip-dev-main
 $ ./configure
 $ make
 ```
@@ -44,5 +49,3 @@ to copy the executable file to `$HOME/bin`
 ```
 $ make install
 ```
-
-
