@@ -1063,7 +1063,7 @@ namespace thl {
 	    vbuf.push_back(line2);
 	  }
 	  if(set_index(vbuf)==0) {parse_vbuf(vbuf);}
-	  read_line.set_prompt("> ");
+	  read_line.set_prompt(prompt);
 	} else if(sp(0)=="if") {
 	  if(sp.size()<2) {
 	    printf("usage: if expr; ...; elif expr; ...; else; ...; fi\n");
@@ -1081,7 +1081,7 @@ namespace thl {
 	    vbuf.push_back(line2);
 	  }
 	  if(set_index(vbuf)==0) {parse_vbuf(vbuf);}
-	  read_line.set_prompt("> ");
+	  read_line.set_prompt(prompt);
 	} else {
 	  vbuf.push_back(line);
 	  parse_vbuf(vbuf);

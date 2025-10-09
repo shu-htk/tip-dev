@@ -32,4 +32,4 @@ a1
 b2
 c3
 ```
-see also [for loop](ref/loop.md)
+see also [loop](loop.md)
