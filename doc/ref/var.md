@@ -6,16 +6,16 @@ usage: @ x [=|+=|-=|*=|/=] expression
  set the expression value to the macro variable x
 ```
 
-spaces between arguments
+- spaces between arguments
 ```
 tip> @ x = 1 + 2 ;# OK
-tip> @x = 1 + 2  ;# NG you should make space "@" and "x"
+tip> @x = 1 + 2  ;# NG you should put space between @ and x
 tip> @ x= 1 + 2  ;# OK
 tip> @ x=1 + 2   ;# OK
 tip> @ x=1+2     ;# OK
 ```
 
-define numerical variables
+- define numerical variables
 ```
 tip> @ pi=3.14159265
 tip> @ x=sin([pi]/2)
@@ -23,13 +23,14 @@ tip> ls *
 pi : number [3.14159265]
 x : number [1]
 tip>
-tip> prn sin([pi]/2)=[x]
+tip> prn sin([pi]/2)=[x]  ;# prn is abbr. of println
 sin(3.14159265/2)=1
 tip>
 tip> fmt "%.2f"  ;# set format of [pi] and [x]
 tip> prn sin([pi]/2)=[x]
 sin(3.14/2)=1.00
 ```
+see also (print)[ref/print.md] and (fmt)[ref/fmt.md]
 
 using operator "+=" "-=" "*=" "/="
 ```
@@ -50,6 +51,8 @@ tip> prn [x]
 0.22
 ```
 
+- define string variable
+
 if left value is not start from digit it is defined as string
 ```
 tip> @ a = Hello
@@ -61,7 +64,7 @@ b : string [World!]
 c : string [Hello World!]
 ```
 
-some special cases
+- some other syntacs
 ```
 tip> @ a = "1"  ;# contents of quatations is string
 tip> ls a
@@ -87,7 +90,7 @@ tip> ls b
 b : number [1]
 ```
 
-another special cases
+- some hacks using macro variable
 ```
 tip> @ MHz=e6
 tip> @ freq=1.2[MHz]  ;# this is taken as 1.2e6
