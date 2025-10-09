@@ -30,7 +30,7 @@ tip> fmt "%.2f"  ;# set format of [pi] and [x]
 tip> prn sin([pi]/2)=[x]
 sin(3.14/2)=1.00
 ```
-see also (print)[ref/print.md] and (fmt)[ref/fmt.md]
+see also [print](ref/print.md) and [fmt](ref/fmt.md)
 
 using operator "+=" "-=" "*=" "/="
 ```
