@@ -73,6 +73,10 @@ tip>
 tip> @ a += "2" ;# append string "2" to the back of string "1"
 tip> ls a
 a : string [12]
+tip> 
+tip> @ a += 2   ;# a is coverted to number 12 then added 2
+tip> ls a
+a : number [14]
 tip>
 tip> @ a -= "2"
 invalid operator of string
@@ -81,23 +85,23 @@ invalid operator of string
 tip> @ a /= "2"
 invalid operator of string
 tip>
-tip> @ a += 2   ;# a is coverted to number 12 then added 2
-tip> ls a
-a : number [14]
-tip> 
-tip> @ b = 1kg  ;# this is number ("kg" is removed)
-tip> ls b
-b : number [1]
+tip> @ mass = 1.2kg  ;# this is number ("kg" is removed)
+tip> ls mass
+mass : number [1.2]
 ```
 
 - some hacks using macro variable
 ```
+tip> @ kg=e3
+tip> @ mass=1.2[kg] ;# this is taken as 1.2e3
+tip> prn [mass][g]  ;# [g] is not replaced since it is not defined as variable
+1200[g]
 tip> @ MHz=e6
-tip> @ freq=1.2[MHz]  ;# this is taken as 1.2e6
-tip> prn [freq]
-1200000
+tip> @ freq=1.2[MHz] ;# this is taken as 1.2e6
+tip> prn [freq][Hz]  ;# [Hz] is not replaced since it is not defined as variable
+1200000[Hz]
 tip> @ ms=e-3
-tip> @ dt=1.2[ms]    ;# this is taken as 1.2e-3
-tip> prn [dt]
-0.0012
+tip> @ dt=1.2[ms]  ;# this is taken as 1.2e-3
+tip> prn [dt][sec] ;# [sec] is not replaced since it is not defined as variable
+0.0012[sec]
 ```

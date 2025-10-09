@@ -1,6 +1,6 @@
 # Command Reference
 
-## command line options from the shell
+## (1) usage to start tip from the shell
 
 ```
 $ tip -h
@@ -17,9 +17,11 @@ options:(where arg is option's argument)
  --png arg : graph is drawn in png file (window is not open)
 ```
 
-## syntacs of the tip interpriter
+## (2) syntacs of the tip interpriter
 
-### multiple commands in a line separating by ";"
+### multiple commands in a line
+
+separating by ";" you can put multiple command in a line
 ```
 tip> plot x y1; plot x y2 (rp:1)
 ```
@@ -36,7 +38,7 @@ to comment out from the middle of the line, put ";" before "#"
 tip> plot x y ;# plotting data x and y  
 ```
 
-## macro variable
+### macro variable
 
 if there is macro variable in the brackets "[" and "]" it is  
 replaced to the value before parsing the command line  
