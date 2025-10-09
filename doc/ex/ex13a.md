@@ -15,4 +15,4 @@ do n 1 2
   mplot x y z (tl:"[expr[n]]" mt:cont2)
 end
 ```
-![](fig/ex13a.png)
+![](../fig/ex13a.png)

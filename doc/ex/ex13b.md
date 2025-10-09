@@ -19,4 +19,4 @@ div 1 16                      ;# divide very narrow area
 box 0 1 0 1 (lw:0 bp:9)       ;# make null box at center position (bp:9)
 text 0 0.5 "[expr4]" (ts:2.45) ;# draw long text for the title of expr4
 ```
-![](fig/ex13b.png)
+![](../fig/ex13b.png)

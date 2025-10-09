@@ -56,4 +56,4 @@ fit x y circ (cp:0.25,0.7 ts:0.8 cf:c)
 print input  p0=[p0] p1=[p1] p2=[p2]\n
 print fitted c0=[c0] c1=[c1] c2=[c2]\n
 ```
-![](fig/ex07b.png)
+![](../fig/ex07b.png)
