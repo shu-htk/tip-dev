@@ -5,8 +5,9 @@ tip> @
 usage: @ x [=|+=|-=|*=|/=] expression
  set the expression value to the macro variable x
 ```
+see [calc](calc.md) to learn how expression is calulated
 
-- spaces between arguments
+## spaces between arguments
 ```
 tip> @ x = 1 + 2 ;# OK
 tip> @x = 1 + 2  ;# NG you should put space between @ and x
@@ -15,7 +16,7 @@ tip> @ x=1 + 2   ;# OK
 tip> @ x=1+2     ;# OK
 ```
 
-- define numerical variables
+## numerical macro variables
 ```
 tip> @ pi=3.14159265
 tip> @ x=sin([pi]/2)
@@ -51,7 +52,7 @@ tip> prn [x]
 0.22
 ```
 
-- define string variable
+## string macro variable
 
 if expression is not starting from digit it is defined as string
 ```
@@ -64,7 +65,19 @@ b : string [World!]
 c : string [Hello World!]
 ```
 
-- some other syntacs
+## ternary operator
+```
+tip> @ x=7
+tip> @ size = [x]>5 ? L : S
+tip> ls size
+size : string [L]
+tip> 
+tip> @ size = [x]>4 ? ([x]>7 ? L : M ) : S  ;# NG it can't be nested
+Var::parse_ternary(): operator lack of args
+```
+
+## some other syntacs
+
 ```
 tip> @ a = "1"  ;# contents of quatations is string
 tip> ls a
@@ -90,7 +103,7 @@ tip> ls mass
 mass : number [1.2]
 ```
 
-- some hacks using macro variable
+hacks to put unit using macro variable
 ```
 tip> @ kg=e3
 tip> @ mass=1.2[kg] ;# this is taken as 1.2e3

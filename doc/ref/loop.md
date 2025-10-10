@@ -1,51 +1,70 @@
 # for, do, while, end
 
+## usage
+
 ```
 tip> for
 usage: for s (a b ...); ...; end
 ```
+assign for each value listed in the brackets ( ) to the macro variable 's'.  
+the value is taken as string even if it is digit.
 
 ```
 tip> do
 usage: do n N1 N2 [dN]; ...; end
 ```
+assign numerical value which range is from N1 to N2 incremented dN
+to the macro variable 'n'.  
+the value can take floating point number.
+if dN is not specified increment +1  
 
 ```
 tip> while
 usage: while expr; ...; end
 ```
+the [logic](logic.md) expression is evaluated for each loop,
+if it is is true continue the loop,
+if it is false break the loop.
+
+## example
 
 - example of for loop
 ```
-tip> for func (sin cos)
-loop>  @ x=[func](1)      ;# prompt changed to "loop>" until "end" 
-loop>  prn [func](1)=[x]
-loop> end
+for func (sin cos)
+  @ x=[func](1)
+  prn [func](1)=[x]
+end
+```
+result
+```
 sin(1)=0.84147098481
 cos(1)=0.54030230587
-tip> 
 ```
 
 - example of do loop
 
 incremental loop with continue and break
 ```
-tip> do n 0 10
-loop> if 1<[n]<5; continue; fi
-loop> if [n]>7; break; fi
-loop> prn [n]
-loop> end
+do n 0 10
+  if 1<[n]<5; continue; fi
+  if [n]>7; break; fi
+  prn [n]
+end
+```
+result
+```
 0
 1
 5
 6
 7
 ```
-see also [if,fi](if_fi.md) and [logic](logic.md)
-
 decremental loop
 ```
-tip> do x 1 0 -0.3; prn [x]; end   ;# write it in one line
+do x 1 0 -0.3; prn [x]; end   ;# write it in one line
+```
+result
+```
 1
 0.7
 0.4
@@ -54,15 +73,20 @@ tip> do x 1 0 -0.3; prn [x]; end   ;# write it in one line
 
 - example of while loop
 ```
-tip> @ n=0
-tip> @ s=a
-tip> while [s]!=aaaa
-loop>  if [n]>100; break; fi  ;# in case bad condition, avoid infinity loop
-loop>  prn [s]
-loop>  @ s=[s]a
-loop> end
-a
-aa
-aaa
+@ n=0
+@ s=a
+while [s] != aaaa
+  prn [n] [s]
+  @ s += a   ;# equivalent to @ s = [s]a
+  ++n
+  if [n]>100; break; fi  ;# avoid infinity loop in case bad condition
+end
+```
+result
+```
+0 a
+1 aa
+2 aaa
 ```
 see also [if,fi](if_fi.md) and [logic](logic.md)
+

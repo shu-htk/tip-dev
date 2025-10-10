@@ -22,7 +22,7 @@ tip> fit x y quad (cp:1,200 lc:blue)
 ![macro/tut01.tip](fig/tut01.png)
 
 `title` specify the text at top of the graph.  
-`set` make the instance of the data, where data is array of number.  
+`set` make instance of the data, where data is array of number.  
 `plot x y` plot the data x and y.  
 `fit x y quad` make the fitting by Quadratic function. 
 

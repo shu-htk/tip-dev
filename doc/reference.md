@@ -1,6 +1,6 @@
 # Command Reference
 
-## (1) usage to start tip from the shell
+## (1) usage to start up the tip interpriter from the shell
 
 ```
 $ tip -h
@@ -54,7 +54,7 @@ func : string [sin]
 see also [command @](ref/var.md).
 
 ### commands of MacroTool
-- [@](ref/var.md) : define numerical or string variable
+- [@](ref/var.md) : set macro variable
 - [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical variable
 - [for,do,while,end](ref/loop.md) : for, do, while loop
 - [if,elif,else,fi](ref/if_fi.md) : conditional branch
@@ -66,7 +66,7 @@ see also [command @](ref/var.md).
 - [logic](ref/logic.md) : evaluate the logic expression
 - q : quit the tip interpriter
 
-### commands of tip
+### commands of plotting and hundling the data
 - [arc](ref/arc.md) : draw a circle in 2D-graph
 - [box](ref/box.md) : draw the axis of 2D-graph in the box shape
 - [box3](ref/box3.md) : draw the axes of 3D-graph

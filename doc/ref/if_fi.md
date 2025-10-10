@@ -5,39 +5,41 @@ tip> if
 usage: if expr; ...; elif expr; ...; else; ...; fi
 ```
 
+conditinal branch by evaluating expression
+
+see [logic](logic.md) to learn how the expression evaluated
+
+
+- example 1
 ```
-$ cat << EOF > a.tip
 do n 1 10
   if [n]<3
     continue
-   elif [n]>=8
+  elif [n]>=8
     break
-   else
+  else
     prn [n]
   fi
 end
-EOF
 ```
+result
 ```
-tip> exe a.tip
 3
 4
 5
 6
 7
 ```
-
+- example 2
 ```
-$ cat << EOF > b.tip
 for c (H e l l o W o r l d)
   pr [c]
   if [c]==[A-Z]; pr  : Capital; fi
   pr \n
 end
-EOF
 ```
+result
 ```
-tip> exe b.tip
 H: Capital
 e
 l
@@ -49,9 +51,8 @@ r
 l
 d
 ```
-
+- example 3
 ```
-$ cat << EOF > c.tip
 for name (Greg Anna Ryan Mary Josh)
   pr [name]
   if [name]=={Greg,Ryan,Josh}
@@ -65,8 +66,8 @@ for name (Greg Anna Ryan Mary Josh)
   fi
   pr \n
 end
-EOF
 ```
+result
 ```
 tip> exe c.tip
 Greg: Boy
