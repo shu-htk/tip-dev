@@ -38,18 +38,54 @@ to comment out from the middle of the line, put ";" before "#"
 tip> plot x y ;# plotting data x and y  
 ```
 
-### macro variable
+## variable
 
-if there is macro variable in the brackets "[" and "]" it is  
-replaced to the value before parsing the command line  
+tip has 2 kind of variable, one is data variable and
+the other is macro variable.
+
+- data variable
+
+the data variable is array of number (or string) which is defined by
+[set](ref/set.md) command.
+```
+tip> set n={1,2,3}
+tip> set x=sin(n)
+tip> ls x
+x : data(num) : size=3
+tip> cat x
+x : data(num) :  0.84147098481 0.90929742683 0.14112000806
+```
+explaining by C Language, it is doing like,
+```
+double n[]={1,2,3};
+double x[3]; for(int i=1; i<=3; i++) x[i]=sin(n[i]);
+```
+
+- macro variable
+
+the macro variable is scalar of number (or string) which is defined by
+[@](ref/var.md) command.  
+ the value of the mcaro variable is refered by enclosing it
+ in the brackets [ ]  
 ```
 tip> @ n=1
-tip> @ func = sin
-tip> @ x[n] = [func]([n])  ;# this is parsed as @ x1 = sin(1)
+tip> @ x=sin([n])  ;# this is parsed as @ x=sin(1)
 tip> ls *
 n : number [1]
-x1 : number [0.84147098481]
+x : number [0.84147098481]
+```
+actually, macro variable is replaced to the value before
+parsing the command, you can do like,
+```
+tip> @ n=1
+tip> @ func=sin
+tip> @ ret=x
+tip> @ [ret]=[func]([n])  ;# this is parsed as @ x=sin(1)
+tip> ls *
+n : number [1]
+x : number [0.84147098481]
 func : string [sin]
+ret : string [x]
 ```
 see also [command @](ref/var.md).
 
@@ -66,7 +102,7 @@ see also [command @](ref/var.md).
 - [logic](ref/logic.md) : evaluate the logic expression
 - q : quit the tip interpriter
 
-### commands of plotting and hundling the data
+### commands of plotting the data, etc.
 - [arc](ref/arc.md) : draw a circle in 2D-graph
 - [box](ref/box.md) : draw the axis of 2D-graph in the box shape
 - [box3](ref/box3.md) : draw the axes of 3D-graph
