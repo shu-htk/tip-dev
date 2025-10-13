@@ -2,7 +2,7 @@
 
 ## What is thl::MacroTool ?
 
-The thl::MacroTool is the hreader-only class libraly which privide
+The thl::MacroTool is the hreader-only class libraly which provide
 the following command:
 ```
 macro commands:

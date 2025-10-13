@@ -1,12 +1,11 @@
 # Install
 
-At the moment the following two systems have been tested to automatically
-generate Makefike using the included configure script:
+At the moment the following systems have been tested.
 
 - Ubuntu 24.04 (both of native and WSL2 on Windows11)
 - AlmaLinux 9.5 (both of native and WSL2 on Windows11)
 
-In principle you can install the tip interpriter on the system
+In principle you can install the tip on the system
 which PLPLOT and GNU readline are installed.
 
 ## (1) Install PLPLOT, GNU-readline
