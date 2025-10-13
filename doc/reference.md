@@ -1,6 +1,6 @@
 # Command Reference
 
-## (1) usage to start up the tip interpriter from the shell
+## (1) Usage to start up the tip interpriter from the shell
 
 ```
 $ tip -h
@@ -17,35 +17,35 @@ options:(where arg is option's argument)
  --png arg : graph is drawn in png file (window is not open)
 ```
 
-## (2) syntacs of the tip interpriter
+## (2) Syntacs of the tip interpriter
 
-### multiple commands in a line
+### Multiple commands in a line
 
-separating by ";" you can put multiple command in a line
+Separating by ";" you can put multiple command in a line
 ```
 tip> title "x vs y1 and y2"; plot x y1; plot x y2 (rp:1) 
 ```
 
-### comment out the line
+### Comment out the line
 
-put the "#" at the head of the line
+Put the "#" at the head of the line
 ```
 tip> # comment out this line
 ```
 
-to comment out from the middle of the line, put ";" before "#"
+To comment out from the middle of the line, put ";" before "#"
 ```
 tip> plot x y ;# plotting data x and y  
 ```
 
-## variable
+## Variable
 
-tip has 2 kind of variable, one is the data variable and
+The tip interpriter has 2 kind of variable, one is the data variable and
 the other is the macro variable.
 
-- **the data variable**
+- **The data variable**
 
-the data variable is array of number (or string) which is defined by
+The data variable is array of number (or string) which is defined by
 [set](ref/set.md) command.
 ```
 tip> set n={1,2,3}
@@ -55,18 +55,16 @@ x : data(num) : size=3
 tip> cat x
 x : data(num) :  0.84147098481 0.90929742683 0.14112000806
 ```
-explaining how it works, it is doing like,
+Explaining by C, the above example is doing like,
 ```
 double n[]={1,2,3};
 double x[sizeof(n)]; for(int i=0; i<sizeof(n); i++) x[i]=sin(n[i]);
 ```
-> note: the above is not actual implementation but just put it simply
+- **The macro variable**
 
-- **the macro variable**
-
-the macro variable is scalar of number (or string) which is defined by
+The macro variable is scalar of number (or string) which is defined by
 [@](ref/var.md) command.  
-enclosing the mcaro variable in the brackets [ ]
+Enclosing the mcaro variable in the brackets [ ]
 it is replaced to the string which is formatted by it's value
 ```
 tip> @ n=1
@@ -75,7 +73,7 @@ tip> ls *
 n : number [1]
 x : number [0.84147098481]
 ```
-actually, macro variable is replaced to the formatted string  before
+Actually, macro variable is replaced to the formatted string  before
 parsing the command.  
 so you can do like,
 ```
@@ -91,7 +89,7 @@ ret : string [x]
 ```
 see also [command @](ref/var.md).
 
-### commands of MacroTool
+### Commands of MacroTool
 - [@](ref/var.md) : set macro variable
 - [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical variable
 - [for,do,while,end](ref/loop.md) : for, do, while loop
@@ -104,7 +102,7 @@ see also [command @](ref/var.md).
 - [logic](ref/logic.md) : evaluate the logic expression
 - q : quit the tip interpriter
 
-### commands of plotting the data, etc.
+### Commands of plotting the data, etc.
 - [arc](ref/arc.md) : draw a circle in 2D-graph
 - [box](ref/box.md) : draw the axis of 2D-graph in the box shape
 - [box3](ref/box3.md) : draw the axes of 3D-graph

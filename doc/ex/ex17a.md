@@ -1,4 +1,4 @@
-# ex17a
+# ex17a: Plot ISO-time-format data with time-axis format
 ```
 opt (gd:1)
 div 1 3
@@ -27,4 +27,3 @@ plot t_cut v_cut (tf:"%d" xt:[day_sec]  xn:1 st:star)
 
 ```
 ![](../fig/ex17a.png)
-

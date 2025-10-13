@@ -1,4 +1,4 @@
-# ex13a
+# ex13a: Plot 3D meshed surface by some functions (part.1)
 ```
 opt (ts:0.9 gd:1 al:50 az:30)
 

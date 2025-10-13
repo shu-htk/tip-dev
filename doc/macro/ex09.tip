@@ -1,3 +1,5 @@
+# ex09: Data Cutting (filtering)
+
 opt (lw:0)   ;# set line width 0 (not plot lines)
 opt (ss:0.7) ;# set symbol size 
 opt (xt:10)  ;# x-axis tick 10

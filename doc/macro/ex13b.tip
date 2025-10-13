@@ -1,3 +1,5 @@
+# ex13b: Plot 3D meshed surface by some functions (part.2)
+
 opt (ts:0.9 gd:1 al:50 az:30)
 
 set x = range(32,-3.2,3.2)

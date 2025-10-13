@@ -1,4 +1,4 @@
-# ex07a
+# ex07a: Fitting Linear/Quadratic/Gaussian
 ```
 opt (gd:1 lw:0 lc:green st:dot rc:1)
 viewport 0.15 0.97 0.15 0.9 0.72

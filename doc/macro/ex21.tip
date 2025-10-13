@@ -1,3 +1,5 @@
+# ex21: Absolute coordinate and Relative coordinate
+
 opt (gd:1 lc:blue st:cr2 sc:red ft:solid fc:wheat ts:0.8)
 
 # in default absolute coordinate

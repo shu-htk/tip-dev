@@ -1,4 +1,4 @@
-# ex07b
+# ex07b: Fitting Exponential/Logarithm/Sinusoidal/Circular
 ```
 opt (gd:1 lw:0 lc:green st:dot rc:1)
 viewport 0.15 0.97 0.15 0.9 0.72

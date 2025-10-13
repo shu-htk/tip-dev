@@ -1,4 +1,4 @@
-# ex17b
+# ex17b: Plot ISO-time-format data converting year,month,day
 ```
 opt (gd:1)
 div 1 3
@@ -36,4 +36,3 @@ line 7 13 0 0 (lc:red ae:3) ; # draw arrow from 7th to 13th day
 text 7.5 -0.4 "7th to 13th days" (tc:red)
 ```
 ![](../fig/ex17b.png)
-

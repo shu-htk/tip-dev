@@ -1,3 +1,5 @@
+# ex05: Greek letters and some Font effects
+
 title "Greek letters and some Font effects"
 div 1 1
 opt (gd:0 lw:2)

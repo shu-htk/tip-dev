@@ -1,3 +1,5 @@
+# ex20: plot time variation of increasing data
+
 opt (gd:1) ;# draw grid lines
 #opt (fl:0) ;# disable flush to avoid screen flickering
 div 1 2

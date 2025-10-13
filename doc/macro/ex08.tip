@@ -1,3 +1,5 @@
+# ex08: FFT power spectrum and fitting
+
 opt (gd:1 lc:red sc:red)
 @ pi2 = 3.14159265*2
 @ MHz = e6

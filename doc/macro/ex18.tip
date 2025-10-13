@@ -1,3 +1,5 @@
+# ex18: Plot ISO-time-format data of very narrow interval
+
 opt (gd:1 ts:0.9)
 
 @ n = 4000

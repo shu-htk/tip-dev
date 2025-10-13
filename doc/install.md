@@ -45,6 +45,9 @@ Access to https://github.com/shu-htk/tip-dev
 
 from the **"Code"** pulldown menu button, choose **"Download zip"**
 
+or directly download from
+ https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip
+
 copy downloaded zip file to your working directry on the Linux terminal
 
 extract zip file
@@ -77,6 +80,4 @@ export PATH=$PATH:$HOME/bin
 The executable file `my_macro` is also installed when you install `tip`.  
 It is the sample program using the ferture of [thl::MacroTool](ref/MacroTool.md)
 but not using graphic drawing feture of PLPLOT.
-
-
 

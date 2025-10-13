@@ -1,3 +1,5 @@
+# ex17b: Plot ISO-time-format data converting year,month,day
+
 opt (gd:1)
 div 1 3
 

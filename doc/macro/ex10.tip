@@ -1,3 +1,5 @@
+# ex10: Plot 3D curve and fitting by the plane
+
 opt (lw:0 st:dot)
 fmt .2f
 
