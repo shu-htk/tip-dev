@@ -1955,8 +1955,11 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      var.ls(args(1));
-      data_list(args(1),opt);
+      thl::StrSplit v_list(args(1),",");
+      for(size_t j=0; j<v_list.size(); j++) {
+	var.ls(v_list(j));
+	data_list(v_list(j),opt);
+      }
       return 0;
     }
     if(args(0)=="cat") {
