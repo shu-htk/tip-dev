@@ -23,7 +23,7 @@ options:(where arg is option's argument)
 
 separating by ";" you can put multiple command in a line
 ```
-tip> plot x y1; plot x y2 (rp:1)
+tip> title "x vs y1 and y2"; plot x y1; plot x y2 (rp:1) 
 ```
 
 ### comment out the line
@@ -40,10 +40,10 @@ tip> plot x y ;# plotting data x and y
 
 ## variable
 
-tip has 2 kind of variable, one is data variable and
-the other is macro variable.
+tip has 2 kind of variable, one is the data variable and
+the other is the macro variable.
 
-- data variable
+- **the data variable**
 
 the data variable is array of number (or string) which is defined by
 [set](ref/set.md) command.
@@ -55,32 +55,34 @@ x : data(num) : size=3
 tip> cat x
 x : data(num) :  0.84147098481 0.90929742683 0.14112000806
 ```
-explaining by C Language, it is doing like,
+explaining how it works, it is doing like,
 ```
 double n[]={1,2,3};
-double x[3]; for(int i=1; i<=3; i++) x[i]=sin(n[i]);
+double x[sizeof(n)]; for(int i=0; i<sizeof(n); i++) x[i]=sin(n[i]);
 ```
+> note: the above is not actual implementation but just put it simply
 
-- macro variable
+- **the macro variable**
 
 the macro variable is scalar of number (or string) which is defined by
 [@](ref/var.md) command.  
- the value of the mcaro variable is refered by enclosing it
- in the brackets [ ]  
+enclosing the mcaro variable in the brackets [ ]
+it is replaced to the string which is formatted by it's value
 ```
 tip> @ n=1
-tip> @ x=sin([n])  ;# this is parsed as @ x=sin(1)
+tip> @ x=sin([n])  ;# this is parsed as "@ x=sin(1)"
 tip> ls *
 n : number [1]
 x : number [0.84147098481]
 ```
-actually, macro variable is replaced to the value before
-parsing the command, you can do like,
+actually, macro variable is replaced to the formatted string  before
+parsing the command.  
+so you can do like,
 ```
 tip> @ n=1
 tip> @ func=sin
 tip> @ ret=x
-tip> @ [ret]=[func]([n])  ;# this is parsed as @ x=sin(1)
+tip> @ [ret]=[func]([n])  ;# this is parsed as "@ x=sin(1)"
 tip> ls *
 n : number [1]
 x : number [0.84147098481]

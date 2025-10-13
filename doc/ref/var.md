@@ -66,9 +66,11 @@ c : string [Hello World!]
 ```
 
 ## ternary operator
+you can use ternary operator of C style.  
+> note: unlike C, it can't be nested
 ```
 tip> @ x=7
-tip> @ size = [x]>5 ? L : S
+tip> @ size = [x]>5 ? L : S          ;# this is OK
 tip> ls size
 size : string [L]
 tip> 
@@ -79,7 +81,7 @@ Var::parse_ternary(): operator lack of args
 ## some other syntacs
 
 ```
-tip> @ a = "1"  ;# contents of quatations is string
+tip> @ a = "1"  ;# enclosing the expr by quatations, it is treated as string
 tip> ls a
 a : string [1]
 tip>
@@ -98,23 +100,19 @@ invalid operator of string
 tip> @ a /= "2"
 invalid operator of string
 tip>
-tip> @ mass = 1.2kg  ;# this is number ("kg" is removed)
-tip> ls mass
-mass : number [1.2]
+tip> @ m = 1.2kg  ;# this is number ("kg" is removed)
+tip> ls m
+m : number [1.2]
 ```
 
-hacks to put unit using macro variable
+hacks to put the metric prefix using macro variable
 ```
 tip> @ kg=e3
-tip> @ mass=1.2[kg] ;# this is taken as 1.2e3
-tip> prn [mass][g]  ;# [g] is not replaced since it is not defined as variable
-1200[g]
-tip> @ MHz=e6
-tip> @ freq=1.2[MHz] ;# this is taken as 1.2e6
-tip> prn [freq][Hz]  ;# [Hz] is not replaced since it is not defined as variable
-1200000[Hz]
+tip> @ m=1.2[kg]        ;# 1.2[kg] is replaced to 1.2e3
+tip> prn mass=[m][g]    ;# [g] is not replaced since it is not defined
+mass=1200[g]
 tip> @ ms=e-3
-tip> @ dt=1.2[ms]  ;# this is taken as 1.2e-3
-tip> prn [dt][sec] ;# [sec] is not replaced since it is not defined as variable
-0.0012[sec]
+tip> @ t=1.2[ms]        ;# 1.2[ms] is replaced to 1.2e-3
+tip> prn time=[t][sec]  ;# [sec] is not replaced since it is not defined
+time=0.0012[sec]
 ```
