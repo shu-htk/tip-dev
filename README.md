@@ -1,10 +1,10 @@
 # tip - tiny interactive plot
 
 `tip` is a command line based graph drawing tool.
-it is written by C++ depends on the libraly of
+It is written by C++ depends on the libraly of
 [PLPLOT](https://plplot.sourceforge.net/)
 and [GNU readline](https://cgit.git.savannah.gnu.org/cgit/readline.git), 
-basically it works on Linux, Windows (WSL, cygwin) and so on.
+basically it works on Linux, Windows (WSL2) and probably other Unix-like OS.
 
 ## Features
 
