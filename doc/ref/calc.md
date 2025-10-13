@@ -9,7 +9,6 @@ where "calculation expression" is appear in
 
 - [@](var.md) x = expr  
 - [set](set.md) x = expr  
-- [cut](cut.md) a,b,c,... "expr"  
 
 
 

@@ -1010,7 +1010,8 @@ namespace thl {
 	  } else {
 	    std::string expr = trim(buf.substr(words.index(1)));
 	    Logic logic; bool debug=1;
-	    printf("%d\n",logic.eval(expr,debug));
+	    logic.eval(expr,debug);
+	    //	    printf("%d\n",logic.eval(expr,debug));
 	  }
 	  nline++; continue;
 	}
