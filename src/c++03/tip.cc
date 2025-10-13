@@ -1546,10 +1546,10 @@ public:
   }
 #endif  
   int add_commands(std::string buf) {// called in MacroTool::parse_vbuf()
-    thl::StrSplit words;
-    words.set_quot_to_skip_split('"');
-    words.split(buf);
-    if(words(0)=="help") { // help
+    thl::StrSplit args;
+    args.set_quot_to_skip_split('"');
+    args.split(buf);
+    if(args(0)=="help") { // help
       const char *help =
 	"list of commands:\n"
 	" arc   : draw a circle in 2D-graph\n"
@@ -1581,6 +1581,7 @@ public:
 	" plot  : plot the data in the 2D-graph\n"
 	" plot3 : plot the data in the 3D-graph\n"
 	" read  : read the data from the file\n"
+	" rm    : remove macro/data variables\n"
 	" set   : set the data\n"
 	" sort  : sort the data in ascending order\n"
 	" sqar  : draw a square in 2D-graph\n"
@@ -1602,8 +1603,8 @@ public:
       printf("\n without arguments, you get usage of the above commands\n");
       return 0;
     }
-    if(words(0)=="opt") {
-      if(words.size() < 2) {
+    if(args(0)=="opt") {
+      if(args.size() < 2) {
 	printf("usage: opt (item1:value1 item2:value2 ...)\n"
 	       "     : opt item1 item2 ...\n"
 	       "     : opt color|line|symbol|fill|reset\n"
@@ -1619,21 +1620,20 @@ public:
 	       "  reset     : set the default value for all items\n"
 	       ); return 0;
       }
-      if(words(1,0)=='(') {
+      if(args(1,0)=='(') {
 	_gopt = get_opt(buf);
-      } else if(words(1)=="reset") {
+      } else if(args(1)=="reset") {
 	_gopt = Option(); // init global options as default values
-	//	var.set_prec(-1); // init precision of macro variable "%g"
 	var.reset_fmt(); // set macro variable output format "%.11g"
       } else {
-	for(size_t j=1; j<words.size(); j++) {
-	  _gopt.print(words(j));
+	for(size_t j=1; j<args.size(); j++) {
+	  _gopt.print(args(j));
 	}
       }
       return 0;
     }
-    if(words(0)=="div") {
-      if(words.size() < 3) {
+    if(args(0)=="div") {
+      if(args.size() < 3) {
 	printf("usage: div nx ny [(bo:0|1)]\n"
 	       "divide graph area by horizontal(nx) and vertical(ny)\n"
 	       "option:\n"
@@ -1642,10 +1642,10 @@ public:
 	       ); return 0;
       }
       _gopt=get_opt(buf);
-      _pl->divide(words.stoi(1),words.stoi(2)); return 0;
+      _pl->divide(args.stoi(1),args.stoi(2)); return 0;
     }
-    if(words(0)=="tfmt") {
-      if(words.size() < 2) {
+    if(args(0)=="tfmt") {
+      if(args.size() < 2) {
 	printf("usage: tfmt \"time format\"\n"
 	       "       tfmt reset\n"
 	       " set x-axis time format.\n"
@@ -1658,8 +1658,8 @@ public:
 	       ); return 0;
       }
       _gopt = get_opt(buf);
-      if(words(1)=="reset") {_gopt.att.time_xaxis = 0; return 0;}
-      std::string tfmt=thl::trim(words(1));
+      if(args(1)=="reset") {_gopt.att.time_xaxis = 0; return 0;}
+      std::string tfmt=thl::trim(args(1));
       if(tfmt.size()) {
 	_gopt.att.set_time_fmt(tfmt.c_str());
 	_gopt.att.time_xaxis = 1;
@@ -1668,53 +1668,53 @@ public:
       }
       return 0;
     }
-    if(words(0)=="title") {
-      if(words.size() < 2) {
+    if(args(0)=="title") {
+      if(args.size() < 2) {
 	printf("usage: title \"strings\"\n"
 	       " set graph top label\n"
 	       " equivalent to 'opt (tl:\"strings\")'\n"
 	       ); return 0;
       }
-      _gopt.att.set_title(thl::trim(words(1)).c_str());
+      _gopt.att.set_title(thl::trim(args(1)).c_str());
       return 0;
     }
-    if(words(0)=="xlab") {
-      if(words.size() < 2) {
+    if(args(0)=="xlab") {
+      if(args.size() < 2) {
 	printf("usage: xlab \"strings\"\n"
 	       " set x-axis label\n"
 	       " equivalent to 'opt (xl:\"strings\")'\n"
 	       ); return 0;
       }
-      _gopt.att.set_xlab(thl::trim(words(1)).c_str());
+      _gopt.att.set_xlab(thl::trim(args(1)).c_str());
       return 0;
     }
-    if(words(0)=="ylab") {
-      if(words.size() < 2) {
+    if(args(0)=="ylab") {
+      if(args.size() < 2) {
 	printf("usage: ylab \"strings\"\n"
 	       " set y-axis label\n"
 	       " equivalent to 'opt (yl:\"strings\")'\n"
 	       ); return 0;
       }
-      _gopt.att.set_ylab(thl::trim(words(1)).c_str());
+      _gopt.att.set_ylab(thl::trim(args(1)).c_str());
       return 0;
     }
-    if(words(0)=="zlab") {
-      if(words.size() < 2) {
+    if(args(0)=="zlab") {
+      if(args.size() < 2) {
 	printf("usage: zlab \"strings\"\n"
 	       " set z-axis label\n"
 	       " equivalent to 'opt (zl:\"strings\")'\n"
 	       ); return 0;
       }
-      _gopt.att.set_zlab(thl::trim(words(1)).c_str());
+      _gopt.att.set_zlab(thl::trim(args(1)).c_str());
       return 0;
     }
-    if(words(0)=="box") {
-      if(words.size() < 5) {
+    if(args(0)=="box") {
+      if(args.size() < 5) {
 	printf("usage: box x0 x1 y0 y1 [(opt)]\n"); return 0;
       }
       Option opt=get_opt(buf);
-      double x0=words.stof(1),x1=words.stof(2);
-      double y0=words.stof(3),y1=words.stof(4);
+      double x0=args.stof(1),x1=args.stof(2);
+      double y0=args.stof(3),y1=args.stof(4);
       _pl->att=opt.att;
       _pl->att.box(x0,x1,y0,y1);
       if(opt.att.lwid==0) {
@@ -1726,14 +1726,14 @@ public:
       if(opt.fl) _pl->flush();
       return 0;
     }
-    if(words(0)=="box3") {
-      if(words.size() < 7) {
+    if(args(0)=="box3") {
+      if(args.size() < 7) {
 	printf("usage: box3 x0 x1 y0 y1 z0 z1 [(opt)]\n"); return 0;
       }
       Option opt=get_opt(buf);
-      double x0=words.stof(1),x1=words.stof(2);
-      double y0=words.stof(3),y1=words.stof(4);
-      double z0=words.stof(5),z1=words.stof(6);
+      double x0=args.stof(1),x1=args.stof(2);
+      double y0=args.stof(3),y1=args.stof(4);
+      double z0=args.stof(5),z1=args.stof(6);
       _pl->att=opt.att;
       _pl->att.box3d(x0,x1,y0,y1,z0,z1);
       _pl->draw_box3d(opt.bp,opt.cr);
@@ -1741,68 +1741,68 @@ public:
       if(opt.fl) _pl->flush();
       return 0;
     }
-    if(words(0)=="fill") {
-      if(words.size() < 3) {
+    if(args(0)=="fill") {
+      if(args.size() < 3) {
 	printf("usage: fill vx vy [(opt)]\n"
 	       " fill a color or pattern in the area which is specified\n"
 	       " by the data vx and vy.\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      draw_fill_area(words(1),words(2),opt);
+      draw_fill_area(args(1),args(2),opt);
       return 0;
     }
-    if(words(0)=="fbox") {
-      if(words.size() < 3) {
+    if(args(0)=="fbox") {
+      if(args.size() < 3) {
 	printf("usage: fbox x0 x1 y0 y1 [(opt)]\n"
 	       " draw filled box.\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      double x0=words.stof(1),x1=words.stof(2);
-      double y0=words.stof(3),y1=words.stof(4);
+      double x0=args.stof(1),x1=args.stof(2);
+      double y0=args.stof(3),y1=args.stof(4);
       _pl->att = opt.att;
       _pl->fill_box(x0,x1,y0,y1, opt.rc);
       if(opt.fl) _pl->flush();
       return 0;
     }
-    if(words(0)=="line") {
-      if(words.size() < 5) {
+    if(args(0)=="line") {
+      if(args.size() < 5) {
 	printf("usage: line x0 x1 y0 y1 [(opt)]\n"); return 0;
       }
       Option opt=get_opt(buf);
-      double x0=words.stof(1),x1=words.stof(2);
-      double y0=words.stof(3),y1=words.stof(4);
+      double x0=args.stof(1),x1=args.stof(2);
+      double y0=args.stof(3),y1=args.stof(4);
       _pl->att=opt.att;
       _pl->draw_line(x0,x1,y0,y1, opt.rc);
       if(opt.fl) _pl->flush();
       return 0;
     }
-    if(words(0)=="sqar") { // square
-      if(words.size() < 5) {
+    if(args(0)=="sqar") { // square
+      if(args.size() < 5) {
 	printf("usage: sqar x0 x1 y0 y1 [(opt)]\n"); return 0;
       }
       Option opt=get_opt(buf);
-      double x0=words.stof(1),x1=words.stof(2);
-      double y0=words.stof(3),y1=words.stof(4);
+      double x0=args.stof(1),x1=args.stof(2);
+      double y0=args.stof(3),y1=args.stof(4);
       _pl->att=opt.att;
       _pl->draw_square(x0,x1,y0,y1, opt.rc);
       if(opt.fl) _pl->flush();
       return 0;
     }
-    if(words(0)=="arc") {
-      if(words.size() < 4) {
+    if(args(0)=="arc") {
+      if(args.size() < 4) {
 	printf("usage: arc x y r [(opt)]\n"); return 0;
       }
       Option opt=get_opt(buf);
-      double x=words.stof(1),y=words.stof(2),r=words.stof(3);
+      double x=args.stof(1),y=args.stof(2),r=args.stof(3);
       _pl->att=opt.att;
       _pl->draw_circle(x,y,r, opt.rc);
       if(opt.fl) _pl->flush();
       return 0;
     }
-    if(words(0)=="text") {
-      if(words.size() < 4) {
+    if(args(0)=="text") {
+      if(args.size() < 4) {
 	printf("usage: text x y \"strings\" [(opt)]\n"
 	       "escape sequences in the text strings:\n"
 	       " #u  : switch to the superscript (ended with #d)\n"
@@ -1815,27 +1815,27 @@ public:
 	return 0;
       }
       Option opt=get_opt(buf);
-      double x=words.stof(1),y=words.stof(2);
+      double x=args.stof(1),y=args.stof(2);
       _pl->att=opt.att;
-      std::string s=thl::trim(words(3));
+      std::string s=thl::trim(args(3));
       replace_esc(s);
       _pl->draw_text(x,y, s.c_str(), opt.rc);
       if(opt.fl) _pl->flush();
       return 0;
     }
-    if(words(0)=="symb") {
-      if(words.size() < 3) {
+    if(args(0)=="symb") {
+      if(args.size() < 3) {
 	printf("usage: symb x y [(opt)]\n"); return 0;
       }
       Option opt=get_opt(buf);
-      double x=words.stof(1),y=words.stof(2);
+      double x=args.stof(1),y=args.stof(2);
       _pl->att=opt.att;
       _pl->draw_symbol(x,y, opt.rc);
       if(opt.fl) _pl->flush();
       return 0;
     }
-    if(words(0)=="seed") {
-      if(words.size() < 3) {
+    if(args(0)=="seed") {
+      if(args.size() < 3) {
 	printf("usage: seed N|utime|clock\n"
 	       "  N     : set random seed N (an integer number).\n"
 	       "  utime : set seed by unix time (sec).\n"
@@ -1843,9 +1843,9 @@ public:
 	       " equivalent to 'opt (sd:N)'\n"
 	       ); return 0;
       }
-      _gopt.sd = words(1);
+      _gopt.sd = args(1);
     }
-    if(words(0)=="set") {
+    if(args(0)=="set") {
       thl::StrSplit sp(buf,"= ");
       if(sp.size() < 3) {
 	printf("usage: set v = {x0,x1,x2,...}\n"
@@ -1874,14 +1874,14 @@ public:
       }
       return 0;
     }
-    if(words(0)=="range") {
+    if(args(0)=="range") {
       printf("usage: set v = range(N,x0,x1)\n"
 	     "  set the data v which size N, start from x0 to the end x1.\n"
 	     "  data increment dx = (x1-x0)/(N-1)\n"
 	     "  ex.) range(5,0,2) set the data {0, 0.5, 1, 1.5, 2}.\n" 
 	     ); return 0;
     }
-    if(words(0)=="random") {
+    if(args(0)=="random") {
       printf("usage: set v = random(N,uni[,x0,x1]) [(opt)]\n"
 	     "       set v = random(N,gaus[,sgm,mean]) [(opt)]\n"
 	     "       set v = random(N,exp[,tau]) [(opt)]\n"
@@ -1895,7 +1895,7 @@ public:
 	     "  sd:clock : set clock(nsec) as random seed (this is default)\n"
 	     ); return 0;
     }
-    if(words(0)=="time") {
+    if(args(0)=="time") {
       printf("usage: set v2 = time(v1[,unit])\n"
 	     " convert the time data\n"
 	     " v1 is the string data of ISO time-format or the numerical\n"
@@ -1915,8 +1915,8 @@ public:
 	     " if unit is not specified, it returns unix-epoch time.\n"
 	     ); return 0;
     }
-    if(words(0)=="read") {
-      if(words.size() < 3) {
+    if(args(0)=="read") {
+      if(args.size() < 3) {
 	printf("usage: read v1,v2,... file_name [(opt)]\n"
 	       "       read v1,v2,... `command` [(opt)]\n"
 	       " where v1,v2,... are list of data to read\n"
@@ -1930,37 +1930,37 @@ public:
 	thl::CFormat tmpfile,fmt;
 	tmpfile("/tmp/tip.%d",getpid());
 	system(fmt("%s > %s",bc.contents(0).c_str(), tmpfile()));
-	data_read(words(1),tmpfile(),opt);
+	data_read(args(1),tmpfile(),opt);
 	system(fmt("rm -f %s",tmpfile()));
       } else {
-	data_read(words(1),words(2),opt);
+	data_read(args(1),args(2),opt);
       }
       return 0;
     }
-    if(words(0)=="write") {
-      if(words.size() < 3) {
+    if(args(0)=="write") {
+      if(args.size() < 3) {
 	printf("usage: write v1,v2,... file_name ([opt])\n"
 	       " where v1,v2,... is list of data to write\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      data_write(words(1),words(2),opt);
+      data_write(args(1),args(2),opt);
       return 0;
     }
-    if(words(0)=="ls") {
-      if(words.size() < 2) {
+    if(args(0)=="ls") {
+      if(args.size() < 2) {
 	printf("usage: ls pattern [(opt)]\n"
 	       " print list of data or macro variables which matches pattern\n"
 	       " 'ls *' show all data or macro variables\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      var.ls(words(1));
-      data_list(words(1),opt);
+      var.ls(args(1));
+      data_list(args(1),opt);
       return 0;
     }
-    if(words(0)=="cat") {
-      if(words.size() < 2) {
+    if(args(0)=="cat") {
+      if(args.size() < 2) {
 	printf("usage: cat v1,v2,... [>|>>] [v] [(opt)]\n"
 	       " concatenate data v1,v2,.. and print contents\n"
 	       " redirect to the data v:\n"
@@ -1973,43 +1973,43 @@ public:
       Option opt=get_opt(buf);
       if(opt.n0==opt.n1) {opt.n0=0; opt.n1=-1;}
       if(buf.find(">") != buf.npos) {
-	if(words.size() >= 3) data_cat(words(1),words(2),words(3),opt);
+	if(args.size() >= 3) data_cat(args(1),args(2),args(3),opt);
       } else {
-	thl::StrSplit v_list(words(1),",");
+	thl::StrSplit v_list(args(1),",");
 	for(size_t j=0; j<v_list.size(); j++) {data_list(v_list(j),opt);}
       }
       return 0;
     }
-    if(words(0)=="rm") {
-      if(words.size() < 2) {
+    if(args(0)=="rm") {
+      if(args.size() < 2) {
 	printf("usage: rm pattern\n"
 	       " remove data or macro variables which matches pattern\n"
 	       " example: 'rm *'  remove all data or macro variables\n"
 	       ); return 0;
       }
-      var.rm(words(1));
+      var.rm(args(1));
       //      clear_var();
-      data_rm(words(1));
+      data_rm(args(1));
       return 0;
     }
-    if(words(0)=="clear") {
-      if(words.size() < 2) {
+    if(args(0)=="clear") {
+      if(args.size() < 2) {
 	printf("usage: clear N|all\n"
 	       " clear the Nth box-area.\n"
 	       " if N is 0, current box-area is cleared.\n"
 	       " if N is 'all', all box-areas are cleared.\n"
 	       ); return 0;
       }
-      if(words(1)=="all") {
+      if(args(1)=="all") {
 	_pl->next_page();
       } else {
-	_pl->set_frame(words.stoi(1),1);
+	_pl->set_frame(args.stoi(1),1);
       }
       _pl->flush();
       return 0;
     }
-    if(words(0)=="plot") {
-      if(words.size() < 2) {
+    if(args(0)=="plot") {
+      if(args.size() < 2) {
 	printf("usage: plot [x] y [(opt)]\n"
 	       " plot the 2D-graph of data x and y.\n"
 	       " if data x is not specified the index data 'y_n' is created\n"
@@ -2017,29 +2017,29 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      if(words.size() < 3) {
-	data_plot(words(1),opt);
+      if(args.size() < 3) {
+	data_plot(args(1),opt);
       } else {
-	if(words(2,0)=='(') {
-	  data_plot(words(1),opt);
+	if(args(2,0)=='(') {
+	  data_plot(args(1),opt);
 	} else {
-	  data_plot(words(1),words(2),opt);
+	  data_plot(args(1),args(2),opt);
 	}
       }
       return 0;
     }
-    if(words(0)=="plot3") {
-      if(words.size() < 4) {
+    if(args(0)=="plot3") {
+      if(args.size() < 4) {
 	printf("usage: plot3 x y z [(opt)]\n"
 	       " plot the 3d-graph of data x, y and z.\n"
 	       " those three data should be the same size.\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      data_plot3d(words(1),words(2),words(3),opt);
+      data_plot3d(args(1),args(2),args(3),opt);
       return 0;
     }
-    if(words(0)=="mset") {
+    if(args(0)=="mset") {
       thl::StrSplit sp(buf,"= ");
       if(sp.size() < 3) {
 	printf("usage: mset v = {{v00,..,v0M},{v10,..,v1M},..,{vN0,..,vNM}}\n"
@@ -2058,8 +2058,8 @@ public:
       }
       return 0;
     }
-    if(words(0)=="mread") {
-      if(words.size() < 3) {
+    if(args(0)=="mread") {
+      if(args.size() < 3) {
       printf("usage: mread x,y,z mesh-file [(opt)]\n"
 	     " read data and mesh-data\n"
 	     " where x is data of size N.\n"
@@ -2068,11 +2068,11 @@ public:
 	     ); return 0;
       }
       Option opt=get_opt(buf);
-      mesh_read(words(1),words(2),opt);
+      mesh_read(args(1),args(2),opt);
       return 0;
     }
-    if(words(0)=="mwrite") {
-      if(words.size() < 3) {
+    if(args(0)=="mwrite") {
+      if(args.size() < 3) {
       printf("usage: mwrite x,y,z mesh-file [(opt)]\n"
 	     " write data and mesh-data\n"
 	     " where x is data of size N.\n"
@@ -2081,11 +2081,11 @@ public:
 	     ); return 0;
       }
       Option opt=get_opt(buf);
-      mesh_write(words(1),words(2),opt);
+      mesh_write(args(1),args(2),opt);
       return 0;
     }
-    if(words(0)=="mplot") {
-      if(words.size() < 4) {
+    if(args(0)=="mplot") {
+      if(args.size() < 4) {
 	printf("usage: mplot x y z [(opt)]\n"
 	       " plot the mesh-3d-graph.\n"
 	       " where x is data of size N.\n"
@@ -2100,11 +2100,11 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      mesh_plot(words(1),words(2),words(3),opt);
+      mesh_plot(args(1),args(2),args(3),opt);
       return 0;
     }
-    if(words(0)=="fit") {
-      if(words.size() < 3) {
+    if(args(0)=="fit") {
+      if(args.size() < 3) {
 	printf("usage: fit x y [lin|quad|exp|log|gaus|sin|circ] [(opt)]\n"
 	       " do fitting to the data x and y and draw the result.\n"
 	       " you should do 'plot x y' before this command.\n"
@@ -2120,12 +2120,12 @@ public:
       }
       Option opt=get_opt(buf);
       std::string func = "lin";
-      if(words.size()>3) {if(words(3,0)!='(') func=words(3);}
-      data_fit(words(1),words(2),func,opt);
+      if(args.size()>3) {if(args(3,0)!='(') func=args(3);}
+      data_fit(args(1),args(2),func,opt);
       return 0;
     }
-    if(words(0)=="fit3") {
-      if(words.size() < 4) {
+    if(args(0)=="fit3") {
+      if(args.size() < 4) {
 	printf("usage: fit3 x y z [plane] [(opt)]\n"
 	       " do fitting to the data x,y,z by plane function.\n"
 	       " you should do 'plot3 x y z' before this command.\n"
@@ -2135,34 +2135,34 @@ public:
       }
       Option opt=get_opt(buf);
       std::string func = "plane";
-      if(words.size()>4) {if(words(4,0)!='(') func=words(4);}
-      data_fit3d(words(1),words(2),words(3),func,opt);
+      if(args.size()>4) {if(args(4,0)!='(') func=args(4);}
+      data_fit3d(args(1),args(2),args(3),func,opt);
       return 0;
     }
-    if(words(0)=="xerr") {
-      if(words.size() < 4) {
+    if(args(0)=="xerr") {
+      if(args.size() < 4) {
 	printf("usage: xerr x y ex [(opt)]\n"
 	       " plot x-error-bars of the data ex.\n"
 	       " you should do 'plot x y' before this command.\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      data_xerr(words(1),words(2),words(3),opt);
+      data_xerr(args(1),args(2),args(3),opt);
       return 0;
     }
-    if(words(0)=="yerr") {
-      if(words.size() < 4) {
+    if(args(0)=="yerr") {
+      if(args.size() < 4) {
 	printf("usage: yerr x y ey [(opt)]\n"
 	       " plot y-error-bars of the data ey\n"
 	       " you should do 'plot x y' before this command.\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      data_yerr(words(1),words(2),words(3),opt);
+      data_yerr(args(1),args(2),args(3),opt);
       return 0;
     }
-    if(words(0)=="hplot") {
-      if(words.size() < 2) {
+    if(args(0)=="hplot") {
+      if(args.size() < 2) {
 	printf("usage: hplot v [(opt)]\n"
 	       " make and plot the histogram of the data v,\n"
 	       " it is created the bin data v_hx and the entry data v_hy\n"
@@ -2175,21 +2175,21 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      hist_plot(words(1),opt);
+      hist_plot(args(1),opt);
       return 0;
     }
-    if(words(0)=="hplot2") {
-      if(words.size() < 3) {
+    if(args(0)=="hplot2") {
+      if(args.size() < 3) {
 	printf("usage: hplot2 x y [(opt)]\n"
 	       " make and plot the 2D-histogram of data x and y\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      hist2d_plot(words(1),words(2),opt);
+      hist2d_plot(args(1),args(2),opt);
       return 0;
     }
-    if(words(0)=="hfit") {
-      if(words.size() < 3) {
+    if(args(0)=="hfit") {
+      if(args.size() < 3) {
 	printf("usage: hfit v func [(opt)]\n"
 	       " you should do the 'hplot' before this command.\n"
 	       " 'hplot' create a bin data v_hx, an entry data v_hy\n"
@@ -2198,11 +2198,11 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      hist_fit(words(1),words(2),opt);
+      hist_fit(args(1),args(2),opt);
       return 0;
     }
-    if(words(0)=="fplot") {
-      if(words.size() < 2) {
+    if(args(0)=="fplot") {
+      if(args.size() < 2) {
 	printf("usage: fplot [t] v [(opt)]\n"
 	       " do FFT with the time data t and the amplitude v.\n"
 	       " it is created the frequency data v_fx and the power"
@@ -2221,19 +2221,19 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      if(words.size() < 3) {
-	fft_plot(words(1),opt);
+      if(args.size() < 3) {
+	fft_plot(args(1),opt);
       } else {
-	if(words(2,0)=='(') {
-	  fft_plot(words(1),opt);
+	if(args(2,0)=='(') {
+	  fft_plot(args(1),opt);
 	} else {
-	  fft_plot(words(1),words(2),opt);
+	  fft_plot(args(1),args(2),opt);
 	}
       }
       return 0;
     }
-    if(words(0)=="ffit") {
-      if(words.size() < 3) {
+    if(args(0)=="ffit") {
+      if(args.size() < 3) {
 	printf("usage: ffit v [func] [(opt)]\n"
 	       " you should do the 'fplot' before this command.\n"
 	       " then 'fit v_fx v_fy [func]' is done.\n"
@@ -2241,11 +2241,11 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      fft_fit(words(1),words(2),opt);
+      fft_fit(args(1),args(2),opt);
       return 0;
     }
-    if(words(0)=="stat") {
-      if(words.size() < 2) {
+    if(args(0)=="stat") {
+      if(args.size() < 2) {
 	printf("usage: stat v [(opt)]\n"
 	       " make the statistics information of data v.\n"
 	       " the macro variables [v_max] [v_min] [v_mean] [v_rms]\n"
@@ -2255,11 +2255,11 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      data_statistics(words(1),opt);
+      data_statistics(args(1),opt);
       return 0;
     }
-    if(words(0)=="cut") {
-      if(words.size() < 3) {
+    if(args(0)=="cut") {
+      if(args.size() < 3) {
 	printf("usage: cut v1,v2,... \"expression\"\n"
 	       " where v1,v2,... are data to cut\n"
 	       " new data v1_cut,v2_cut,... are created\n"
@@ -2270,15 +2270,15 @@ public:
 	       " plot x y (cc:\"0<x<1 & 1<y<2\")\n"
 	       ); return 0;
       }
-      thl::StrSplit v_list(words(1),",");
-      std::string expr = thl::trim(buf.substr(words.index(2)));
+      thl::StrSplit v_list(args(1),",");
+      std::string expr = thl::trim(buf.substr(args.index(2)));
       if(v_list.size()>0 && expr.size()>0) {
 	for(size_t j=0; j<v_list.size(); j++) {data_make_cut(v_list(j), expr);}
       }
       return 0;
     }
-    if(words(0)=="vp"||words(0)=="viewport") {
-      if(words.size() < 2) {
+    if(args(0)=="vp"||args(0)=="viewport") {
+      if(args.size() < 2) {
 	printf("usage: vp x0 x1 y0 y1 aspect \n"
 	       "       vp show|reset\n"
 	       " where x0,x1 is x-range [0:1] of viewport\n"
@@ -2286,30 +2286,30 @@ public:
 	       "       aspect is ratio: y-width/x-width\n"
 	       ); return 0;
       }
-      if(words(1)=="show") {
+      if(args(1)=="show") {
 	_pl->print_viewport();
 	double x0,x1,y0,y1;
 	plgvpd(&x0,&x1,&y0,&y1);
 	printf("x0=%g x1=%g y0=%f y1=%g\n",x0,x1,y0,y1);
-      } else if(words(1)=="reset") {
+      } else if(args(1)=="reset") {
 	_gopt.att.viewport(0,0,0,0, 0);
-      } else if(words.size() > 5) {
-	_gopt.att.viewport(words.stof(1),words.stof(2),
-			   words.stof(3),words.stof(4), words.stof(5));
+      } else if(args.size() > 5) {
+	_gopt.att.viewport(args.stof(1),args.stof(2),
+			   args.stof(3),args.stof(4), args.stof(5));
       }
       return 0;
     }
-    if(words(0)=="exe") {
-      if(words.size() < 2) {
+    if(args(0)=="exe") {
+      if(args.size() < 2) {
 	printf("usage: exe [macro_file] [(opt)]\n"
 	       " execute macro_file\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      tip_exec(words(1),opt.dm);
+      tip_exec(args(1),opt.dm);
       return 0;
     }
-    if(words(0)=="elem") {
+    if(args(0)=="elem") {
       thl::StrSplit sp(buf,"= ");
       if(sp.size() < 3) {
 	printf("usage: elem x = v(N)\n"
@@ -2338,8 +2338,8 @@ public:
       }      
       return 0;
     }
-    if(words(0)=="font") {
-      if(words.size() < 2) {
+    if(args(0)=="font") {
+      if(args.size() < 2) {
 	printf("usage: font [N]\n"
 	       "set global font\n"
 	       " N=1 : Sans-Serif\n"
@@ -2347,33 +2347,33 @@ public:
 	       " N=3 : Italic\n"
 	       ); return 0;
       }
-      _pl->set_font(words.stoi(1));
+      _pl->set_font(args.stoi(1));
       return 0;
     }
-    if(words(0)=="sort") {
-      if(words.size() < 4) {
+    if(args(0)=="sort") {
+      if(args.size() < 4) {
 	printf("usage: sort v1,v2,... by v\n"
 	       " sort data v1,v2,... by v in ascending order.\n"
 	       " it is created sorted data v1_sort,v2_sort,...\n"
 	       ); return 0;
       }
-      data_make_sort(words(1),words(3));
+      data_make_sort(args(1),args(3));
       return 0;
     }
 #if USE_EPICS_CA 
-    if(words(0)=="cainfo") {
-      if(words.size() < 2) {
+    if(args(0)=="cainfo") {
+      if(args.size() < 2) {
 	printf("usage: cainfo EPICS_record\n"
 	       " show information of EPICS_record.\n"
 	       ); return 0;
       }
-      std::string rec = words(1);
+      std::string rec = args(1);
       thl::EpicsCA ca(rec.c_str());
       ca.print_info();
       return 0;
     }
-    if(words(0)=="caget") {
-      if(words.size() < 2) {
+    if(args(0)=="caget") {
+      if(args.size() < 2) {
 	printf("usage: caget EPICS_record [> v]\n"
 	       " get the value from EPICS_record and print contents.\n"
 	       " if '>' is specified the value is redirected to the data v.\n"
@@ -2383,13 +2383,13 @@ public:
 	       "   v : the 1st element of data v\n"
 	       ); return 0;
       }
-      std::string rec = words(1);
-      std::string tag = (words.size()>3 && words(2)==">") ? words(3) : "";
+      std::string rec = args(1);
+      std::string tag = (args.size()>3 && args(2)==">") ? args(3) : "";
       epics_ca_get(rec,tag);
       return 0;
     }
-    if(words(0)=="caput") {
-      if(words.size() < 4 || (words.size() > 2 && words(2) != "<")) {
+    if(args(0)=="caput") {
+      if(args.size() < 4 || (args.size() > 2 && args(2) != "<")) {
 	printf("usage: caput EPICS_record < v\n"
 	       "usage: caput EPICS_record < expression\n"
 	       " put the value to EPICS_record.\n"
@@ -2397,25 +2397,25 @@ public:
 	       " if not exist, the expression value is put to EPICS_record.\n"
 	       ); return 0;
       }
-      std::string rec = words(1);
-      std::string expr = buf.substr(words.index(3));
+      std::string rec = args(1);
+      std::string expr = buf.substr(args.index(3));
       epics_ca_put(rec,expr);
       return 0;
     }
-    if(words(0)=="camon") {
-      if(words.size() < 4 || (words.size() > 2 && words(2) != ">")) {
+    if(args(0)=="camon") {
+      if(args.size() < 4 || (args.size() > 2 && args(2) != ">")) {
 	printf("usage: camon EPICS_record > v\n"
 	       " monitor the value of EPICS_record and redirected to"
 	       " the data v.\n"
 	       ); return 0;
       }
-      std::string rec = words(1);
-      std::string tag = words(3);
+      std::string rec = args(1);
+      std::string tag = args(3);
       epics_ca_mon(rec,tag);
       return 0;
     }
-    if(words(0)=="cacheck") {
-      if(words.size() < 2) {
+    if(args(0)=="cacheck") {
+      if(args.size() < 2) {
 	printf("usage: cacheck v1,v2,...\n"
 	       " check if EPICS records related to data v1,v2,..."
 	       " are updated.\n (v1,v2,... should be defeined by 'camon')\n"
@@ -2429,17 +2429,17 @@ public:
 	       "  ... and so on ...\n"
 	       ); return 0;
       }
-      epics_ca_check(words(1));
+      epics_ca_check(args(1));
       return 0;
     }
-    if(words(0)=="caclose") {
-      if(words.size() < 2) {
+    if(args(0)=="caclose") {
+      if(args.size() < 2) {
 	printf("usage: caclose [v1,v2,...]\n"
 	       " close the connection of the EPICS record related to"
 	       " the data v1,v2,...\n"
 	       ); return 0;
       }
-      epics_ca_close(words(1));
+      epics_ca_close(args(1));
       return 0;
     }
 #endif
