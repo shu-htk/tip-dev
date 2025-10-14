@@ -106,6 +106,7 @@ see also [command @](ref/var.md).
 - [arc](ref/arc.md) : draw a circle in 2D-graph
 - [box](ref/box.md) : draw the axis of 2D-graph in the box shape
 - [box3](ref/box3.md) : draw the axes of 3D-graph
+- [cat](ref/cat.md) : show data contents / concatenate data
 - [cut](ref/cut.md) : set cut condition
 - [div](ref/div.md) : divide the drawing area
 - [elem](ref/elem.md) : copy data element to macro variable
@@ -122,6 +123,7 @@ see also [command @](ref/var.md).
 - [hplot](ref/hplot.md) : plot the histogram from the data
 - [hplot2](ref/hplot2.md): plot the 2D-histogram from the couple of data
 - [line](ref/line.md) : draw a line in 2D-graph
+- [ls](ref/ls.md) : list macro/data variables
 - [mplot](ref/mplot.md) : plot mesh-graph(3D) or contour-graph(2D)
 - [mread](ref/mread.md) : read the mesh data from the file
 - [mset](ref/mset.md) : set mesh data
@@ -130,6 +132,7 @@ see also [command @](ref/var.md).
 - [plot](ref/plot.md) : plot the data in the 2D-graph
 - [plot3](ref/plot3.md) : plot the data in the 3D-graph
 - [read](ref/read.md) : read the data from the file
+- [rm](ref/rm.md) : remove macro/data variables
 - [set](ref/set.md) : set the data
 - [sort](ref/sort.md) : sort the data in ascending order
 - [sqar](ref/sqar.md) : draw a square in 2D-graph
@@ -138,7 +141,7 @@ see also [command @](ref/var.md).
 - [text](ref/text.md) : draw a text in 2D-graph
 - [title](ref/title.md) : set the graph title
 - [tfmt](ref/tfmt.md) : set the x-axis time format
-- [vp](ref/vp.md) : set viewport of drawing area
+- [viewport](ref/vp.md) : set viewport of drawing area
 - [write](ref/write.md) : write the data to the file
 - [xerr](ref/xerr.md) : plot the x-error-bars in 2D-graph
 - [xlab](ref/xlab.md) : set the x-axis label
