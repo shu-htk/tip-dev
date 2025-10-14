@@ -69,7 +69,6 @@ end
 ```
 result
 ```
-tip> exe c.tip
 Greg: Boy
 Anna: Girl: name begin from 'A'
 Ryan: Boy
