@@ -31,14 +31,14 @@ sudo dnf install g++
 sudo dnf install plplot-devel
 sudo dnf install readline-devel
 ```
-- **Windows 10 or 11**
+- **Windows 11**
 
-The easiest way is to run the Linux distribution on WLS2.
+The easiest way is to run the Linux on WLS2.
 
 official : https://learn.microsoft.com/windows/wsl/install  
 
 
-## (2) Configure and make tip executable
+## (2) Configure and make the tip executable
 
 Access to https://github.com/shu-htk/tip-dev
 
@@ -76,7 +76,7 @@ export PATH=$PATH:$HOME/bin
 
 ## (3) About my_macro 
 
-The executable file `my_macro` is also installed when you install `tip`.  
-It is the sample program using the ferture of [thl::MacroTool](ref/MacroTool.md)
-but not using graphic drawing feture of PLPLOT.
+The executable file `my_macro` is also installed when you install the `tip`.  
+It is a sample program using [thl::MacroTool](ref/MacroTool.md)
+but not using PLPLOT.
 

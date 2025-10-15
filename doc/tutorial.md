@@ -138,7 +138,7 @@ tip> stat x (cp:0.03,0.6 rc:1 ts:0.8)
 
 `set x = random(100000,gaus,5,10)` make data of random gaussian distribution
 with sigma=5 mean=10.
-[see random](#ref/random.md)  
+[see random](ref/random.md)  
 `hplot x (nb:50)` makes histogram of data x 
 where bin number 50, x-range is set to include all data of x.  
 you can change the x-range by the option `(xr:Xmin,Xmax)`.
