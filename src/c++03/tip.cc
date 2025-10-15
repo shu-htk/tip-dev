@@ -643,7 +643,7 @@ public:
 	for(size_t j=0; j < size; j++) {
 	  for(size_t k=0; k<v_list.size(); k++) {
 	    std::string v=v_list(k);
-	    if(_dat[v].type==DataType::Str) {
+	    if(_dat[v].type==Str) {
 	      ofs << fmt("%s",_dat[v].str[j].c_str());
 	    } else {
 	      ofs << fmt("%.11g",_dat[v].num[j]);

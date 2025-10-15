@@ -161,7 +161,7 @@ echo "** configure normal end **"
 #2:INC = -I./include
 #2:LIB = -lreadline
 #21:LIB += -ltermcap
-#22:LIB += -lrt
+#2:LIB += -lrt
 # libtermcap.so should be linked for readline in old system
 # librt.so should be linked for clock_gettime() in old system
 
