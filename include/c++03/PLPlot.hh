@@ -266,7 +266,8 @@ namespace thl {
       const char *arg[] = {title,"-geometry",geom,"-np",""};
       int narg=4;
       if(PLPlotDoubleBufferXwin) {arg[4]="-db"; narg=5;}
-#if PLPLOT_OPTION_NEW
+      //#if PLPLOT_OPTION_NEW
+#if __cplusplus >= 201103L
       plparseopts(&narg, (char **)arg, PL_PARSE_FULL);
 #else
       plparseopts(&narg, (const char **)arg, PL_PARSE_FULL);
