@@ -4,7 +4,7 @@
 It is written by C++ depends on the libraly of
 [PLPLOT](https://plplot.sourceforge.net/)
 and [GNU readline](https://cgit.git.savannah.gnu.org/cgit/readline.git), 
-basically it works on Linux, Windows (WSL2) and probably other Unix-like OS.
+basically it works on Linux or other Unix-like OS.
 
 ## Features
 

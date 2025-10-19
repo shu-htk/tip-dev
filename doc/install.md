@@ -23,8 +23,8 @@ sudo apt install libreadline-dev
 ```
 sudo dnf update
 sudo dnf upgrade
-# sudo dnf install dnf-plugins-core     (<-- this may not be neccessary)
-# sudo dnf config-manager --enable crb  (<-- this may not be neccessary)
+sudo dnf install dnf-plugins-core     (<-- this may not be neccessary)
+sudo dnf config-manager --enable crb  (<-- this may not be neccessary)
 sudo dnf install epel-release
 sudo dnf install epel-next-release
 sudo dnf install g++
