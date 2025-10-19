@@ -9,13 +9,18 @@ usage: fmt ["format"|reset|show]
  output:  001
 ```
 
-available format specifier
+available format specifiers
 
 |specifier| |
 |-|-|
 |%f|OK|
 |%e|OK|
 |%g|OK|
+
+the following specifiers are not available 
+
+|specifier| |
+|-|-|
 |%c|NG|
 |%s|NG|
 |%d|NG|

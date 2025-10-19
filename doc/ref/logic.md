@@ -80,7 +80,7 @@ wild cards can be used for the right value of expression
 | match to          | notation      |
 |-------------------|---------------|
 |any string         |  *            |
-|any charcter       |  ?            |
+|any character       |  ?            |
 |one of list of char|[abc..], [a-z] |
 |one of list of string |{str1,str2,...}|
 

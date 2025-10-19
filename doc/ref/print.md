@@ -13,15 +13,16 @@ the following escape sequence is available.
 |escape char|function|
 |-|-|
 | \t | tab |
-| \r | return line |
-
-the quotations is printed as it is.
+| \n | return line |
 
 ```
 tip> print Hello\tWorld\n
 Hello  World
+```
 
-tip> prn You said "Hello World"
+the quotations is printed as it is.
+```
+tip> prn You said "Hello World"  ;# prn is abbr. of println 
 You said "Hello World"
 ```
 
@@ -34,11 +35,4 @@ tip> prn [e10]
 tip> fmt %.3e
 tip> prn [e10]
 2.203e+04
-```
-
-```
-tip> fmt %03d
-invalid format [%03d]
-since numerical variable type is 'double'
-you should specify the format 'f' or 'e' or 'g'
 ```

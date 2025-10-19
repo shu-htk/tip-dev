@@ -2,7 +2,7 @@
 
 ## usage
 
-- **for loop**
+- **for-loop**
 ```
 tip> for
 usage: for s (a b ...); ...; end
@@ -11,7 +11,7 @@ it is assigned for each value listed in the brackets ( )
 to the macro variable 's'.  
 the value is assigned as string even if it is digit
 
-- **do loop**
+- **do-loop**
 ```
 tip> do
 usage: do n N1 N2 [dN]; ...; end
@@ -21,7 +21,7 @@ to the macro variable 'n'.
 the value can take floating point number.
 if dN is not specified, it is incremented +1  
 
-- **while loop**
+- **while-loop**
 ```
 tip> while
 usage: while expr; ...; end
@@ -32,7 +32,7 @@ if it is false break the loop.
 
 ## example
 
-- **for loop**
+- **for-loop**
 ```
 for func (sin cos)
   @ x=[func](1)
@@ -45,7 +45,7 @@ sin(1)=0.84147098481
 cos(1)=0.54030230587
 ```
 
-- **do loop**
+- **do-loop**
 
 incremental loop with continue and break
 ```
@@ -65,7 +65,7 @@ result
 ```
 decremental loop
 ```
-do x 1 0 -0.3; prn [x]; end   ;# write it in one line
+do x 1 0 -0.3; prn [x]; end
 ```
 result
 ```
@@ -75,7 +75,7 @@ result
 0.1
 ```
 
-- **while loop**
+- **while-loop**
 ```
 @ n=0
 @ s=a
