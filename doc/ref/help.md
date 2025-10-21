@@ -62,7 +62,7 @@ macro commands:
  wait  : wait time or console input
  sys   : execute system command
  calc  : evaluate the numerical expression
- logic : evaluate the logic expression
+ logic : evaluate the logical expression
  q     : terminate this program
 
  without arguments, you get usage of the above commands

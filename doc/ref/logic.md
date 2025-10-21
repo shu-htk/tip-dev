@@ -2,9 +2,9 @@
 ```
 usage: logic [expression]
 ```
-this command show the result of "logic expression"
+this command show the result of logical expression
 
-where "logic expression" is appear in
+where logical expression is appear in
 
 - [if](if_fi.md) expr
 - [elif](if_fi.md) expr
@@ -12,7 +12,7 @@ where "logic expression" is appear in
 - [@](var.md) a = expr ? : b : c
 - [cut](cut.md) a,b,c,... "expr"  
 
-## the notation of logic expression
+## the notation of logical expression
 
 |function       |standard notation|simplified notation|
 |---------------|--------------|------------|
@@ -22,8 +22,8 @@ where "logic expression" is appear in
 |less than equal| A <= B       |            |
 |more than      | A > B        |            |
 |more than equal| A >= B       |            |
-|logic and      |expr1 && expr2|expr1 & expr2|
-|logic or       |expr1 \|\| expr2|expr1 \| expr2|
+|logical and    |expr1 && expr2|expr1 & expr2|
+|logical or     |expr1 \|\| expr2|expr1 \| expr2|
 
 example
 ```

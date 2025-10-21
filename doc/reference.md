@@ -99,7 +99,7 @@ see also [command @](ref/var.md).
 - [wait](ref/wait.md) : wait time or console input
 - [sys](ref/sys.md) : execute system command
 - [calc](ref/calc.md) : evaluate the numerical expression
-- [logic](ref/logic.md) : evaluate the logic expression
+- [logic](ref/logic.md) : evaluate the logical expression
 - q : quit the tip interpriter
 
 ### Commands of plotting the data, etc.

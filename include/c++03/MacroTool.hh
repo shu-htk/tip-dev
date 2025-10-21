@@ -2,8 +2,8 @@
 //
 // trim     : a function to trim the spaces or quotations from string
 // Calc     : class to parse numerical expression
-// NumLogic : class to parse numerical logic expression 
-// StrLogic : class to parse string logic expression 
+// NumLogic : class to parse numerical logical expression 
+// StrLogic : class to parse string logical expression 
 // Logic    : class to parse both of num and str logic
 // Var      : class to take the variable which has key and value
 // Loop     : class to take 'for', 'do', 'while' loops 
@@ -769,7 +769,7 @@ namespace thl {
 	" wait  : wait time or console input\n"
 	" sys   : execute system command\n"
 	" calc  : evaluate the numerical expression\n"
-	" logic : evaluate the logic expression\n"
+	" logic : evaluate the logical expression\n"
 	" q     : terminate this program\n";
 	printf("%s",help);
     }
@@ -1011,7 +1011,6 @@ namespace thl {
 	    std::string expr = trim(buf.substr(words.index(1)));
 	    Logic logic; bool debug=1;
 	    logic.eval(expr,debug);
-	    //	    printf("%d\n",logic.eval(expr,debug));
 	  }
 	  nline++; continue;
 	}

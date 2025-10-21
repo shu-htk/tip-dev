@@ -756,7 +756,7 @@ namespace thl {
 	" wait  : wait time or console input\n"
 	" sys   : execute system command\n"
 	" calc  : evaluate the numerical expression\n"
-	" logic : evaluate the logic expression\n"
+	" logic : evaluate the logical expression\n"
 	" q     : terminate this program\n";
 	printf("%s",help);
     }
@@ -998,7 +998,6 @@ namespace thl {
 	    std::string expr = trim(buf.substr(words.index(1)));
 	    Logic logic; bool debug=1;
 	    logic.eval(expr,debug);
-	    //	    printf("%d\n",logic.eval(expr,debug));
 	  }
 	  nline++; continue;
 	}
