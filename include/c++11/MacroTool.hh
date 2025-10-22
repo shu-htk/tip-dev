@@ -564,10 +564,11 @@ namespace thl {
     void replace(std::string &buf) {
       CFormat fmt;
       for(auto &&a : _num) {
+	fmt(_fmt,a.second);
 	std::string tag = "["+a.first+"]";
 	if(buf.find(tag) != buf.npos) {
 	  for(size_t n=0; (n=buf.find(tag))!= buf.npos;) {
-	    buf.replace(n,tag.size(),fmt(_fmt,a.second));
+	    buf.replace(n,tag.size(),fmt());
 	  }
 	}
       }

@@ -21,11 +21,11 @@ the following specifiers are not available
 
 |specifier| |
 |-|-|
-|%c|NG|
-|%s|NG|
-|%d|NG|
-|%u|NG|
-|%x|NG|
+|%c|N/A|
+|%s|N/A|
+|%d|N/A|
+|%u|N/A|
+|%x|N/A|
 
 ```
 tip> @ e=exp(1)
