@@ -11,7 +11,7 @@ println: line is returned. (abbreviate to 'prn')
 the following escape sequence is available.
 
 |escape char|function|
-|:-:|:-:|
+|:---:|:---:|
 | \t | tab |
 | \n | return line |
 

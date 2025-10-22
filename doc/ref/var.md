@@ -69,8 +69,8 @@ c : string [Hello World!]
 ```
 
 ## ternary operator
-you can use ternary operator of C style.  
-> note: unlike C, it can't be nested
+**note)**
+> ternary operator can not be nested
 ```
 tip> @ x=7
 tip> @ size = [x]>5 ? L : S          ;# this is OK

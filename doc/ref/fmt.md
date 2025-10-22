@@ -12,20 +12,20 @@ usage: fmt ["format"|reset|show]
 available format specifiers
 
 |specifier| |
-|:-:|:-:|
-|%f|OK|
-|%e|OK|
-|%g|OK|
+|:---:|:---:|
+| %f | OK |
+| %e | OK |
+| %g | OK |
 
 the following specifiers are not available 
 
 |specifier| |
-|:-:|:-:|
-|%c|N/A|
-|%s|N/A|
-|%d|N/A|
-|%u|N/A|
-|%x|N/A|
+|:---:|:---:|
+| %c | N/A |
+| %s | N/A |
+| %d | N/A |
+| %u | N/A |
+| %x | N/A |
 
 ```
 tip> @ e=exp(1)

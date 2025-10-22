@@ -15,9 +15,9 @@ where calculation expression is appear in
 - **unary operator**
 
 |function|operator|notation|
-|:-:|:-:|:-:|
+|:---:|:---:|:---:|
 |positive| +|+ X|
-|negative| \-|- X|
+|negative| -|- X|
 
 ```
 tip> calc +3
@@ -36,12 +36,12 @@ tip> calc 2 * -3
 - **binary operator**
 
 |function|operator|notation|
-|:-:|:-:|:-:|
-|multiply|*|X * Y|
-|divide|/|X / Y|
+|:---:|:---:|:---:|
+|multiply |*|X * Y|
+|divide   |/|X / Y|
 |remainder|%|X % Y|
-|add|+|X + Y|
-|subtract|\-|X - Y|
+|add      |+|X + Y|
+|subtract |-|X - Y|
 
 ```
 tip> @ x=2
