@@ -12,7 +12,7 @@ usage: fmt ["format"|reset|show]
 available format specifiers
 
 |specifier| |
-|-|-|
+|:-:|:-:|
 |%f|OK|
 |%e|OK|
 |%g|OK|
@@ -20,7 +20,7 @@ available format specifiers
 the following specifiers are not available 
 
 |specifier| |
-|-|-|
+|:-:|:-:|
 |%c|N/A|
 |%s|N/A|
 |%d|N/A|

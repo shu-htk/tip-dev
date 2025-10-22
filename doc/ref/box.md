@@ -6,7 +6,7 @@ usage: box x0 x1 y0 y1 [(opt)]
 available options
 
 |option| description|
-|-|-|
+|:-:|:-:|
 |(tl:"title")|same as `title` command|
 |(xl:"x-label")|same as `xlab` command|
 |(yl:"y-label")|same as `ylab` command|

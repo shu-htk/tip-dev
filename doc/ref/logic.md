@@ -15,7 +15,7 @@ where logical expression is appear in
 ## Logical Expression
 
 |function       |standard expr |simplified  expr|
-|-|-|-|
+|:-:|:-:|:-:|
 |equal          | A == B       |A = B       |
 |not equal      | A != B       |            |
 |less than      | A < B        |            |
@@ -49,7 +49,7 @@ tip> logic A=B | B=B
 ## Extended Logical Expression
 
 |function       |extended expr| standard expr|
-|-|-|-|
+|:-:|:-:|:-:|
 |series equal          | A=B=C ...     |(A==B) && (B==C) && ...|
 |series not equal      | A!=B!=C ...   |(A!=B) && (B!=C) && ...|
 |series less than      | A<B<C ...     |(A<B) && (B<c) && ...  |
@@ -71,7 +71,7 @@ tip> logic A=A!=B       ;# same to A==A && A!=B
 ## Wild Card Matching (for string logic only)
 
 | match to           | wild card | usage|
-|-|-|-|
+|:-:|:-:|:-:|
 |any string          |  *           | string = str*|
 |any character       |  ?           | string = s?ring|
 |one of the list of chars|[abc..], [a-z] | string = [a-z]trin[efg]|
@@ -106,7 +106,7 @@ tip> logic [s]=[A-Z]*
 ## List Matching (for both of numerical and string logic)
 
 | match to       | usage |same as|
-|-|-|-|
+|:-:|:-:|:-:|
 |one of the list of exprs|x = {expr1, expr2, ...}|x == expr1 && x == expr2 && ...|
 
 **note 3)**
