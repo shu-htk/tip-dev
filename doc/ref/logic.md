@@ -12,10 +12,10 @@ where logical expression is appear in
 - [@](var.md) a = expr ? : b : c
 - [cut](cut.md) a,b,c,... "expr"  
 
-## the notation of logical expression
+## Logical Expression
 
-|function       |standard notation|simplified notation|
-|---------------|--------------|------------|
+|function       |standard expr |simplified  expr|
+|-|-|-|
 |equal          | A == B       |A = B       |
 |not equal      | A != B       |            |
 |less than      | A < B        |            |
@@ -28,96 +28,104 @@ where logical expression is appear in
 example
 ```
 tip> logic 1<2
-expression: [1<2]
-bool_by_num: 1
+[1<2] -> num_logic -> [1]
 
-tip> logic 1=2 & 3=3
-expression: [1=2 & 3=3]
-bool_by_num: 0
+tip> logic 1==2 && 3==3     ;# standard expr
+[1==2 && 3==3] -> num_logic -> [0]
+
+tip> logic 1=2 & 3=3        ;# simplified expr
+[1=2 & 3=3] -> num_logic -> [0]
 
 tip> logic 1=2 | 3=3
-expression: [1=2 | 3=3]
-bool_by_num: 1
+[1=2 | 3=3] -> num_logic -> [1]
 
 tip> logic A=B
-expression: [A=B]
-bool_by_str: 0
+[A=B] -> str_logic -> [0]
 
 tip> logic A=B | B=B
-expression: [A=B | B=B]
-bool_by_str: 1
+[A=B | B=B] -> str_logic -> [1]
 ```
 
-## extension of the notation (numerical)
+## Extended Logical Expression
 
-|function       |extension notation| standard notation|
-|---------------|---------------|---------------------|
-|equal          | A=B=C ...     |(A==B) && (B==C) && ...|
-|not equal      | A!=B!=C ...   |(A!=B) && (B!=C) && ...|
-|less than      | A<B<C ...     |(A<B) && (B<c) && ...  |
-|less than equal| A<=B<=C ...   |(A<=B) && (b<=C) && ...|
-|more than      | A>B>C ...     |(A>B) && (B>c) && ...  |
-|more than equal| A>=B>=C ...   |(A>=B) && (b>=C) && ...|
+|function       |extended expr| standard expr|
+|-|-|-|
+|series equal          | A=B=C ...     |(A==B) && (B==C) && ...|
+|series not equal      | A!=B!=C ...   |(A!=B) && (B!=C) && ...|
+|series less than      | A<B<C ...     |(A<B) && (B<c) && ...  |
+|series less than equal| A<=B<=C ...   |(A<=B) && (b<=C) && ...|
+|series more than      | A>B>C ...     |(A>B) && (B>c) && ...  |
+|series more than equal| A>=B>=C ...   |(A>=B) && (b>=C) && ...|
 
 example
 ```
-tip> logic 1<2<3<4
-expression: [1<2<3<4]
-bool_by_num: 1
+tip> logic 1<2<3<=3     ;# same to 1<2 && 2<3 && 3<=3
+[1<2<3<=3] -> num_logic -> [1]
 
-tip> logic 1<5<3<4
-expression: [1<5<3<4]
-bool_by_num: 0
+tip> logic 1<5<3<=3     ;# same to 1<5 && 5<3 && 3<=3
+[1<5<3<=3] -> num_logic -> [0]
 
-tip> logic A=A!=B
-expression: [A=A!=B]
-bool_by_str: 1
+tip> logic A=A!=B       ;# same to A==A && A!=B
+[A=A!=B] -> str_logic -> [1]
 ```
-## wild card matching (string)
+## Wild Card Matching (for string logic only)
 
-wild cards can be used for the right value of expression
+| match to           | wild card | usage|
+|-|-|-|
+|any string          |  *           | string = str*|
+|any character       |  ?           | string = s?ring|
+|one of the list of chars|[abc..], [a-z] | string = [a-z]trin[efg]|
 
-| match to          | notation      |
-|-------------------|---------------|
-|any string         |  *            |
-|any character       |  ?            |
-|one of list of char|[abc..], [a-z] |
-|one of list of string |{str1,str2,...}|
+**note 1)**
+> wild cards should be **at the right part** of the comparison
+
+**note 2)**
+> wild card is **not the regular expression**  
+> actually it is implimented by `fnmatch()` function
 
 example
 ```
 tip> @ s=ABC
 
 tip> logic [s]=A*
-expression: [ABC=A*]
-bool_by_str: 1
+[ABC=A*] -> str_logic -> [1]
 
-tip> logic [s]=?BC
-expression: [ABC=?BC]
-bool_by_str: 1
+tip> logic A*=[s]   ;# NG : wild card should be at the right
+[A*=ABC] -> str_logic -> [0]
 
 tip> logic [s]=B*
-expression: [ABC=B*]
-bool_by_str: 0
+[ABC=B*] -> str_logic -> [0]
+
+tip> logic [s]=?BC
+[ABC=?BC] -> str_logic -> [1]
 
 tip> logic [s]=[A-Z]*
-expression: [ABC=[A-Z]*]
-bool_by_str: 1
-
-tip> logic [s]={AAA,BBB,ABC}
-expression: [ABC={AAA,BBB,ABC}]
-bool_by_str: 1
-
-tip> logic [s]={AAA,BBB,CCC}
-expression: [ABC={AAA,BBB,CCC}]
-bool_by_str: 0
-
-tip> logic [s]!={AAA,BBB,CCC}
-expression: [ABC!={AAA,BBB,CCC}]
-bool_by_str: 1
-
-tip> logic [s]!={AAA,BBB,ABC}
-expression: [ABC!={AAA,BBB,ABC}]
-bool_by_str: 0
+[ABC=[A-Z]*] -> str_logic -> [1]
 ```
 
+## List Matching (for both of numerical and string logic)
+
+| match to       | usage |same as|
+|-|-|-|
+|one of the list of exprs|x = {expr1, expr2, ...}|x == expr1 && x == expr2 && ...|
+
+**note 3)**
+> the list of exprs should be **at the right part** of the comparison
+
+**note 4)**
+> the list of exprs **can not be concatenate** to the other exprs
+
+example
+```
+tip> logic 6 = {1+2, 2*3}
+[6 = {1+2, 2*3}] -> num_logic -> [1]
+
+tip> logic {1+2, 2*3} = 6
+[{1+2, 2*3} = 6] -> str_logic -> [0]  ;# NG : list of expr should be at the right
+
+tip> logic abc == {a?, b*, [a-z]??}
+[abc == {a?, b*, [a-z]??}] -> str_logic -> [1]
+
+tip> logic aaabbb = aaa{bbb,ccc}    ;# NG : list can not be concatenate to the other
+[aaabbb = aaa{bbb,ccc}] -> str_logic -> [0]
+```

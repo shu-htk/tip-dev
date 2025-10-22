@@ -3,9 +3,9 @@
 usage: calc [expression]
 ```
 
-this command show the result of "calculation expression"
+this command show the result of calculation expression
 
-where "calculation expression" is appear in
+where calculation expression is appear in
 
 - [@](var.md) x = expr  
 - [set](set.md) x = expr  
@@ -14,36 +14,57 @@ where "calculation expression" is appear in
 
 - **unary operator**
 
-|operator|function|
-|-|-|
-|+|positive|
-|\-|negative|
+|function|operator|notation|
+|-|-|-|
+|positive| +|+ X|
+|negative| \-|- X|
 
 ```
 tip> calc +3
-expression: [+3]
-result: 3
+[+3] -> [3]
+
 tip> calc 2 * +3
-expression: [2 * +3]
-result: 6
+[2 * +3] -> [6]
 
 tip> calc -3
-expression: [-3]
-result: -3
+[-3] -> [-3]
+
 tip> calc 2 * -3
-expression: [2 * -3]
-result: -6
+[2 * -3] -> [-6]
 ```
 
 - **binary operator**
 
-|operator|function|
-|-|-|
-|*|multiply|
-|/|divide|
-|%|remainder|
-|+|add|
-|\-|subtract|
+|function|operator|notation|
+|-|-|-|
+|multiply|*|X * Y|
+|divide|/|X / Y|
+|remainder|%|X % Y|
+|add|+|X + Y|
+|subtract|\-|X - Y|
+
+```
+tip> @ x=2
+tip> @ y=3
+
+tip> calc [x]+[y]
+[2+3] -> [5]
+
+tip> calc [x]*[y]
+[2*3] -> [6]
+
+tip> calc [x]/[y]
+[2/3] -> [0.66666666667]
+
+tip> calc [x]%[y]
+[2%3] -> [2]
+
+tip> calc [x]+[y]
+[2+3] -> [5]
+
+tip> calc [x]-[y]
+[2-3] -> [-1]
+```
 
 
 ## mathematical functions

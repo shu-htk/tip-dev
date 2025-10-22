@@ -2,7 +2,7 @@
 
 ```
 tip> @
-usage: @ x [=|+=|-=|*=|/=] expression
+usage: @ x [=|+=|-=|*=|/=|%=] expression
  set the expression value to the macro variable x
 ```
 see [calc](calc.md) to learn how expression is calulated
@@ -33,7 +33,7 @@ sin(3.14/2)=1.00
 ```
 see also [print](print.md) and [fmt](fmt.md)
 
-using operator +=  -=  *=  /=
+using operator `+=`  `-=`  `*=`  `/=` `%=`
 ```
 tip> @ x = 1.23
 tip> prn [x]
@@ -50,6 +50,9 @@ tip> prn [x]
 tip> @ x /= 3
 tip> prn [x]
 0.22
+tip> @ x %= 0.1  ;# x = fmod(x,0.1)
+tip> prn [x]
+0.02
 ```
 
 ## string macro variable

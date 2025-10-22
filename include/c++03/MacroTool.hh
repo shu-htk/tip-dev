@@ -186,7 +186,9 @@ namespace thl {
 	if(bc.size()>0) {
 	  _cp += bc.ic(0)+1;
 	  StrSplit sp(bc.contents(0),",");
-	  for(size_t j=0; j<sp.size(); j++) _nc.push_back(sp.stof(j));
+	  for(size_t j=0; j<sp.size(); j++) {
+	    _nc.push_back(_calc.eval(sp(j)));
+	  }
 	} else {
 	  printf("NumLogic::factor(): unbalanced bracket '{ }'.\n");
 	}
@@ -395,12 +397,12 @@ namespace thl {
     Logic(void) {}
     bool eval(const std::string &expr, bool debug=0) {
       std::string s = trim(expr);
-      if(debug) printf("expression: [%s]\n",s.c_str());
+      if(debug) printf("[%s] -> ",s.c_str());
       if(isdigit(s[0])||(s[0]=='+')||(s[0]=='-')||(s[0]=='.')) {
-	if(debug) printf("bool_by_num: %d\n",(int)num.eval(s));
+	if(debug) printf("num_logic -> [%d]\n",(int)num.eval(s));
 	return num.eval(s);
       } else {
-	if(debug) printf("bool_by_str: %d\n",(int)str.eval(s));
+	if(debug) printf("str_logic -> [%d]\n",(int)str.eval(s));
 	return str.eval(s);
       }
     }
@@ -484,14 +486,15 @@ namespace thl {
 	if(ope==2) _num[tag] -= x;
 	if(ope==3) _num[tag] *= x;
 	if(ope==4) _num[tag] /= x;
+	if(ope==5) _num[tag] = fmod(_num[tag],x);
       }
     }
     void set_eval(const std::string &buf) {
-      size_t n = buf.find_first_of("=+-*/");
+      size_t n = buf.find_first_of("=+-*/%");
       if(n==buf.npos) {printf("invalid argument\n"); return;}
       std::string tag = trim(buf.substr(0,n));
       std::string expr = buf.substr(n);
-      size_t m = expr.find_first_not_of("=+-*/");
+      size_t m = expr.find_first_not_of("=+-*/%");
       if(m==buf.npos) {printf("lack of expression\n"); return;}
       std::string ope = expr.substr(0,m);
       expr = expr.substr(m);
@@ -522,7 +525,7 @@ namespace thl {
 	  set_expr(tag, expr, 0);
 	}
       } else {
-	if(ope!="+=" && ope!="-=" && ope!="*=" && ope!="/=") {
+	if(ope!="+=" && ope!="-=" && ope!="*=" && ope!="/="&& ope!="%=") {
 	  printf("invalid operator [%s]\n",ope.c_str());
 	  return;
 	}
@@ -530,6 +533,7 @@ namespace thl {
 	if(ope=="-=") set_expr(tag, buf.substr(buf.find("-=")+2), 2);
 	if(ope=="*=") set_expr(tag, buf.substr(buf.find("*=")+2), 3);
 	if(ope=="/=") set_expr(tag, buf.substr(buf.find("/=")+2), 4);
+	if(ope=="%=") set_expr(tag, buf.substr(buf.find("%=")+2), 5);
       }
     }
     void ls(const std::string &pattern) {
@@ -893,8 +897,8 @@ namespace thl {
 	}
 	if(words(0)=="@") {
 	  if(words.size()<2) {
-	    printf("usage: @ x [=|+=|-=|*=|/=] expression\n"
-		   " set the expression value to the macro variable x\n"
+	    printf("usage: @ x [=|+=|-=|*=|/=|%c=] expression\n"
+		   " set the expression value to the macro variable x\n",'%'
 		   );
 	  } else {
 	    std::string expr = buf.substr(buf.find("@")+1);
@@ -999,8 +1003,8 @@ namespace thl {
 	  } else {
 	    std::string expr = buf.substr(words.index(1));
 	    Calc calc;
-	    printf("expression: [%s]\n",expr.c_str());
-	    printf("result: %.11g\n",calc.eval(expr));
+	    printf("[%s] -> ",expr.c_str());
+	    printf("[%.11g]\n",calc.eval(expr));
 	  }
 	  nline++; continue;
 	}
