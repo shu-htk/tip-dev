@@ -35,6 +35,3 @@ and so on
 
 - [command reference](doc/reference.md)
 
-## Q & A
-
-- [Q & A](doc/QandA.md)
