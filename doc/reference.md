@@ -87,8 +87,6 @@ x : number [0.84147098481]
 func : string [sin]
 ret : string [x]
 ```
-see also [command @](ref/var.md).
-
 ### Commands of MacroTool
 - [@](ref/var.md) : set macro variable
 - [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical variable

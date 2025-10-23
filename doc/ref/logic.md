@@ -111,7 +111,7 @@ tip> logic [s]=[A-Z]*
 
 | not match to       | usage |standard expr|
 |:---:|:---:|:---:|
-|one of the list of exprs|x != {expr1, expr2, ...}|(x != expr1) && (x != expr2) && ...|
+|all of the list of exprs|x != {expr1, expr2, ...}|(x != expr1) && (x != expr2) && ...|
 
 
 **note 3)**
