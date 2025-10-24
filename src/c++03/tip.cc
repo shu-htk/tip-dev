@@ -2316,7 +2316,7 @@ public:
       thl::StrSplit sp(buf,"= ");
       if(sp.size() < 3) {
 	printf("usage: elem x = v(N)\n"
-	       " copy Nth element of daat v to the macro variable x.\n"
+	       " copy Nth element of data v to the macro variable x.\n"
 	       " (N begin from 0)\n"
 	       ); return 0;
       }

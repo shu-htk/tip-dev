@@ -87,9 +87,9 @@ x : number [0.84147098481]
 func : string [sin]
 ret : string [x]
 ```
-### Commands of MacroTool
+## (3) Commands of MacroTool
 - [@](ref/var.md) : set macro variable
-- [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical variable
+- [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical macro variable
 - [for,do,while,end](ref/loop.md) : for, do, while loop
 - [if,elif,else,fi](ref/if_fi.md) : conditional branch
 - [print](ref/print.md) : print arguments with macro variables formated
@@ -100,7 +100,7 @@ ret : string [x]
 - [logic](ref/logic.md) : evaluate the logical expression
 - q : quit the tip interpriter
 
-### Commands of plotting the data, etc.
+## (4) Commands of drawing and handling data.
 - [arc](ref/arc.md) : draw a circle in 2D-graph
 - [box](ref/box.md) : draw the axis of 2D-graph in the box shape
 - [box3](ref/box3.md) : draw the axes of 3D-graph

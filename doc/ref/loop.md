@@ -7,42 +7,46 @@
 tip> for
 usage: for s (a b ...); ...; end
 ```
-it is assigned for each value listed in the brackets ( )
+It is assigned for each value listed in the brackets ( )
 to the macro variable 's'.  
-the value is assigned as string even if it is digit
 
 - **do-loop**
 ```
 tip> do
 usage: do n N1 N2 [dN]; ...; end
 ```
-it is assigned numerical value which range is from N1 to N2 incremented dN
+It is assigned numerical value which range is from N1 to N2 incremented dN
 to the macro variable 'n'.  
-the value can take floating point number.
-if dN is not specified, it is incremented +1  
+The value can take floating point number.
+If dN is not specified, it is incremented +1  
 
 - **while-loop**
 ```
 tip> while
 usage: while expr; ...; end
 ```
-the [logic](logic.md) expression is evaluated for each loop,
-if it is is true continue the loop,
-if it is false break the loop.
+It is evaluated the [logical expression](logic.md) for each time,
+if it is is true continue, if false break.
 
 ## example
 
 - **for-loop**
 ```
-for func (sin cos)
-  @ x=[func](1)
-  prn [func](1)=[x]
+for func (sin cos exp)
+  for x (1 2)
+    @ y = [func]([x])
+    prn [func]([x]) = [y]
+  end
 end
 ```
 result
 ```
-sin(1)=0.84147098481
-cos(1)=0.54030230587
+sin(1) = 0.84147098481
+sin(2) = 0.90929742683
+cos(1) = 0.54030230587
+cos(2) = -0.41614683655
+exp(1) = 2.7182818285
+exp(2) = 7.3890560989
 ```
 
 - **do-loop**

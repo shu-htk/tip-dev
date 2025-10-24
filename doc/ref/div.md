@@ -6,3 +6,7 @@ option:
  bo:0  : horizontal box ordered (default)
  bo:1  : vertical box ordered
 ```
+
+divide drawing frame nx in horizontal, ny in vertical.
+
+see also [box](box.md)
