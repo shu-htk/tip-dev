@@ -9,8 +9,37 @@ usage: cat v1,v2,... [>|>>] [v] [(opt)]
  option:
    nr:N0,N1 : choose index number range from N0 to N1
 ```
+## option
+
+- `fs:` set field separater of console output
+- `nr:` set index range of cosole output
 
 example
+```
+tip> set x=range(10,0,9)
+tip> cat x
+x : data(num) :  0 1 2 3 4 5 6 7 8 9
+
+tip> cat x (fs:",")
+x : data(num) : 0,1,2,3,4,5,6,7,8,9
+
+tip> cat x (fs:"\n")
+x : data(num) :
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+
+tip> cat x (nr:2,8)
+x : data(num) :  2 3 4 5 6 7
+```
+
 ```
 tip> set x1={1,2,3}
 tip> set x2={4,5,6}
