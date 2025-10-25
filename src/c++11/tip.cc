@@ -320,11 +320,13 @@ public:
   int data_set_list(const std::string &v, const std::string &expr) {
     thl::Bracket bc('{','}',expr); if(bc.size()<1) return 1;
     _dat[v].clear();
+    thl::Calc calc;
     thl::StrSplit sp;
     sp.set_quot_to_skip_split('"');
     sp.split(bc.contents(0),", ");
     for(auto && s :sp) {
-      double x = str_to_val(s,_dat[v].type);
+      double x = calc.eval(s);
+      _dat[v].type = calc.not_digit() ? DataType::Str : DataType::Num;
       if(_dat[v].type==DataType::Str) {
 	_dat[v].str.push_back(thl::trim(s));
       } else {
@@ -693,17 +695,46 @@ public:
     }
     return 0;
   }
-  void data_show(const std::string &v, Option &opt) {
-    if(_dat[v].type==DataType::Mesh) {
-      printf("%s : data(mesh) : ",v.c_str());
-      if(_dat[v].mesh.size() == 0) {
-	printf("no data\n");
-      } else {
-	if(opt.n0==0 && opt.n1==0) {
+  std::vector<std::string> get_vlist(const std::string &pattern) {
+    std::vector<std::string> vlist;
+    thl::StrSplit sp(pattern,",");
+    for(auto &&s : sp) {
+      for(auto &&a : _dat) {
+	if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	  vlist.push_back(a.first);
+	}
+      }
+    }
+    return vlist;
+  }
+  void data_ls(const std::vector<std::string> vlist, Option &opt) {
+    for(auto &&v : vlist) {
+      if(_dat[v].type==DataType::Mesh) {
+	printf("%s : data(mesh) : ",v.c_str());
+	if(_dat[v].mesh.size() == 0) {
+	  printf("no data\n");
+	} else {
 	  printf("size_x=%lu size_y=%lu\n",
 		 _dat[v].mesh.size(),_dat[v].mesh[0].size());
+	}
+      } else {
+	printf("%s : data(%s) : ",v.c_str(),_dat[v].type_name());
+	if(opt.fs == "\n") printf("\n");
+	if(_dat[v].size() == 0) {
+	  printf("no data\n");
 	} else {
-	  printf("\n");
+	  if(opt.n0==0 && opt.n1==0) {
+	    printf("size=%lu\n",_dat[v].size());
+	  }
+	}
+      }
+    }
+  }
+  void data_show(const std::vector<std::string> vlist, Option &opt) {
+    for(auto &&v : vlist) {
+      if(_dat[v].type==DataType::Mesh) {
+	if(_dat[v].mesh.size() != 0) {
+	  printf("%s : data(mesh) : \n",v.c_str());
 	  int end = (int)_dat[v].mesh.size();
 	  if(0<=opt.n1 && opt.n1<=end) {end=opt.n1;}
 	  for(int j=0; j<end; j++) {
@@ -713,16 +744,10 @@ public:
 	    }
 	  }
 	}
-      }
-    } else {
-      printf("%s : data(%s) : ",v.c_str(),_dat[v].type_name());
-      if(opt.fs == "\n") printf("\n");
-      if(_dat[v].size() == 0) {
-	printf("no data\n");
       } else {
-	if(opt.n0==0 && opt.n1==0) {
-	  printf("size=%lu\n",_dat[v].size());
-	} else {
+	if(_dat[v].size() != 0) {
+	  printf("%s : data(%s) : ",v.c_str(),_dat[v].type_name());
+	  if(opt.fs == "\n") printf("\n");
 	  int end = (int)_dat[v].size();
 	  if(0<=opt.n1 && opt.n1<=end) {end=opt.n1;}
 	  for(int j=0; j<end; j++) {
@@ -738,51 +763,37 @@ public:
       }
     }
   }
-  void data_list(const std::string &pattern, Option &opt) {
-    for(auto &&a : _dat) {
-      if( fnmatch(pattern.c_str(),a.first.c_str(),0)==0 ) {
-	data_show(a.first,opt);
-      }
-    }
-  }
-  void data_rm(const std::string &pattern) {
-    std::vector<std::string> vlist;
-    for(auto &&a : _dat) {
-      if( fnmatch(pattern.c_str(),a.first.c_str(),0)==0 ) {
-	a.second.clear();
-	vlist.push_back(a.first);
-      }
-    }
-    for(auto &&v : vlist) _dat.erase(v);
-  }
-  void data_cat(const std::string &vlist, const std::string &mode,
-	       const std::string &vout, Option &opt) {
+  void data_cat(const std::vector<std::string> vlist, const std::string &mode,
+	       const std::string &vout,	Option &opt) {
     if(mode == ">") _dat[vout].clear();
-    thl::StrSplit sp(vlist,",");
-    if(_dat[sp(0)].type==DataType::Mesh) {
+    
+    if(_dat[vlist[0]].type==DataType::Mesh) {
       printf("mesh type can not be concatenate.\n"); return;
     }
-    _dat[vout].type = _dat[sp(0)].type;
-    for(auto &&s : sp) {
-      if(_dat[s].type != _dat[vout].type) {
+    _dat[vout].type = _dat[vlist[0]].type;
+    for(auto &&v : vlist) {
+      if(_dat[v].type != _dat[vout].type) {
 	printf("incompatible type [%s]!=[%s] skipped.\n",
-	       _dat[s].type_name(),_dat[vout].type_name());
+	       _dat[v].type_name(),_dat[vout].type_name());
 	continue;
       }
-      int end = (int)_dat[s].size();
+      int end = (int)_dat[v].size();
       if(0<=opt.n1 && opt.n1<=end) {end=opt.n1;}
       if(_dat[vout].type==DataType::Str) {
 	for(int k=0; k<end; k++) {
 	  if(k < opt.n0) continue;
-	  _dat[vout].str.push_back(_dat[s].str[k]);
+	  _dat[vout].str.push_back(_dat[v].str[k]);
 	}
       } else {
 	for(int k=0; k<end; k++) {
 	  if(k < opt.n0) continue;
-	  _dat[vout].num.push_back(_dat[s].num[k]);
+	  _dat[vout].num.push_back(_dat[v].num[k]);
 	}
       }
     }
+  }
+  void data_rm(const std::vector<std::string> vlist) {
+    for(auto &&v : vlist) _dat.erase(v);
   }
   void save_graph_range(void) {
     _gopt.att.x0 = _pl->att.x0;
@@ -1938,9 +1949,9 @@ public:
       }
       Option opt=get_opt(buf);
       thl::StrSplit v_list(args(1),",");
-      for(size_t j=0; j<v_list.size(); j++) {
-	var.ls(v_list(j));
-	data_list(v_list(j),opt);
+      for(auto &&v : v_list) {
+	var.ls(v);
+	data_ls(get_vlist(v),opt);
       }
       return 0;
     }
@@ -1958,10 +1969,9 @@ public:
       Option opt=get_opt(buf);
       if(opt.n0==opt.n1) {opt.n0=0; opt.n1=-1;}
       if(buf.find(">") != buf.npos) {
-	if(args.size() >= 3) data_cat(args(1),args(2),args(3),opt);
+	if(args.size()>=3) data_cat(get_vlist(args(1)),args(2),args(3),opt);
       } else {
-	thl::StrSplit v_list(args(1),",");
-	for(auto &&v : v_list) {data_list(v,opt);}
+	data_show(get_vlist(args(1)),opt);
       }
       return 0;
     }
@@ -1973,8 +1983,7 @@ public:
 	       ); return 0;
       }
       var.rm(args(1));
-      //      clear_var();
-      data_rm(args(1));
+      data_rm(get_vlist(args(1)));
       return 0;
     }
     if(args(0)=="clear") {
@@ -2298,7 +2307,7 @@ public:
       thl::StrSplit sp(buf,"= ");
       if(sp.size() < 3) {
 	printf("usage: elem x = v(N)\n"
-	       " copy Nth element of data v to the macro variable x.\n"
+	       " copy Nth element of daat v to the macro variable x.\n"
 	       " (N begin from 0)\n"
 	       ); return 0;
       }
