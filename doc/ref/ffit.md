@@ -12,15 +12,7 @@ do fitting to the curve of frequency domain after [fplot](../ref/fplot.md).
 
 ## fitting functions
 
-|name | abbr. | expression |
-|:---:|:---:|:---:|
-|lin  | l | ey = c0 + c1*x | 
-|quad | q | y = c0 + c1*x + c2*x^2 | 
-|exp  | e | y = c0*exp(c1*x) |
-|log  |log| y = c0 + log(c1*x) | 
-|gaus | g | y = c0*exp(-(x-c1)^2/2*c2^2) | 
-|sin  | s | y = c0 + c1*sin(2*PI*c3*x) + c2*cos(2*PI*c3*x) | 
-|circ | c | (x-c0)**2 + (y-c1)**2 = c2**2 |
+see [fit](fit.md)
 
 ## option
 
