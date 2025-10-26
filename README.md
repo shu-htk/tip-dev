@@ -12,7 +12,7 @@ basically it works on Linux or other Unix-like OS.
 - plot the histogram in 2D and 3D
 - plot the FFT power spectrum
 - data fitting to the curve and the histogram
-- data sorting, filtering
+- data sorting, cutting
 - control (`for`,`do`,`while`,`end`,`if`,`elif`,`else`,`fi`)
 - execute macro file
 - save to pdf or png file

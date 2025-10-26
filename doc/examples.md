@@ -9,7 +9,7 @@
 - [ex07a: Fitting Linear/Quadratic/Gaussian](ex/ex07a.md)
 - [ex07b: Fitting Exponential/Logarithm/Sinusoidal/Circular](ex/ex07b.md)
 - [ex08: FFT power spectrum and fitting](ex/ex08.md)
-- [ex09: Data Cutting (filtering)](ex/ex09.md)
+- [ex09: Data cutting and simplified logical expression](ex/ex09.md)
 - [ex10: Plot 3D curve and fitting by the plane](ex/ex10.md)
 - [ex11: Plot 1D,2D Histograms and cutting the data](ex/ex11.md)
 - [ex12: Plot 3D contour and meshed surface with colored scaling](ex/ex12.md)
