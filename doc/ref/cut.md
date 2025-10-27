@@ -30,5 +30,5 @@ name_cut : data(str) :  Saburo Shiro Goro
 ```
 
 see also
-- [ex09: Data Cutting (filtering)](../ex/ex09.md)
+- [ex09: Data Cutting and simplified logical expression](../ex/ex09.md)
 - [ex11: Plot 1D,2D Histograms and cutting the data](../ex/ex11.md)

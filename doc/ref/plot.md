@@ -16,11 +16,17 @@ usage: plot [x] y [(opt)]
 example
 
 ```
-tip> div 1 2
-tip> set x=range(10,2,20)
-tip> plot x (lw:0 st:star sc:red)   ;# single argument
-tip> 
-tip> set y=exp(0.1*x)
-tip> plot x y (lw:0 st:star sc:red) ;# two arguments
+@ pi2=3.14159265*2
+set t=range(50,0,[pi2])
+set v=sin(t)
+
+opt (gd:1 lw:0 st:pls sc:red)
+div 1 2
+
+title "Index vs Value of data v"
+plot v   ;# index data 'v_n' is automatically generated
+
+title "Value of data t vs v"
+plot t v
 ```
 
