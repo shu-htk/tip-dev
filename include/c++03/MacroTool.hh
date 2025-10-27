@@ -574,7 +574,7 @@ namespace thl {
       CFormat fmt;
       for(std::map<std::string,double>::iterator it=_num.begin();
 	  it != _num.end(); it++) {
-	fmt(_fmt,a.second);
+	fmt(_fmt,it->second);
 	std::string tag = "["+it->first+"]";
 	if(buf.find(tag) != buf.npos) {
 	  for(size_t n=0; (n=buf.find(tag))!= buf.npos;) {

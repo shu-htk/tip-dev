@@ -595,10 +595,12 @@ public:
       int nline=1;
       thl::StrSplit sp; sp.take_null_field(opt.nf);
       check_data_file(fname,opt);
-      while(sp.getline(ifs,opt.fs)) {
-	if(sp.size()==0) continue;
+      std::string buf;
+      while(std::getline(ifs,buf)) {
+	if(buf.size()==0) continue;
 	if(nline <opt.n0 ) {nline++; continue;}
-	if(opt.n1 > 0 && nline >opt.n1) {nline++; continue;}
+	if(opt.n1 > 0 && nline >opt.n1) {break;}
+	sp.split(buf,opt.fs);
 	if(sp(0,0)=='#') continue;
 	for(size_t j=0; j<sp.size(); j++) {
 	  size_t n = v_list.size();
@@ -705,36 +707,62 @@ public:
     }
     return 0;
   }
-  void data_show(const std::string &v, Option &opt) {
-    if(_dat[v].type==Mesh) {
-      printf("%s : data(mesh) : ",v.c_str());
-      if(_dat[v].mesh.size() == 0) {
-	printf("no data\n");
-      } else {
-	if(opt.n0==0 && opt.n1==0) {
-	  printf("size_x=%d size_y=%d\n",
-		 (int)_dat[v].mesh.size(), (int)_dat[v].mesh[0].size());
+  std::vector<std::string> get_vlist(const std::string &pattern) {
+    std::vector<std::string> vlist;
+    thl::StrSplit sp(pattern,",");
+    for(size_t j=0; j<sp.size(); j++) {
+      for(std::map<std::string,Data>::iterator it=_dat.begin();
+	  it != _dat.end(); it++) {
+	if( fnmatch(sp(j).c_str(),it->first.c_str(),0)==0 ) {
+	  vlist.push_back(it->first);
+	}
+      }
+    }
+    return vlist;
+  }
+  void data_ls(const std::vector<std::string> vlist, Option &opt) {
+    for(size_t j=0; j<vlist.size(); j++) {
+      std::string v=vlist[j];
+      if(_dat[v].type==DataType::Mesh) {
+	printf("%s : data(mesh) : ",v.c_str());
+	if(_dat[v].mesh.size() == 0) {
+	  printf("no data\n");
 	} else {
-	  printf("\n");
+	  printf("size_x=%lu size_y=%lu\n",
+		 _dat[v].mesh.size(),_dat[v].mesh[0].size());
+	}
+      } else {
+	printf("%s : data(%s) : ",v.c_str(),_dat[v].type_name());
+	if(opt.fs == "\n") printf("\n");
+	if(_dat[v].size() == 0) {
+	  printf("no data\n");
+	} else {
+	  if(opt.n0==0 && opt.n1==0) {
+	    printf("size=%lu\n",_dat[v].size());
+	  }
+	}
+      }
+    }
+  }
+  void data_show(const std::vector<std::string> vlist, Option &opt) {
+    for(size_t i=0; i<vlist.size(); i++) {
+      std::string v=vlist[i];
+      if(_dat[v].type==DataType::Mesh) {
+	if(_dat[v].mesh.size() != 0) {
+	  printf("%s : data(mesh) : \n",v.c_str());
 	  int end = (int)_dat[v].mesh.size();
 	  if(0<=opt.n1 && opt.n1<=end) {end=opt.n1;}
 	  for(int j=0; j<end; j++) {
 	    if(j < opt.n0) continue;
 	    for(size_t k=0; k<_dat[v].mesh[j].size(); k++) {
-	      printf("%d %d [%.11g]\n",j,(int)k,_dat[v].mesh[j][k]);
+	      printf("%d %lu [%.11g]\n",j,k,_dat[v].mesh[j][k]);
 	    }
 	  }
 	}
-      }
-    } else {
-      printf("%s : data(%s) : ",v.c_str(),_dat[v].type_name());
-      if(opt.fs == "\n") printf("\n");
-      if(_dat[v].size() == 0) {
-	printf("no data\n");
       } else {
-	if(opt.n0==0 && opt.n1==0) {
-	  printf("size=%d\n",(int)_dat[v].size());
-	} else {
+	if(_dat[v].size() != 0) {
+	  printf("%s : data(%s) : ",v.c_str(),_dat[v].type_name());
+	  if(opt.fs == "\n") printf("\n");
 	  int end = (int)_dat[v].size();
 	  if(0<=opt.n1 && opt.n1<=end) {end=opt.n1;}
 	  for(int j=0; j<end; j++) {
@@ -750,54 +778,38 @@ public:
       }
     }
   }
-  void data_list(const std::string &pattern, Option &opt) {
-    for(std::map<std::string,Data>::iterator it=_dat.begin();
-	it != _dat.end(); it++) {
-      if( fnmatch(pattern.c_str(),it->first.c_str(),0)==0 ) {
-	data_show(it->first,opt);
-      }
-    }
-  }
-  void data_rm(const std::string &pattern) {
-    std::vector<std::string> vlist;
-    for(std::map<std::string,Data>::iterator it=_dat.begin();
-	it != _dat.end(); it++) {
-      if( fnmatch(pattern.c_str(),it->first.c_str(),0)==0 ) {
-	it->second.clear();
-	vlist.push_back(it->first);
-      }
-    }
-    for(size_t j=0; j<vlist.size(); j++) _dat.erase(vlist[j]);
-  }
-  void data_cat(const std::string &vlist, const std::string &mode,
-	       const std::string &vout, Option &opt) {
+  void data_cat(const std::vector<std::string> vlist, const std::string &mode,
+	       const std::string &vout,	Option &opt) {
     if(mode == ">") _dat[vout].clear();
-    thl::StrSplit sp(vlist,",");
-    if(_dat[sp(0)].type==Mesh) {
+    
+    if(_dat[vlist[0]].type==DataType::Mesh) {
       printf("mesh type can not be concatenate.\n"); return;
     }
-    _dat[vout].type = _dat[sp(0)].type;
-    for(size_t j=0; j<sp.size(); j++) {
-      std::string s = sp(j);
-      if(_dat[s].type != _dat[vout].type) {
+    _dat[vout].type = _dat[vlist[0]].type;
+    for(size_t j=0; j<vlist.size(); j++) {
+      std::string v=vlist[j];
+      if(_dat[v].type != _dat[vout].type) {
 	printf("incompatible type [%s]!=[%s] skipped.\n",
-	       _dat[s].type_name(),_dat[vout].type_name());
+	       _dat[v].type_name(),_dat[vout].type_name());
 	continue;
       }
-      int end = (int)_dat[s].size();
+      int end = (int)_dat[v].size();
       if(0<=opt.n1 && opt.n1<=end) {end=opt.n1;}
-      if(_dat[vout].type==Str) {
+      if(_dat[vout].type==DataType::Str) {
 	for(int k=0; k<end; k++) {
 	  if(k < opt.n0) continue;
-	  _dat[vout].str.push_back(_dat[s].str[k]);
+	  _dat[vout].str.push_back(_dat[v].str[k]);
 	}
       } else {
 	for(int k=0; k<end; k++) {
 	  if(k < opt.n0) continue;
-	  _dat[vout].num.push_back(_dat[s].num[k]);
+	  _dat[vout].num.push_back(_dat[v].num[k]);
 	}
       }
     }
+  }
+  void data_rm(const std::vector<std::string> vlist) {
+    for(size_t j=0; j<vlist.size(); j++) _dat.erase(vlist[j]);
   }
   void save_graph_range(void) {
     _gopt.att.x0 = _pl->att.x0;
@@ -1958,7 +1970,7 @@ public:
       thl::StrSplit v_list(args(1),",");
       for(size_t j=0; j<v_list.size(); j++) {
 	var.ls(v_list(j));
-	data_list(v_list(j),opt);
+	data_ls(get_vlist(v_list(j)),opt);
       }
       return 0;
     }
@@ -1976,10 +1988,9 @@ public:
       Option opt=get_opt(buf);
       if(opt.n0==opt.n1) {opt.n0=0; opt.n1=-1;}
       if(buf.find(">") != buf.npos) {
-	if(args.size() >= 3) data_cat(args(1),args(2),args(3),opt);
+	if(args.size() >= 3) data_cat(get_vlist(args(1)),args(2),args(3),opt);
       } else {
-	thl::StrSplit v_list(args(1),",");
-	for(size_t j=0; j<v_list.size(); j++) {data_list(v_list(j),opt);}
+	data_show(get_vlist(args(1)),opt);
       }
       return 0;
     }
@@ -1991,8 +2002,7 @@ public:
 	       ); return 0;
       }
       var.rm(args(1));
-      //      clear_var();
-      data_rm(args(1));
+      data_rm(get_vlist(args(1)));
       return 0;
     }
     if(args(0)=="clear") {

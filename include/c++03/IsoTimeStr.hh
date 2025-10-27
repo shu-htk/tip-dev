@@ -9,6 +9,7 @@
 
 #include <ctime>
 #include <cmath>
+#include <cctype>
 #ifndef USE_CLOCK_GETTIME
 #include <sys/time.h>
 #endif
@@ -69,7 +70,9 @@ namespace thl {
     }
     int count_delimiters(const std::string &s, char delm) {
       int n=0;
-      for(size_t j=0; j<s.size(); j++) if(s[j]==delm) n++;
+      for(size_t j=0; j<s.size(); j++) {
+	if(isdigit(s[j])) {if(s[j+1]==delm) {n++; j++;}}
+      }
       return n;
     }
     int calc_yday(void) {

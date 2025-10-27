@@ -594,10 +594,12 @@ public:
       int nline=1;
       thl::StrSplit sp; sp.take_null_field(opt.nf);
       check_data_file(fname,opt);
-      while(sp.getline(ifs,opt.fs)) {
-	if(sp.size()==0) continue;
+      std::string buf;
+      while(std::getline(ifs,buf)) {
+	if(buf.size()==0) continue;
 	if(nline <opt.n0 ) {nline++; continue;}
-	if(opt.n1 > 0 && nline >opt.n1) {nline++; continue;}
+	if(opt.n1 > 0 && nline >opt.n1) {break;}
+	sp.split(buf,opt.fs);
 	if(sp(0,0)=='#') continue;
 	for(size_t j=0; j<sp.size(); j++) {
 	  size_t n = v_list.size();
