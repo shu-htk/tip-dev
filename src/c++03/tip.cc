@@ -183,7 +183,7 @@ private:
   std::map<std::string,thl::EpicsCA> _ca;
 #endif
 public:
-  Tip(thl::PLPlot* pl) {_pl=pl;}
+  Tip(thl::PLPlot* pl) {_pl=pl; _pl->divide(1,1);}
   template<class T> void get_pair(const std::string &s, T &left, T &right) {
     thl::StrSplit sp(s,",");
     if(sp.size() < 2) {
@@ -745,32 +745,28 @@ public:
     }
   }
   void data_show(const std::vector<std::string> vlist, Option &opt) {
-    for(size_t i=0; i<vlist.size(); i++) {
-      std::string v=vlist[i];
+    for(auto &&v : vlist) {
+      int size = (int)_dat[v].size();
+      int start = (opt.n0 > 0) ? opt.n0-1 : 0;
+      int end = (0 < opt.n1 && opt.n1 < size) ? opt.n1 : size;
       if(_dat[v].type==DataType::Mesh) {
-	if(_dat[v].mesh.size() != 0) {
+	if(size != 0) {
 	  printf("%s : data(mesh) : \n",v.c_str());
-	  int end = (int)_dat[v].mesh.size();
-	  if(0<=opt.n1 && opt.n1<=end) {end=opt.n1;}
-	  for(int j=0; j<end; j++) {
-	    if(j < opt.n0) continue;
+	  for(int j=start; j<end; j++) {
 	    for(size_t k=0; k<_dat[v].mesh[j].size(); k++) {
 	      printf("%d %lu [%.11g]\n",j,k,_dat[v].mesh[j][k]);
 	    }
 	  }
 	}
       } else {
-	if(_dat[v].size() != 0) {
+	if(size != 0) {
 	  printf("%s : data(%s) : ",v.c_str(),_dat[v].type_name());
 	  if(opt.fs == "\n") printf("\n");
-	  int end = (int)_dat[v].size();
-	  if(0<=opt.n1 && opt.n1<=end) {end=opt.n1;}
-	  for(int j=0; j<end; j++) {
-	    if(j < opt.n0) continue;
+	  for(int j=start; j<end; j++) {
 	    if(opt.fs == " \t\n") {
 	      printf(" "); _dat[v].print(j);
 	    } else {
-	      printf("%s",(j==0) ? "" : opt.fs.c_str()); _dat[v].print(j);
+	      printf("%s",(j==start) ? "" : opt.fs.c_str()); _dat[v].print(j);
 	    }
 	  }
 	  printf("\n");
@@ -2128,7 +2124,7 @@ public:
 	       "   log   : y = c0 + log(c1*x) \n"
 	       "   g[aus]: y = c0*exp(-(x-c1)^2/2*c2^2) \n"
 	       "   s[in] : y = c0 + c1*sin(2*PI*c3*x) + c2*cos(2*PI*c3*x) \n"
-	       "   c[irc]: (x-c0)**2 + (y-c1)**2 = c2**2 \n"
+	       "   c[irc]: (x-c0)^2 + (y-c1)^2 = c2^2 \n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
@@ -2326,7 +2322,7 @@ public:
       thl::StrSplit sp(buf,"= ");
       if(sp.size() < 3) {
 	printf("usage: elem x = v(N)\n"
-	       " copy Nth element of data v to the macro variable x.\n"
+	       " copy Nth element of daat v to the macro variable x.\n"
 	       " (N begin from 0)\n"
 	       ); return 0;
       }
@@ -2335,16 +2331,16 @@ public:
       if(bc.size()==0) {printf("unbalanced '(' and ')'\n"); return 0;}
       std::string v = thl::trim(bc.before(0));
       thl::Calc calc;
-      size_t index = (size_t)calc.eval(bc.contents(0));
+      int index = (int)calc.eval(bc.contents(0));
       if(_dat.count(v)>0) {
-	if(index < _dat[v].size()) {
-	  if(_dat[v].type==Str) {
+	if(index >=0 && index < (int)_dat[v].size()) {
+	  if(_dat[v].type==DataType::Str) {
 	    var.set_str(x,_dat[v].str[index]);
 	  } else {
 	    var.set_num(x,_dat[v].num[index]);
 	  }
 	} else {
-	  printf("index %d is out of range\n",(int)index);
+	  printf("index %d is out of range\n",index);
 	}
       } else {
 	printf("%s not found\n",v.c_str());
