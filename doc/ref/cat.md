@@ -11,33 +11,39 @@ usage: cat v1,v2,... [>|>>] [v] [(opt)]
 ```
 ## option
 
-- `fs:` set field separater of console output
-- `nr:` set index range of cosole output
+- `fs:` set field separater of output (console only)
+- `nr:` set data range of output (1st data is begin from 1)
+
+**note)**
+> if `nr:` is not specified (default `nr:0,0`), all data is outputed  
+> if `nr:N,-1`, it it outputed from N to end
 
 example
 ```
-tip> set x=range(10,0,9)
+tip> set x=range(5, 0.1, 0.5)
 tip> cat x
-x : data(num) :  0 1 2 3 4 5 6 7 8 9
-
-tip> cat x (fs:",")
-x : data(num) : 0,1,2,3,4,5,6,7,8,9
+x : data(num) :  0.1 0.2 0.3 0.4 0.5
 
 tip> cat x (fs:"\n")
 x : data(num) :
-0
-1
-2
-3
-4
-5
-6
-7
-8
-9
+0.1
+0.2
+0.3
+0.4
+0.5
 
-tip> cat x (nr:2,8)
-x : data(num) :  2 3 4 5 6 7
+tip> cat x (fs:"\n" nr:2,4)    ;# output from 2nd to 4th data 
+x : data(num) :
+0.2
+0.3
+0.4
+
+tip> cat x (fs:"\n" nr:2,-1)   ;# output from 2nd to end
+x : data(num) :
+0.2
+0.3
+0.4
+0.5
 ```
 
 ```

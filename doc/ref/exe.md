@@ -10,9 +10,10 @@ usage: exe [macro_file] [(opt)]
 
 ## Execute macro file with debug-mode
 
-When executing macro file, variables defind in it can not be referd from
-the interactive console. If it is executed with debug-mode,
-variables in the macro file can be refered from the interactive console.
+Usually variables defind in the macro file can not be referd from
+the interactive console.  
+Executing with debug-mode, variables in the macro file can be
+refered from the interactive console.
 
 example
 ```

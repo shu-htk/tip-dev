@@ -24,7 +24,7 @@ sudo apt install libreadline-dev
 sudo dnf update
 sudo dnf upgrade
 sudo dnf install dnf-plugins-core     (<-- this may not be neccessary)
-sudo dnf config-manager --enable crb  (<-- this may not be neccessary)
+sudo dnf config-manager --enable crb
 sudo dnf install epel-release
 sudo dnf install epel-next-release
 sudo dnf install g++
@@ -42,7 +42,7 @@ official : https://learn.microsoft.com/windows/wsl/install
 
 Access to https://github.com/shu-htk/tip-dev
 
-from the **"Code"** pulldown menu button, choose **"Download zip"**
+from the **"Code"** pulldown menu, choose **"Download zip"**
 
 or directly download from
  https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip
@@ -60,10 +60,10 @@ cd tip-dev-main
 ./configure
 make
 ```
-The executable is comipled and output to `./bin/tip`
+The executable is comipled and outputed to `./bin/tip`
 
 If your shell has command path to $HOME/bin,
-copy the executable file to `$HOME/bin`
+copy the executable file to `$HOME/bin` by
 ```
 make install
 ```
@@ -77,6 +77,5 @@ export PATH=$PATH:$HOME/bin
 ## (3) About my_macro 
 
 The executable file `my_macro` is also installed when you install the `tip`.  
-It is a sample program using [thl::MacroTool](ref/MacroTool.md)
-but not using PLPLOT.
+It is a simple example using [MacroTool](ref/MacroTool.md).
 

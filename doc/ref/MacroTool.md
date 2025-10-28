@@ -1,8 +1,6 @@
-# thl::MacroTool
+# MacroTool
 
-## What is thl::MacroTool ?
-
-The thl::MacroTool is the hreader-only class libraly which provide
+MacroTool is the hreader-only class libraly which provide
 the following command:
 ```
 macro commands:
@@ -28,9 +26,7 @@ macro commands:
  q     : terminate this program
  ```
 
-## How to use the thl::MacroTool
-
- There is a simple example how to use the thl::MacroTool :  `my_macro.cc`.
+There is a simple example how to use MacroTool : `src/my_macro.cc`.
 
 ```
 // my_macro : simple example how to use thl::MacroTool

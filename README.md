@@ -1,10 +1,13 @@
 # tip - tiny interactive plot
 
-`tip` is a command line based data plotting tool.
-It is written by C++ depends on the libraly of
+Tip is a command-line based data plotting tool.
+It is written in C++ and depends on the libraly of
 [PLPLOT](https://plplot.sourceforge.net/)
-and [GNU readline](https://cgit.git.savannah.gnu.org/cgit/readline.git), 
-basically it works on Linux or other Unix-like OS.
+and [GNU readline](https://cgit.git.savannah.gnu.org/cgit/readline.git). 
+Basically it works on Linux or other Unix-like OS.
+Although it has fewer functions than existing plotting tool such as gnuplot,
+matplotlib, it aims to make it easier to use.
+
 
 ## Features
 
@@ -16,8 +19,6 @@ basically it works on Linux or other Unix-like OS.
 - control (`for`,`do`,`while`,`end`,`if`,`elif`,`else`,`fi`)
 - execute macro file
 - save to pdf or png file
-
-and so on
 
 ## Install
 
