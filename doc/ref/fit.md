@@ -13,7 +13,7 @@ usage: fit x y [lin|quad|exp|log|gaus|sin|circ] [(opt)]
    c[irc]: (x-c0)^2 + (y-c1)^2 = c2^2 
 ```
 
- Fit the curve to data x and y after [plot](plot.md) command.
+It fits the curve to data x and y after [plot](plot.md) command.
 The fitting information is outputed to console and fitting curve is
 drawn on the existing graph.
 If you specify option `cp:X,Y`, the fitting information is drawn in
@@ -36,11 +36,18 @@ the graph at (X,Y).
 
 ## option
 
+### option with single argument
+
 - lc: line color of fitting curve
 - lt: line style of fitting curve
-- cp: comment position of fitting information
 - rc: flag to set relative coordinate for comment position
 - cf: set tag of macro variable to store fitting coefficients
+
+### option with two arguments
+
+> arguments is separated by comma with no spaces.
+
+- cp: comment position of fitting information
 
 example
 ```

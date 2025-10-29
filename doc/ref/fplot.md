@@ -15,3 +15,10 @@ options:
   bk  : Blackman
   bh  : Blackman-Haris
 ```
+
+## option
+
+see [plot](plot.md)
+
+for example, see [ex08](../ex/ex08.md), [ex18](../ex/ex18.md)
+

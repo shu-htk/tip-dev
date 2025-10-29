@@ -10,10 +10,10 @@ usage: exe [macro_file] [(opt)]
 
 ## Execute macro file with debug-mode
 
-Usually variables defind in the macro file can not be referd from
+Usually variables defined in the macro file can not be referenced from
 the interactive console.  
 Executing with debug-mode, variables in the macro file can be
-refered from the interactive console.
+referenced from the interactive console.
 
 example
 ```
@@ -26,7 +26,7 @@ tip> exe doc/macro/tut01.tip   ;# execute macro file without debug-mode
  c2= 2
  chi2/ndf= 8.15e-25/7
 
-tip> ls *   ;# variables defined in the macro file can not be refered
+tip> ls *   ;# variables defined in the macro file can not be referenced
 
 tip> exe doc/macro/tut01.tip (dm:1)  ;# execute macro file with debug-mode
 @ Quadratic Fitting:
@@ -36,7 +36,7 @@ tip> exe doc/macro/tut01.tip (dm:1)  ;# execute macro file with debug-mode
  c2= 2
  chi2/ndf= 8.15e-25/7
 
-tip> ls *    ;# variables defined in the macro file can be refered
+tip> ls *    ;# variables defined in the macro file can be referenced
 x : data(num) : size=10
 y : data(num) : size=10
 ```

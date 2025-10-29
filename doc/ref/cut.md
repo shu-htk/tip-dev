@@ -10,6 +10,29 @@ using option 'cc:' it is also done by
  plot x y (cc:"0<x<1 & 1<y<2")
 ```
 
+select elements of data v1, v2, ... by the condition of logical expression.  
+selected data are created named v1_cut, v2_cut, ...
+
+**note1)**
+> data names should be separated with commas and no spaces
+
+> condition of logical expression should be quoted by "" 
+
+```
+tip> cut a,b,c "a>0"    ; # OK
+tip> cut a, b, c "a>0"  ; # NG
+```
+
+**note2)**
+> size of data should be same
+
+```
+tip> set x={1,2,3,4,5}
+tip> set y={10,20,30}
+tip> cut x,y "x>2"    ;# NG : size of y is different from size of x
+size of y != size of x
+```
+
 example
 ```
 tip> set name = {Taro, Jiro, Saburo, Shiro, Goro}

@@ -9,4 +9,9 @@ option:
 
 divide drawing frame nx in horizontal, ny in vertical.
 
+## option
+
+- `bo:` set box drawing order, (0=horizontal, 1=vertical)
+
+
 see also [box](box.md)

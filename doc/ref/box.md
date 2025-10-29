@@ -9,17 +9,25 @@ draw 2-dimensional axis frame in the box shape.
 
 ## option
 
-- `tl:` set title 
-- `xl:` set x-label
-- `yl:` set y-label
-- `gd:` set flag to draw geid line, 0=not draw, 1=draw
-- `bo:` set box drawing order, 0=horizontal, 1=vertical 
-- `bp:` set box positon, from 1 to max number of divided frame
-- `lw:` set box line width, 0=not draw, 1=draw
+### option with single argument
+
+- `xt:` x-tick interval
+- `yt:` y-tick interval
+- `xn`: x-subtick num
+- `yn`: y-subtick num
+- `xs:` x-axis scale, (lin, log)
+- `ys:` x-axis scale, (lin, log)
+- `gd:` set flag to draw grid line, (0=not draw, 1=draw)
+- `bo:` set box drawing order, (0=horizontal, 1=vertical)
+- `bp:` set box positon, (from 1 to max number of divided frame)
+- `lw:` set box line width, (0=not draw, 1=draw)
+
+### option with quotted argument by ""
+
+- `tl:` title (see [title](title.md))
+- `xl:` x-label (see [xlab](xlab.md))
+- `yl:` y-label (see [ylab](ylab.md))
 
 see [ex16: plot divided box by vertical order](../ex/ex16.md)
-
-
-
 
 

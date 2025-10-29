@@ -9,3 +9,10 @@ escape sequences in the text strings:
  #fr : switch to Roman (serif) font
  #fi : switch to Italic font
 ```
+
+## option
+
+- `tc:` text color, (default is black)
+- `tp:` text pos(0:L to 1:R), (default is 0)
+- `tr:` text rotation(deg), (default is 0)
+- `ts:` text size, (default is 1)

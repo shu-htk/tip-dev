@@ -11,10 +11,21 @@ draw 3-dimensional axis frame.
 
 ## option
 
-- `tl:` set title 
-- `xl:` set x-label
-- `yl:` set y-label
-- `zl:` set z-label
-- `bo:` set box drawing order, 0=horizontal, 1=vertical 
-- `bp:` set box positon, from 1 to max number of divided frame
+### option with single argument
+
+- `xt:` x-tick interval
+- `yt:` y-tick interval
+- `xn`: x-subtick num
+- `yn`: y-subtick num
+- `bo:` set box drawing order, (0=horizontal, 1=vertical)
+- `bp:` set box positon, (from 1 to max number of divided frame)
+- `al:` altitude view angle , (default is 45 degree)
+- `az:` azimuth view angle, (default is 45 degree)
+
+### option with quotted argument by ""
+
+- `tl:` title (see [title](title.md))
+- `xl:` x-label (see [xlab](xlab.md))
+- `yl:` y-label (see [ylab](ylab.md))
+- `zl:` z-label (see [zlab](zlab.md))
 

@@ -11,8 +11,15 @@ usage: cat v1,v2,... [>|>>] [v] [(opt)]
 ```
 ## option
 
-- `fs:` set field separater of output (console only)
+### option with two arguments
+
+> arguments is separated by comma with no spaces.
+
 - `nr:` set data range of output (1st data is begin from 1)
+
+### option with quotted argument by ""
+
+- `fs:` set field separater of output (console only)
 
 **note)**
 > if `nr:` is not specified (default `nr:0,0`), all data is outputed  

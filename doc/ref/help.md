@@ -1,4 +1,7 @@
 # help
+
+It shows the following message
+
 ```
 list of commands:
  arc   : draw a circle in 2D-graph

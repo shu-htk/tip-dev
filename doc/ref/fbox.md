@@ -11,8 +11,9 @@ draw fill-area of box shape in 2D graph
 
 ## option
 
-- fc: fill area color
-- ft: fill area style
-- lc: line color of border
-- ft: line style of border
+- `fc:` fill area color
+- `ft:` fill area style
+- `lc:` line color of border
+- `lt:` line style of border
+- `lw:` line width, (0=not draw, default is 1)
 
