@@ -369,7 +369,7 @@ public:
   int data_set_random(const std::string &v, const std::string &expr,
 		     Option &opt) {
     thl::Bracket bc('(',')',expr); if(bc.size()<1) return 1;
-    _dat[v].clear(); _dat[v].type = Num;
+    _dat[v].clear(); _dat[v].type = DataType::Num;
     thl::StrSplit sp(bc.contents(0),",");
     if(sp.size()<2) {
       printf("random() should have at least 2 arguments\n"); return 1;
@@ -380,25 +380,25 @@ public:
       else if(opt.sd=="clock") rdm.set_seed_by_clock();
       else rdm.set_seed((unsigned long)sn.stol(opt.sd));
       int ndata = sp.stoi(0);
-      if(sp(1)=="uni") {
+      if(sp(1)=="uni" || sp(1)=="u") {
 	double x0 = (sp.size()>2) ? sp.stof(2) : 0;
 	double x1 = (sp.size()>3) ? sp.stof(3) : x0+1;
 	for(int n=0; n<ndata; n++) {
 	  _dat[v].num.push_back(rdm.uniform(x0,x1));
 	}
-      }
-      if(sp(1)=="gaus") {
+      } else if(sp(1)=="gaus" || sp(1)=="g") {
 	double sgm = (sp.size()>2) ? sp.stof(2) : 1;
 	double mean = (sp.size()>3) ? sp.stof(3) : 0;
 	for(int n=0; n<ndata; n++) {
 	  _dat[v].num.push_back(rdm.gaus(sgm,mean));
 	}
-      }
-      if(sp(1)=="exp") {
+      } else if(sp(1)=="exp" || sp(1)=="e") {
 	double tau = (sp.size()>2) ? sp.stof(2) : 1;
 	for(int n=0; n<ndata; n++) {
 	  _dat[v].num.push_back(rdm.exp(tau));
 	}
+      } else {
+	printf("data_set_random(): undefined random name %s\n",sp(1).c_str());
       }
       return 0;
     }
