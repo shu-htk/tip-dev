@@ -733,13 +733,10 @@ public:
 	}
       } else {
 	printf("%s : data(%s) : ",v.c_str(),_dat[v].type_name());
-	if(opt.fs == "\n") printf("\n");
 	if(_dat[v].size() == 0) {
 	  printf("no data\n");
 	} else {
-	  if(opt.n0==0 && opt.n1==0) {
-	    printf("size=%lu\n",_dat[v].size());
-	  }
+	  printf("size=%lu\n",_dat[v].size());
 	}
       }
     }
@@ -1957,7 +1954,7 @@ public:
     }
     if(args(0)=="ls") {
       if(args.size() < 2) {
-	printf("usage: ls pattern [(opt)]\n"
+	printf("usage: ls pattern\n"
 	       " print list of data or macro variables which matches pattern\n"
 	       " 'ls *' show all data or macro variables\n"
 	       ); return 0;
