@@ -12,6 +12,7 @@ usage: plot [x] y [(opt)]
 
 ### option with single argument
 
+- `gt:` graph type (slope, bin1, bin2) default is slope. see [hplot](hplot.md)
 - `lc:` line color
 - `lt:` line style
 - `lw:` line width, (0=not draw, default is 1)

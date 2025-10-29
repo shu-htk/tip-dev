@@ -15,6 +15,7 @@ usage: hplot v [(opt)]
 
 ### option with single argument
 
+- `ht:` histogram type (bin1,bin2,slope) default is bin1
 - `nb:` number of bins of 1D-histogram
 - `fc:` fill area color
 - `ft:` fill area style
@@ -44,6 +45,13 @@ to left/right edge of x-axis
 > in `ym:` y margin means distance between maximum/minimum point of data
 to down/up edge of y-axis
 
+### Histogram type specified by option `ht:`
+|type | description|
+|:---:|:---:|
+|bin1 | histogram bins are not separated by vertical line|
+|bin2 | histogram bins are separated by vertical line|
+|slope| plot bins-center-values vs bins-entries by curve|
+
 ### option with two arguments
 
 > arguments is separated by comma with no spaces.
@@ -58,7 +66,24 @@ to down/up edge of y-axis
 - `yl:` y-label (see [ylab](ylab.md))
 - `cc:` cut condition (see [cut](cut.md))
 
-for example, see
+example
+```
+tip> rm *
+tip> set v=random(10000,gaus)
+
+tip> hplot v (nb:100)        ;# make histogram of data v by nbin=100 and plot it
+
+tip> ls *
+v : data(num) : size=10000
+v_hx : data(num) : size=100    ;# bins-center-velues
+v_hy : data(num) : size=100    ;# bins-entry-values
+
+tip> plot v_hx v_hy (gt:bin1)  ;# same as hplot v
+
+tip> hplot v (ht:slope)        ;# same as plot v_hx v_hy
+```
+
+for more examples, see
  [ex04](../ex/ex04.md),
  [ex11](../ex/ex11.md),
  [ex12](../ex/ex12.md),

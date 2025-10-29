@@ -8,6 +8,7 @@ usage: hplot2 x y [(opt)]
 
 ### option with single argument
 
+- `mt:` mesh graph type (mesh1,mesh2,cont1,cont2),default is mesh1
 - `nx:` number of x-axis bins of 2D-histogram
 - `ny:` number of y-axis bins of 2D-histogram
 - `fc:` fill area color
@@ -31,12 +32,22 @@ usage: hplot2 x y [(opt)]
 - `bo:` set box drawing order, (0=horizontal, 1=vertical)
 - `bp:` set box positon, (from 1 to max number of divided frame)
 - `mv:` moving average number
+- `al:` altitude view angle , (default is 45 degree)
+- `az:` azimuth view angle, (default is 45 degree)
 
 > in `xm:` x margin means distance between maximum/minimum point of data
 to left/right edge of x-axis
 
 > in `ym:` y margin means distance between maximum/minimum point of data
 to down/up edge of y-axis
+
+### Mesh type specified by option `mt:`
+|type | description|
+|:---:|:---:|
+|mesh1 | It is drawn by lego-shaped (rectangular parallelepiped)|
+|mesh2 | same as mesh1 but colored proportionally to bins-entry |
+|cont1 | It is drawn by contours with gray-scale|
+|cont2 | It is drawn by contours with color-scale|
 
 ### option with two arguments
 
