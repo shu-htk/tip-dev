@@ -754,15 +754,8 @@ namespace thl {
 	" --    : decrement(-1) numerical variable\n"
 	" for   : foreach loop\n"
 	" do    : numerical ranged loop\n"
-	" break : break for/do/while loop\n"
-	" continue : continue for/do/while loop\n"
-	" end   : end of for/do/while loop\n"
 	" if    : conditional branch\n"
-	" elif  : else if\n"
-	" else  : else\n"
-	" fi    : end of if\n"
 	" print : print arguments (abbr. pr)\n"
-	" println: print arguments and '\\n' (abbr. prn)\n"
 	" fmt   : set output format of macro variable\n"
 	" wait  : wait time or console input\n"
 	" sys   : execute system command\n"
@@ -903,7 +896,7 @@ namespace thl {
 	if(words(0).find("++") != buf.npos) {
 	  StrSplit sp(buf," +");
 	  if(sp.size()<1) {
-	    printf("usage: ++var\n increment var\n");
+	    printf("usage: ++var\n increment numerical macro variable\n");
 	  } else {
 	    std::string tag=trim(sp(0));
 	    if(!var.exist(tag)) var.set_num(tag,0);
@@ -915,7 +908,7 @@ namespace thl {
 	if(words(0).find("--") != buf.npos) {
 	  StrSplit sp(buf," -");
 	  if(sp.size()<1) {
-	    printf("usage: --var\n decrement var\n");
+	    printf("usage: --var\n decrement numerical macro variable\n");
 	  } else {
 	    std::string tag=trim(sp(0));
 	    if(!var.exist(tag)) var.set_num(tag,0);
