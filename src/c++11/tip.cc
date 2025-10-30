@@ -1939,7 +1939,8 @@ public:
     if(args(0)=="ls") {
       if(args.size() < 2) {
 	printf("usage: ls pattern\n"
-	       " print list of data or macro variables which matches pattern\n"
+	       " print list of both macro and data variables"
+	       " which matches pattern\n"
 	       " 'ls *' show all data or macro variables\n"
 	       ); return 0;
       }
