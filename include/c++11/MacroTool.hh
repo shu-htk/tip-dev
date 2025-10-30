@@ -532,27 +532,33 @@ namespace thl {
       }
     }
     void ls(const std::string &pattern) {
-      for(auto &&a : _num) {
-	if( fnmatch(pattern.c_str(),a.first.c_str(),0)==0 ) {
-	  printf("%s : number [%.11g]\n",a.first.c_str(),a.second);
+      StrSplit sp(pattern,",");
+      for(auto &&s : sp) {
+	for(auto &&a : _num) {
+	  if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	    printf("%s : number [%.11g]\n",a.first.c_str(),a.second);
+	  }
 	}
-      }
-      for(auto &&a : _str) {
-	if( fnmatch(pattern.c_str(),a.first.c_str(),0)==0 ) {
-	  printf("%s : string [%s]\n",a.first.c_str(),a.second.c_str());
+	for(auto &&a : _str) {
+	  if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	    printf("%s : string [%s]\n",a.first.c_str(),a.second.c_str());
+	  }
 	}
       }
     }
     void rm(const std::string &pattern) {
       std::vector<std::string> tags;
-      for(auto &&a : _num) {
-	if( fnmatch(pattern.c_str(),a.first.c_str(),0)==0 ) {
-	  tags.push_back(a.first);
+      StrSplit sp(pattern,",");
+      for(auto &&s : sp) {
+	for(auto &&a : _num) {
+	  if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	    tags.push_back(a.first);
+	  }
 	}
-      }
-      for(auto &&a : _str) {
-	if( fnmatch(pattern.c_str(),a.first.c_str(),0)==0 ) {
-	  tags.push_back(a.first);
+	for(auto &&a : _str) {
+	  if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	    tags.push_back(a.first);
+	  }
 	}
       }
       for(auto &&a : tags) erase(a);

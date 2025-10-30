@@ -537,31 +537,37 @@ namespace thl {
       }
     }
     void ls(const std::string &pattern) {
-      for(std::map<std::string,double>::iterator it=_num.begin();
-	  it != _num.end(); it++) {
-	if( fnmatch(pattern.c_str(),(it->first).c_str(),0)==0 ) {
-	  printf("%s : number [%.11g]\n",(it->first).c_str(),it->second);
+      StrSplit sp(pattern,",");
+      for(size_t j=0; j<sp.size(); j++) {
+	for(std::map<std::string,double>::iterator it=_num.begin();
+	    it != _num.end(); it++) {
+	  if( fnmatch(sp(j).c_str(),(it->first).c_str(),0)==0 ) {
+	    printf("%s : number [%.11g]\n",(it->first).c_str(),it->second);
+	  }
 	}
-      }
-      for(std::map<std::string,std::string>::iterator it=_str.begin();
-	  it != _str.end(); it++) {
-	if( fnmatch(pattern.c_str(),(it->first).c_str(),0)==0 ) {
-	  printf("%s : string [%s]\n",(it->first).c_str(),(it->second).c_str());
+	for(std::map<std::string,std::string>::iterator it=_str.begin();
+	    it != _str.end(); it++) {
+	  if( fnmatch(sp(j).c_str(),(it->first).c_str(),0)==0 ) {
+	    printf("%s : string [%s]\n",(it->first).c_str(),(it->second).c_str());
+	  }
 	}
       }
     }
     void rm(const std::string &pattern) {
       std::vector<std::string> tags;
-      for(std::map<std::string,double>::iterator it=_num.begin();
-	  it != _num.end(); it++) {
-	if( fnmatch(pattern.c_str(),(it->first).c_str(),0)==0 ) {
-	  tags.push_back(it->first);
+      StrSplit sp(pattern,",");
+      for(size_t j=0; j<sp.size(); j++) {
+	for(std::map<std::string,double>::iterator it=_num.begin();
+	    it != _num.end(); it++) {
+	  if( fnmatch(sp(j).c_str(),(it->first).c_str(),0)==0 ) {
+	    tags.push_back(it->first);
+	  }
 	}
-      }
-      for(std::map<std::string,std::string>::iterator it=_str.begin();
-	  it != _str.end(); it++) {
-	if( fnmatch(pattern.c_str(),(it->first).c_str(),0)==0 ) {
-	  tags.push_back(it->first);
+	for(std::map<std::string,std::string>::iterator it=_str.begin();
+	    it != _str.end(); it++) {
+	  if( fnmatch(sp(j).c_str(),(it->first).c_str(),0)==0 ) {
+	    tags.push_back(it->first);
+	  }
 	}
       }
       for(size_t j=0; j<tags.size(); j++) erase(tags[j]);

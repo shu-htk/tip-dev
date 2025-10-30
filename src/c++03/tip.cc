@@ -1960,11 +1960,8 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      thl::StrSplit v_list(args(1),",");
-      for(size_t j=0; j<v_list.size(); j++) {
-	var.ls(v_list(j));
-	data_ls(get_vlist(v_list(j)),opt);
-      }
+      var.ls(args(1));
+      data_ls(get_vlist(args(1)),opt);
       return 0;
     }
     if(args(0)=="cat") {
