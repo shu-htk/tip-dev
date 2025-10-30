@@ -24,3 +24,4 @@
 - [ex19: Plot moving averaged data](ex/ex19.md)
 - [ex20: plot time variation of increasing data](ex/ex20.md)
 - [ex21: Absolute coordinate and Relative coordinate](ex/ex21.md)
+- [ex22: Gain curve of Low Pass Filter](ex/ex22.md)
