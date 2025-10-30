@@ -1,5 +1,6 @@
 # line
 ```
+tip> line
 usage: line x0 x1 y0 y1 [(opt)]
 ```
 draw a line from (x0,y0) to (x1,y1),

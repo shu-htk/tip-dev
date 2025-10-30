@@ -1,5 +1,6 @@
 # tfmt
 ```
+tip> tfmt
 usage: tfmt "time format"
        tfmt reset
  set x-axis time format.

@@ -1,5 +1,6 @@
 # hplot
 ```
+tip> hplot
 usage: hplot v [(opt)]
  make and plot the histogram of the data v,
  it is created the bin data v_hx and the entry data v_hy
@@ -70,17 +71,15 @@ example
 ```
 tip> rm *
 tip> set v=random(10000,gaus)
-
 tip> hplot v (nb:100)        ;# make histogram of data v by nbin=100 and plot it
 
 tip> ls *
 v : data(num) : size=10000
-v_hx : data(num) : size=100    ;# bins-center-velues
-v_hy : data(num) : size=100    ;# bins-entry-values
+v_hx : data(num) : size=100    ;# created data of bins-center
+v_hy : data(num) : size=100    ;# created data of bins-entry
 
-tip> plot v_hx v_hy (gt:bin1)  ;# same as hplot v
-
-tip> hplot v (ht:slope)        ;# same as plot v_hx v_hy
+tip> plot v_hx v_hy (gt:bin1)  ;# same as hplot v (ht:bin1)
+tip> plot v_hx v_hy (gt:slope) ;# same as hplot v (ht:slope) 
 ```
 
 for more examples, see

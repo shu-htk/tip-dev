@@ -2,6 +2,7 @@
 
 ## usage
 ```
+tip> opt
 usage: opt (item1:value1 item2:value2 ...)
      : opt item1 item2 ...
      : opt color|line|symbol|fill|reset

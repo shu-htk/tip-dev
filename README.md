@@ -5,9 +5,8 @@ It is written in C++ and depends on the libraly of
 [PLPLOT](https://plplot.sourceforge.net/)
 and [GNU readline](https://cgit.git.savannah.gnu.org/cgit/readline.git). 
 Basically it works on Linux or other Unix-like OS.
-Although it has fewer functions than existing plotting tool such as gnuplot,
-matplotlib, it aims to make it easier to use.
-
+Although it has fewer functions than existing plotting tools,
+it just aims ease of use over versatility.
 
 ## Features
 

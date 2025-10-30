@@ -1,5 +1,6 @@
 # arc
 ```
+tip> arc
 usage: arc x y r [(opt)]
 ```
 draw a circle which center is x and y, radius is r.

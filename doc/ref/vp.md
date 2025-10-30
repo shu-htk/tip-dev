@@ -1,5 +1,6 @@
-# vp
+# viewport, vp
 ```
+tip> vp
 usage: vp x0 x1 y0 y1 aspect 
        vp show|reset
  where x0,x1 is x-range [0:1] of viewport

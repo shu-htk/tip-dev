@@ -9,22 +9,15 @@ macro commands:
  --    : decrement(-1) numerical variable
  for   : foreach loop
  do    : numerical ranged loop
- break : break for/do/while loop
- continue : continue for/do/while loop
- end   : end of for/do/while loop
  if    : conditional branch
- elif  : else if
- else  : else
- fi    : end of if
  print : print arguments (abbr. pr)
- println: print arguments and '\n' (abbr. prn)
  fmt   : set output format of macro variable
  wait  : wait time or console input
  sys   : execute system command
  calc  : evaluate the numerical expression
  logic : evaluate the logical expression
  q     : terminate this program
- ```
+```
 
 There is a simple example how to use MacroTool : `src/my_macro.cc`.
 

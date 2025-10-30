@@ -1,5 +1,6 @@
 # mwrite
 ```
+tip> mwrite
 usage: mwrite x,y,z mesh-file [(opt)]
  write data and mesh-data
  where x is data of size N.

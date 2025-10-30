@@ -1,5 +1,6 @@
 # elem
 ```
+tip> elem
 usage: elem x = v(N)
  copy Nth element of data v to the macro variable x.
  (N begin from 0)

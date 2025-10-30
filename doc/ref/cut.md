@@ -1,5 +1,6 @@
 # cut
 ```
+tip> cut
 usage: cut v1,v2,... "expression"
  where v1,v2,... are data to cut
  new data v1_cut,v2_cut,... are created
@@ -21,6 +22,7 @@ selected data are created named v1_cut, v2_cut, ...
 ```
 tip> cut a,b,c "a>0"    ; # OK
 tip> cut a, b, c "a>0"  ; # NG
+tip> cut a,b,c a>0      ; # NG
 ```
 
 **note2)**

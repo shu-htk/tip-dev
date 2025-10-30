@@ -3,13 +3,12 @@
 ```
 tip> ++
 usage: ++var
- increment var
+ increment numerical macro variable
 ```
-
 ```
 tip> --
 usage: --var
- decrement var
+ decrement numerical macro variable
 ```
 
 - example 1

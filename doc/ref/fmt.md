@@ -1,5 +1,6 @@
 # fmt
 ```
+tip> fmt
 usage: fmt ["format"|reset|show]
  specify output format of macro variable.
  (it is same as printf)

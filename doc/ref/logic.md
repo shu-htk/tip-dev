@@ -1,5 +1,6 @@
 # logic
 ```
+tip> logic
 usage: logic [expression]
 ```
 this command show the result of logical expression

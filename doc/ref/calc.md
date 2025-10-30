@@ -1,5 +1,6 @@
 # calc
 ```
+tip> calc
 usage: calc [expression]
 ```
 

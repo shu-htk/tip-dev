@@ -1,5 +1,6 @@
-# print
+# print, println, pr, prn
 ```
+tip> print
 usage: print args...
        println args...
  print arguments with macro variables formated.

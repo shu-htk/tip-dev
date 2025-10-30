@@ -1,5 +1,6 @@
 # hfit
 ```
+tip> hfit
 usage: hfit v func [(opt)]
  you should do the 'hplot' before this command.
  'hplot' create a bin data v_hx, an entry data v_hy

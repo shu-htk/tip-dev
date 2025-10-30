@@ -139,7 +139,7 @@ ret : string [x]
 - [text](ref/text.md) : draw a text in 2D-graph
 - [title](ref/title.md) : set the graph title
 - [tfmt](ref/tfmt.md) : set the x-axis time format
-- [viewport](ref/vp.md) : set viewport of drawing area
+- [vp](ref/vp.md) : set viewport of drawing area
 - [write](ref/write.md) : write the data to the file
 - [xerr](ref/xerr.md) : plot the x-error-bars in 2D-graph
 - [xlab](ref/xlab.md) : set the x-axis label

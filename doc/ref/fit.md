@@ -1,5 +1,6 @@
 # fit
 ```
+tip> fit
 usage: fit x y [lin|quad|exp|log|gaus|sin|circ] [(opt)]
  do fitting to the data x and y and draw the result.
  you should do 'plot x y' before this command.

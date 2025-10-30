@@ -1,5 +1,6 @@
 # text
 ```
+tip> text
 usage: text x y "strings" [(opt)]
 escape sequences in the text strings:
  #u  : switch to the superscript (ended with #d)
