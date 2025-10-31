@@ -20,7 +20,18 @@ see [fit](fit.md)
 
 ## option
 
-see [fit](fit.md)
+### option with single argument
+
+- `lc:` line color of fitting curve
+- `lt:` line style of fitting curve
+- `rc:` flag to set relative coordinate for comment position
+- `cf:` set tag of macro variable to store fitting coefficients
+
+### option with two arguments
+
+> arguments is separated by comma with no spaces.
+
+- `cp:` comment position of fitting information
 
 for example, see [ex04](../ex/ex04.md), [ex20](../ex/ex20.md)
 

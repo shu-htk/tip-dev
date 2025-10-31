@@ -27,10 +27,10 @@ the graph at (X,Y).
 
 ### option with single argument
 
-- lc: line color of fitting plane
-- lt: line style of fitting plane
-- rc: flag to set relative coordinate for comment position
-- cf: set tag of macro variable to store fitting coefficients
+- `lc:` line color of fitting plane
+- `lt:` line style of fitting plane
+- `rc:` flag to set relative coordinate for comment position
+- `cf:` set tag of macro variable to store fitting coefficients
 
 ### option with two arguments
 
