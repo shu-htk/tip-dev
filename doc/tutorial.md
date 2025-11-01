@@ -68,8 +68,9 @@ tip> plot v1 v3 (lc:blue rp:1)
 ```
 where `test.csv` is 3 columns CSV text data.
 the column number is automatically added to tha data name v  
-like v1, v2, v3. This feature is convenient since you don't need to care
-about the number of columns of data.  
+like v1, v2, v3.
+This feature is convenient since you don't need to know
+how many columns in the data file.  
 
 `xlab` specify x-axis label and `ylab` specify y-axis label.
 
@@ -79,7 +80,7 @@ about the number of columns of data.
 
 ![macro/tut02b.tip](fig/tut02b.png)
 
-If you already know the number of columns of data, you can specify
+If you know how many columns in the data file, you can specify
 for each data name like,
 ```
 tip> read x,y,z test.csv (fs:",")
@@ -97,7 +98,7 @@ where 1st column is x and 2nd and 3rd are named to y1 and y2.
 in general,
 
 ```
- read v1,v2,...,vN  file_of_Mth_column.dat
+ read v1,v2,...,vN  file_of_M_column.dat
 ```
 
 - if N < M, last (M-N+1) columns are named as vN1, vN2, ..., vNx (x=M-N+1)

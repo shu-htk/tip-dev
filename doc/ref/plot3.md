@@ -49,5 +49,30 @@ to down/up edge of y-axis
 - `yl:` y-label (see [ylab](ylab.md))
 - `cc:` cut condition (see [cut](cut.md))
 
-for example, see [ex10](../ex/ex10.md)
+## set viewing angle (altitude / azimuth)
+
+example
+```
+set t=range(100,0,30)
+set x=cos(t)
+set y=sin(t)
+
+opt (lc:blue st:star sc:red)
+
+opt (fl:0) ;# disable flushing to avoid display flickering
+
+do al 10 50   ;# rotate altitude angle 10 - 50 [deg]
+  plot3 x y t (al:[al])
+  wait 0.01
+end
+
+wait 0
+
+do az 10 50    ;# rotate azimuth angle 10 - 50 [deg]
+  plot3 x y t (az:[az])
+  wait 0.01
+end
+```
+
+see also [ex10](../ex/ex10.md)
 

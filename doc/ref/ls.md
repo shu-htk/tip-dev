@@ -6,17 +6,17 @@ usage: ls pattern
  'ls *' show all data or macro variables
 ```
 
-It shows information about both macro variable and data variable
+It is shown the list of  information about both macro variable and data variable
 which name matches the pattern.
 
 If it is macro variable, the name and type(number, string) and it's value
-is shown.
+is shown.  
 If it is data variable, the name and type(num, str, mesh) and it's size is
 shown.  
 
-## list of variable names
+## argument list of variable names
 
-> list of variable names is separated by conmma with no spaces.
+> argument list of variable names is separated by conmma with no spaces.
 
 ## wild-card matching to the variable name
 

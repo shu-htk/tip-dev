@@ -42,14 +42,14 @@ official : https://learn.microsoft.com/windows/wsl/install
 
 Access to https://github.com/shu-htk/tip-dev
 
-from the **"Code"** pulldown menu, choose **"Download zip"**
+From the **"Code"** pulldown menu, choose **"Download zip"**
 
 or directly download from
  https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip
 
-copy downloaded zip file to your working directry on the Linux terminal
+Copy downloaded zip file to your working directry.
 
-extract zip file
+On the Linux terminal, extract zip file,
 ```
 unzip tip-dev-main.zip
 ```

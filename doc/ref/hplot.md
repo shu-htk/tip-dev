@@ -78,8 +78,8 @@ v : data(num) : size=10000
 v_hx : data(num) : size=100    ;# created data of bins-center
 v_hy : data(num) : size=100    ;# created data of bins-entry
 
-tip> plot v_hx v_hy (gt:bin1)  ;# same as hplot v (ht:bin1)
-tip> plot v_hx v_hy (gt:slope) ;# same as hplot v (ht:slope) 
+tip> plot v_hx v_hy (gt:bin1)  ;# the same as hplot v (ht:bin1)
+tip> plot v_hx v_hy (gt:slope) ;# the same as hplot v (ht:slope) 
 ```
 
 for more examples, see

@@ -39,7 +39,7 @@ to down/up edge of y-axis
 |type | description|
 |:---:|:---:|
 |mesh1 | It is drawn by lego-shaped (rectangular parallelepiped)|
-|mesh2 | same as mesh1 but colored proportionally to bins-entry |
+|mesh2 | the same as mesh1 but colored proportionally to bins-entry |
 |cont1 | It is drawn by contours with gray-scale|
 |cont2 | It is drawn by contours with color-scale|
 
@@ -70,10 +70,10 @@ y_my : data(num) : size=42                ;# created data of y-axis-bin-center
 x_y_mz : data(mesh) : size_x=42 size_y=42 ;# created mesh data of bin-entry
 
 tip> opt (xm:0 ym:0)
-tip> mplot x_mx y_my x_y_mz (mt:mesh1)    ;# same as hplot2 x y (mt:mesh1)
-tip> mplot x_mx y_my x_y_mz (mt:mesh2)    ;# same as hplot2 x y (mt:mesh2)
-tip> mplot x_mx y_my x_y_mz (mt:cont1)    ;# same as hplot2 x y (mt:cont1)
-tip> mplot x_mx y_my x_y_mz (mt:cont2)    ;# same as hplot2 x y (mt:cont2)
+tip> mplot x_mx y_my x_y_mz (mt:mesh1)    ;# the same as hplot2 x y (mt:mesh1)
+tip> mplot x_mx y_my x_y_mz (mt:mesh2)    ;# the same as hplot2 x y (mt:mesh2)
+tip> mplot x_mx y_my x_y_mz (mt:cont1)    ;# the same as hplot2 x y (mt:cont1)
+tip> mplot x_mx y_my x_y_mz (mt:cont2)    ;# the same as hplot2 x y (mt:cont2)
 ```
 see also [mplot](mplot.md)
 

@@ -9,8 +9,6 @@ usage: plot [x] y [(opt)]
 
 ## option
 
-> option tag and it's argument is separated by ':' with no spaces. 
-
 ### option with single argument
 
 - `gt:` graph type (slope, bin1, bin2) default is slope. see [hplot](hplot.md)

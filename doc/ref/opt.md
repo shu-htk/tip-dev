@@ -18,19 +18,29 @@ set or show the global options
   reset     : set the default value for all items
 ```
 
-- **global option and local option**
+**note)**  
+> option's tag and it's argument is separated by ':' with no spaces. 
+
+
+## global option and local option
+see the following example how the golbal and local option work.
 ```
 tip> opt (lc:red)       ;# set the global line color red
 tip> plot x y           ;# the line color is red
 tip> plot x y (lc:blue) ;# the line color is blue
 tip> plot x y           ;# the line color is red
-tip> opt reset          ;# reset global options
-tip> plot x y           ;# the line color is black (default color)
+
+tip> opt lc              ;# show global line color
+lc: line color : [red]
+
+tip> opt reset           ;# reset global options
+tip> opt lc
+lc: line color : [black] ;# default color
 ```
 
-## list of options
+## list of options tags, descriptions and their default values
 
-conventionally tip uses "2-letters option".
+conventionally option's tag is "2-letters".
 
 ```
 tip> opt *

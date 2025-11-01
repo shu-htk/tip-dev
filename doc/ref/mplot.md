@@ -43,10 +43,10 @@ to down/up edge of y-axis
 ### Mesh type specified by option `mt:`
 |type | description|
 |:---:|:---:|
-|mesh1 | It is drawn by lego-shaped (rectangular parallelepiped)|
-|mesh2 | same as mesh1 but colored proportionally to bins-entry |
-|cont1 | It is drawn by contours with gray-scale|
-|cont2 | It is drawn by contours with color-scale|
+|mesh1 | draw slope of 3D-mesh surface with single color |
+|mesh2 | the same as mesh1 but colored proportionally z-value |
+|cont1 | draw contours with gray-scale|
+|cont2 | draw contours with color-scale|
 
 ### option with two arguments
 
