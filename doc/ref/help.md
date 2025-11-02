@@ -37,7 +37,6 @@ list of commands:
  rm    : remove macro/data variables
  set   : set the data
  sort  : sort the data in ascending order
- sqar  : draw a square in 2D-graph
  stat  : calc statistics from the data
  symb  : draw a symbol in 2D-graph
  text  : draw a text in 2D-graph

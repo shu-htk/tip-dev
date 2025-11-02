@@ -626,31 +626,30 @@ public:
     }
     return 0;
   }
-  int data_write(const std::string &v_str, const std::string &fname,
-		Option &opt) {
+  int data_write(const std::vector<std::string> vlist,
+		 const std::string &fname, Option &opt) {
     std::ofstream ofs(fname.c_str());
     if(ofs) {
       std::string fs = (opt.fs==" \t\n") ? " " : opt.fs;
-      thl::StrSplit v_list(v_str,",");
-      if(v_list.size() > 0) {
-	size_t size=_dat[v_list(0)].size();
-	for(size_t k=0; k<v_list.size(); k++) {
-	  std::string v=v_list(k);
+      if(vlist.size() > 0) {
+	size_t size=_dat[vlist[0]].size();
+	for(size_t k=0; k<vlist.size(); k++) {
+	  std::string v=vlist[k];
 	  if(_dat[v].size() < size) size=_dat[v].size();
 	}
-	if(size != _dat[v_list(0)].size()) {
+	if(size != _dat[vlist[0]].size()) {
 	  printf("warning: data size is arranged to %lu\n",size);
 	}
 	thl::CFormat fmt;
 	for(size_t j=0; j < size; j++) {
-	  for(size_t k=0; k<v_list.size(); k++) {
-	    std::string v=v_list(k);
+	  for(size_t k=0; k<vlist.size(); k++) {
+	    std::string v=vlist[k];
 	    if(_dat[v].type==Str) {
 	      ofs << fmt("%s",_dat[v].str[j].c_str());
 	    } else {
 	      ofs << fmt("%.11g",_dat[v].num[j]);
 	    }
-	    if(k<v_list.size()-1) ofs << fs;
+	    if(k<vlist.size()-1) ofs << fs;
 	  }
 	  ofs << std::endl;
 	}
@@ -1589,7 +1588,6 @@ public:
 	" rm    : remove macro/data variables\n"
 	" set   : set the data\n"
 	" sort  : sort the data in ascending order\n"
-	" sqar  : draw a square in 2D-graph\n"
 	" stat  : calc statistics from the data\n"
 	" symb  : draw a symbol in 2D-graph\n"
 	" text  : draw a text in 2D-graph\n"
@@ -1783,18 +1781,6 @@ public:
       if(opt.fl) _pl->flush();
       return 0;
     }
-    if(args(0)=="sqar") { // square
-      if(args.size() < 5) {
-	printf("usage: sqar x0 x1 y0 y1 [(opt)]\n"); return 0;
-      }
-      Option opt=get_opt(buf);
-      double x0=args.stof(1),x1=args.stof(2);
-      double y0=args.stof(3),y1=args.stof(4);
-      _pl->att=opt.att;
-      _pl->draw_square(x0,x1,y0,y1, opt.rc);
-      if(opt.fl) _pl->flush();
-      return 0;
-    }
     if(args(0)=="arc") {
       if(args.size() < 4) {
 	printf("usage: arc x y r [(opt)]\n"); return 0;
@@ -1881,8 +1867,8 @@ public:
     }
     if(args(0)=="range") {
       printf("usage: set v = range(N,x0,x1)\n"
-	     "  set the data v which size N, start from x0 to the end x1.\n"
-	     "  data increment dx = (x1-x0)/(N-1)\n"
+	     "  set N-size data starting from x0 and ending at x1.\n"
+	     "  data elements interval dx = (x1-x0)/(N-1)\n"
 	     "  ex.) range(5,0,2) set the data {0, 0.5, 1, 1.5, 2}.\n" 
 	     ); return 0;
     }
@@ -1890,7 +1876,7 @@ public:
       printf("usage: set v = random(N,uni[,x0,x1]) [(opt)]\n"
 	     "       set v = random(N,gaus[,sgm,mean]) [(opt)]\n"
 	     "       set v = random(N,exp[,tau]) [(opt)]\n"
-	     " set random numbers to the data v which size N.\n"
+	     " set N-size data with random numbers.\n"
 	     "  uni,x0,x1 : uniform distribution [x0:x1] (default x0=0,x1=1)\n"
 	     "  gaus,sgm,mean : gauss distribution (default sgm=1,mean=0)\n"
 	     "  exp,tau   : exponential distribution (default tau=1)\n"
@@ -1901,11 +1887,12 @@ public:
 	     ); return 0;
     }
     if(args(0)=="time") {
-      printf("usage: set v2 = time(v1[,unit])\n"
+      printf("usage: set vn = time([vn|vs][,unit])\n"
+	     "usage: set vs = time([vn|vs],str)\n"
 	     " convert the time data\n"
-	     " v1 is the string data of ISO time-format or the numerical\n"
-	     " data of unix-epoch time.\n"
-	     " if the name of v1 is \"now\" it returns the current local time\n"
+	     " vs is the string data of ISO time-format.\n"
+	     " vn is numerical data of unix-epoch time.\n"
+	     " if 1st argument is \"now\" it returns the current local time\n"
 	     " unit:\n"
 	     "   utime : return unix-epoch time in usec precision (UTC)\n"
 	     "   year  : return years with decimal (local time)\n"
@@ -1949,7 +1936,7 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      data_write(args(1),args(2),opt);
+      data_write(get_vlist(args(1)),args(2),opt);
       return 0;
     }
     if(args(0)=="ls") {

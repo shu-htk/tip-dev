@@ -8,6 +8,18 @@ usage: read v1,v2,... file_name [(opt)]
  data are read from the out put of the system command
 ```
 
+## option
+
+### option with two arguments
+
+> arguments is separated by comma with no spaces.
+
+- `nr:` set range of line number to read (1st line is begin from 1)
+
+### option with quotted argument by ""
+
+- `fs:` field separater
+
 ## file format
 
 data file is multi column text separated by field separater.
@@ -30,6 +42,11 @@ If it is specified a list of N variables, and file has M columns,
 ```
 - if N < M, last (M-N+1) columns are named as vN1, vN2, ..., vNx (x=M-N+1)
 - if N > M, vM+1,...,VN are ignored
+
+## read the output of the system command
+
+> If the filename is a command enclosed in backquotes,
+> its output is read through the pipe.
 
 example,
 ```
@@ -71,6 +88,22 @@ name : data(str) :  A B C D E
 v1 : data(num) :  11 21 31 41 51
 v2 : data(num) :  12 22 32 42 52
 v3 : data(num) :  13 23 33 43 53
+
+tip> read x `tail -3 test.dat`  ;# read the output of the system command
+tip> cat x*
+x1 : data(num) :  3 4 5
+x2 : data(str) :  C D E
+x3 : data(num) :  31 41 51
+x4 : data(num) :  32 42 52
+x5 : data(num) :  33 43 53
+
+tip> read x test.dat (nr:2,4)   ;# read line which number is from 2 to 4
+tip> cat x*
+x1 : data(num) :  2 3 4
+x2 : data(str) :  B C D
+x3 : data(num) :  21 31 41
+x4 : data(num) :  22 32 42
+x5 : data(num) :  23 33 43
 ```
 
 

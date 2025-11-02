@@ -133,7 +133,6 @@ ret : string [x]
 - [rm](ref/rm.md) : remove macro/data variables
 - [set](ref/set.md) : set the data
 - [sort](ref/sort.md) : sort the data in ascending order
-- [sqar](ref/sqar.md) : draw a square in 2D-graph
 - [stat](ref/stat.md) : calc statistics from the data
 - [symb](ref/symb.md) : draw a symbol in 2D-graph
 - [text](ref/text.md) : draw a text in 2D-graph

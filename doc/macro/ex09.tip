@@ -19,12 +19,9 @@ set y = random([ndata],uni,-1,1)
 
 div 1 2
 
-title "cut x,y by the condition of [cc1]"
-plot x y (st:star)
-plot x y (cc:"[cc1]" st:arc sc:red rp:1)
-sqar [x0] [x1] [y0] [y1] (lt:dot lc:green)
-
-title "cut x,y by the condition of [cc2]"
-plot x y (st:star)
-plot x y (cc:"[cc2]" st:arc sc:red rp:1)
-sqar [x0] [x1] [y0] [y1] (lt:dot lc:green)
+do n 1 2
+  title "cut x,y by the condition of [cc[n]]"
+  plot x y (st:star)
+  plot x y (cc:"[cc[n]]" st:arc sc:red rp:1)
+  fbox [x0] [x1] [y0] [y1] (lt:dot lc:green)
+end
