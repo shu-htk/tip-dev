@@ -2279,9 +2279,9 @@ public:
       }
       if(args(1)=="show") {
 	_pl->print_viewport();
-	double x0,x1,y0,y1;
-	plgvpd(&x0,&x1,&y0,&y1);
-	printf("x0=%g x1=%g y0=%f y1=%g\n",x0,x1,y0,y1);
+	// double x0,x1,y0,y1;
+	// plgvpd(&x0,&x1,&y0,&y1);
+	// printf("x0=%g x1=%g y0=%f y1=%g\n",x0,x1,y0,y1);
       } else if(args(1)=="reset") {
 	_gopt.att.viewport(0,0,0,0, 0);
       } else if(args.size() > 5) {

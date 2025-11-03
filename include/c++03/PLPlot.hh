@@ -305,7 +305,7 @@ namespace thl {
       if(flag_3d) {
 	plvpas(0, 1, -0.1, 0.85, att.vasp);
       } else {
-	if(att.vx1==0) {
+	if(att.vx1==0 || att.vy1==0) {
 	  PLFLT x0,x1,y0,y1;
 	  if(_nx==1) {x0=0.12; x1=0.92;}
 	  if(_nx==2) {x0=0.15; x1=0.92;}
@@ -325,8 +325,9 @@ namespace thl {
       }
     }
     void print_viewport(void) {
-      printf("vx0,vx1,vy0,vy1,(vasp)=%g %g %g %g (%g)\n",
-      	     att.vx0, att.vx1, att.vy0, att.vy1, att.vasp);
+      printf("x0=%g, x1=%g, ",att.vx0, att.vx1);
+      printf("y0=%g, y1=%g, ",att.vy0, att.vy1);
+      printf("aspect=%g\n",att.vasp);
     }
     void set_div_order(int n) {att.divo=n;}
     int calc_advance(int sub) {
