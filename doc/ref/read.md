@@ -62,7 +62,7 @@ val1 : data(num) :  11 21 31 41 51
 val2 : data(num) :  12 22 32 42 52
 val3 : data(num) :  13 23 33 43 53
 
-tip> write id,name,val1,val2,val3 test.dat  ;# save variables to the file
+tip> write id,name,val* test.dat  ;# save variables to the file
 tip> rm *  ;# remove all variables
 
 tip> read x test.dat  ;# xn (n=1,2,3,4,5) are created
