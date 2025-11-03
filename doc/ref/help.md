@@ -1,9 +1,14 @@
 # help
+
+It shows all commands of the tip interpriter.
+
 ```
+tip> help
 list of commands:
  arc   : draw a circle in 2D-graph
  box   : draw the axis of 2D-graph in the box shape
  box3  : draw the axes of 3D-graph
+ cat   : show data contents / concatenate data
  cut   : set cut condition
  div   : divide the drawing area
  elem  : copy data element to macro variable
@@ -20,6 +25,7 @@ list of commands:
  hplot : plot the histogram from the data
  hplot2: plot the 2D-histogram from the couple of data
  line  : draw a line in 2D-graph
+ ls    : list macro/data variables
  mplot : plot mesh-graph(3D) or contour-graph(2D)
  mread : read the mesh data from the file
  mset  : set mesh data
@@ -28,9 +34,9 @@ list of commands:
  plot  : plot the data in the 2D-graph
  plot3 : plot the data in the 3D-graph
  read  : read the data from the file
+ rm    : remove macro/data variables
  set   : set the data
  sort  : sort the data in ascending order
- sqar  : draw a square in 2D-graph
  stat  : calc statistics from the data
  symb  : draw a symbol in 2D-graph
  text  : draw a text in 2D-graph
@@ -49,20 +55,13 @@ macro commands:
  --    : decrement(-1) numerical variable
  for   : foreach loop
  do    : numerical ranged loop
- break : break for/do/while loop
- continue : continue for/do/while loop
- end   : end of for/do/while loop
  if    : conditional branch
- elif  : else if
- else  : else
- fi    : end of if
  print : print arguments (abbr. pr)
- println: print arguments and '\n' (abbr. prn)
  fmt   : set output format of macro variable
  wait  : wait time or console input
  sys   : execute system command
  calc  : evaluate the numerical expression
- logic : evaluate the logic expression
+ logic : evaluate the logical expression
  q     : terminate this program
 
  without arguments, you get usage of the above commands

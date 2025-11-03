@@ -1,3 +1,5 @@
+# ex06: Text drawing with some rotations
+
 title "Text drawing with some rotations"
 @ pi=3.14159265
 div 1 1

@@ -1,3 +1,5 @@
+# ex04: Marge 2 Histograms
+
 opt (fc:gray)       ;# fill area color gray
 opt (rc:1)          ;# relative coordinate for text/fbox/symb position 
 opt (cp:0.75,0.8)   ;# commnet position

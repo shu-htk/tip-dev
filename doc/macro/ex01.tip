@@ -1,3 +1,5 @@
+# ex01: Plot data with error-bars and fitting
+
 title "Plot data with error-bars and fitting"
 set x = range(10,1,10)
 set y = {2,3,5,7,9,10,11,12,14,15}

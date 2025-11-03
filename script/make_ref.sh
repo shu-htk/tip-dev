@@ -2,7 +2,7 @@
 
 list1=(var incr loop if_fi)
 list2=(print fmt wait sys calc logic)
-list3=(arc box box3 cut div elem exe fbox ffit fit fit3 fill font fplot help hfit hplot hplot2 line mplot mread mset mwrite opt plot plot3 read set sort sqar stat symb text title tfmt vp write xerr xlab yerr ylab zlab)
+list3=(arc box box3 cut div elem exe fbox ffit fit fit3 fill font fplot help hfit hplot hplot2 line mplot mread mset mwrite opt plot plot3 read set sort stat symb text title tfmt vp write xerr xlab yerr ylab zlab)
 
 dir=doc/ref
 mkdir -p $dir

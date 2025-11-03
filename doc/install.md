@@ -1,8 +1,16 @@
 # Install
 
+At the moment the following systems have been tested.
+
+- Ubuntu 24.04 (both of native and WSL2 on Windows11)
+- AlmaLinux 9.5 (both of native and WSL2 on Windows11)
+
+In principle you can install the tip on the system
+which PLPLOT and GNU readline are installed.
+
 ## (1) Install PLPLOT, GNU-readline
 
-- Ubuntu 24.04
+- **Ubuntu 24.04**
 ```
 sudo apt update
 sudo apt upgrade
@@ -11,38 +19,63 @@ sudo apt install libplplot-dev
 sudo apt install plplot-driver-cairo
 sudo apt install libreadline-dev
 ```
-- AlmaLinax 9
+- **AlmaLinax 9**
 ```
 sudo dnf update
 sudo dnf upgrade
-# sudo dnf install dnf-plugins-core     (<-- this may not be neccessary)
-# sudo dnf config-manager --enable crb  (<-- this may not be neccessary)
+sudo dnf install dnf-plugins-core     (<-- this may not be neccessary)
+sudo dnf config-manager --enable crb
 sudo dnf install epel-release
 sudo dnf install epel-next-release
 sudo dnf install g++
 sudo dnf install plplot-devel
 sudo dnf install readline-devel
 ```
+- **Windows 11**
 
-## (2) configure and make tip executable
+The easiest way is to run the Linux on WLS2.
 
-access to https://github.com/shu-htk/tip-dev
+official : https://learn.microsoft.com/windows/wsl/install  
 
-> "Code" Tab -> "Code" button ->  "Download zip"
 
-extract downloaded zip file
+## (2) Configure and make the tip executable
+
+Access to https://github.com/shu-htk/tip-dev
+
+From the **"Code"** pulldown menu, choose **"Download zip"**
+
+or directly download from
+ https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip
+
+Copy downloaded zip file to your working directry.
+
+On the Linux terminal, extract zip file,
+```
+unzip tip-dev-main.zip
+```
 
 then do
 ```
-$ cd tip-dev
-$ ./configure
-$ make
+cd tip-dev-main
+./configure
+make
 ```
-the executable is comipled and output to `./bin/tip`
+The executable is comipled and outputed to `./bin/tip`
 
-to copy the executable file to `$HOME/bin`
+If your shell has command path to $HOME/bin,
+copy the executable file to `$HOME/bin` by
 ```
-$ make install
+make install
 ```
+<!--
+edit $HOME/.bashrc and add the following line
+```
+export PATH=$PATH:$HOME/bin
+```
+-->
 
+## (3) About my_macro 
+
+The executable file `my_macro` is also installed when you install the `tip`.  
+It is a simple example using [MacroTool](ref/MacroTool.md).
 

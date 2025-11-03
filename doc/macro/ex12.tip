@@ -1,3 +1,5 @@
+# ex12: Plot 3D contour and meshed surface with colored scaling
+
 opt (gd:1 al:45 az:-40 gc:64) ;# gc: gradiation contour
 
 set x = random(10000,exp,-0.5) ;# random exponential tau=0.5

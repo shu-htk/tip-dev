@@ -2,8 +2,8 @@
 //
 // trim     : a function to trim the spaces or quotations from string
 // Calc     : class to parse numerical expression
-// NumLogic : class to parse numerical logic expression 
-// StrLogic : class to parse string logic expression 
+// NumLogic : class to parse numerical logical expression 
+// StrLogic : class to parse string logical expression 
 // Logic    : class to parse both of num and str logic
 // Var      : class to take the variable which has key and value
 // Loop     : class to take 'for', 'do', 'while' loops 
@@ -183,7 +183,9 @@ namespace thl {
 	if(bc.size()>0) {
 	  _cp += bc.ic(0)+1;
 	  StrSplit sp(bc.contents(0),",");
-	  for(size_t j=0; j<sp.size(); j++) _nc.push_back(sp.stof(j));
+	  for(size_t j=0; j<sp.size(); j++) {
+	    _nc.push_back(_calc.eval(sp(j)));
+	  }
 	} else {
 	  printf("NumLogic::factor(): unbalanced bracket '{ }'.\n");
 	}
@@ -390,12 +392,12 @@ namespace thl {
     Logic(void) {}
     bool eval(const std::string &expr, bool debug=0) {
       std::string s = trim(expr);
-      if(debug) printf("expression: [%s]\n",s.c_str());
+      if(debug) printf("[%s] -> ",s.c_str());
       if(isdigit(s[0])||(s[0]=='+')||(s[0]=='-')||(s[0]=='.')) {
-	if(debug) printf("bool_by_num: %d\n",(int)num.eval(s));
+	if(debug) printf("num_logic -> [%d]\n",(int)num.eval(s));
 	return num.eval(s);
       } else {
-	if(debug) printf("bool_by_str: %d\n",(int)str.eval(s));
+	if(debug) printf("str_logic -> [%d]\n",(int)str.eval(s));
 	return str.eval(s);
       }
     }
@@ -479,14 +481,15 @@ namespace thl {
 	if(ope==2) _num[tag] -= x;
 	if(ope==3) _num[tag] *= x;
 	if(ope==4) _num[tag] /= x;
+	if(ope==5) _num[tag] = fmod(_num[tag],x);
       }
     }
     void set_eval(const std::string &buf) {
-      size_t n = buf.find_first_of("=+-*/");
+      size_t n = buf.find_first_of("=+-*/%");
       if(n==buf.npos) {printf("invalid argument\n"); return;}
       std::string tag = trim(buf.substr(0,n));
       std::string expr = buf.substr(n);
-      size_t m = expr.find_first_not_of("=+-*/");
+      size_t m = expr.find_first_not_of("=+-*/%");
       if(m==buf.npos) {printf("lack of expression\n"); return;}
       std::string ope = expr.substr(0,m);
       expr = expr.substr(m);
@@ -517,7 +520,7 @@ namespace thl {
 	  set_expr(tag, expr, 0);
 	}
       } else {
-	if(ope!="+=" && ope!="-=" && ope!="*=" && ope!="/=") {
+	if(ope!="+=" && ope!="-=" && ope!="*=" && ope!="/=" && ope!="%=") {
 	  printf("invalid operator [%s]\n",ope.c_str());
 	  return;
 	}
@@ -525,30 +528,37 @@ namespace thl {
 	if(ope=="-=") set_expr(tag, buf.substr(buf.find("-=")+2), 2);
 	if(ope=="*=") set_expr(tag, buf.substr(buf.find("*=")+2), 3);
 	if(ope=="/=") set_expr(tag, buf.substr(buf.find("/=")+2), 4);
+	if(ope=="%=") set_expr(tag, buf.substr(buf.find("%=")+2), 5);
       }
     }
     void ls(const std::string &pattern) {
-      for(auto &&a : _num) {
-	if( fnmatch(pattern.c_str(),a.first.c_str(),0)==0 ) {
-	  printf("%s : number [%.11g]\n",a.first.c_str(),a.second);
+      StrSplit sp(pattern,",");
+      for(auto &&s : sp) {
+	for(auto &&a : _num) {
+	  if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	    printf("%s : number [%.11g]\n",a.first.c_str(),a.second);
+	  }
 	}
-      }
-      for(auto &&a : _str) {
-	if( fnmatch(pattern.c_str(),a.first.c_str(),0)==0 ) {
-	  printf("%s : string [%s]\n",a.first.c_str(),a.second.c_str());
+	for(auto &&a : _str) {
+	  if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	    printf("%s : string [%s]\n",a.first.c_str(),a.second.c_str());
+	  }
 	}
       }
     }
     void rm(const std::string &pattern) {
       std::vector<std::string> tags;
-      for(auto &&a : _num) {
-	if( fnmatch(pattern.c_str(),a.first.c_str(),0)==0 ) {
-	  tags.push_back(a.first);
+      StrSplit sp(pattern,",");
+      for(auto &&s : sp) {
+	for(auto &&a : _num) {
+	  if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	    tags.push_back(a.first);
+	  }
 	}
-      }
-      for(auto &&a : _str) {
-	if( fnmatch(pattern.c_str(),a.first.c_str(),0)==0 ) {
-	  tags.push_back(a.first);
+	for(auto &&a : _str) {
+	  if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	    tags.push_back(a.first);
+	  }
 	}
       }
       for(auto &&a : tags) erase(a);
@@ -560,10 +570,11 @@ namespace thl {
     void replace(std::string &buf) {
       CFormat fmt;
       for(auto &&a : _num) {
+	fmt(_fmt,a.second);
 	std::string tag = "["+a.first+"]";
 	if(buf.find(tag) != buf.npos) {
 	  for(size_t n=0; (n=buf.find(tag))!= buf.npos;) {
-	    buf.replace(n,tag.size(),fmt(_fmt,a.second));
+	    buf.replace(n,tag.size(),fmt());
 	  }
 	}
       }
@@ -743,20 +754,13 @@ namespace thl {
 	" --    : decrement(-1) numerical variable\n"
 	" for   : foreach loop\n"
 	" do    : numerical ranged loop\n"
-	" break : break for/do/while loop\n"
-	" continue : continue for/do/while loop\n"
-	" end   : end of for/do/while loop\n"
 	" if    : conditional branch\n"
-	" elif  : else if\n"
-	" else  : else\n"
-	" fi    : end of if\n"
 	" print : print arguments (abbr. pr)\n"
-	" println: print arguments and '\\n' (abbr. prn)\n"
 	" fmt   : set output format of macro variable\n"
 	" wait  : wait time or console input\n"
 	" sys   : execute system command\n"
 	" calc  : evaluate the numerical expression\n"
-	" logic : evaluate the logic expression\n"
+	" logic : evaluate the logical expression\n"
 	" q     : terminate this program\n";
 	printf("%s",help);
     }
@@ -880,8 +884,8 @@ namespace thl {
 	}
 	if(words(0)=="@") {
 	  if(words.size()<2) {
-	    printf("usage: @ x [=|+=|-=|*=|/=] expression\n"
-		   " set the expression value to the macro variable x\n"
+	    printf("usage: @ x [=|+=|-=|*=|/=|%c=] expression\n"
+		   " set the expression value to the macro variable x\n",'%'
 		   );
 	  } else {
 	    std::string expr = buf.substr(buf.find("@")+1);
@@ -892,7 +896,7 @@ namespace thl {
 	if(words(0).find("++") != buf.npos) {
 	  StrSplit sp(buf," +");
 	  if(sp.size()<1) {
-	    printf("usage: ++var\n increment var\n");
+	    printf("usage: ++var\n increment numerical macro variable\n");
 	  } else {
 	    std::string tag=trim(sp(0));
 	    if(!var.exist(tag)) var.set_num(tag,0);
@@ -904,7 +908,7 @@ namespace thl {
 	if(words(0).find("--") != buf.npos) {
 	  StrSplit sp(buf," -");
 	  if(sp.size()<1) {
-	    printf("usage: --var\n decrement var\n");
+	    printf("usage: --var\n decrement numerical macro variable\n");
 	  } else {
 	    std::string tag=trim(sp(0));
 	    if(!var.exist(tag)) var.set_num(tag,0);
@@ -986,8 +990,8 @@ namespace thl {
 	  } else {
 	    std::string expr = buf.substr(words.index(1));
 	    Calc calc;
-	    printf("expression: [%s]\n",expr.c_str());
-	    printf("result: %.11g\n",calc.eval(expr));
+	    printf("[%s] -> ",expr.c_str());
+	    printf("[%.11g]\n",calc.eval(expr));
 	  }
 	  nline++; continue;
 	}
@@ -997,7 +1001,7 @@ namespace thl {
 	  } else {
 	    std::string expr = trim(buf.substr(words.index(1)));
 	    Logic logic; bool debug=1;
-	    printf("%d\n",logic.eval(expr,debug));
+	    logic.eval(expr,debug);
 	  }
 	  nline++; continue;
 	}
@@ -1063,7 +1067,7 @@ namespace thl {
 	    vbuf.push_back(line2);
 	  }
 	  if(set_index(vbuf)==0) {parse_vbuf(vbuf);}
-	  read_line.set_prompt("> ");
+	  read_line.set_prompt(prompt);
 	} else if(sp(0)=="if") {
 	  if(sp.size()<2) {
 	    printf("usage: if expr; ...; elif expr; ...; else; ...; fi\n");
@@ -1081,7 +1085,7 @@ namespace thl {
 	    vbuf.push_back(line2);
 	  }
 	  if(set_index(vbuf)==0) {parse_vbuf(vbuf);}
-	  read_line.set_prompt("> ");
+	  read_line.set_prompt(prompt);
 	} else {
 	  vbuf.push_back(line);
 	  parse_vbuf(vbuf);

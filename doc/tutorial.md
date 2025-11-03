@@ -6,7 +6,7 @@ from the linux shell,
 ```
 $ tip
 ```
-where you should set the shell's command path to execute `tip` 
+where you should set the shell's command path to the executable file of tip 
 
 see [how to install](install.md) to learn making executable file.
 
@@ -22,11 +22,11 @@ tip> fit x y quad (cp:1,200 lc:blue)
 ![macro/tut01.tip](fig/tut01.png)
 
 `title` specify the text at top of the graph.  
-`set` make the instance of the data, where data is array of number.  
+`set` make instance of the data, where data is array of number.  
 `plot x y` plot the data x and y.  
 `fit x y quad` make the fitting by Quadratic function. 
 
-arguments between the bracket '(' and ')' are options.
+arguments between the bracket '(' and ')' are options.  
 
 `(lw:0)` set the line width 0, i.e. not draw the line.  
 `(st:star)` set the symbol's style 'star shape'. [see symbols](#symbols)  
@@ -35,30 +35,22 @@ arguments between the bracket '(' and ')' are options.
 `(cp:1,200)` set comment position about the fitting parameters.  
 `(lc:blue) `set the line's color blue. 
 
-if option is specified at the back of the command it is scoped in that command.
-
-on the other hand you can specify global option like,
+options which are put at the back of the command are
+local options. (i.e. they only applied to the same line)  
+on the other hand [opt](ref/opt.md) command set global options.
 ```
 tip> opt (lw:0 st:star sc:red gd:1)
 ```
-where these option effect to all after this command.
+these options are applied to all bellow this command.
 
-you can reset global option by,
-
-```
-tip> opt reset
-```
-
-see [options](#options) for more information.
-
-data made by user are listed like,
+data made by user are listed by [ls](ref/ls.md) command.
 ```
 tip> ls *
 x : data(num) : size=10
 y : data(num) : size=10
 ```
 
-contents of the data is shown like,
+contents of the data is shown by [cat](ref/cat.md) command.
 ```
 tip> cat y
 y : data(num) :  2 8 18 32 50 72 98 128 162 200
@@ -76,7 +68,10 @@ tip> plot v1 v3 (lc:blue rp:1)
 ```
 where `test.csv` is 3 columns CSV text data.
 the column number is automatically added to tha data name v  
-like v1, v2, v3.  
+like v1, v2, v3.
+This feature is convenient since you don't need to know
+how many columns in the data file.  
+
 `xlab` specify x-axis label and `ylab` specify y-axis label.
 
 `(fs:",")` is option to specify the filed separater of data.  
@@ -85,13 +80,16 @@ like v1, v2, v3.
 
 ![macro/tut02b.tip](fig/tut02b.png)
 
-another method to define the data name is like,
+If you know how many columns in the data file, you can specify
+for each data name like,
 ```
 tip> read x,y,z test.csv (fs:",")
 ```
 where 1st column is x, 2nd is y, 3rd is z.
 
-also you can do like,
+In many cases, 1st column is asigned for x-axis and rest of columns are
+asigned for y-axis,  
+in that case you can do like,
 ```
 tip> read x,y test.csv (fs:",")
 ```
@@ -100,7 +98,7 @@ where 1st column is x and 2nd and 3rd are named to y1 and y2.
 in general,
 
 ```
- read v1,v2,...,vN  file_of_Mth_column.dat
+ read v1,v2,...,vN  file_of_M_column.dat
 ```
 
 - if N < M, last (M-N+1) columns are named as vN1, vN2, ..., vNx (x=M-N+1)
@@ -146,7 +144,7 @@ tip> stat x (cp:0.03,0.6 rc:1 ts:0.8)
 
 `set x = random(100000,gaus,5,10)` make data of random gaussian distribution
 with sigma=5 mean=10.
-[see random](#random)  
+[see random](ref/random.md)  
 `hplot x (nb:50)` makes histogram of data x 
 where bin number 50, x-range is set to include all data of x.  
 you can change the x-range by the option `(xr:Xmin,Xmax)`.
@@ -198,94 +196,9 @@ then do,
 tip> exe some_macro.tip
 ```
 
-## Options
-
-```
-tip> opt
-usage: opt (item1:value1 item2:value2 ...)
-     : opt item1 item2 ...
-     : opt color|line|symbol|fill|reset
-set or show the global options
- if items are in the bracket (), the item values are set
- if not in (), the item values are shown
- if item is '*', all of the item names and values are shown
- others,
-  color(c)  : show list of the color names
-  line(l)   : show list of the line-style names
-  symbol(s) : show list of the symbol names
-  fill(f)   : show list of the fill-area-style names
-  reset     : set the default value for all items
-```
-
-conventionally tip uses "2-letters option".
-
-to show the all available options and their values,
-```
-tip> opt *
-ae: arrow edge(0=non,1=end,2=begin,3=both): [0]
-al: altitude: [45]
-az: azimuth: [45]
-bo: box drawing order : [0]
-bp: box position : [0]
-cc: cut condition: []
-cf: tag of fit.coeff: []
-cp: comment position: [0,0]
-cr: clear flag : [1]
-dm: debug mode : [0]
-dt: time tick of FFT: [1]
-fc: fill area color: [white]
-fl: flush flag: [1]
-fq: freq of sin.fit: [1]
-fr: fitting range: [0,0]
-fs: field separator : [white space]
-ft: fill area style: [null]
-fw: FFT window func (rc,hn,hm,bk,bh): [rc]
-gc: gradient of contour : [32]
-gd: grid flag : [0]
-gt: graph type (slope,bin1,bin2): [slope]
-ht: histogram type (bin1,bin2,slope): [bin1]
-lc: line color : [black]
-lt: line style : [solid]
-lw: line width : [1]
-mt: mesh graph type (mesh1,mesh2,cont1,cont2): [mesh1]
-mv: moving average number: [1]
-nb: histogram bin: [100]
-nf: take null field: [0]
-nr: numbers range: [0,0]
-nx: 2D-histogram xbin: [20]
-ny: 2D-histogram ybin: [20]
-rc: relative coordinate flag: [0]
-rp: replot flag: [0]
-sc: symbol color: [black]
-sd: random seed: [clock]
-st: symbol type : [non]
-ss: symbol size : [1]
-tc: text color : [black]
-td: time-format-delimiters : [- :]
-tf: x-axis time format: []
-tl: graph title : []
-tp: text pos(0:L to 1:R) : [0]
-tr: text rotation(deg) : [0]
-ts: text size : [1]
-xl: x-axis label: []
-xm: x margin factor: [0.02]
-xn: x-subtick num: [0]
-xr: x-axis range: [0,0]
-xs: x-axis scale: [lin]
-xt: x-tick interval: [0]
-yl: y-axis label: []
-ym: y margin factor: [0.1]
-yn: y-subtick num: [0]
-ys: y-axis scale: [lin]
-yt: y-tick interval: [0]
-yr: y-axis range: [0,0]
-zl: z-axis label: []
-zm: z margin factor: [0.1]
-zr: z-axis range: [0,0]
-```
-
 ## Colors
 
+To find color names defined in tip, type `opt color` or `opt c`.
 ```
 tip> opt color
 color names of the symbol/line/fill :
@@ -297,6 +210,7 @@ color names of the symbol/line/fill :
 
 ## Symbols
 
+To find symbols names defined in tip, type `opt symbol` or `opt s`.
 ```
 tip> opt symbol
 names of the symbol :
@@ -308,101 +222,9 @@ names of the symbol :
 
 ## Fill-Area-Style
 
+To find fill-area names defined in tip, type `opt fill` or `opt f`.
 ```
 tip> opt fill
 names of the fill area style:
  null(-1), solid(s,0), hor(1), ver(2), p45(3), n45(4), p30(5), n30(6), hv(7), pn45(8)
 ```
-
-## Random
-
-```
-tip> random
-usage: set v = random(N,uni[,x0,x1]) [(opt)]
-       set v = random(N,gaus[,sgm,mean]) [(opt)]
-       set v = random(N,exp[,tau]) [(opt)]
- set random numbers to the data v which size N.
-  uni,x0,x1 : uniform distribution [x0:x1] (default x0=0,x1=1)
-  gaus,sgm,mean : gauss distribution (default sgm=1,mean=0)
-  exp,tau   : exponential distribution (default tau=1)
- option:
-  sd:n   : set integer value n as random seed
-  sd:utime : set unix time(sec) as random seed
-  sd:clock : set clock(nsec) as random seed (this is default)
-```
-
-## Help
-
-to leran what commands are available in the tip intepriter.
-
-```
-tip> help
-list of commands:
- arc   : draw a circle in 2D-graph
- box   : draw the axis of 2D-graph in the box shape
- box3  : draw the axes of 3D-graph
- cut   : set cut condition
- div   : divide the drawing area
- elem  : copy data element to macro variable
- exe   : execute macro file
- fbox  : draw a filled pattern box in 2D-graph
- ffit  : fit the frequency domain graph
- fit   : fit the data in 2D-graph
- fit3  : fit the data in 3D-graph
- fill  : draw a filled pattern object in 2D-graph
- font  : set text font
- fplot : plot the frequency domain graph from the data
- help  : show help message
- hfit  : fit the histogram
- hplot : plot the histogram from the data
- hplot2: plot the 2D-histogram from the couple of data
- line  : draw a line in 2D-graph
- mplot : plot mesh-graph(3D) or contour-graph(2D)
- mread : read the mesh data from the file
- mset  : set mesh data
- mwrite: write the mesh data to the file
- opt   : set/show global options
- plot  : plot the data in the 2D-graph
- plot3 : plot the data in the 3D-graph
- read  : read the data from the file
- set   : set the data
- sort  : sort the data in ascending order
- sqar  : draw a square in 2D-graph
- stat  : calc statistics from the data
- symb  : draw a symbol in 2D-graph
- text  : draw a text in 2D-graph
- title : set the graph title
- tfmt  : set the x-axis time format
- viewport : set drawing area in the window (abbr. vp)
- write : write the data to the file
- xerr  : plot the x-error-bars in 2D-graph
- xlab  : set the x-axis label
- yerr  : plot the y-error-bars in 2D-graph
- ylab  : set the y-axis label
- zlab  : set the z-axis label in 3D-graph
-macro commands:
- @     : define numerical or string variable
- ++    : increment(+1) numerical variable
- --    : decrement(-1) numerical variable
- for   : foreach loop
- do    : numerical ranged loop
- break : break for/do/while loop
- continue : continue for/do/while loop
- end   : end of for/do/while loop
- if    : conditional branch
- elif  : else if
- else  : else
- fi    : end of if
- print : print arguments (abbr. pr)
- println: print arguments and '\n' (abbr. prn)
- fmt   : set output format of macro variable
- wait  : wait time or console input
- sys   : execute system command
- calc  : evaluate the numerical expression
- logic : evaluate the logic expression
- q     : terminate this program
-
- without arguments, you get usage of the above commands
-```
-
-

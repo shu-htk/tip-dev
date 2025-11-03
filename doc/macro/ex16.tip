@@ -1,3 +1,5 @@
+# ex16: plot divided box by vertical order
+
 opt (ts:1.2)
 @ nx = 3
 @ ny = 4

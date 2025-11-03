@@ -1,4 +1,4 @@
-# ex13a
+# ex13a: Plot 3D meshed surface by some functions (part.1)
 ```
 opt (ts:0.9 gd:1 al:50 az:30)
 
@@ -15,4 +15,4 @@ do n 1 2
   mplot x y z (tl:"[expr[n]]" mt:cont2)
 end
 ```
-![](fig/ex13a.png)
+![](../fig/ex13a.png)
