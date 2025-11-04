@@ -21,10 +21,11 @@ tip> fit x y quad (cp:1,200 lc:blue)
 ```
 ![macro/tut01.tip](fig/tut01.png)
 
-`title` specify the text at top of the graph.  
-`set` make instance of the data, where data is array of number.  
-`plot x y` plot the data x and y.  
-`fit x y quad` make the fitting by Quadratic function. 
+"[title](ref/title.md)" specify the text at top of the graph.  
+"[set](ref/set.md)" make instance of the data, where data is array of number.  
+"[plot](ref/plot.md)" draw the 2D-plot using data x and y.  
+"[fit](ref/fit.md)" make the fitting by the specified function,
+in this example "quad" means Quadratic function. 
 
 arguments between the bracket '(' and ')' are options.  
 
@@ -32,7 +33,8 @@ arguments between the bracket '(' and ')' are options.
 `(st:star)` set the symbol's style 'star shape'. [see symbols](#symbols)  
 `(sc:red)` set the symbol's color red. [see colors](#colors)  
 `(gd:1)` set the flag to draw the grid lines in the graph.  
-`(cp:1,200)` set comment position about the fitting parameters.  
+`(cp:1,200)` set the comment position about the fitting parameters
+at (x=1, y=200) in the gragh coordinate.  
 `(lc:blue) `set the line's color blue. 
 
 options which are put at the back of the command are
@@ -66,13 +68,15 @@ tip> ylab "2nd and 3rd column data"
 tip> plot v1 v2 (lc:red)
 tip> plot v1 v3 (lc:blue rp:1)
 ```
-where `test.csv` is 3 columns CSV text data.
-the column number is automatically added to tha data name v  
+In this  example `test.csv` is 3 columns CSV text data.   
+"[read](ref/read.md)" is reading the data file where
+the column number is automatically added to the variable name
 like v1, v2, v3.
 This feature is convenient since you don't need to know
 how many columns in the data file.  
 
-`xlab` specify x-axis label and `ylab` specify y-axis label.
+"[xlab](ref/xlab.md)"` specify x-axis label and
+"[ylab](ref/ylab.md)"` specify y-axis label.
 
 `(fs:",")` is option to specify the filed separater of data.  
 `(lc:red)` and `(lc:blue)` are options to specify the line's color.   
@@ -80,7 +84,7 @@ how many columns in the data file.
 
 ![macro/tut02b.tip](fig/tut02b.png)
 
-If you know how many columns in the data file, you can specify
+If you already know the number of columns in the data file, you can specify
 for each data name like,
 ```
 tip> read x,y,z test.csv (fs:",")
