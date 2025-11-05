@@ -15,3 +15,25 @@ usage: set v = random(N,uni[,x0,x1]) [(opt)]
   sd:clock : set clock(nsec) as random seed (this is default)
 ```
 
+## option
+
+- `sd:` set integer value as a random seed  
+>  if value is "utime" set unix epoch time(sec)  
+>  if value is "clock" set computer clock(nsec)
+
+## Uniform distribution
+
+uniform random number in the range [x0,x1]
+
+## Gaussian distribution  (Box-Muller transform Method)
+
+_sigma \* sqrt(-2\*log(a)) \* sin(2\*PI\*b) + mean_ 
+&emsp; : a,b is independent uniform_
+
+## Exponential distribution (Inverse Transform Method)
+
+if tau>0 ;&emsp; _-log(a) / tau_  &emsp; : a is uniform (0,1]  
+if tau<0 ;&emsp; _log(a) / tau_   &emsp; : a is uniform(0,1]  
+if tau=0 ;&emsp; _1_
+
+
