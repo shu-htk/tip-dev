@@ -21,29 +21,33 @@ tip> fit x y quad (cp:1,200 lc:blue)
 ```
 ![macro/tut01.tip](fig/tut01.png)
 
-"[title](ref/title.md)" specify the text at top of the graph.  
-"[set](ref/set.md)" make instance of the data, where data is array of number.  
+"[title](ref/title.md)" specify the text at the top of the graph.  
+"[set](ref/set.md)" create the data instance,
+where data is an array of numbers.  
 "[plot](ref/plot.md)" draw the 2D-plot using data x and y.  
-"[fit](ref/fit.md)" make the fitting by the specified function,
+"[fit](ref/fit.md)" make the fitting curve by the specified function,
 in this example "quad" means Quadratic function. 
 
-arguments between the bracket '(' and ')' are options.  
+The arguments enclosed in ( ) are options.
 
 `(lw:0)` set the line width 0, i.e. not draw the line.  
-`(st:star)` set the symbol's style 'star shape'. [see symbols](#symbols)  
-`(sc:red)` set the symbol's color red. [see colors](#colors)  
+`(st:star)` set the [symbol](#symbols) style 'star shape'.  
+`(sc:red)` set the symbol [color](#colors) red.  
 `(gd:1)` set the flag to draw the grid lines in the graph.  
 `(cp:1,200)` set the comment position about the fitting parameters
 at (x=1, y=200) in the gragh coordinate.  
-`(lc:blue) `set the line's color blue. 
+`(lc:blue) `set the line [color](#colors) blue. 
 
-options which are put at the back of the command are
-local options. (i.e. they only applied to the same line)  
-on the other hand [opt](ref/opt.md) command set global options.
+The options which are put at the back of the command are
+the local options. (i.e. they only applied to the same line).  
+On the other hand the options defined by [opt](ref/opt.md) command
+is the global options.
 ```
 tip> opt (lw:0 st:star sc:red gd:1)
 ```
-these options are applied to all bellow this command.
+The global options are applied to all bellow this command.
+
+## Showing data information
 
 data made by user are listed by [ls](ref/ls.md) command.
 ```
@@ -68,30 +72,29 @@ tip> ylab "2nd and 3rd column data"
 tip> plot v1 v2 (lc:red)
 tip> plot v1 v3 (lc:blue rp:1)
 ```
-In this  example `test.csv` is 3 columns CSV text data.   
-"[read](ref/read.md)" is reading the data file where
-the column number is automatically added to the variable name
-like v1, v2, v3.
-This feature is convenient since you don't need to know
-how many columns in the data file.  
+In this  example, `test.csv` is a CSV text file that has 3 columns of data.  
+"[read](ref/read.md)" is reading the data from the file, at that time,
+the column number is automatically added to the specified variable name
+like v1, v2, v3.  
+This feature is convenient if there are many columns in the data file.  
 
-"[xlab](ref/xlab.md)"` specify x-axis label and
-"[ylab](ref/ylab.md)"` specify y-axis label.
+"[xlab](ref/xlab.md)"/"[ylab](ref/ylab.md)" specify x-axis/y-axis label
+respectively.
 
 `(fs:",")` is option to specify the filed separater of data.  
-`(lc:red)` and `(lc:blue)` are options to specify the line's color.   
+`(lc:red)` and `(lc:blue)` are options to specify the line color.   
 `(rp:1)` is option to do 'replot' i.e. over-drawing in the exsisting graph. 
 
 ![macro/tut02b.tip](fig/tut02b.png)
 
-If you already know the number of columns in the data file, you can specify
-for each data name like,
+If the columns in the data file is not so many, you can specify
+for each variable name like,
 ```
 tip> read x,y,z test.csv (fs:",")
 ```
 where 1st column is x, 2nd is y, 3rd is z.
 
-In many cases, 1st column is asigned for x-axis and rest of columns are
+In some cases, 1st column is asigned for x-axis and the rests are
 asigned for y-axis,  
 in that case you can do like,
 ```
@@ -105,8 +108,8 @@ in general,
  read v1,v2,...,vN  file_of_M_column.dat
 ```
 
-- if N < M, last (M-N+1) columns are named as vN1, vN2, ..., vNx (x=M-N+1)
-- if N > M, vM+1,...,VN are ignored
+- if N < M, last n columns are named as vN1, vN2, ..., vNn (n=M-N+1)
+- if N > M, vn,...,VN are ignored (n=M+1)
 
 ## Drawing fill box, line and text
 
@@ -123,14 +126,10 @@ tip> line 0.82 0.86 0.85 0.85 (lc:blue); text 0.88 0.85 "y2"
 ```
 ![macro/tut02c.tip](fig/tut02c.png)
 
-separating by ";", you can put multiple commands in the same line
-like `xlab "x"; ylab "y1, y2"`  
-`fbox` is command to draw the fill-area-box in the graph.
-[see fill-area-style](#fill-area-style).  
-`line` is command to draw the line.  
-`text` is command to draw the text.  
-`(ft:solid)` set the fill-area-style "solid".  
-`(rc:1)` is option to set the flag of relative axis coordinate.  
+"[fbox](fbox.md)" draws the fill-area-box,
+"[line](line.md)" draws a line, "[text](text.md)" draws text in the graph.  
+`(ft:solid)` set the [fill-area-style](#fill-area-style) "solid".  
+`(rc:1)` set the flag of relative axis coordinate.  
 where relative axis coordinate means that the axis-range is defined
 from 0.0 to 1.0 for both of x-axis and y-axis.
 
@@ -146,20 +145,20 @@ tip> stat x (cp:0.03,0.6 rc:1 ts:0.8)
 ```
 ![macro/tut03.tip](fig/tut03.png)
 
-`set x = random(100000,gaus,5,10)` make data of random gaussian distribution
-with sigma=5 mean=10.
-[see random](ref/random.md)  
-`hplot x (nb:50)` makes histogram of data x 
-where bin number 50, x-range is set to include all data of x.  
-you can change the x-range by the option `(xr:Xmin,Xmax)`.
-
-`hfit x gaus` make fitting of gaussian curve to the histogoram.  
-the fitting curve is drawn with green line, fitting information is
-drawn at the position x=0.05,y=0.9 in relative coordinate.  
-`(ts:0.8)` specify text size 0.8 (default is 1.0).
-
-`stat x (cp:0.05,0.9 rc:1)` put the statistics information of data
-at the position x=0.03,y=0.9 in relative coordinate.
+"[random](ref/random.md)" make random distribution with specified data size.  
+In this example,
+it is generated 100000 sizes of Gaussian distribution with sigma=5 mean=10.  
+"[hplot](ref/hplot.md)" creates a 1D-histogram of the specified data.
+In this example, a histogram with bin number 50 is generated.  
+The x-range of the histogram is calculated to include all data
+unless it is specified the option `(xr:Xmin,Xmax)`.  
+"[hfit](ref/hfit.md)" makes a fitting curve to the histogram
+with the specified function and it is drawn over the existing plot.
+`(cp:0.03,0.9 rc:1)` specify to draw the fitting information at x=0.05,y=0.9
+in the relative coordinate.  
+`(ts:0.8)` specify the text size 0.8 (default is 1.0).  
+"[stat](ref/stat.md)" make the statistics information of the specified data,
+and it is drawn over the exisiting plot if the option `(cp:)` is specified.
 
 ## Histogram 2D
 
@@ -172,7 +171,7 @@ tip> hplot2 x y (nx:30 ny:30)
 ```
 ![macro/tut04.tip](fig/tut04.png)
 
-`hplot2 x y (nx:30 ny:30)` makes 2D-histogram of data x and y.  
+"[hplot2](ref/hplot2.md)" makes 2D-histogram of a pair of data.  
 `(nx:30)` and `(ny:30)` are options to specify x-axis and y-axis
 bin number relatively.
 
@@ -181,12 +180,12 @@ bin number relatively.
 ```
 tip> q
 ```
-the command history is saved to the file `.tip_history` in your
+It is saved the command history to the file `.tip_history` in your
 working directory.
 
-## Making macro file and execute it
+## Making a macro file and executing it
 
-you can copy the command history to the macro file like,
+Copy the command history to the macro file like,
 
 ```
 $ cp .tip_history some_macro.tip

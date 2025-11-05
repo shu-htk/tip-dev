@@ -22,6 +22,29 @@ usage: set vs = time([vn|vs],str)
  if unit is not specified, it returns unix-epoch time.
 ```
 
+## option
+### option with quotted argument by ""
+
+- `td:` set delimiters of ISO time format string 
+>  argument of `td:` is 3 chracters, "ABC"  
+>  A is delimiter among year, month, day  
+>  B is delimiter between day and hour  
+>  C is delimiter among hour, min, sec
+
+> default is "- :"
+
+example
+```
+tip> set tn=time(now)
+tip> set ts=time(tn,str)
+tip> cat ts
+ts : data(str) :  2025-11-05 12:26:53.353887
+
+tip> set ts=time(tn,str) (td:"/_:")
+tip> cat ts
+ts : data(str) :  2025/11/05_12:26:53.353887
+```
+
 ## convert unix epoch time to ISO-time string
 example
 ```
@@ -54,7 +77,7 @@ vn : data(num) :  1762073282
 
 |unit|type|value|
 |:---:|:---:|:---:|
-|str|ISO-time string|Y-M-D h:m:s.us|
+|str|ISO format time string|Y-M-D h:m:s.us|
 |usec |floating point number|us   |
 |sec  |floating point number|s + usec*0.001|
 |min  |floating point number|m + sec/60|
@@ -91,6 +114,77 @@ tip> cat vs
 vs : data(str) :  2025-11-02 08:48:13.322786
 ```
 
+## time() function for the macro variable
+
+> time() function is also available to set macro variable.
+
+example
+```
+tip> @ n=time(now)
+tip> @ year=time(n,year)
+tip> @ mon=time(n,mon)
+tip> @ day=time(n,day)
+tip> @ hour=time(n,hour)
+tip> @ min=time(n,min)
+tip> @ sec=time(n,sec)
+tip> @ usec=time(n,usec)
+
+tip> ls year,mon,day,hour,min,sec,usec
+year : number [2025.8453539]
+mon : number [11.151805759]
+day : number [5.5541727768]
+hour : number [13.300146649]
+min : number [18.008799273]
+sec : number [0.527976824]
+usec : number [527999.609]
+
+tip> @ s=time([n],str)
+tip> ls s
+s : string [2025-11-05 13:18:00.500000]
+```
+
+## omitting date/time in the ISO time format
+
+> ommiting time, it is complemented with current time  
+> ommiting date, it is complemented with current date  
+
+example
+```
+tip> @ t1=time("2020-02-03")  ;# omitting time, convert to unix epoch time
+tip> @ t2=time("13:26:49")    ;# omitting date, convert to unix epoch time
+tip>
+tip> @ ts1=time([t1],str)     ;# convert t1 to ISO format time string
+tip> @ ts2=time([t2],str)     ;# convert t2 to ISO format time string
+tip>
+tip> ls ts?
+ts1 : string [2020-02-05 15:12:09.500000]  ;# time is complemented with the current time
+ts2 : string [2025-11-05 13:26:49.599999]  ;# date is complemented with the current date
+```
+
+## making the time array
+
+example
+```
+tip> @ t1 = time("1999-12-31 00:00:00.0") ;# convert to unix epoch time
+tip> @ t2 = time("2000-01-02 00:00:00.0") ;# convert to unix epoch time
+tip> set t = range(13,[t1],[t2])          ;# make array of unix epoch time
+tip> set ts = time(t,str)                 ;# convert to ISO time string
+tip> cat ts (fs:"\n")
+ts : data(str) :
+1999-12-31 00:00:00.000000
+1999-12-31 04:00:00.000000
+1999-12-31 08:00:00.000000
+1999-12-31 12:00:00.000000
+1999-12-31 16:00:00.000000
+1999-12-31 20:00:00.000000
+2000-01-01 00:00:00.000000
+2000-01-01 04:00:00.000000
+2000-01-01 08:00:00.000000
+2000-01-01 12:00:00.000000
+2000-01-01 16:00:00.000000
+2000-01-01 20:00:00.000000
+2000-01-02 00:00:00.000000
+```
+
 for more example, see
 [ex17a](../ex/ex17a.md), [ex17b](../ex/ex17b.md), [ex18](../ex/ex18.md)
-

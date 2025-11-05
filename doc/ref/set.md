@@ -12,43 +12,63 @@ usage: set v = {x0,x1,x2,...}
 
 ## set data using initializer list {}
 
-> initializer list is enclosed by {}, separated by comma or space.
+> initializer list is enclosed by { } separated by comma or space.
 
 ```
 tip> set x = {1, 2, 3} # OK: you can put spaces between value and comma
-tip> set x = {1,2,3}   # OK
 tip> set x={1,2,3}     # OK
 ```
 
 ## set data using range()
 
-see [range](range.md)
+> [range](range.md)() is a function exclusive to the `set` command
+> and cannot be used in the expressions.
+
+example
 ```
-tip> set x = range(10,1,10)    ;# OK
 tip> set x = range(10, 1, 10)  ;# OK: you can put spaces between value and comma
 tip> set x = range (10, 1, 10) ;# NG: you can not put spaces between range and (
 tip> set x=range(10,1,10)      ;# OK
+tip> set x = y + range(10,1,10) ;# NG: you can not use it in the expression
 ```
 
 ## set data using random()
 
-see [random](random.md)
+> [random](random.md)() is a function exclusive to the `set` command
+> and cannot be used in the expressions.
 
-> spacing rule is same as range()
+exmplae
+```
+tip> set x=random(1000,uni,-10,10) ;# uniform dist. -10 <= x <= 10
+tip> set x=random(1000)            ;# default 0 <= x <= 1
 
+tip> set x=random(1000,gaus,0.5,1) ;# gaussian dist. sgm=0.5, mean=1 
+tip> set x=random(1000,gaus)       ;# default sgm=1, mean=0 
+
+tip> set x=random(1000,exp,2)      ;# exponental dist. tau=2
+tip> set x=random(1000,exp)        ;# default tau=1
+
+tip> set x=random(10,gaus)+random(10,exp); NG: you can not use it in the expression
+tip> # for the above case you shoud do like,
+tip> set x1=random(10,gaus)
+tip> set x2=random(10,exp)
+tip> set x=x1+x2
+```
 
 ## set data using time()
 
-see [time](time.md)
-
-> spacing rule is same as range()
-
+> [time](time.md)() is a function exclusive to the `set` and
+> [@](var.md) command
+> and cannot be used in the expressions.
 
 ## set data by experssion
 
-> set y = expression(x1,x2,...,xn)  
-> where size of data x1,x2,...,xn in the expression should be the same
+> If there are variables in the expression, new data is created which size
+> is the same as data in the expression.
 
+> If there are no variables in the expression, size of new data is 1.
+
+example
 ```
 tip> rm *
 tip> set a={1,2,3}
@@ -67,4 +87,11 @@ a : data(num) :  1 2 3
 b : data(num) :  4 5 6
 c : data(num) :  5 7 9
 d : data(num) :  7 8
+
+tip> set x = exp(1)  ;# no variables in the expression
+tip> ls x
+x : data(num) : size=1  ;# data size is 1
+tip> cat x
+x : data(num) :  2.7182818285
+tip>
 ```
