@@ -592,7 +592,9 @@ public:
       thl::StrSplit v_list(v_str,","); // get list of variables
       std::map<std::string,bool> first;
       int nline=1;
-      thl::StrSplit sp; sp.take_null_field(opt.nf);
+      thl::StrSplit sp;
+      sp.take_null_field(opt.nf);
+      sp.set_quot_to_skip_split('"');
       check_data_file(fname,opt);
       std::string buf;
       while(std::getline(ifs,buf)) {
@@ -612,7 +614,7 @@ public:
 	    _dat[v_n].type = type;
 	  }
 	  if(_dat[v_n].type==DataType::Str) {
-	    _dat[v_n].str.push_back(sp(j));
+	    _dat[v_n].str.push_back(thl::trim(sp(j)));
 	  } else {
 	    _dat[v_n].num.push_back(val);
 	  }
@@ -643,7 +645,7 @@ public:
 	  for(size_t k=0; k<vlist.size(); k++) {
 	    std::string v=vlist[k];
 	    if(_dat[v].type==DataType::Str) {
-	      ofs << fmt("%s",_dat[v].str[j].c_str());
+	      ofs << fmt("\"%s\"",_dat[v].str[j].c_str());
 	    } else {
 	      ofs << fmt("%.11g",_dat[v].num[j]);
 	    }
