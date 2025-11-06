@@ -8,7 +8,8 @@ if [ -e .git ] ; then
 	echo "$git_tag $git_log"
 	if [ -e version.txt ] ; then
 	    update=`cmp ver.tmp version.txt | grep -c .`
-	    if [ $update == 1 ] ; then
+	    read -p "do you update version file ? (y/N)> " ans
+	    if [ $update == 1 ] && [ ${ans:-"n"} == "y" ] ; then
 		echo "version.txt is updated"
 		cp ver.tmp version.txt
 	    else
