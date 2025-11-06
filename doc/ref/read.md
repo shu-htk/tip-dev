@@ -37,11 +37,13 @@ in the case the number of column is M,
 ## naming rule of valiable list
 
 If it is specified a list of N variables, and file has M columns,
+
 ```
  read v1,v2,...,vN  file_of_M_column.dat
 ```
-- if N < M, last (M-N+1) columns are named as vN1, vN2, ..., vNx (x=M-N+1)
-- if N > M, vM+1,...,VN are ignored
+
+- if N < M, last n columns are named as vN1, ... , vNn (n=M-N+1)
+- if N > M, vn, ... , VN are ignored (n=M+1)
 
 ## read the output of the system command
 

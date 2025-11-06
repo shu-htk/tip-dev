@@ -102,15 +102,6 @@ tip> read x,y test.csv (fs:",")
 ```
 where 1st column is x and 2nd and 3rd are named to y1 and y2.
 
-in general,
-
-```
- read v1,v2,...,vN  file_of_M_column.dat
-```
-
-- if N < M, last n columns are named as vN1, vN2, ..., vNn (n=M-N+1)
-- if N > M, vn,...,VN are ignored (n=M+1)
-
 ## Drawing fill box, line and text
 
 ```
@@ -126,8 +117,9 @@ tip> line 0.82 0.86 0.85 0.85 (lc:blue); text 0.88 0.85 "y2"
 ```
 ![macro/tut02c.tip](fig/tut02c.png)
 
-"[fbox](fbox.md)" draws the fill-area-box,
-"[line](line.md)" draws a line, "[text](text.md)" draws text in the graph.  
+"[fbox](ref/fbox.md)" draws the fill-area-box,
+"[line](ref/line.md)" draws a line,
+"[text](ref/text.md)" draws text in the graph.  
 `(ft:solid)` set the [fill-area-style](#fill-area-style) "solid".  
 `(rc:1)` set the flag of relative axis coordinate.  
 where relative axis coordinate means that the axis-range is defined

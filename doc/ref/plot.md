@@ -11,7 +11,7 @@ usage: plot [x] y [(opt)]
 
 ### option with single argument
 
-- `gt:` graph type (slope, bin1, bin2) default is slope. see [hplot](hplot.md)
+- `gt:` graph type (slope, bin1, bin2) default is slope.
 - `lc:` line color
 - `lt:` line style
 - `lw:` line width, (0=not draw, default is 1)
@@ -62,10 +62,10 @@ set v=sin(t)
 opt (gd:1 lw:0 st:pls sc:red)
 div 1 2
 
-title "Index vs Value of data v"
-plot v   ;# index data 'v_n' is automatically generated
+title "v_n vs v"
+plot v          ;# index data 'v_n' is automatically generated
 
-title "Value of data t vs v"
+title "t vs v"
 plot t v
 ```
 

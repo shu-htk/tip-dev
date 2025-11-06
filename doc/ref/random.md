@@ -27,13 +27,13 @@ uniform random number in the range [x0,x1]
 
 ## Gaussian distribution  (Box-Muller transform Method)
 
-_sigma \* sqrt(-2\*log(a)) \* sin(2\*PI\*b) + mean_ 
-&emsp; : a,b is independent uniform_
+_sigma \* sqrt(-2\*log(a)) \* sin(2\*PI\*b) + mean_
+&emsp; : a,b is independent uniform random number [0,1]
 
 ## Exponential distribution (Inverse Transform Method)
 
-if tau>0 ;&emsp; _-log(a) / tau_  &emsp; : a is uniform (0,1]  
-if tau<0 ;&emsp; _log(a) / tau_   &emsp; : a is uniform(0,1]  
+if tau>0 ;&emsp; _-log(a) / tau_  &emsp; : a is uniform random number (0,1]  
+if tau<0 ;&emsp; _log(a) / tau_  
 if tau=0 ;&emsp; _1_
 
 
