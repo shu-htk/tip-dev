@@ -30,7 +30,8 @@ END
   g++ -o bin/check_c++11 src/check_c++11.cc
 fi
 cpp11=`bin/check_c++11`
-if [ $cpp11 == "post11" ] ; then
+renew=${1:-yes}
+if [ $cpp11 == "post11" ] && [ $renew == "yes" ] ; then
   echo "cp c++11 files"
   cp -p src/c++11/*.cc src
   cp -p include/c++11/*.hh include/thl
@@ -146,7 +147,7 @@ rm Makefile.1 Makefile.2
 echo "** configure normal end **"
 
 #1:TARGETS = %TARGETS
-#1:all: version $(TARGETS)
+#1:all: $(TARGETS)
 #1:CC=g++
 ##1:CC=clang++
 ##1:TAG = $(shell git describe --tags --always)
