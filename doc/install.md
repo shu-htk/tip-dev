@@ -19,11 +19,11 @@ sudo apt install libplplot-dev
 sudo apt install plplot-driver-cairo
 sudo apt install libreadline-dev
 ```
-- **AlmaLinax 9**
+- **AlmaLinux 9**
 ```
 sudo dnf update
 sudo dnf upgrade
-sudo dnf install dnf-plugins-core     (<-- this may not be neccessary)
+sudo dnf install dnf-plugins-core     (<-- this may not be necessary)
 sudo dnf config-manager --enable crb
 sudo dnf install epel-release
 sudo dnf install epel-next-release
@@ -33,7 +33,7 @@ sudo dnf install readline-devel
 ```
 - **Windows 11**
 
-The easiest way is to run the Linux on WLS2.
+The easiest way is to run the Linux on WSL2.
 
 official : https://learn.microsoft.com/windows/wsl/install  
 
@@ -42,12 +42,12 @@ official : https://learn.microsoft.com/windows/wsl/install
 
 Access to https://github.com/shu-htk/tip-dev
 
-From the **"Code"** pulldown menu, choose **"Download zip"**
+From the **"Code"** pull-down menu, choose **"Download zip"**
 
 or directly download from
  https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip
 
-Copy downloaded zip file to your working directry.
+Copy downloaded zip file to your working directory.
 
 On the Linux terminal, extract zip file,
 ```
@@ -60,7 +60,7 @@ cd tip-dev-main
 ./configure
 make
 ```
-The executable is comipled and outputed to `./bin/tip`
+The executable is compiled and outputted to `./bin/tip`
 
 If your shell has command path to $HOME/bin,
 copy the executable file to `$HOME/bin` by

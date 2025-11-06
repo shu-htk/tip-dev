@@ -1,6 +1,6 @@
 # Command Reference
 
-## (1) Usage to start up the tip interpriter from the shell
+## (1) Usage to start up the tip interpreter from the shell
 
 ```
 $ tip -h
@@ -17,7 +17,7 @@ options:(where arg is option's argument)
  --png arg : graph is drawn in png file (window is not open)
 ```
 
-## (2) Syntacs of the tip interpriter
+## (2) Syntax of the tip interpriter
 
 ### Multiple commands in a line
 
