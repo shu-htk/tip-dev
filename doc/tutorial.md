@@ -1,6 +1,6 @@
 # Tutorial
 
-## Starting the tip interpriter
+## Starting the tip interpreter
 
 from the linux shell,
 ```
