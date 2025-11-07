@@ -6,13 +6,13 @@ usage: write v1,v2,... file_name ([opt])
 ```
 
 ## option
-### option with quotted argument by ""
+### option with quoted argument by ""
 
-- `fs:` field separater
+- `fs:` field separator
 
 ## argument list of variable names
 
-> argument list of variable names is separated by conmma with no spaces.
+> argument list of variable names is separated by comma with no spaces.
 
 ## wild-card matching to the variable name
 

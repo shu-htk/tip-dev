@@ -11,7 +11,7 @@ put a symbol mark at the point (x,y).
 - `st:` symbol style
 - `ss:` symbol size, (default is 1)
 
-## list of sysmbol name
+## list of symbol name
 
 ```
 tip> opt symbol

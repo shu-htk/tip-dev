@@ -9,7 +9,7 @@ usage: hfit v func [(opt)]
 ```
 
 It fits the curve to histogram of data v after [hplot](hplot.md) command.
-The fitting information is outputed to console and fitting curve is
+The fitting information is outputted to console and fitting curve is
 drawn on the existing graph.
 If you specify option `cp:X,Y`, the fitting information is drawn in
 the graph at (X,Y).

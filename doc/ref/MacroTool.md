@@ -1,6 +1,6 @@
 # MacroTool
 
-MacroTool is the hreader-only class libraly which provide
+MacroTool is the header-only class library which provide
 the following command:
 ```
 macro commands:
@@ -69,7 +69,7 @@ public:
       if(args.size() < 2) {
 	printf("usage: rm [pattern]\n"
 	       " remove macro variables which matches pattern.\n"
-	       " example: 'rm *'  remvoe all macro variables.\n");
+	       " example: 'rm *'  remove all macro variables.\n");
 	return 0;
       }
       var.rm(args(1));

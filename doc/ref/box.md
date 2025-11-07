@@ -20,10 +20,10 @@ draw 2-dimensional axis frame in the box shape.
 - `ys:` x-axis scale, (lin, log)
 - `gd:` set flag to draw grid line, (0=not draw, 1=draw)
 - `bo:` set box drawing order, (0=horizontal, 1=vertical)
-- `bp:` set box positon, (from 1 to max number of divided frame)
+- `bp:` set box position, (from 1 to max number of divided frame)
 - `lw:` set box line width, (0=not draw, 1=draw)
 
-### option with quotted argument by ""
+### option with quoted argument by ""
 
 - `tl:` title (see [title](title.md))
 - `xl:` x-label (see [xlab](xlab.md))

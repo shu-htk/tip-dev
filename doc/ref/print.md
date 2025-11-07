@@ -3,10 +3,10 @@
 tip> print
 usage: print args...
        println args...
- print arguments with macro variables formated.
+ print arguments with macro variables format.
                  (see also 'fmt' command)
 print  : line is not returned. (abbreviate to 'pr')
-println: line is returned. (abbreviate to 'prn')
+print-ln: line is returned. (abbreviate to 'prn')
 ```
 
 the following escape sequence is available.
@@ -27,7 +27,7 @@ tip> prn You said "Hello World"  ;# prn is abbr. of println
 You said "Hello World"
 ```
 
-the macro variable is formated using [fmt](fmt.md) command.
+the macro variable is format using [fmt](fmt.md) command.
 ```
 tip> @ e10=exp(10)
 tip> prn [e10]

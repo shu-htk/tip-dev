@@ -37,19 +37,19 @@ tip> set x = y + range(10,1,10) ;# NG: you can not use it in the expression
 > [random](random.md)() is a function exclusive to the `set` command
 > and cannot be used in the expressions.
 
-exmplae
+example
 ```
 tip> set x=random(1000,uni,-10,10) ;# uniform dist. -10 <= x <= 10
 tip> set x=random(1000)            ;# default 0 <= x <= 1
 
-tip> set x=random(1000,gaus,0.5,1) ;# gaussian dist. sgm=0.5, mean=1 
+tip> set x=random(1000,gaus,0.5,1) ;# Gaussian dist. sgm=0.5, mean=1 
 tip> set x=random(1000,gaus)       ;# default sgm=1, mean=0 
 
-tip> set x=random(1000,exp,2)      ;# exponental dist. tau=2
+tip> set x=random(1000,exp,2)      ;# exponential dist. tau=2
 tip> set x=random(1000,exp)        ;# default tau=1
 
 tip> set x=random(10,gaus)+random(10,exp); NG: you can not use it in the expression
-tip> # for the above case you shoud do like,
+tip> # for the above case you should do like,
 tip> set x1=random(10,gaus)
 tip> set x2=random(10,exp)
 tip> set x=x1+x2
@@ -61,7 +61,7 @@ tip> set x=x1+x2
 > [@](var.md) command
 > and cannot be used in the expressions.
 
-## set data by experssion
+## set data by expression
 
 > If there are variables in the expression, new data is created which size
 > is the same as data in the expression.

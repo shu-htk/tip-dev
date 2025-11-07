@@ -16,14 +16,14 @@ usage: read v1,v2,... file_name [(opt)]
 
 - `nr:` set range of line number to read (1st line is begin from 1)
 
-### option with quotted argument by ""
+### option with quoted argument by ""
 
-- `fs:` field separater
+- `fs:` field separator
 
 ## file format
 
-data file is multi column text separated by field separater.
-The default field separater is a space character.
+data file is multi column text separated by field separator.
+The default field separator is a space character.
 
 in the case the number of column is M,
 

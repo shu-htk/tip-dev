@@ -9,15 +9,15 @@ usage: mread x,y,z mesh-file [(opt)]
 ```
 
 ## option
-### option with quotted argument by ""
+### option with quoted argument by ""
 
-- `fs:` field separater
+- `fs:` field separator
 
 
 ## file format
 
-data file is 3 column text separated by field separater.
-The default field separater is a space character.
+data file is 3 column text separated by field separator.
+The default field separator is a space character.
 
 |x|y|z| comment|
 |---|---|---|---|

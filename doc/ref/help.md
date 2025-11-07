@@ -1,6 +1,6 @@
 # help
 
-It shows all commands of the tip interpriter.
+It shows all commands of the tip interpreter.
 
 ```
 tip> help

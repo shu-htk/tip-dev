@@ -29,7 +29,7 @@ usage: plot [x] y [(opt)]
 - `ym:` y margin factor, (default is 0.1)
 - `gd:` set flag to draw grid line, (0=not draw, 1=draw)
 - `bo:` set box drawing order, (0=horizontal, 1=vertical)
-- `bp:` set box positon, (from 1 to max number of divided frame)
+- `bp:` set box position, (from 1 to max number of divided frame)
 - `mv:` moving average number
 
 > in `xm:` x margin means distance between maximum/minimum point of data
@@ -42,10 +42,10 @@ to down/up edge of y-axis
 
 > arguments is separated by comma with no spaces.
 
-- `xr:` x-axis range (default 0,0 : range is automatically calcurated)
-- `yr:` x-axis range (default 0,0 : range is automatically calcurated)
+- `xr:` x-axis range (default 0,0 : range is automatically calculated)
+- `yr:` x-axis range (default 0,0 : range is automatically calculated)
 
-### option with quotted argument by ""
+### option with quoted argument by ""
 
 - `tl:` title (see [title](title.md))
 - `xl:` x-label (see [xlab](xlab.md))

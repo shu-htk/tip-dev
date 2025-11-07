@@ -15,7 +15,7 @@ usage: fit x y [lin|quad|exp|log|gaus|sin|circ] [(opt)]
 ```
 
 Fit the curve to data x and y after [plot](plot.md) command.
-The fitting information is outputed to console and fitting curve is
+The fitting information is outputted to console and fitting curve is
 drawn on the existing graph.
 If you specify option `cp:X,Y`, the fitting information is drawn in
 the graph at (X,Y).

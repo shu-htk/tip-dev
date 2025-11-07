@@ -2,7 +2,7 @@
 
 ## Starting the tip interpreter
 
-from the linux shell,
+from the Linux shell,
 ```
 $ tip
 ```
@@ -35,7 +35,7 @@ The arguments enclosed in ( ) are options.
 `(sc:red)` set the symbol [color](#colors) red.  
 `(gd:1)` set the flag to draw the grid lines in the graph.  
 `(cp:1,200)` set the comment position about the fitting parameters
-at (x=1, y=200) in the gragh coordinate.  
+at (x=1, y=200) in the graph coordinate.  
 `(lc:blue) `set the line [color](#colors) blue. 
 
 The options which are put at the back of the command are
@@ -81,9 +81,9 @@ This feature is convenient if there are many columns in the data file.
 "[xlab](ref/xlab.md)"/"[ylab](ref/ylab.md)" specify x-axis/y-axis label
 respectively.
 
-`(fs:",")` is option to specify the filed separater of data.  
+`(fs:",")` is option to specify the filed separator of data.  
 `(lc:red)` and `(lc:blue)` are options to specify the line color.   
-`(rp:1)` is option to do 'replot' i.e. over-drawing in the exsisting graph. 
+`(rp:1)` is option to do 'replot' i.e. over-drawing in the existing graph. 
 
 ![macro/tut02b.tip](fig/tut02b.png)
 
@@ -94,8 +94,8 @@ tip> read x,y,z test.csv (fs:",")
 ```
 where 1st column is x, 2nd is y, 3rd is z.
 
-In some cases, 1st column is asigned for x-axis and the rests are
-asigned for y-axis,  
+In some cases, 1st column is assigned for x-axis and the rests are
+assigned for y-axis,  
 in that case you can do like,
 ```
 tip> read x,y test.csv (fs:",")
@@ -128,7 +128,7 @@ from 0.0 to 1.0 for both of x-axis and y-axis.
 ## Histogram 1D
 
 ```
-tip> title "Histogram of gaussian distribution (sigm=5,mean=10)"
+tip> title "Histogram of Gaussian distribution (sigm=5,mean=10)"
 tip> ylab "Num of entries"
 tip> set x = random(100000,gaus,5,10)
 tip> hplot x (nb:50)
@@ -150,7 +150,7 @@ with the specified function and it is drawn over the existing plot.
 in the relative coordinate.  
 `(ts:0.8)` specify the text size 0.8 (default is 1.0).  
 "[stat](ref/stat.md)" make the statistics information of the specified data,
-and it is drawn over the exisiting plot if the option `(cp:)` is specified.
+and it is drawn over the existing plot if the option `(cp:)` is specified.
 
 ## Histogram 2D
 
@@ -167,7 +167,7 @@ tip> hplot2 x y (nx:30 ny:30)
 `(nx:30)` and `(ny:30)` are options to specify x-axis and y-axis
 bin number relatively.
 
-## Quit the tip interpriter
+## Quit the tip interpreter
 
 ```
 tip> q

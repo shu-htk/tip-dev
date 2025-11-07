@@ -17,13 +17,13 @@ usage: cat v1,v2,... [>|>>] [v] [(opt)]
 
 - `nr:` set data range of output (1st data is begin from 1)
 
-### option with quotted argument by ""
+### option with quoted argument by ""
 
-- `fs:` set field separater of output (console only)
+- `fs:` set field separator of output (console only)
 
 **note)**
-> if `nr:` is not specified (default `nr:0,0`), all data is outputed  
-> if `nr:N,-1`, it it outputed from N to end
+> if `nr:` is not specified (default `nr:0,0`), all data is outputted  
+> if `nr:N,-1`, it it outputted from N to end
 
 example
 ```
@@ -64,7 +64,7 @@ tip> cat x1,x2 > x3  ;# redirected to x3
 tip> cat x3
 x3 : data(num) :  1 2 3 4 5 6
 
-tip> cat x1,x2 >> x3  ;# apended to x3
+tip> cat x1,x2 >> x3  ;# appended to x3
 tip> cat x3
 x3 : data(num) :  1 2 3 4 5 6 1 2 3 4 5 6
 

@@ -82,7 +82,7 @@ tip> logic A=A!=B       ;# same to A==A && A!=B
 
 **note 2)**
 > wild card is **not the regular expression**  
-> actually it is implimented by `fnmatch()` function
+> actually it is implemented by `fnmatch()` function
 
 example
 ```

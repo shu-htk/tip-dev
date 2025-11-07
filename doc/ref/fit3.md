@@ -9,7 +9,7 @@ usage: fit3 x y z [plane] [(opt)]
 ```
 
 Fit the plane to data x, y and z after [plot3](plot3.md) command.
-The fitting information is outputed to console and fitting plane is
+The fitting information is outputted to console and fitting plane is
 drawn on the existing graph.
 If you specify option `cp:X,Y`, the fitting information is drawn in
 the graph at (X,Y).

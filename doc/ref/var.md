@@ -81,10 +81,10 @@ tip> @ size = [x]>4 ? ([x]>7 ? L : M ) : S  ;# NG it can't be nested
 Var::parse_ternary(): operator lack of args
 ```
 
-## some other syntacs
+## some other syntax
 
 ```
-tip> @ a = "1"  ;# enclosing the expr by quatations, it is treated as string
+tip> @ a = "1"  ;# enclosing the expr by quotations, it is treated as string
 tip> ls a
 a : string [1]
 tip>
@@ -92,7 +92,7 @@ tip> @ a += "2" ;# append string "2" to the back of string "1"
 tip> ls a
 a : string [12]
 tip> 
-tip> @ a += 2   ;# a is coverted to number 12 then added 2
+tip> @ a += 2   ;# a is converted to number 12 then added 2
 tip> ls a
 a : number [14]
 tip>

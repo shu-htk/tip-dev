@@ -5,7 +5,7 @@ tip> if
 usage: if expr; ...; elif expr; ...; else; ...; fi
 ```
 
-conditinal branch by evaluating logical expression
+conditional branch by evaluating logical expression
 
 see [logic](logic.md) to learn how the logical expression evaluated
 

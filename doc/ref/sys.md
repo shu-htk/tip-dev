@@ -5,7 +5,7 @@ usage: sys [command]
  execute system command
 ```
 
-`sys` execute shell command in the tip interpriter
+`sys` execute shell command in the tip interpreter
 
 example
 ```

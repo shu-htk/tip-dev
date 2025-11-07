@@ -5,7 +5,7 @@ usage: sort v1,v2,... by v
  sort data v1,v2,... by v in ascending order.
  it is created sorted data v1_sort,v2_sort,...
 ```
-> argument list of variable names is separated by conmma with no spaces.
+> argument list of variable names is separated by comma with no spaces.
 
 example
 ```

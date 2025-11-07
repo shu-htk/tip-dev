@@ -17,7 +17,7 @@ options:(where arg is option's argument)
  --png arg : graph is drawn in png file (window is not open)
 ```
 
-## (2) Syntax of the tip interpriter
+## (2) Syntax of the tip interpreter
 
 ### Multiple commands in a line
 
@@ -40,7 +40,7 @@ tip> plot x y ;# plotting data x and y
 
 ## Variable
 
-The tip interpriter has 2 kind of variable, one is the data variable and
+The tip interpreter has 2 kind of variable, one is the data variable and
 the other is the macro variable.
 
 - **The data variable**
@@ -64,7 +64,7 @@ double x[sizeof(n)]; for(int i=0; i<sizeof(n); i++) x[i]=sin(n[i]);
 
 The macro variable is scalar of number (or string) which is defined by
 [@](ref/var.md) command.  
-Enclosing the mcaro variable in the brackets [ ]
+Enclosing the macro variable in the brackets [ ]
 it is replaced to the string which is formatted by it's value
 ```
 tip> @ n=1
@@ -92,13 +92,13 @@ ret : string [x]
 - [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical macro variable
 - [for,do,while,end](ref/loop.md) : for, do, while loop
 - [if,elif,else,fi](ref/if_fi.md) : conditional branch
-- [print](ref/print.md) : print arguments with macro variables formated
+- [print](ref/print.md) : print arguments with macro variables format
 - [fmt](ref/fmt.md) : set output format of macro variable
 - [wait](ref/wait.md) : wait time or console input
 - [sys](ref/sys.md) : execute system command
 - [calc](ref/calc.md) : evaluate the numerical expression
 - [logic](ref/logic.md) : evaluate the logical expression
-- q : quit the tip interpriter
+- q : quit the tip interpreter
 
 ## (4) Commands of drawing and handling data.
 - [arc](ref/arc.md) : draw a circle in 2D-graph

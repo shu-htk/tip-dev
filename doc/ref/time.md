@@ -23,10 +23,10 @@ usage: set vs = time([vn|vs],str)
 ```
 
 ## option
-### option with quotted argument by ""
+### option with quoted argument by ""
 
 - `td:` set delimiters of ISO time format string 
->  argument of `td:` is 3 chracters, "ABC"  
+>  argument of `td:` is 3 characters, "ABC"  
 >  A is delimiter among year, month, day  
 >  B is delimiter between day and hour  
 >  C is delimiter among hour, min, sec
@@ -145,8 +145,8 @@ s : string [2025-11-05 13:18:00.500000]
 
 ## omitting date/time in the ISO time format
 
-> ommiting time, it is complemented with current time  
-> ommiting date, it is complemented with current date  
+> omitting time, it is complemented with current time  
+> omitting date, it is complemented with current date  
 
 example
 ```

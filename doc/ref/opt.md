@@ -23,7 +23,7 @@ set or show the global options
 
 
 ## global option and local option
-see the following example how the golbal and local option work.
+see the following example how the global and local option work.
 ```
 tip> opt (lc:red)       ;# set the global line color red
 tip> plot x y           ;# the line color is red

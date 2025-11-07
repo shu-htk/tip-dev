@@ -19,11 +19,11 @@ draw 3-dimensional axis frame.
 - `xn`: x-subtick num
 - `yn`: y-subtick num
 - `bo:` set box drawing order, (0=horizontal, 1=vertical)
-- `bp:` set box positon, (from 1 to max number of divided frame)
+- `bp:` set box position, (from 1 to max number of divided frame)
 - `al:` altitude view angle , (default is 45 degree)
 - `az:` azimuth view angle, (default is 45 degree)
 
-### option with quotted argument by ""
+### option with quoted argument by ""
 
 - `tl:` title (see [title](title.md))
 - `xl:` x-label (see [xlab](xlab.md))

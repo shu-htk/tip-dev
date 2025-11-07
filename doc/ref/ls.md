@@ -16,7 +16,7 @@ shown.
 
 ## argument list of variable names
 
-> argument list of variable names is separated by conmma with no spaces.
+> argument list of variable names is separated by comma with no spaces.
 
 ## wild-card matching to the variable name
 
