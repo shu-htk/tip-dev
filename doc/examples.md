@@ -25,3 +25,8 @@
 - [ex20: plot time variation of increasing data](ex/ex20.md)
 - [ex21: Absolute coordinate and Relative coordinate](ex/ex21.md)
 - [ex22: Gain curve of Low Pass Filter](ex/ex22.md)
+
+## EPICS CA (optional)
+
+- [ex101: plot the trend graph of the data using EPICS CA](ex/ex101.md)
+

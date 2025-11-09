@@ -10,6 +10,7 @@ where calculation expression is appear in
 
 - [@](var.md) x = expr  
 - [set](set.md) x = expr  
+- [mset](mset.md) z = expr  
 
 ## operators
 

@@ -6,7 +6,7 @@ usage: ls pattern
  'ls *' show all data or macro variables
 ```
 
-It is shown the list of  information about both macro variable and data variable
+Show the list of  information about both macro variable and data variable
 which name matches the pattern.
 
 If it is macro variable, the name and type(number, string) and it's value
@@ -14,9 +14,22 @@ is shown.
 If it is data variable, the name and type(num, str, mesh) and it's size is
 shown.  
 
-## argument list of variable names
+## variable names in the argument
 
-> argument list of variable names is separated by comma with no spaces.
+> variable names are separated by commas with no spaces.
+
+example
+```
+tip> do n 1 3; @ x[n]=[n]; set v[n]=range([n],1,[n]); end
+
+tip> ls x1,v1,v3           ;# OK: separated by commas with no spaces
+x1 : number [1]
+v1 : data(num) : size=1
+v3 : data(num) : size=3
+
+tip> ls x1, v1, v3         ;# NG: separated by commas with spaces
+x1 : number [1]            ;# only 1st argument is listed
+```
 
 ## wild-card matching to the variable name
 

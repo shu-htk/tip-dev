@@ -145,3 +145,12 @@ ret : string [x]
 - [yerr](ref/yerr.md) : plot the y-error-bars in 2D-graph
 - [ylab](ref/ylab.md) : set the y-axis label
 - [zlab](ref/zlab.md) : set the z-axis label in 3D-graph
+
+## (5) Commands of EPICS CA (optional)
+
+- [cainfo](ref/cainfo.md) : show information of record
+- [caget](ref/caget.md) : get value of record
+- [caput](ref/caput.md) : put value of record
+- [camon](ref/camon.md) : open monitored record
+- [cacheck](ref/cacheck.md): check if monitored record is updated
+- [caclose](ref/caclose.md): close monitored record

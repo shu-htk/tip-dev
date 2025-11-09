@@ -2,7 +2,7 @@
 
 Tip is a command-line based data plotting tool.
 It is written in C++ and depends on the library of
-[PLPLOT](https://plplot.sourceforge.net/)
+[PLPLOT](https://plplot.sourceforge.net/),
 and [GNU readline](https://cgit.git.savannah.gnu.org/cgit/readline.git). 
 Basically it works on Linux or other Unix-like OS.
 Although it has fewer functions than existing plotting tools,
@@ -18,6 +18,9 @@ it just aims ease of use over versatility.
 - control (`for`,`do`,`while`,`end`,`if`,`elif`,`else`,`fi`)
 - execute macro file
 - save to pdf or png file
+
+### optional
+- [EPICS](https://epics-controls.org/) CA access
 
 ## Install
 
