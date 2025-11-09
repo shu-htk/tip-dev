@@ -1586,6 +1586,15 @@ public:
 	" yerr  : plot the y-error-bars in 2D-graph\n"
 	" ylab  : set the y-axis label\n"
 	" zlab  : set the z-axis label in 3D-graph\n"
+#if USE_EPICS_CA
+	"EPICS CA commands:\n"	
+	" cainfo : show information of record\n"
+	" caget  : get value of record\n"
+	" caput  : put value of record\n"
+	" camon  : open monitored record\n"
+	" cacheck: check if monitored record is updated\n"
+	" caclose: close monitored record\n"
+#endif
 	;
       printf("%s",help);
       print_help(); // help of MacroTool
