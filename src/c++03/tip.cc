@@ -54,7 +54,7 @@ private:
     std::string fs, fw, cf, cc, sd, gt, ht, mt, tf, td;
     thl::PLAtt att;
     Option(void) : cx(0), cy(0), x0(0), x1(0), y0(0), y1(0), z0(0), z1(0),
-		   fx0(0), fx1(0), dt(1), fq(1), n0(0), n1(0), nb(100),
+		   fx0(0), fx1(0), dt(1), fq(1), n0(0), n1(-1), nb(100),
 		   nx(20), ny(20), bp(0), dm(0), mv(1), ae(0),
 		   rp(0), cr(1), rc(0), fl(1), nf(0),
 		   fs(" "), fw("rc"), cf(""), cc(""), sd("clock"),

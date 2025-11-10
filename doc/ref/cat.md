@@ -22,7 +22,7 @@ usage: cat v1,v2,... [>|>>] [v] [(opt)]
 - `fs:` set field separator of output (console only)
 
 **note)**
-> if `nr:` is not specified (default `nr:0,0`), all data is outputted  
+> if `nr:` is not specified (default `nr:0,-1`), all data is outputted  
 > if `nr:N,-1`, it it outputted from N to end
 
 example
