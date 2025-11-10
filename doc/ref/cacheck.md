@@ -21,7 +21,7 @@ If it is updated the following variables are set.
 - **macro variable :** `@ v = (1st element of EPICS_record)`
 - **macro variable :** `@ v.update = 1`
 
-If it is not updated the following variables are set.
+If it is not updated the following variable is set.
 
 - **macro variable :** `@ v.update = 0`
 

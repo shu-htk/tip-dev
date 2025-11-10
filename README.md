@@ -18,9 +18,7 @@ it just aims ease of use over versatility.
 - control (`for`,`do`,`while`,`end`,`if`,`elif`,`else`,`fi`)
 - execute macro file
 - save to pdf or png file
-
-### optional
-- [EPICS](https://epics-controls.org/) CA access
+- [EPICS](https://epics-controls.org/) CA access (optional)
 
 ## Install
 

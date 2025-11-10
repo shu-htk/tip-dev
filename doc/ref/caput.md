@@ -13,7 +13,7 @@ example
 tip> cainfo monitor:str
 monitor:str
     State:         connected
-    Host:          some.user.host
+    Host:          some.host.name
     Access:        read=1, write=1
     Data type:     DBR_STRING (native: DBF_STRING)
     Element count: 1

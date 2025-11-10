@@ -79,3 +79,40 @@ export PATH=$PATH:$HOME/bin
 The executable file `my_macro` is also installed when you install the `tip`.  
 It is a simple example using [MacroTool](ref/MacroTool.md).
 
+## (4) Enable EPICS CA (optional)
+
+If it is already installed the EPICS in your computer,
+just check if the environment variable `EPICS_BASE` is set in your shell.
+If it is set,
+the [configure script of the Tip](#2-configure-and-make-the-tip-executable)
+generate Makefile to enable the EPICS CA.
+
+If it is not installed the EPICS, you need to make and setup the
+EPICS environment as following.
+
+Download the archive of the EPICS source.
+
+- stable:: 
+https://epics-controls.org/download/base/base-3.15.9.tar.gz
+- new:
+https://epics-controls.org/download/base/base-7.0.9.tar.gz
+
+For example, installing new version to $HOME/epics
+
+```
+mkdir -p $HOME/epics
+cp base-7.0.9.tar.gz $HOME/epics
+cd $HOME/epics
+tar zxf base-7.0.9.tar.gz
+cd base-7.0.9
+make
+```
+It takes for a while to complete compiling.
+
+After that you should set the environment variable as following.
+
+```
+export EPICS_BASE=$HOME/epics/base-7.0.9
+```
+
+

@@ -79,15 +79,8 @@ fi
 
 if [ $pkg != null ] ; then
   ver=`grep Version $pkg_path/pkgconfig/$pkg.pc | awk '{print $2}'`
-#  v1=`echo $ver | awk -F . '{print $1}'`
-#  v2=`echo $ver | awk -F . '{print $2}'`
-#  v3=`echo $ver | awk -F . '{print $3}'`
-#  opt=`echo $v2 | awk '{if($1>12) print 1;else print 0;}'`
-#  echo "PLPLOT: Version $ver (Major=$v1 Mid=$v2 Minor=$v3) new=$opt"
   echo "PLPLOT: Version $ver"
   grep '^#3:' $0 | sed "s/#3://g" | sed "s|%BASE|$pkg_path|g" >> Makefile.2
-#  grep '^#31:' $0 | sed "s/#31://g"|sed "s|%PKG|$pkg|g" |sed "s|%OPT|$opt|g" \
-#   >> Makefile.2
   grep '^#31:' $0 | sed "s/#31://g"|sed "s|%PKG|$pkg|g" >> Makefile.2
   echo PLPLOT: $pkg_path/pkgconfig/$pkg.pc
 fi
@@ -176,6 +169,7 @@ echo "** configure normal end **"
 #32:INC_CA = -I$(EPICS_BASE)/include/compiler/gcc
 #32:INC_CA += -I$(EPICS_BASE)/include/os/Linux -I$(EPICS_BASE)/include 
 #32:INC_CA += -D USE_EPICS_CA=1 -D EPICS_VER="\"$(EPICS_VERSION_NUMBER)\""
+#32:EPICS_HOST_ARCH = $(shell $(EPICS_BASE)/startup/EpicsHostArch)
 #32:LIB_CA = -L$(EPICS_BASE)/lib/$(EPICS_HOST_ARCH)
 #32:LIB_CA += -Wl,-rpath,$(EPICS_BASE)/lib/$(EPICS_HOST_ARCH)
 #32:LIB_CA += -lca -lCom
