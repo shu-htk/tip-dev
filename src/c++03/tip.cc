@@ -1975,7 +1975,6 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      if(opt.n0==opt.n1) {opt.n0=0; opt.n1=-1;}
       if(buf.find(">") != buf.npos) {
 	if(args.size() >= 3) data_cat(get_vlist(args(1)),args(2),args(3),opt);
       } else {
