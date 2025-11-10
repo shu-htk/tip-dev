@@ -36,11 +36,10 @@ namespace thl {
     if(s.size()==0) return "";
     size_t n=s.find_first_not_of(" \t");   // skip forward spaces
     if(n==s.npos) return s;
-    if(c > 0) {
-      Bracket bc(c,c,s);
-      if(bc.size()>0) return bc.contents(0); // strings in the quotations
-    }
     size_t m=s.find_last_not_of(" \t");   // ignore backward spaces
+    if(c > 0) {
+      if(s[n]==c && s[m]==c) {n++; m--;}
+    }
     return s.substr(n,m-n+1);
   }
 
