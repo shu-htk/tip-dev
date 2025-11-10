@@ -1,0 +1,13 @@
+# test of executing all macro files
+
+fmt %02.0f
+do n 1 22
+  if [n]==07 | [n]==13 | [n]==17
+    exe doc/macro/ex[n]a.tip
+    wait 1
+    exe doc/macro/ex[n]b.tip
+  else
+    exe doc/macro/ex[n].tip
+  fi
+  wait 1
+end
