@@ -96,6 +96,7 @@ ret : string [x]
 - [fmt](ref/fmt.md) : set output format of macro variable
 - [wait](ref/wait.md) : wait time or console input
 - [sys](ref/sys.md) : execute system command
+- [split](ref/split.md) : split string variable
 - [calc](ref/calc.md) : evaluate the numerical expression
 - [logic](ref/logic.md) : evaluate the logical expression
 - q : quit the tip interpreter

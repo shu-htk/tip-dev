@@ -3,7 +3,9 @@
 ```
 tip> @
 usage: @ x [=|+=|-=|*=|/=|%=] expression
+usage: @ t = time(s[,unit])
  set the expression value to the macro variable x
+ convert ISO time string to unix epoch time and vice versa
 ```
 see [calc](calc.md) to learn how expression is calulated
 
@@ -114,8 +116,16 @@ tip> @ kg=e3
 tip> @ m=1.2[kg]        ;# 1.2[kg] is replaced to 1.2e3
 tip> prn mass=[m][g]    ;# [g] is not replaced since it is not defined
 mass=1200[g]
-tip> @ ms=e-3
-tip> @ t=1.2[ms]        ;# 1.2[ms] is replaced to 1.2e-3
-tip> prn time=[t][sec]  ;# [sec] is not replaced since it is not defined
-time=0.0012[sec]
+```
+
+## convert ISO time string to unix epoch time and vice versa
+
+```
+tip> @ t=time("2001-02-03 09:12:37.0") ;# ISO-time-string to unix-epoch-time
+tip> ls t
+t : number [981191557]
+
+tip> @ ts=time([t],str)                ;# unix-epoch-time to ISO-time-string
+tip> ls ts
+ts : string [2001-02-03 09:12:37.000000]
 ```

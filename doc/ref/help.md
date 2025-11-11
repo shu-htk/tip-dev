@@ -60,6 +60,7 @@ macro commands:
  fmt   : set output format of macro variable
  wait  : wait time or console input
  sys   : execute system command
+ split : split string variable
  calc  : evaluate the numerical expression
  logic : evaluate the logical expression
  q     : terminate this program
