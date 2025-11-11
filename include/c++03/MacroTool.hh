@@ -597,6 +597,19 @@ namespace thl {
 	}
       }
     }
+    void split(const std::string &tag, std::string fs=" \t\n") {
+      if(_str.count(tag)) {
+	CFormat fmt;
+	StrSplit sp;
+	sp.set_quot_to_skip_split('"');
+	sp.split(_str[tag],fs);
+	for(size_t j=0; j<sp.size(); j++) {
+	  _str[tag+fmt("%lu",j)] = trim(sp(j));
+	}
+      } else {
+	printf("string macro variable %s is not found\n",tag.c_str());
+      }
+    }
   };
 
 //--- tool of do/for/while loops -------------------------------------------
@@ -771,6 +784,7 @@ namespace thl {
 	" fmt   : set output format of macro variable\n"
 	" wait  : wait time or console input\n"
 	" sys   : execute system command\n"
+	" split : split string variable\n"
 	" calc  : evaluate the numerical expression\n"
 	" logic : evaluate the logical expression\n"
 	" q     : terminate this program\n";
@@ -782,32 +796,32 @@ namespace thl {
       std::vector<size_t> loop_index,if_index;
       _loop.clear(); _if.clear();
       for(size_t j=0; j<vbuf.size(); j++) {
-	StrSplit words(vbuf[j]);
-	if(words.size() > 0) {
-	  if(words(0)=="do" || words(0)=="for"|| words(0)=="while") {
+	StrSplit args(vbuf[j]);
+	if(args.size() > 0) {
+	  if(args(0)=="do" || args(0)=="for"|| args(0)=="while") {
 	    loop_index.push_back(nline);
 	    _loop[nline]=Loop();
 	  }
-	  if(words(0)=="break") {
+	  if(args(0)=="break") {
 	    vbuf[j] += fmt(" %u",loop_index.back());
 	  }
-	  if(words(0)=="continue") {
+	  if(args(0)=="continue") {
 	    vbuf[j] += fmt(" %u",loop_index.back());
 	  }
-	  if(words(0)=="end") {
+	  if(args(0)=="end") {
 	    vbuf[j] += fmt(" %u",loop_index.back());
 	    _loop[loop_index.back()].set_end_idx(nline);
 	    loop_index.pop_back();
 	  }
-	  if(words(0)=="if") {
+	  if(args(0)=="if") {
 	    if_index.push_back(nline);
 	    _if[nline]=If();
 	  }
-	  if(words(0)=="elif"||words(0)=="else") {
+	  if(args(0)=="elif"||args(0)=="else") {
 	    vbuf[j] += fmt(" %u",if_index.back());
 	    _if[if_index.back()].add_next_idx(nline);
 	  }
-	  if(words(0)=="fi") {
+	  if(args(0)=="fi") {
 	    _if[if_index.back()].add_next_idx(nline);
 	    if_index.pop_back();
 	  }
@@ -829,11 +843,11 @@ namespace thl {
 	if(_break=='b') {_break=0; break;}
 	std::string buf=vbuf[nline];
 	var.replace(buf);
-	StrSplit words(buf);
-	if(words.size()==0) {nline++; continue;}
-	if(words(0,0)=='#') {nline++; continue;}
+	StrSplit args(buf);
+	if(args.size()==0) {nline++; continue;}
+	if(args(0,0)=='#') {nline++; continue;}
 
-	if(words(0)=="do" || words(0)=="for"|| words(0)=="while") {
+	if(args(0)=="do" || args(0)=="for"|| args(0)=="while") {
 	  if(_loop.count(nline)) {
 	    Loop *ptr = &_loop[nline];
 	    ptr->process(buf,&var);
@@ -847,20 +861,20 @@ namespace thl {
 	  }
 	  nline++; continue;
 	}
-	if(words(0)=="break"||_break=='b') {
+	if(args(0)=="break"||_break=='b') {
 	  if(_break=='b') {_break=0; break;}
-	  if(words.size()>1) {
-	    nline=_loop[words.stoi(1)].end_idx()+1; continue;
+	  if(args.size()>1) {
+	    nline=_loop[args.stoi(1)].end_idx()+1; continue;
 	  }
 	  nline++; continue;
 	}
-	if(words(0)=="end" || words(0)=="continue") {
-	  if(words.size()>1) {
-	    nline=words.stoi(1); continue;
+	if(args(0)=="end" || args(0)=="continue") {
+	  if(args.size()>1) {
+	    nline=args.stoi(1); continue;
 	  } 
 	  nline++; continue;
 	}
-	if(words(0)=="if") {
+	if(args(0)=="if") {
 	  if(_if.count(nline)) {
 	    If *ptr = &_if[nline];
 	    ptr->process(buf);
@@ -873,8 +887,8 @@ namespace thl {
 	  }
 	  nline++; continue;
 	}
-	if(words(0)=="elif" || words(0)=="else") {
-	  size_t n=words.stoi(words.size()-1);
+	if(args(0)=="elif" || args(0)=="else") {
+	  size_t n=args.stoi(args.size()-1);
 	  if(_if.count(n)) {
 	    If *ptr = &_if[n];
 	    if(ptr->pass()) {
@@ -891,13 +905,16 @@ namespace thl {
 	  }
 	  nline++; continue;
 	}
-	if(words(0)=="fi") {
+	if(args(0)=="fi") {
 	  nline++; continue;
 	}
-	if(words(0)=="@") {
-	  if(words.size()<2) {
+	if(args(0)=="@") {
+	  if(args.size()<2) {
 	    printf("usage: @ x [=|+=|-=|*=|/=|%c=] expression\n"
-		   " set the expression value to the macro variable x\n",'%'
+		   "usage: @ t = time(s[,unit])\n"
+		   " set the expression value to the macro variable x\n"
+		   " convert ISO time string to unix epoch time and"
+		   " vice versa\n",'%'
 		   );
 	  } else {
 	    std::string expr = buf.substr(buf.find("@")+1);
@@ -905,7 +922,7 @@ namespace thl {
 	  }
 	  nline++; continue;
 	}
-	if(words(0).find("++") != buf.npos) {
+	if(args(0).find("++") != buf.npos) {
 	  StrSplit sp(buf," +");
 	  if(sp.size()<1) {
 	    printf("usage: ++var\n increment numerical macro variable\n");
@@ -917,7 +934,7 @@ namespace thl {
 	  }
 	  nline++; continue;
 	}
-	if(words(0).find("--") != buf.npos) {
+	if(args(0).find("--") != buf.npos) {
 	  StrSplit sp(buf," -");
 	  if(sp.size()<1) {
 	    printf("usage: --var\n decrement numerical macro variable\n");
@@ -929,9 +946,9 @@ namespace thl {
 	  }
 	  nline++; continue;
 	}
-	if(words(0)=="print" || words(0)=="println" ||
-	   words(0)=="pr" || words(0)=="prn") {
-	  if(words.size()<2) {
+	if(args(0)=="print" || args(0)=="println" ||
+	   args(0)=="pr" || args(0)=="prn") {
+	  if(args.size()<2) {
 	    printf("usage: print args...\n"
 		   "       println args...\n"
 		   " print arguments with macro variables formated.\n"
@@ -941,15 +958,15 @@ namespace thl {
 		   );
 	  } else {
 	    replace_esc(buf);
-	    std::string args = buf.substr(words.index(1));
-	    printf("%s",args.c_str());
-	    if(words(0)=="println"||words(0)=="prn") printf("\n");
+	    std::string s = buf.substr(args.index(1));
+	    printf("%s",s.c_str());
+	    if(args(0)=="println"||args(0)=="prn") printf("\n");
 	    fflush(stdout);
 	  }
 	  nline++; continue;
 	}
-	if(words(0) == "fmt") {
-	  if(words.size()<2) {
+	if(args(0) == "fmt") {
+	  if(args.size()<2) {
 	    printf("usage: fmt [\"format\"|reset|show]\n"
 		   " specify output format of macro variable.\n"
 		   " (it is same as printf)\n"
@@ -959,69 +976,83 @@ namespace thl {
 		   " output:  001\n","%.11g","%03.0f"
 		   );
 	  } else {
-	    if(words(1)=="reset") {
+	    if(args(1)=="reset") {
 	      var.reset_fmt();
-	    } else if(words(1)=="show") {
+	    } else if(args(1)=="show") {
 	      var.print_fmt();
 	    } else {
-	      var.set_fmt(trim(words(1)));
+	      var.set_fmt(trim(args(1)));
 	    }
 	  }
 	  nline++; continue;
 	}
-	if(words(0)=="sys") { // execute system command
-	  if(words.size() < 2) {
+	if(args(0)=="sys") { // execute system command
+	  if(args.size() < 2) {
 	    printf("usage: sys [command]\n"
 		   " execute system command\n"
 		   );
 	  } else {
-	    size_t n = buf.find(words(0));
-	    system(buf.substr(n+words(0).size()).c_str());
+	    size_t n = buf.find(args(0));
+	    system(buf.substr(n+args(0).size()).c_str());
 	  }
 	  nline++; continue;
 	}
-	if(words(0)=="wait") {
-	  if(words.size() < 2) {
+	if(args(0)=="wait") {
+	  if(args.size() < 2) {
 	    printf("usage: wait [t]\n"
 		   " wait t seconds, (t is floating point number)\n"
 		   " if t=0 wait console input\n");
 	  } else {
-	    if(words.stof(1)==0) {
+	    if(args.stof(1)==0) {
 	      printf("'b':break, others:continue > ");
 	      char s[8]; fgets(s,8,stdin); sscanf(s,"%c\n",(char*)&_break);
 	    } else {
-	      unsigned int ut = (unsigned int)(words.stof(1)*1000000.);
+	      unsigned int ut = (unsigned int)(args.stof(1)*1000000.);
 	      usleep(ut);
 	    }
 	  }
 	  nline++; continue;
 	}
-	if(words(0)=="calc") { // for the debug of Calc
-	  if(words.size() < 2) {
+	if(args(0)=="calc") { // for the debug of Calc
+	  if(args.size() < 2) {
 	    printf("usage: calc [expression]\n");
 	  } else {
-	    std::string expr = buf.substr(words.index(1));
+	    std::string expr = buf.substr(args.index(1));
 	    Calc calc;
 	    printf("[%s] -> ",expr.c_str());
 	    printf("[%.11g]\n",calc.eval(expr));
 	  }
 	  nline++; continue;
 	}
-	if(words(0)=="logic") { // for the debug of Logic
-	  if(words.size() < 2) {
+	if(args(0)=="logic") { // for the debug of Logic
+	  if(args.size() < 2) {
 	    printf("usage: logic [expression]\n");
 	  } else {
-	    std::string expr = trim(buf.substr(words.index(1)));
+	    std::string expr = trim(buf.substr(args.index(1)));
 	    Logic logic; bool debug=1;
 	    logic.eval(expr,debug);
 	  }
 	  nline++; continue;
 	}
-	if(words(0)=="q") {
+	if(args(0)=="split") {
+	  if(args.size() < 2) {
+	    printf("usage: split s [fs]\n"
+		   " split the string macro variable by delomiter fs\n"
+		   " default delimiter is white space\n"
+		   " splitted string variables are created named s0,..,sN-1\n"
+		   " (N is number of splitted string)\n"
+		   );
+	  } else {
+	    if(args.size() < 3) {var.split(args(1));}
+	    else {var.split(args(1),args(2));} 
+	  }
+	  nline++; continue;
+	}
+	if(args(0)=="q") {
 	  _quit=1; break;
 	}
 	if( ! add_commands(buf) ) {nline++; continue;}
-	printf("invalid command: %s\n",words(0).c_str());
+	printf("invalid command: %s\n",args(0).c_str());
 	printf("try 'help' to learn available commands\n");
 	break;
       }
