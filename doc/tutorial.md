@@ -87,12 +87,12 @@ respectively.
 
 ![macro/tut02b.tip](fig/tut02b.png)
 
-If the columns in the data file is not so many, you can specify
-for each variable name like,
+If the number of columns in the file is not so large, you can specify
+variable name for each column like,
 ```
 tip> read x,y,z test.csv (fs:",")
 ```
-where 1st column is x, 2nd is y, 3rd is z.
+where data of 1st, 2nd, 3rd columns are named x, y, z respectively.
 
 In some cases, 1st column is assigned for x-axis and the rests are
 assigned for y-axis,  
@@ -100,7 +100,7 @@ in that case you can do like,
 ```
 tip> read x,y test.csv (fs:",")
 ```
-where 1st column is x and 2nd and 3rd are named to y1 and y2.
+where 1st column is named x and 2nd, 3rd are named to y1, y2 respectively.
 
 ## Drawing fill box, line and text
 
