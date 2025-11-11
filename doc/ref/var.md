@@ -70,6 +70,20 @@ b : string [World!]
 c : string [Hello World!]
 ```
 
+## treatment of the quotations
+
+- **quotations at both edge of the string are removed**
+```
+tip> @ s = "a b c d"
+tip> ls s
+s : string [a b c d]
+```
+-  **quotations among the string are not removed**
+```
+tip> @ s = a "b c" d
+tip> ls s
+s : string [a "b c" d]
+```
 ## ternary operator
 **note)**
 > ternary operator can not be nested
