@@ -604,7 +604,7 @@ namespace thl {
 	sp.set_quot_to_skip_split('"');
 	sp.split(_str[tag],fs);
 	for(size_t j=0; j<sp.size(); j++) {
-	  _str[tag+fmt("%lu",j)] = trim(sp(j));
+	  _str[tag+fmt("%lu",j+1)] = trim(sp(j));
 	}
       } else {
 	printf("string macro variable %s is not found\n",tag.c_str());
@@ -1039,7 +1039,7 @@ namespace thl {
 	    printf("usage: split s [fs]\n"
 		   " split the string macro variable by delomiter fs\n"
 		   " default delimiter is white space\n"
-		   " splitted string variables are created named s0,..,sN-1\n"
+		   " splitted string variables are created named s1,..,sN\n"
 		   " (N is number of splitted string)\n"
 		   );
 	  } else {
