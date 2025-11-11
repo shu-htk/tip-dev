@@ -828,7 +828,7 @@ public:
     std::string vn = v + "_n";
     _dat[vn].type = DataType::Num;
     _dat[vn].num.resize(_dat[v].num.size());
-    for(size_t j=0; j<_dat[v].num.size(); j++) _dat[vn].num[j]=j;
+    for(size_t j=0; j<_dat[v].num.size(); j++) _dat[vn].num[j]=j+1;
     data_plot(vn,v,opt);
     return 0;
   }
@@ -2299,7 +2299,7 @@ public:
       if(sp.size() < 3) {
 	printf("usage: elem x = v(N)\n"
 	       " copy Nth element of daat v to the macro variable x.\n"
-	       " (N begin from 0)\n"
+	       " (N begin from 1)\n"
 	       ); return 0;
       }
       std::string x = thl::trim(sp(1));
@@ -2309,11 +2309,11 @@ public:
       thl::Calc calc;
       int index = (int)calc.eval(bc.contents(0));
       if(_dat.count(v)>0) {
-	if(index >=0 && index < (int)_dat[v].size()) {
+	if(index > 0 && index <= (int)_dat[v].size()) {
 	  if(_dat[v].type==DataType::Str) {
-	    var.set_str(x,_dat[v].str[index]);
+	    var.set_str(x,_dat[v].str[index-1]);
 	  } else {
-	    var.set_num(x,_dat[v].num[index]);
+	    var.set_num(x,_dat[v].num[index-1]);
 	  }
 	} else {
 	  printf("index %d is out of range\n",index);
