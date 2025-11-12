@@ -369,7 +369,7 @@ public:
   int data_set_random(const std::string &v, const std::string &expr,
 		     Option &opt) {
     thl::Bracket bc('(',')',expr); if(bc.size()<1) return 1;
-    _dat[v].clear(); _dat[v].type = DataType::Num;
+    _dat[v].clear(); _dat[v].type = Num;
     thl::StrSplit sp(bc.contents(0),",");
     if(sp.size()<2) {
       printf("random() should have at least 2 arguments\n"); return 1;
@@ -640,7 +640,7 @@ public:
 	  if(_dat[v].size() < size) size=_dat[v].size();
 	}
 	if(size != _dat[vlist[0]].size()) {
-	  printf("warning: data size is arranged to %lu\n",size);
+	  printf("warning: data size is arranged to %d\n",(int)size);
 	}
 	thl::CFormat fmt;
 	for(size_t j=0; j < size; j++) {
@@ -724,35 +724,36 @@ public:
   void data_ls(const std::vector<std::string> vlist, Option &opt) {
     for(size_t j=0; j<vlist.size(); j++) {
       std::string v=vlist[j];
-      if(_dat[v].type==DataType::Mesh) {
+      if(_dat[v].type==Mesh) {
 	printf("%s : data(mesh) : ",v.c_str());
 	if(_dat[v].mesh.size() == 0) {
 	  printf("no data\n");
 	} else {
-	  printf("size_x=%lu size_y=%lu\n",
-		 _dat[v].mesh.size(),_dat[v].mesh[0].size());
+	  printf("size_x=%d size_y=%d\n",
+		 (int)_dat[v].mesh.size(),(int)_dat[v].mesh[0].size());
 	}
       } else {
 	printf("%s : data(%s) : ",v.c_str(),_dat[v].type_name());
 	if(_dat[v].size() == 0) {
 	  printf("no data\n");
 	} else {
-	  printf("size=%lu\n",_dat[v].size());
+	  printf("size=%d\n",(int)_dat[v].size());
 	}
       }
     }
   }
   void data_show(const std::vector<std::string> vlist, Option &opt) {
-    for(auto &&v : vlist) {
+    for(size_t i=0; i<vlist.size(); i++) {
+      std::string v=vlist[i];
       int size = (int)_dat[v].size();
       int start = (opt.n0 > 0) ? opt.n0-1 : 0;
       int end = (0 < opt.n1 && opt.n1 < size) ? opt.n1 : size;
-      if(_dat[v].type==DataType::Mesh) {
+      if(_dat[v].type==Mesh) {
 	if(size != 0) {
 	  printf("%s : data(mesh) : \n",v.c_str());
 	  for(int j=start; j<end; j++) {
 	    for(size_t k=0; k<_dat[v].mesh[j].size(); k++) {
-	      printf("%d %lu [%.11g]\n",j,k,_dat[v].mesh[j][k]);
+	      printf("%d %d [%.11g]\n",j,(int)k,_dat[v].mesh[j][k]);
 	    }
 	  }
 	}
@@ -776,7 +777,7 @@ public:
 	       const std::string &vout,	Option &opt) {
     if(mode == ">") _dat[vout].clear();
     
-    if(_dat[vlist[0]].type==DataType::Mesh) {
+    if(_dat[vlist[0]].type==Mesh) {
       printf("mesh type can not be concatenate.\n"); return;
     }
     _dat[vout].type = _dat[vlist[0]].type;
@@ -789,7 +790,7 @@ public:
       }
       int end = (int)_dat[v].size();
       if(0<=opt.n1 && opt.n1<=end) {end=opt.n1;}
-      if(_dat[vout].type==DataType::Str) {
+      if(_dat[vout].type==Str) {
 	for(int k=0; k<end; k++) {
 	  if(k < opt.n0) continue;
 	  _dat[vout].str.push_back(_dat[v].str[k]);
@@ -2326,7 +2327,7 @@ public:
       int index = (int)calc.eval(bc.contents(0));
       if(_dat.count(v)>0) {
 	if(index > 0 && index <= (int)_dat[v].size()) {
-	  if(_dat[v].type==DataType::Str) {
+	  if(_dat[v].type==Str) {
 	    var.set_str(x,_dat[v].str[index-1]);
 	  } else {
 	    var.set_num(x,_dat[v].num[index-1]);

@@ -24,6 +24,5 @@ cut t,v "ts==2022-04-*"     ;# choose 2022-4 by the time string
 @ day_sec = 24*3600
 title "cut by 'ts==2022-04-*' (x-axis is time format)"
 plot t_cut v_cut (tf:"%d" xt:[day_sec]  xn:1 st:star)
-
 ```
 ![](../fig/ex17a.png)
