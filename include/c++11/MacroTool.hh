@@ -759,10 +759,11 @@ namespace thl {
       }
     }
     void replace_env(std::string &buf) {
-      Bracket bc('{','}',buf);
+      std::string buf_org=buf;
+      Bracket bc('{','}',buf_org);
       for(size_t j=0; j<bc.size(); j++) {
 	if(bc.ib(j)<2) continue;
-	if(buf[bc.ib(j)-2]=='$') {
+	if(buf_org[bc.ib(j)-2]=='$') {
 	  char *env=0;
 	  env=getenv(bc.contents(j).c_str());
 	  if(env != 0) {
