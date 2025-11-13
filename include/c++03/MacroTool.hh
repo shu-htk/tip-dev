@@ -771,6 +771,22 @@ namespace thl {
 	}
       }
     }
+    void replace_env(std::string &buf) {
+      Bracket bc('{','}',buf);
+      for(size_t j=0; j<bc.size(); j++) {
+	if(bc.ib(j)<2) continue;
+	if(buf[bc.ib(j)-2]=='$') {
+	  char *env=0;
+	  env=getenv(bc.contents(j).c_str());
+	  if(env != 0) {
+	    std::string tag = "${"+bc.contents(j)+"}";
+	    for(size_t n=0; (n=buf.find(tag))!= buf.npos;) {
+	      buf.replace(n,tag.size(),env);
+	    }
+	  }
+	}
+      }
+    }
     void print_help(void) {
       const char *help =
 	"macro commands:\n"
@@ -842,6 +858,7 @@ namespace thl {
       while(nline < vbuf.size()) {
 	if(_break=='b') {_break=0; break;}
 	std::string buf=vbuf[nline];
+	replace_env(buf);
 	var.replace(buf);
 	StrSplit args(buf);
 	if(args.size()==0) {nline++; continue;}
