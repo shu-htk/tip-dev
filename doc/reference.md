@@ -33,17 +33,14 @@ Put the "#" at the head of the line
 tip> # comment out this line
 ```
 
-To comment out from the middle of the line, put ";" before "#"
+Comment out from the middle of the line, put ";" before "#"
 ```
 tip> plot x y ;# plotting data x and y  
 ```
 
-## Variable
+### Variable
 
-The tip interpreter has 2 kind of variable, one is the data variable and
-the other is the macro variable.
-
-- **The data variable**
+- **Data variable**
 
 The data variable is array of number (or string) which is defined by
 [set](ref/set.md) command.
@@ -60,7 +57,7 @@ Explaining by C, the above example is doing like,
 double n[]={1,2,3};
 double x[sizeof(n)]; for(int i=0; i<sizeof(n); i++) x[i]=sin(n[i]);
 ```
-- **The macro variable**
+- **Macro variable**
 
 The macro variable is scalar of number (or string) which is defined by
 [@](ref/var.md) command.  
@@ -87,6 +84,15 @@ x : number [0.84147098481]
 func : string [sin]
 ret : string [x]
 ```
+- **Environment variable**
+
+Environment variables defined in the shell are referenced by ${ }.
+
+```
+tip> prn ${SHELL}
+/bin/bash
+```
+
 ## (3) Commands of MacroTool
 - [@](ref/var.md) : set macro variable
 - [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical macro variable
