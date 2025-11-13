@@ -1603,6 +1603,7 @@ public:
 	" yerr  : plot the y-error-bars in 2D-graph\n"
 	" ylab  : set the y-axis label\n"
 	" zlab  : set the z-axis label in 3D-graph\n"
+	" $def  : set default arguments of macro file\n"
 #if USE_EPICS_CA
 	"EPICS CA commands:\n"	
 	" cainfo : show information of record\n"
@@ -2303,12 +2304,28 @@ public:
     }
     if(args(0)=="exe") {
       if(args.size() < 2) {
-	printf("usage: exe [macro_file] [(opt)]\n"
+	printf("usage: exe [macro_file] [arg1,arg2,...] [(opt)]\n"
 	       " execute macro_file\n"
+	       " reference of arguments:\n"
+	       "  [$#] : number of argumnts\n"
+	       "  [$N] : Nth argument (N=1,2,..)\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      tip_exec(args(1),opt.dm);
+      std::string arg_list=(args.size()>2 && args(2,0)!='(') ? args(2) : "";
+      tip_exec(args(1),arg_list,opt.dm);
+      return 0;
+    }
+    if(args(0)=="$def") {
+      if(args.size() < 2) {
+	printf("usage: $def [arg1,arg2,...]\n"
+	       " set default argument of macro_file\n"
+	       " reference of arguments:\n"
+	       "  [$#] : number of argumnts\n"
+	       "  [$N] : Nth argument (N=1,2,..)\n"
+	       ); return 0;
+      }
+      set_macro_arg(args(1),1);      
       return 0;
     }
     if(args(0)=="elem") {
@@ -2447,7 +2464,29 @@ public:
 #endif
     return 1;
   }
-  void tip_exec(std::string fname, int mode=0) {
+  void set_macro_arg(std::string arg_list, bool def=0) {
+    if(arg_list.size()>0) {
+      thl::CFormat fmt;
+      thl::StrSplit sp;
+      sp.set_quot_to_skip_split('"');
+      sp.split(arg_list,",");
+      if(def) {
+	if(!var.exist_num("$#")) var.set_num("$#",(double)sp.size());
+	for(int j=0; j<(int)sp.size(); j++) {
+	  std::string tag=fmt("$%d",j+1);
+	  if(!var.exist_str(tag)) var.set_str(tag,sp(j));
+	}
+      } else {
+	var.set_num("$#",(double)sp.size());
+	for(int j=0; j<(int)sp.size(); j++) {
+	  var.set_str(fmt("$%d",j+1),sp(j));
+	}
+      }
+    } else {
+      var.set_num("$#",0);
+    }
+  }
+  void tip_exec(std::string fname, std::string arg_list, int mode=0) {
     Tip tip(_pl);
     std::ifstream ifs(fname.c_str());
     if(ifs) {
@@ -2466,10 +2505,12 @@ public:
       }
       if(mode==1) {           // in debug mode(=1)
 	if(set_index(vbuf)==0) {
+	  set_macro_arg(arg_list);
 	  parse_vbuf(vbuf);
    	}
       } else if (mode==0) {                // in normal mode(=0)
 	if(tip.set_index(vbuf)==0) {
+	  tip.set_macro_arg(arg_list);
 	  tip.parse_vbuf(vbuf);
    	}
       }
@@ -2520,7 +2561,11 @@ int main(int argc, const char *argv[]) {
 
   Tip tip(&pl);
   if(arg.find_opt("e")) {
-    tip.tip_exec(arg.opt("e"));
+    thl::StrSplit sp;
+    sp.set_quot_to_skip_split('"');
+    sp.split(arg.opt("e"));
+    std::string arg_list=(sp.size()>1) ? sp(1) : "";
+    tip.tip_exec(sp(0),arg_list);
     if((!arg.find_opt("-pdf")) && (!arg.find_opt("-png"))) {
       usleep(100000); tip.flush(); getchar();
     }
