@@ -1603,7 +1603,7 @@ public:
 	" yerr  : plot the y-error-bars in 2D-graph\n"
 	" ylab  : set the y-axis label\n"
 	" zlab  : set the z-axis label in 3D-graph\n"
-	" $def  : set default arguments of macro file\n"
+	" def   : set default arguments of macro file\n"
 #if USE_EPICS_CA
 	"EPICS CA commands:\n"	
 	" cainfo : show information of record\n"
@@ -2316,16 +2316,16 @@ public:
       tip_exec(args(1),arg_list,opt.dm);
       return 0;
     }
-    if(args(0)=="$def") {
+    if(args(0)=="def") {
       if(args.size() < 2) {
-	printf("usage: $def [arg1,arg2,...]\n"
+	printf("usage: def [arg1,arg2,...]\n"
 	       " set default argument of macro_file\n"
 	       " reference of arguments:\n"
 	       "  [$#] : number of argumnts\n"
 	       "  [$N] : Nth argument (N=1,2,..)\n"
 	       ); return 0;
       }
-      set_macro_arg(args(1),1);      
+      set_macro_arg(args(1));      
       return 0;
     }
     if(args(0)=="elem") {
@@ -2464,22 +2464,21 @@ public:
 #endif
     return 1;
   }
-  void set_macro_arg(std::string arg_list, bool def=0) {
+  void set_macro_arg(std::string arg_list) {
     if(arg_list.size()>0) {
       thl::CFormat fmt;
       thl::StrSplit sp;
       sp.set_quot_to_skip_split('"');
       sp.split(arg_list,",");
-      if(def) {
-	if(!var.exist_num("$#")) var.set_num("$#",(double)sp.size());
-	for(int j=0; j<(int)sp.size(); j++) {
+      if(!var.exist_num("$#")) var.set_num("$#",(double)sp.size());
+      for(int j=0; j<(int)sp.size(); j++) {
+	thl::StrSplit sp2(sp(j),"=");
+	if(sp2.size()>1) {
+	  std::string tag=sp2(0);
+	  if(!var.exist_str(tag)) var.set_str(tag,sp2(1));
+	} else {
 	  std::string tag=fmt("$%d",j+1);
 	  if(!var.exist_str(tag)) var.set_str(tag,sp(j));
-	}
-      } else {
-	var.set_num("$#",(double)sp.size());
-	for(int j=0; j<(int)sp.size(); j++) {
-	  var.set_str(fmt("$%d",j+1),sp(j));
 	}
       }
     } else {
