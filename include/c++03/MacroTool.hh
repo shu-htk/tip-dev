@@ -883,8 +883,9 @@ namespace thl {
       while(nline < vbuf.size()) {
 	if(_break=='b') {_break=0; break;}
 	std::string buf=vbuf[nline];
-	replace_env(buf);
 	var.replace(buf);
+	replace_env(buf);
+	var.replace(buf);  // to replace nested variable [x[n]]
 	StrSplit args;
 	args.set_quot_to_skip_split('"');
 	args.split(buf);
