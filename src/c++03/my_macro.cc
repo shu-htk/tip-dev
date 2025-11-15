@@ -10,8 +10,10 @@ private:
 public:
   MyMacro() : _debug(0) {}
   int add_commands(std::string buf) {// called from thl::MacroTool::parse_vbuf()
-    thl::StrSplit args(buf);
-    if(args(0)=="help") {
+    thl::StrSplit args;
+    args.set_quot_to_skip_split('"');
+    args.split(buf);
+       if(args(0)=="help") {
       printf("additional commands:\n"
 	     " exe  : execute a macro file.\n"
 	     " ls   : print macro variables.\n"
@@ -22,13 +24,12 @@ public:
     }
     if(args(0)=="exe") {
       if(args.size() < 2) {
-	printf("usage: exe [macro_file] [debug]\n"
+	printf("usage: exe [macro_file] [arg1,arg2,..]\n"
 	       " execute macro_file.\n");
 	return 0;
       }
-      _debug = (args.size()>2) ? 1 : 0;
-      if(_debug) printf("debug mode\n");
-      exec(args(1));
+      std::string arg_list=(args.size()>2) ? args(2) : "";
+      exec(args(1),arg_list);
       return 0;
     }
     if(args(0)=="ls") {

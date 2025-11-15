@@ -610,6 +610,29 @@ namespace thl {
 	printf("string macro variable %s is not found\n",tag.c_str());
       }
     }
+    void set_arg_list(std::string arg_list, bool update=0) {
+      if(arg_list.size()>0) {
+	thl::CFormat fmt;
+	thl::StrSplit sp;
+	sp.set_quot_to_skip_split('"');
+	sp.split(arg_list,",");
+	if(update || !exist_num("$#")) set_num("$#",(double)sp.size());
+	for(int j=0; j<(int)sp.size(); j++) {
+	  thl::StrSplit sp2;
+	  sp2.set_quot_to_skip_split('"');
+	  sp2.split(sp(j),"=");
+	  if(sp2.size()>1) {
+	    std::string tag=sp2(0);
+	    if(update || !exist(tag)) set_expr(tag,trim(sp2(1)),0);
+	  } else {
+	    std::string tag=fmt("$%d",j+1);
+	    if(update || !exist(tag)) set_expr(tag,trim(sp(j)),0);
+	  }
+	}
+      } else {
+	set_num("$#",0);
+      }
+    }
   };
 
 //--- tool of do/for/while loops -------------------------------------------
@@ -792,6 +815,7 @@ namespace thl {
       const char *help =
 	"macro commands:\n"
 	" @     : define numerical or string variable\n"
+	" args  : define default arguments of the macro file\n"
 	" ++    : increment(+1) numerical variable\n"
 	" --    : decrement(-1) numerical variable\n"
 	" for   : foreach loop\n"
@@ -861,7 +885,9 @@ namespace thl {
 	std::string buf=vbuf[nline];
 	replace_env(buf);
 	var.replace(buf);
-	StrSplit args(buf);
+	StrSplit args;
+	args.set_quot_to_skip_split('"');
+	args.split(buf);
 	if(args.size()==0) {nline++; continue;}
 	if(args(0,0)=='#') {nline++; continue;}
 
@@ -929,7 +955,7 @@ namespace thl {
 	if(args(0)=="@") {
 	  if(args.size()<2) {
 	    printf("usage: @ x [=|+=|-=|*=|/=|%c=] expression\n"
-		   "usage: @ t = time(s[,unit])\n"
+		   "       @ t = time(s[,unit])\n"
 		   " set the expression value to the macro variable x\n"
 		   " convert ISO time string to unix epoch time and"
 		   " vice versa\n",'%'
@@ -937,6 +963,21 @@ namespace thl {
 	  } else {
 	    std::string expr = buf.substr(buf.find("@")+1);
 	    var.set_eval(expr);
+	  }
+	  nline++; continue;
+	}
+	if(args(0)=="args") {
+	  if(args.size() < 2) {
+	    printf("usage: args [arg1,arg2,...]\n"
+		   " set default argument of the macro file\n"
+		   " they are named like x1=val,x2=val2,...\n"
+		   " if it is specified only values like val1,val2,...\n"
+		   " they are named $1=val1,$2=val2,...\n"
+		   " number of argumnts is named $#\n"
+		   );
+	  } else {
+	    bool update = (args.size()>2 && args(2)=="update") ? 1 : 0;
+	    var.set_arg_list(args(1),update);      
 	  }
 	  nline++; continue;
 	}
@@ -1076,7 +1117,7 @@ namespace thl {
       }
       return 0;
     }
-    void exec(std::string fname) {
+    void exec(std::string fname, std::string arg_list) {
       std::ifstream ifs(fname.c_str());
       if(ifs) {
 	std::vector<std::string> vbuf;
@@ -1093,6 +1134,7 @@ namespace thl {
 	  }
 	}
 	if(set_index(vbuf)==0) {
+	  var.set_arg_list(arg_list,1);
 	  parse_vbuf(vbuf);
 	}
       }

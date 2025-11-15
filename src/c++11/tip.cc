@@ -1547,6 +1547,7 @@ public:
 	" box3  : draw the axes of 3D-graph\n"
 	" cat   : show data contents / concatenate data\n"
 	" cut   : set cut condition\n"
+//	" default: set default arguments of the macro file (abbr. dft)\n"
 	" div   : divide the drawing area\n"
 	" elem  : copy data element to macro variable\n"
 	" exe   : execute macro file\n"
@@ -1586,7 +1587,6 @@ public:
 	" yerr  : plot the y-error-bars in 2D-graph\n"
 	" ylab  : set the y-axis label\n"
 	" zlab  : set the z-axis label in 3D-graph\n"
-	" def   : set default arguments of macro file\n"
 #if USE_EPICS_CA
 	"EPICS CA commands:\n"	
 	" cainfo : show information of record\n"
@@ -2274,9 +2274,6 @@ public:
       }
       if(args(1)=="show") {
 	_pl->print_viewport();
-	// double x0,x1,y0,y1;
-	// plgvpd(&x0,&x1,&y0,&y1);
-	// printf("x0=%g x1=%g y0=%f y1=%g\n",x0,x1,y0,y1);
       } else if(args(1)=="reset") {
 	_gopt.att.viewport(0,0,0,0, 0);
       } else if(args.size() > 5) {
@@ -2289,26 +2286,16 @@ public:
       if(args.size() < 2) {
 	printf("usage: exe [macro_file] [arg1,arg2,...] [(opt)]\n"
 	       " execute macro_file\n"
-	       " reference of arguments:\n"
-	       "  [$#] : number of argumnts\n"
-	       "  [$N] : Nth argument (N=1,2,..)\n"
+	       " arguments are referenced as macro variables\n"
+	       " they are named like x1=val,x2=val2,...\n"
+	       " if it is specified only values like val1,val2,...\n"
+	       " they are named $1=val1,$2=val2,...\n"
+	       " number of argumnts is named $#\n"
 	       ); return 0;
       }
       Option opt=get_opt(buf);
       std::string arg_list=(args.size()>2 && args(2,0)!='(') ? args(2) : "";
       tip_exec(args(1),arg_list,opt.dm);
-      return 0;
-    }
-    if(args(0)=="def") {
-      if(args.size() < 2) {
-	printf("usage: def [arg1,arg2,...]\n"
-	       " set default argument of macro_file\n"
-	       " reference of arguments:\n"
-	       "  [$#] : number of argumnts\n"
-	       "  [$N] : Nth argument (N=1,2,..)\n"
-	       ); return 0;
-      }
-      set_macro_arg(args(1));      
       return 0;
     }
     if(args(0)=="elem") {
@@ -2485,14 +2472,14 @@ public:
 	  }
 	}
       }
-      if(mode==1) {           // in debug mode(=1)
+      if(mode==1) {               // in debug mode(=1)
 	if(set_index(vbuf)==0) {
-	  set_macro_arg(arg_list);
+	  var.set_arg_list(arg_list,1);
 	  parse_vbuf(vbuf);
    	}
-      } else if (mode==0) {                // in normal mode(=0)
+      } else if (mode==0) {       // in normal mode(=0)
 	if(tip.set_index(vbuf)==0) {
-	  tip.set_macro_arg(arg_list);
+	  tip.var.set_arg_list(arg_list);
 	  tip.parse_vbuf(vbuf);
    	}
       }
