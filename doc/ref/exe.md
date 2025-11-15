@@ -1,8 +1,13 @@
 # exe
 ```
 tip> exe
-usage: exe [macro_file] [(opt)]
+usage: exe [macro_file] [arg1,arg2,...] [(opt)]
  execute macro_file
+ arguments are referenced as macro variables
+ they are named like x1=val,x2=val2,...
+ if it is specified only values like val1,val2,...
+ they are named $1=val1,$2=val2,...
+ number of argumnts is named $#
 ```
 
 ## option

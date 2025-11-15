@@ -95,6 +95,7 @@ tip> prn ${SHELL}
 
 ## (3) Commands of MacroTool
 - [@](ref/var.md) : set macro variable
+- [args](ref/args.md) : set default argument of the macro file
 - [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical macro variable
 - [for,do,while,end](ref/loop.md) : for, do, while loop
 - [if,elif,else,fi](ref/if_fi.md) : conditional branch
