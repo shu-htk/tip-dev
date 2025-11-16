@@ -423,7 +423,7 @@ namespace thl {
     Var(void) : ts("- :") {snprintf(_fmt,256,"%s","%.11g");}
     void reset_fmt(void) {snprintf(_fmt,256,"%s","%.11g");}
     void print_fmt(void) {printf("[%s]\n",_fmt);}
-    void set_fmt(std::string s) {
+    void set_fmt(const std::string &s) {
       if(fnmatch("%*f",s.c_str(),0)==0 || fnmatch("%*e",s.c_str(),0)==0 ||
 	 fnmatch("%*g",s.c_str(),0)==0) {
 	snprintf(_fmt,256,"%s",s.c_str());
@@ -434,9 +434,9 @@ namespace thl {
 	       ,s.c_str());
       }
     }
-    double num(std::string tag) {return _val[tag].num;}
-    std::string str(std::string tag) {return _val[tag].str;}
-    void set_num(std::string tag, double x, int ope=0) {
+    double num(const std::string &tag) {return _val[tag].num;}
+    std::string str(const std::string &tag) {return _val[tag].str;}
+    void set_num(const std::string &tag, double x, int ope=0) {
       _val[tag].type = Num;
       if(ope==0) _val[tag].num = x;
       if(ope==1) _val[tag].num += x;
@@ -445,20 +445,20 @@ namespace thl {
       if(ope==4) _val[tag].num /= x;
       if(ope==5) _val[tag].num = fmod(_val[tag].num,x);
     }
-    void set_str(std::string tag, std::string s, int ope=0) {
+    void set_str(const std::string &tag, std::string s, int ope=0) {
       _val[tag].type = Str;
       if(ope==0) _val[tag].str = trim(s);
       if(ope==1) _val[tag].str += trim(s);
       if(ope >1) printf("invalid operator of string\n");
     }
-    bool exist_num(std::string tag) {
+    bool exist_num(const std::string &tag) {
       if(_val.count(tag)) {return (_val[tag].type==Num);} else {return 0;}
     }
-    bool exist_str(std::string tag) {
+    bool exist_str(const std::string &tag) {
       if(_val.count(tag)) {return (_val[tag].type==Str);} else {return 0;}
     }
-    bool exist(std::string tag) {return _val.count(tag);}
-    void erase(std::string tag) {
+    bool exist(const std::string &tag) {return _val.count(tag);}
+    void erase(const std::string &tag) {
       if(_val.count(tag)) _val.erase(tag);
     }
     void parse_ternary(const std::string &expr, double &x, std::string &s) {
@@ -1106,7 +1106,7 @@ namespace thl {
       }
       return 0;
     }
-    void exec(std::string fname, std::string arg_list) {
+    void exec(const std::string &fname, const std::string &arg_list) {
       std::ifstream ifs(fname.c_str());
       if(ifs) {
 	std::vector<std::string> vbuf;
