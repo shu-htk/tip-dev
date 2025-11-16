@@ -410,19 +410,22 @@ namespace thl {
 
 //-- numerical/string variable
   class Var {
-    std::map<std::string,double> _num;       // key=string, val=numerical
-    std::map<std::string,std::string> _str;  // key=string, val=string
+    enum Type {Num=1,Str=2};
+    struct Val {
+      int type;
+      double num;
+      std::string str;
+      Val(void) {}
+      void print(void) {
+	if(type==Str) printf("string [%s]\n",str.c_str());
+	if(type==Num) printf("number [%.11g]\n",num);
+      }
+    };
+    std::map<std::string,Val> _val;
     char _fmt[256];
   public:
     IsoTimeStr ts;
     Var(void) : ts("- :") {snprintf(_fmt,256,"%s","%.11g");}
-    double num(std::string tag) {return _num[tag];}
-    std::string str(std::string tag) {return _str[tag];}
-    void set_num(std::string tag, double x) {_num[tag] = x;}
-    void set_str(std::string tag, std::string s) {_str[tag] = trim(s);}
-    bool exist_num(std::string tag) {return _num.count(tag)>0;}
-    bool exist_str(std::string tag) {return _str.count(tag)>0;}
-    bool exist(std::string tag) {return exist_num(tag)||exist_str(tag);}
     void reset_fmt(void) {snprintf(_fmt,256,"%s","%.11g");}
     void print_fmt(void) {printf("[%s]\n",_fmt);}
     void set_fmt(std::string s) {
@@ -435,6 +438,33 @@ namespace thl {
 	       "you should specify the format 'f' or 'e' or 'g'\n"
 	       ,s.c_str());
       }
+    }
+    double num(std::string tag) {return _val[tag].num;}
+    std::string str(std::string tag) {return _val[tag].str;}
+    void set_num(std::string tag, double x, int ope=0) {
+      _val[tag].type = Num;
+      if(ope==0) _val[tag].num = x;
+      if(ope==1) _val[tag].num += x;
+      if(ope==2) _val[tag].num -= x;
+      if(ope==3) _val[tag].num += x;
+      if(ope==4) _val[tag].num /= x;
+      if(ope==5) _val[tag].num = fmod(_val[tag].num,x);
+    }
+    void set_str(std::string tag, std::string s, int ope=0) {
+      _val[tag].type = Str;
+      if(ope==0) _val[tag].str = trim(s);
+      if(ope==1) _val[tag].str += trim(s);
+      if(ope >1) printf("invalid operator of string\n");
+    }
+    bool exist_num(std::string tag) {
+      if(_val.count(tag)) {return (_val[tag].type==Num);} else {return 0;}
+    }
+    bool exist_str(std::string tag) {
+      if(_val.count(tag)) {return (_val[tag].type==Str);} else {return 0;}
+    }
+    bool exist(std::string tag) {return _val.count(tag);}
+    void erase(std::string tag) {
+      if(_val.count(tag)) _val.erase(tag);
     }
     void parse_ternary(const std::string &expr, double &x, std::string &s) {
       Calc calc;
@@ -465,27 +495,18 @@ namespace thl {
       std::string s;
       parse_ternary(expr,x,s);
       if(s.size()>0) {
-	if(_num.count(tag)) {
+	if(exist_num(tag)) {
 	  CFormat fmt;
-	  _str[tag] = fmt("%.11g",_num[tag]);
-	  _num.erase(tag);
+	  set_str(tag,fmt("%.11g",num(tag)));
 	}
-	if(ope==0) _str[tag] = trim(s);
-	if(ope==1) _str[tag] += trim(s);
-	if(ope >1) printf("invalid operator of string\n");
+	set_str(tag,trim(s),ope);
       } else {
-	if(_str.count(tag)) {
+	if(exist_str(tag)) {
 	  Calc calc;
-	  _num[tag] = calc.eval(_str[tag]);
-	  _str.erase(tag);
+	  set_num(tag,calc.eval(str(tag)));
 	}
-	if(!_num.count(tag)) {_num[tag]=0;}
-	if(ope==0) _num[tag] = x;
-	if(ope==1) _num[tag] += x;
-	if(ope==2) _num[tag] -= x;
-	if(ope==3) _num[tag] *= x;
-	if(ope==4) _num[tag] /= x;
-	if(ope==5) _num[tag] = fmod(_num[tag],x);
+	if(!exist_num(tag)) {set_num(tag,0);}
+	set_num(tag,x,ope);
       }
     }
     void set_eval(const std::string &buf) {
@@ -505,19 +526,17 @@ namespace thl {
 	  std::string tstr = (sp.size()>0) ? sp(0) : "";
 	  std::string unit = (sp.size()>1) ? sp(1) : "";
 	  if(unit=="str") {
-	    if(_num.count(tag)) _num.erase(tag);
 	    double utime =
 	      (tstr=="now") ? ts.str_to_num("now","utime") : sp.stof(0);
-	    _str[tag] = ts.utime_to_str(utime,1);
+	    set_str(tag,ts.utime_to_str(utime,1));
 	  } else {
-	    if(_str.count(tag)) _str.erase(tag);
 	    size_t n = tstr.find_first_of(ts.tsd());
 	    StrNum sn; sn.set_verbose(0);
 	    double utime = sn.stof(tstr);
 	    if(n != tstr.npos || sn.nerr()==2) {
-	      _num[tag] = ts.str_to_num(tstr,unit);
+	      set_num(tag,ts.str_to_num(tstr,unit));
 	    } else {
-	      _str[tag] = ts.utime_to_num(utime,unit);
+	      set_num(tag,ts.utime_to_num(utime,unit));
 	    }
 	  }
 	} else {
@@ -538,16 +557,10 @@ namespace thl {
     void ls(const std::string &pattern) {
       StrSplit sp(pattern,",");
       for(size_t j=0; j<sp.size(); j++) {
-	for(std::map<std::string,double>::iterator it=_num.begin();
-	    it != _num.end(); it++) {
+	for(std::map<std::string,Val>::iterator it=_val.begin();
+	    it != _val.end(); it++) {
 	  if( fnmatch(sp(j).c_str(),(it->first).c_str(),0)==0 ) {
-	    printf("%s : number [%.11g]\n",(it->first).c_str(),it->second);
-	  }
-	}
-	for(std::map<std::string,std::string>::iterator it=_str.begin();
-	    it != _str.end(); it++) {
-	  if( fnmatch(sp(j).c_str(),(it->first).c_str(),0)==0 ) {
-	    printf("%s : string [%s]\n",(it->first).c_str(),(it->second).c_str());
+	    printf("%s : ",(it->first).c_str()); (it->second).print();
 	  }
 	}
       }
@@ -556,55 +569,38 @@ namespace thl {
       std::vector<std::string> tags;
       StrSplit sp(pattern,",");
       for(size_t j=0; j<sp.size(); j++) {
-	for(std::map<std::string,double>::iterator it=_num.begin();
-	    it != _num.end(); it++) {
+	for(std::map<std::string,Val>::iterator it=_val.begin();
+	    it != _val.end(); it++) {
 	  if( fnmatch(sp(j).c_str(),(it->first).c_str(),0)==0 ) {
 	    tags.push_back(it->first);
 	  }
 	}
-	for(std::map<std::string,std::string>::iterator it=_str.begin();
-	    it != _str.end(); it++) {
-	  if( fnmatch(sp(j).c_str(),(it->first).c_str(),0)==0 ) {
-	    tags.push_back(it->first);
-	  }
-	}
+	for(size_t j=0; j<tags.size(); j++) erase(tags[j]);
       }
-      for(size_t j=0; j<tags.size(); j++) erase(tags[j]);
-    }
-    void erase(std::string tag) {
-      if(_num.count(tag)) _num.erase(tag);
-      if(_str.count(tag)) _str.erase(tag);
     }
     void replace(std::string &buf) {
-      CFormat fmt;
-      for(std::map<std::string,double>::iterator it=_num.begin();
-	  it != _num.end(); it++) {
-	fmt(_fmt,it->second);
+      CFormat fmt; 
+      for(std::map<std::string,Val>::iterator it=_val.begin();
+	  it != _val.end(); it++) {
 	std::string tag = "["+it->first+"]";
+	std::string val;
+	if((it->second).type==Num) val=fmt(_fmt,(it->second).num);
+	if((it->second).type==Str) val=(it->second).str;
 	if(buf.find(tag) != buf.npos) {
 	  for(size_t n=0; (n=buf.find(tag))!= buf.npos;) {
-	    buf.replace(n,tag.size(),fmt());
-	  }
-	}
-      }
-      for(std::map<std::string,std::string>::iterator it=_str.begin();
-	  it != _str.end(); it++) {
-	std::string tag = "["+it->first+"]";
-	if(buf.find(tag) != buf.npos) {
-	  for(size_t n=0; (n=buf.find(tag))!= buf.npos;) {
-	    buf.replace(n,tag.size(),it->second);
+	    buf.replace(n,tag.size(),val);
 	  }
 	}
       }
     }
     void split(const std::string &tag, std::string fs=" \t\n") {
-      if(_str.count(tag)) {
+      if(exist_str(tag)) {
 	CFormat fmt;
 	StrSplit sp;
 	sp.set_quot_to_skip_split('"');
-	sp.split(_str[tag],fs);
+	sp.split(str(tag),fs);
 	for(size_t j=0; j<sp.size(); j++) {
-	  _str[tag+fmt("%lu",j+1)] = trim(sp(j));
+	  set_str(tag+fmt("%lu",j+1),trim(sp(j)));
 	}
       } else {
 	printf("string macro variable %s is not found\n",tag.c_str());
