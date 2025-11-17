@@ -145,30 +145,33 @@ s : string [2025-11-05 13:18:00.500000]
 
 ## omitting date/time in the ISO time format
 
-> omitting time, it is complemented with current time  
+> omitting time, it is complemented with "00:00:00.0"  
 > omitting date, it is complemented with current date  
 
 example
 ```
-tip> @ t1=time("2020-02-03")  ;# omitting time, convert to unix epoch time
-tip> @ t2=time("13:26:49")    ;# omitting date, convert to unix epoch time
+tip> @ t0=time(now)           ;# current time
+tip> @ t1=time("2020-02-03")  ;# input time string without time
+tip> @ t2=time("13:26:49")    ;# input time string without date
 tip>
-tip> @ ts1=time([t1],str)     ;# convert t1 to ISO format time string
-tip> @ ts2=time([t2],str)     ;# convert t2 to ISO format time string
+tip> @ ts0=time([t0],str)     ;# convert unix epoch time to time string
+tip> @ ts1=time([t1],str)     ;# convert unix epoch time to time string
+tip> @ ts2=time([t2],str)     ;# convert unix epoch time to time string
 tip>
 tip> ls ts?
-ts1 : string [2020-02-05 15:12:09.500000]  ;# time is complemented with the current time
-ts2 : string [2025-11-05 13:26:49.599999]  ;# date is complemented with the current date
+ts0 : string [2025-11-17 14:35:59.700000] ;# current time
+ts1 : string [2020-02-03 00:00:00.000000] ;# time is "00:00:00.0"
+ts2 : string [2025-11-17 13:26:49.000000] ;# date is taken as current time 
 ```
 
-## making the time array
+## making data array of the time string
 
 example
 ```
 tip> @ t1 = time("1999-12-31 00:00:00.0") ;# convert to unix epoch time
 tip> @ t2 = time("2000-01-02 00:00:00.0") ;# convert to unix epoch time
-tip> set t = range(13,[t1],[t2])          ;# make array of unix epoch time
-tip> set ts = time(t,str)                 ;# convert to ISO time string
+tip> set t = range(13,[t1],[t2])     ;# make data array of unix epoch time
+tip> set ts = time(t,str)            ;# convert to data array of time string
 tip> cat ts (fs:"\n")
 ts : data(str) :
 1999-12-31 00:00:00.000000

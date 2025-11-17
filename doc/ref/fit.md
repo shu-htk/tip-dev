@@ -25,15 +25,15 @@ the graph at (X,Y).
 
 ## fitting functions
 
-|name | abbr. | function |
-|:---:|:---:|:---:|
-|lin  | l | y = c0 + c1*x | 
-|quad | q | y = c0 + c1\*x + c2\*x^2 | 
-|exp  | e | y = c0\*exp(c1\*x) |
-|log  |log| y = c0 + log(c1*x) | 
-|gaus | g | y = c0\*exp(-(x-c1)^2/2\*c2^2) | 
-|sin  | s | y = c0 + c1\*sin(2\*PI\*c3\*x) + c2\*cos(2\*PI\*c3\*x) | 
-|circ | c | (x-c0)^2 + (y-c1)^2 = c2^2 |
+|name | abbr. | function | option |
+|:---:|:---:|:---:|:---:|
+|lin  | l | y = c0 + c1*x || 
+|quad | q | y = c0 + c1\*x + c2\*x^2 || 
+|exp  | e | y = c0\*exp(c1\*x) ||
+|log  |log| y = c0 + log(c1*x) ||
+|gaus | g | y = c0\*exp(-(x-c1)^2/2\*c2^2) ||
+|sin  | s | y = c0 + c1\*sin(2\*PI\*c3\*x) + c2\*cos(2\*PI\*c3\*x) |`fq:`| 
+|circ | c | (x-c0)^2 + (y-c1)^2 = c2^2 ||
 
 ## option
 
@@ -43,6 +43,7 @@ the graph at (X,Y).
 - `lt:` line style of fitting curve
 - `rc:` flag to set relative coordinate for comment position
 - `cf:` set tag of macro variable to store fitting coefficients
+- `fq:` set frequency of sinusoidal (sin) fitting
 
 ### option with two arguments
 

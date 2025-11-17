@@ -57,7 +57,7 @@ tip> set x=x1+x2
 
 ## set data using time()
 
-> [time](time.md)() is a function exclusive to the `set` and
+> [time](time.md)() is a function exclusive to the [set](set.md) and
 > [@](var.md) command
 > and cannot be used in the expressions.
 

@@ -134,6 +134,10 @@ mass=1200[g]
 
 ## convert ISO time string to unix epoch time and vice versa
 
+> [time](time.md)() is a function exclusive to the [set](set.md) and
+> [@](var.md) command
+> and cannot be used in the expressions.
+
 ```
 tip> @ t=time("2001-02-03 09:12:37.0") ;# ISO-time-string to unix-epoch-time
 tip> ls t

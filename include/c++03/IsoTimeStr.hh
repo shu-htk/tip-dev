@@ -14,7 +14,7 @@
 #include <sys/time.h>
 #endif
 #include "StrSplit.hh"
-#include "Bracket.hh"
+//#include "Bracket.hh"
 
 namespace thl {
   class IsoTimeStr { //time format of extended ISO 8601 (RFC 3339)
@@ -60,14 +60,6 @@ namespace thl {
       _t.tm_isdst = 0;
       _utime = (double)mktime(&_t) - timezone + 1e-6*_usec;
     }
-    size_t find_end_point(const std::string &s) {//check timezone's delimiters
-      int n=0,m=s.size()-7;
-      if(m<0) m=0;
-      if((n=s.rfind("+")) > m) {return n;}
-      if((n=s.rfind("-")) > m) {return n;}
-      if((n=s.rfind("Z")) > m) {return n;}
-      return s.size();
-    }
     int count_delimiters(const std::string &s, char delm) {
       int n=0;
       for(size_t j=0; j<s.size(); j++) {
@@ -83,27 +75,60 @@ namespace thl {
       }
       return daysum+_t.tm_mday;
     }
+    std::string trim(const std::string &s, char c='"') {
+      if(s.size()==0) return "";
+      size_t n=s.find_first_not_of(" \t");   // skip forward spaces
+      if(n==s.npos) return s;
+      size_t m=s.find_last_not_of(" \t");   // ignore backward spaces
+      if(c > 0) {
+	if(s[n]==c && s[m]==c) {n++; m--;}
+      }
+      return s.substr(n,m-n+1);
+    }
     int get_str(std::string str) {
-      Bracket bc('"','"',str);
-      std::string s = (bc.size()) ? bc.contents(0) : str; // remove quotation
-      s = s.substr(0,find_end_point(s));
+      std::string s = trim(str); // remove quotation
       int ndd = count_delimiters(s,_tsd[0]);
       int ndt = count_delimiters(s,_tsd[2]);
       StrSplit day,tim;
       if(ndd>0 && ndt>0) {
-	StrSplit daytim(s,_tsd[1]);
-	day.split(daytim(0),_tsd[0]);
-	tim.split(daytim(1),_tsd[2]);
+       	StrSplit daytim(s,_tsd[1]);
+       	day.split(daytim(0),_tsd[0]);
+       	tim.split(daytim(1),_tsd[2]);
       }
       if(ndd==0 && ndt>0) {tim.split(s,_tsd[2]);}
       if(ndd>0 && ndt==0) {day.split(s,_tsd[0]);}
       get_now(); // get current time as default value
       int nerr=0;
-      if(day.size()>0) {_t.tm_year = day.stoi(0)-1900; nerr += day.nerr();}
-      if(day.size()>1) {_t.tm_mon  = day.stoi(1)-1;    nerr += day.nerr();}
-      if(day.size()>2) {_t.tm_mday = day.stoi(2);      nerr += day.nerr();}
-      if(tim.size()>0) {_t.tm_hour = tim.stoi(0);      nerr += tim.nerr();}
-      if(tim.size()>1) {_t.tm_min  = tim.stoi(1);      nerr += tim.nerr();}
+      if(day.size()>1) {
+	_t.tm_year = day.stoi(0)-1900;
+	_t.tm_mon  = day.stoi(1)-1;
+	_t.tm_mday = 1;
+	nerr += day.nerr();
+      }
+      if(day.size()>2) {
+	_t.tm_mday = day.stoi(2);
+	nerr += day.nerr();
+      }
+      if(tim.size()==0) {
+	_t.tm_hour = 0;
+	_t.tm_min  = 0;
+	_t.tm_sec = 0;
+	_usec = 0;
+	nerr += tim.nerr();
+      }
+      if(tim.size()>0) {
+	_t.tm_hour = tim.stoi(0);
+	_t.tm_min  = 0;
+	_t.tm_sec = 0;
+	_usec = 0;
+	nerr += tim.nerr();
+      }
+      if(tim.size()>1) {
+	_t.tm_min  = tim.stoi(1);
+	_t.tm_sec = 0;
+	_usec = 0;
+	nerr += tim.nerr();
+      }
       _t.tm_yday = calc_yday();
       if(tim.size()>2) {
 	if(tim(2).size()>2) {
@@ -231,10 +256,10 @@ namespace thl {
       // distinguish "YYYY-mm-dd HH:MM:SS"
       int n0=count_delimiters(s,_tsd[0]);
       int n2=count_delimiters(s,_tsd[2]);
-      if(n0==2 && n2!=2) return 1;
-      if(n0!=2 && n2==2) return 2;
-      if(n0==2 && n2==2) return 3;
-      return 0;
+      if(n0==2 && n2!=2) return 1; // date only
+      if(n0!=2 && n2==2) return 2; // time only
+      if(n0==2 && n2==2) return 3; // date & time
+      return 0; // not taken as time string
     }
   };//IsoTimeStr
 } //namespace thl
