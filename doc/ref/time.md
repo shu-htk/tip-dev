@@ -121,13 +121,13 @@ vs : data(str) :  2025-11-02 08:48:13.322786
 example
 ```
 tip> @ n=time(now)
-tip> @ year=time(n,year)
-tip> @ mon=time(n,mon)
-tip> @ day=time(n,day)
-tip> @ hour=time(n,hour)
-tip> @ min=time(n,min)
-tip> @ sec=time(n,sec)
-tip> @ usec=time(n,usec)
+tip> @ year=time([n],year)
+tip> @ mon=time([n],mon)
+tip> @ day=time([n],day)
+tip> @ hour=time([n],hour)
+tip> @ min=time([n],min)
+tip> @ sec=time([n],sec)
+tip> @ usec=time([n],usec)
 
 tip> ls year,mon,day,hour,min,sec,usec
 year : number [2025.8453539]
