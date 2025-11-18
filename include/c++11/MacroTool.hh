@@ -389,12 +389,12 @@ namespace thl {
   };
 //-----------------------------------------------------
   class Var {
-    enum Type {Num=1,Str=2};
+    enum Type {Undef,Num,Str};
     struct Val {
-      int type;
+      Type type;
       double num;
       std::string str;
-      Val(void) {}
+      Val(void) : type(Undef),num(0) {}
       void print(void) {
 	if(type==Str) printf("string [%s]\n",str.c_str());
 	if(type==Num) printf("number [%.11g]\n",num);

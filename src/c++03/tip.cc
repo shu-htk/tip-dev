@@ -17,13 +17,13 @@
 
 class Tip : public thl::MacroTool {
 private:
-  enum DataType {Num,Str,Mesh};
+  enum DataType {Undef,Num,Str,Mesh};
   struct Data {
     DataType type;
     std::vector<double> num;
     std::vector<std::string> str;
     std::vector<std::vector<double> > mesh;
-    Data(void) {}
+    Data(void) : type(Undef) {}
     void clear(void) {
       if(num.size()>0) num.clear();
       if(str.size()>0) str.clear();

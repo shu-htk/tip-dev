@@ -18,32 +18,32 @@
 
 class Tip : public thl::MacroTool {
 private:
-  enum class DataType {Num,Str,Mesh};
+  enum DataType {Undef,Num,Str,Mesh};
   struct Data {
     DataType type;
     std::vector<double> num;
     std::vector<std::string> str;
     std::vector<std::vector<double> > mesh;
-    Data(void) {}
+    Data(void) : type(Undef) {}
     void clear(void) {
       if(num.size()>0) num.clear();
       if(str.size()>0) str.clear();
       if(mesh.size()>0) mesh.clear();
     }
     size_t size(void) {
-      if(type==DataType::Str) return str.size();
-      if(type==DataType::Mesh) return mesh.size();
-      if(type==DataType::Num) return num.size();
+      if(type==Str) return str.size();
+      if(type==Mesh) return mesh.size();
+      if(type==Num) return num.size();
       return 0;
     }
     void print(size_t j) {
-      if(type==DataType::Str) printf("%s",str[j].c_str());
-      if(type==DataType::Num) printf("%.11g",num[j]);
+      if(type==Str) printf("%s",str[j].c_str());
+      if(type==Num) printf("%.11g",num[j]);
     }
     const char *type_name(void) {
-      if(type==DataType::Num) return "num";
-      if(type==DataType::Str) return "str";
-      if(type==DataType::Mesh) return "mesh";
+      if(type==Num) return "num";
+      if(type==Str) return "str";
+      if(type==Mesh) return "mesh";
       else return "unknown";
     }
   };
@@ -280,23 +280,23 @@ public:
     sn.set_verbose(0);
     double x = sn.stof(s);
     if(sn.nerr()==1 || sn.nerr()==3) {
-      type=DataType::Num; return x;
+      type=Num; return x;
     }
     if(var.ts.distinguish_time_string(s) > 0 || sn.nerr()==2) {
-      type=DataType::Str; return 0;
+      type=Str; return 0;
     }
-    type=DataType::Num; return x;
+    type=Num; return x;
   }
   int check_data1(const std::string &v, int quiet=0) {
     if(_dat.count(v)==0) {
       if(!((quiet>>4)&1)) printf("%s is not defined\n",v.c_str());
       return 4;
     }
-    if(_dat[v].type==DataType::Mesh) {
+    if(_dat[v].type==Mesh) {
       if(!((quiet>>3)&1))printf("%s type=%s\n", v.c_str(),_dat[v].type_name());
       return 3;
     }
-    if(_dat[v].type==DataType::Str) {
+    if(_dat[v].type==Str) {
       if(!((quiet>>2)&1)) printf("%s type=%s\n",v.c_str(),_dat[v].type_name());
       return 2;
     }
@@ -325,8 +325,8 @@ public:
     sp.split(bc.contents(0),", ");
     for(auto && s :sp) {
       double x = calc.eval(s);
-      _dat[v].type = calc.not_digit() ? DataType::Str : DataType::Num;
-      if(_dat[v].type==DataType::Str) {
+      _dat[v].type = calc.not_digit() ? Str : Num;
+      if(_dat[v].type==Str) {
 	_dat[v].str.push_back(thl::trim(s));
       } else {
 	_dat[v].num.push_back(x);
@@ -346,7 +346,7 @@ public:
       int ndata = sp.stoi(0);
       double x0 = str_to_val(sp(1),type0);
       double x1 = str_to_val(sp(2),type1);
-      if(type0 != DataType::Num || type1 != DataType::Num) {
+      if(type0 != Num || type1 != Num) {
 	printf("data type should be numerical\n"); return 1;
       }
       if(ndata < 1) {
@@ -368,7 +368,7 @@ public:
   int data_set_random(const std::string &v, const std::string &expr,
 		     Option &opt) {
     thl::Bracket bc('(',')',expr); if(bc.size()<1) return 1;
-    _dat[v].clear(); _dat[v].type = DataType::Num;
+    _dat[v].clear(); _dat[v].type = Num;
     thl::StrSplit sp(bc.contents(0),",");
     if(sp.size()<2) {
       printf("random() should have at least 2 arguments\n"); return 1;
@@ -416,30 +416,30 @@ public:
       double utime = var.ts.str_to_num("now","utime");
       std::string ts = var.ts.utime_to_str(utime,1);
       if(unit=="str") {
-	_dat[v].type = DataType::Str; _dat[v].clear();
+	_dat[v].type = Str; _dat[v].clear();
 	_dat[v].str.push_back(ts);
       } else {
-	_dat[v].type = DataType::Num; _dat[v].clear();
+	_dat[v].type = Num; _dat[v].clear();
 	_dat[v].num.push_back(var.ts.str_to_num(ts,unit));
       }
     } else {
       if(_dat.count(tag)==0) {
 	printf("[%s] not found.\n",tag.c_str()); return 1;
       }
-      if(_dat[tag].type == DataType::Str) {
-	_dat[v].type = DataType::Num; _dat[v].clear();
+      if(_dat[tag].type == Str) {
+	_dat[v].type = Num; _dat[v].clear();
 	for(auto &&s : _dat[tag].str) {
 	  _dat[v].num.push_back(var.ts.str_to_num(s,unit));
 	}
       }
-      if(_dat[tag].type == DataType::Num) {
+      if(_dat[tag].type == Num) {
 	if(unit=="str") {
-	  _dat[v].type = DataType::Str; _dat[v].clear();
+	  _dat[v].type = Str; _dat[v].clear();
 	  for(auto x : _dat[tag].num) {
 	    _dat[v].str.push_back(var.ts.utime_to_str(x,1));
 	  }
 	} else {
-	  _dat[v].type = DataType::Num; _dat[v].clear();
+	  _dat[v].type = Num; _dat[v].clear();
 	  for(auto x : _dat[tag].num) {
 	    _dat[v].num.push_back(var.ts.utime_to_num(x,unit));
 	  }
@@ -452,7 +452,7 @@ public:
     thl::StrSplit sp(expr,"()+-*/%<>=!, \t");
     for(auto &&s : sp) {
       if(_dat.count(s)>0) {
-	if(_dat[s].type==DataType::Mesh) {
+	if(_dat[s].type==Mesh) {
 	  printf("'%s': type[mesh] : ignored.\n",s.c_str());
 	} else {
 	  bool exist=0;
@@ -483,10 +483,10 @@ public:
       double x = calc.eval(expr);
       if(calc.not_digit()) {
 	_dat[v].str.push_back(expr);
-	_dat[v].type=DataType::Str;
+	_dat[v].type=Str;
       } else {
 	_dat[v].num.push_back(x);
-	_dat[v].type=DataType::Num;
+	_dat[v].type=Num;
       }
       return 1;
     }
@@ -525,7 +525,7 @@ public:
 	_dat[s+"_cut"].type = _dat[s].type;
 	for(size_t j=0; j<_dat[s].size(); j++) {
 	  if(vbool[j]) {
-	    if(_dat[s+"_cut"].type==DataType::Str) {
+	    if(_dat[s+"_cut"].type==Str) {
 	      _dat[s+"_cut"].str.push_back(_dat[s].str[j]);
 	    } else {
 	      _dat[s+"_cut"].num.push_back(_dat[s].num[j]);
@@ -555,7 +555,7 @@ public:
       thl::MovAve<double> mave(_dat[s].num, nave);
       thl::CFormat fmt;
       std::string tag = s+"_m"+fmt("%d",nave);
-      _dat[tag].type = DataType::Num;
+      _dat[tag].type = Num;
       _dat[tag].num = mave.data();
     }
     return 0;
@@ -612,7 +612,7 @@ public:
 	    first[v_n]=1; _dat[v_n].clear();
 	    _dat[v_n].type = type;
 	  }
-	  if(_dat[v_n].type==DataType::Str) {
+	  if(_dat[v_n].type==Str) {
 	    _dat[v_n].str.push_back(thl::trim(sp(j)));
 	  } else {
 	    _dat[v_n].num.push_back(val);
@@ -643,7 +643,7 @@ public:
 	for(size_t j=0; j < size; j++) {
 	  for(size_t k=0; k<vlist.size(); k++) {
 	    std::string v=vlist[k];
-	    if(_dat[v].type==DataType::Str) {
+	    if(_dat[v].type==Str) {
 	      ofs << fmt("\"%s\"",_dat[v].str[j].c_str());
 	    } else {
 	      ofs << fmt("%.11g",_dat[v].num[j]);
@@ -662,12 +662,12 @@ public:
   int data_make_sort(const std::string &v_str, const std::string &v) {
     std::vector<size_t> idx(_dat[v].size());
     std::iota(idx.begin(),idx.end(),0);
-    if(_dat[v].type==DataType::Num) {
+    if(_dat[v].type==Num) {
       std::sort(idx.begin(),idx.end(),
 		[&](size_t j,size_t k){return _dat[v].num[j]<_dat[v].num[k];}
 		);
     }
-    if(_dat[v].type==DataType::Str) {
+    if(_dat[v].type==Str) {
       std::sort(idx.begin(),idx.end(),
 		[&](size_t j,size_t k){return _dat[v].str[j]<_dat[v].str[k];}
 		);
@@ -680,15 +680,15 @@ public:
     }    
     for(auto &&s : sp) {
       std::string s2=s+"_sort";
-      if(_dat[s].type==DataType::Num) {
-	_dat[s2].type=DataType::Num;
+      if(_dat[s].type==Num) {
+	_dat[s2].type=Num;
 	_dat[s2].num.resize(idx.size());
 	for(size_t j=0; j<idx.size(); j++) {
 	  _dat[s2].num[j]=_dat[s].num[idx[j]];
 	}
       }
-      if(_dat[s].type==DataType::Str) {
-	_dat[s2].type=DataType::Str;
+      if(_dat[s].type==Str) {
+	_dat[s2].type=Str;
 	_dat[s2].str.resize(idx.size());
 	for(size_t j=0; j<idx.size(); j++) {
 	  _dat[s2].str[j]=_dat[s].str[idx[j]];
@@ -711,7 +711,7 @@ public:
   }
   void data_ls(const std::vector<std::string> vlist, Option &opt) {
     for(auto &&v : vlist) {
-      if(_dat[v].type==DataType::Mesh) {
+      if(_dat[v].type==Mesh) {
 	printf("%s : data(mesh) : ",v.c_str());
 	if(_dat[v].mesh.size() == 0) {
 	  printf("no data\n");
@@ -734,7 +734,7 @@ public:
       int size = (int)_dat[v].size();
       int start = (opt.n0 > 0) ? opt.n0-1 : 0;
       int end = (0 < opt.n1 && opt.n1 < size) ? opt.n1 : size;
-      if(_dat[v].type==DataType::Mesh) {
+      if(_dat[v].type==Mesh) {
 	if(size != 0) {
 	  printf("%s : data(mesh) : \n",v.c_str());
 	  for(int j=start; j<end; j++) {
@@ -763,7 +763,7 @@ public:
 	       const std::string &vout,	Option &opt) {
     if(mode == ">") _dat[vout].clear();
     
-    if(_dat[vlist[0]].type==DataType::Mesh) {
+    if(_dat[vlist[0]].type==Mesh) {
       printf("mesh type can not be concatenate.\n"); return;
     }
     _dat[vout].type = _dat[vlist[0]].type;
@@ -775,7 +775,7 @@ public:
       }
       int end = (int)_dat[v].size();
       if(0<=opt.n1 && opt.n1<=end) {end=opt.n1;}
-      if(_dat[vout].type==DataType::Str) {
+      if(_dat[vout].type==Str) {
 	for(int k=0; k<end; k++) {
 	  if(k < opt.n0) continue;
 	  _dat[vout].str.push_back(_dat[v].str[k]);
@@ -825,7 +825,7 @@ public:
   int data_plot(const std::string &v, Option &opt) {
     if(check_data1(v)) return 1;
     std::string vn = v + "_n";
-    _dat[vn].type = DataType::Num;
+    _dat[vn].type = Num;
     _dat[vn].num.resize(_dat[v].num.size());
     for(size_t j=0; j<_dat[v].num.size(); j++) _dat[vn].num[j]=j+1;
     data_plot(vn,v,opt);
@@ -1067,7 +1067,7 @@ public:
     if(hist.nentry()==0) {printf("no entry\n"); return 2;}
     std::string hx = v + "_hx";
     std::string hy = v + "_hy";
-    _dat[hx].type = _dat[hy].type = DataType::Num;
+    _dat[hx].type = _dat[hy].type = Num;
     _dat[hx].num = std::vector<double>(opt.nb);
     _dat[hy].num = std::vector<double>(opt.nb);
     for(int j=0; j<opt.nb; j++) {
@@ -1123,9 +1123,9 @@ public:
       Option opt2 = opt;
       opt2.nx = opt.nx*2+2;
       opt2.ny = opt.ny*2+2;
-      _dat[mx].num.resize(opt2.nx); _dat[mx].type=DataType::Num;
-      _dat[my].num.resize(opt2.ny); _dat[my].type=DataType::Num;
-      _dat[mz].mesh.resize(opt2.nx); _dat[mz].type=DataType::Mesh;
+      _dat[mx].num.resize(opt2.nx); _dat[mx].type=Num;
+      _dat[my].num.resize(opt2.ny); _dat[my].type=Num;
+      _dat[mz].mesh.resize(opt2.nx); _dat[mz].type=Mesh;
       for(int j=0; j<opt2.nx; j++) {_dat[mz].mesh[j].resize(opt2.ny);}
       
       double xwid=h2.xwid()/2;
@@ -1158,11 +1158,11 @@ public:
       }
       mesh_plot(mx,my,mz,opt2);
     } else {
-      _dat[mx].num.resize(opt.nx); _dat[mx].type=DataType::Num;
-      _dat[my].num.resize(opt.ny); _dat[my].type=DataType::Num;
+      _dat[mx].num.resize(opt.nx); _dat[mx].type=Num;
+      _dat[my].num.resize(opt.ny); _dat[my].type=Num;
       for(int j=0; j<opt.nx; j++) {_dat[mx].num[j]=h2.x(j);}
       for(int j=0; j<opt.ny; j++) {_dat[my].num[j]=h2.y(j);}
-      _dat[mz].mesh.resize(opt.nx); _dat[mz].type=DataType::Mesh;
+      _dat[mz].mesh.resize(opt.nx); _dat[mz].type=Mesh;
       for(int j=0; j<opt.nx; j++) {
 	_dat[mz].mesh[j].resize(opt.ny);
 	for(int k=0; k<opt.ny; k++) {
@@ -1201,8 +1201,8 @@ public:
     fft.calc();
     std::string fx = v + "_fx";
     std::string fy = v + "_fy";
-    _dat[fx].type = DataType::Num;
-    _dat[fy].type = DataType::Num;
+    _dat[fx].type = Num;
+    _dat[fy].type = Num;
     _dat[fx].num=std::vector<double>(fft.size()/2);
     _dat[fy].num=std::vector<double>(fft.size()/2);
 
@@ -1232,7 +1232,7 @@ public:
     thl::Bracket bc('{','}',expr); if(bc.size()<1) return 1;
     _dat[v].clear();
     thl::Bracket bc2('{','}',bc.contents(0));
-    _dat[v].type=DataType::Mesh;
+    _dat[v].type=Mesh;
     _dat[v].mesh.resize(bc2.size());
     for(size_t j=0; j<bc2.size(); j++) {
       thl::StrSplit sp(bc2.contents(j),",");
@@ -1269,7 +1269,7 @@ public:
 	  _dat[v].mesh[j][k]=z;
 	}
       }
-      _dat[v].type=DataType::Mesh;
+      _dat[v].type=Mesh;
       return 0;
     }
   }
@@ -1280,9 +1280,9 @@ public:
       printf("argument should have 3 variables like x,y,z\n");
       return 1;
     }
-    std::string vx=v(0); _dat[vx].type=DataType::Num; _dat[vx].clear();
-    std::string vy=v(1); _dat[vy].type=DataType::Num; _dat[vy].clear(); 
-    std::string vz=v(2); _dat[vz].type=DataType::Mesh; _dat[vz].clear();
+    std::string vx=v(0); _dat[vx].type=Num; _dat[vx].clear();
+    std::string vy=v(1); _dat[vy].type=Num; _dat[vy].clear(); 
+    std::string vz=v(2); _dat[vz].type=Mesh; _dat[vz].clear();
     std::ifstream ifs(fname.c_str());
     if(!ifs) {printf("can't open %s\n",fname.c_str()); return 1;}
     thl::StrSplit sp;
@@ -1314,13 +1314,13 @@ public:
   }
   int check_mesh_data(const std::string &vx, const std::string &vy,
 		      const std::string &vz) {
-    if(_dat[vx].type == DataType::Mesh) {
+    if(_dat[vx].type == Mesh) {
       printf("%s should not be mesh data\n",vx.c_str()); return 1;
     }
-    if(_dat[vy].type == DataType::Mesh) {
+    if(_dat[vy].type == Mesh) {
       printf("%s should not be mesh data\n",vy.c_str()); return 1;
     }
-    if(_dat[vz].type != DataType::Mesh) {
+    if(_dat[vz].type != Mesh) {
       printf("%s should be mesh data\n",vz.c_str()); return 1;
     }
     if(_dat[vx].num.size() != _dat[vz].mesh.size()) {
@@ -1455,11 +1455,11 @@ public:
   void epics_ca_setval(thl::EpicsCA &ca, std::string tag) {
     _dat[tag].clear();
     if(ca.dbr_type()==DBR_STRING) {
-      _dat[tag].type=DataType::Str;
+      _dat[tag].type=Str;
       _dat[tag].str.push_back(ca.val_string());
       var.set_str(tag,ca.val_string());
     } else {
-      _dat[tag].type=DataType::Num;
+      _dat[tag].type=Num;
       for(int j=0; j<ca.n_elems(); j++) {
 	_dat[tag].num.push_back((double)ca.val(j));
       }
@@ -1490,7 +1490,7 @@ public:
       }
       ca.set_val_by_string(0,fmt());
     } else {
-      if(_dat[tag].type==DataType::Str) {
+      if(_dat[tag].type==Str) {
 	ca.set_val_by_string(0,_dat[tag].str[0].c_str());
       } else {
 	for(size_t j=0; j<_dat[tag].size(); j++) {
@@ -2313,7 +2313,7 @@ public:
       int index = (int)calc.eval(bc.contents(0));
       if(_dat.count(v)>0) {
 	if(index > 0 && index <= (int)_dat[v].size()) {
-	  if(_dat[v].type==DataType::Str) {
+	  if(_dat[v].type==Str) {
 	    var.set_str(x,_dat[v].str[index-1]);
 	  } else {
 	    var.set_num(x,_dat[v].num[index-1]);
