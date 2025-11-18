@@ -13,8 +13,8 @@
 #ifndef USE_CLOCK_GETTIME
 #include <sys/time.h>
 #endif
+#include "Trim.hh"
 #include "StrSplit.hh"
-//#include "Bracket.hh"
 
 namespace thl {
   class IsoTimeStr { //time format of extended ISO 8601 (RFC 3339)
@@ -74,16 +74,6 @@ namespace thl {
 	daysum += mdays[m];
       }
       return daysum+_t.tm_mday;
-    }
-    std::string trim(const std::string &s, char c='"') {
-      if(s.size()==0) return "";
-      size_t n=s.find_first_not_of(" \t");   // skip forward spaces
-      if(n==s.npos) return s;
-      size_t m=s.find_last_not_of(" \t");   // ignore backward spaces
-      if(c > 0) {
-	if(s[n]==c && s[m]==c) {n++; m--;}
-      }
-      return s.substr(n,m-n+1);
     }
     int get_str(std::string str) {
       std::string s = trim(str); // remove quotation

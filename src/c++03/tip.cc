@@ -3,8 +3,7 @@
 // -std=c++03
 //
 #include <algorithm>
-#include "thl/ArgOpt.hh"
-#include "thl/ReadLine.hh"
+#include "thl/ArgOpt.hh" // std::sort
 #include "thl/PLPlot.hh"
 #include "thl/LsFit.hh"
 #include "thl/Histogram.hh"

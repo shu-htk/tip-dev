@@ -1,13 +1,12 @@
 // thl : tiny header-only library
 //
-// trim     : a function to trim the spaces or quotations from string
-// Calc     : class to parse numerical expression
-// NumLogic : class to parse numerical logical expression 
-// StrLogic : class to parse string logical expression 
-// Logic    : class to parse both of num and str logic
-// Var      : class to take the variable which has key and value
-// Loop     : class to take 'for', 'do', 'while' loops 
-// If       : class to take 'if', 'elif', 'else', 'fi' 
+// Calc      : class to parse numerical expression
+// NumLogic  : class to parse numerical logical expression 
+// StrLogic  : class to parse string logical expression 
+// Logic     : class to parse both of num and str logic
+// Var       : class to create variables which have key and value
+// Loop      : class to control 'for', 'do', 'while' loops 
+// If        : class to control 'if', 'elif', 'else', 'fi' 
 // MacroTool : class to parse macro commands using above tools
 //
 // -std=c++11
@@ -24,6 +23,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <cstdio>
+#include "Trim.hh"
 #include "StrSplit.hh"
 #include "CFormat.hh"
 #include "Bracket.hh"
@@ -31,19 +31,7 @@
 #include "ReadLine.hh"
 
 namespace thl {
-
-  std::string trim(const std::string &s, char c='"') {
-    if(s.size()==0) return "";
-    size_t n=s.find_first_not_of(" \t");   // skip forward spaces
-    if(n==s.npos) return s;
-    size_t m=s.find_last_not_of(" \t");   // ignore backward spaces
-    if(c > 0) {
-      if(s[n]==c && s[m]==c) {n++; m--;}
-    }
-    return s.substr(n,m-n+1);
-  }
-
-  //---- numerical calculation parser ---------------------------------------
+//-----------------------------------------------------
   class Calc {
   private:
     char *_cp;
@@ -156,8 +144,7 @@ namespace thl {
       }
     }
   };
-
-//----- numerical logic parser -------------------------------------------
+//-----------------------------------------------------
   class NumLogic {
   private:
     char *_cp;
@@ -258,8 +245,7 @@ namespace thl {
       }
     }
   };
-
-//----- strings logic parser -----------------------------------------
+//-----------------------------------------------------
   class StrLogic {
   private:
     char *_cp;
@@ -382,8 +368,7 @@ namespace thl {
       }
     }
   };
-
-//-- numerical and string logic
+//-----------------------------------------------------
   class Logic {
   public:
     NumLogic num;
@@ -402,8 +387,7 @@ namespace thl {
     }
     void clear(void) {num.clear(); str.clear();}
   };
-
-//-- numerical/string variable
+//-----------------------------------------------------
   class Var {
     enum Type {Num=1,Str=2};
     struct Val {
@@ -622,8 +606,7 @@ namespace thl {
       }
     }
   };
-
-//--- tool of do/for/while loops -------------------------------------------
+//-----------------------------------------------------
   class Loop {
     bool _init={1},_pass={0},_err={0};
     size_t _end_idx={0};
@@ -712,8 +695,7 @@ namespace thl {
       }
     }
   };
-
-//--- tool of if/elif/else ------------------------------------------------
+//-----------------------------------------------------
   class If {
     bool _pass={0},_err={0};
     std::vector<size_t> _next_idx;
@@ -755,8 +737,7 @@ namespace thl {
       return logic.eval(expr);
     }
   };
-
-//--- macro tool using the class Var, Loop, If, Calc, Logic
+//-----------------------------------------------------
   class MacroTool {
   private:
     std::map<size_t,Loop> _loop;   // key=nline, val=Loop_object
@@ -1052,8 +1033,9 @@ namespace thl {
 		   " if t=0 wait console input\n");
 	  } else {
 	    if(args.stof(1)==0) {
-	      printf("'b':break, others:continue > ");
-	      char s[8]; fgets(s,8,stdin); sscanf(s,"%c\n",(char*)&_break);
+	      printf("continue? (Y/n)> ");
+	      char c,s[8]; fgets(s,8,stdin); sscanf(s,"%c\n",&c);
+	      _break = (c=='n'||c=='N') ? 'b' : 0;
 	    } else {
 	      unsigned int ut = (unsigned int)(args.stof(1)*1000000.);
 	      usleep(ut);

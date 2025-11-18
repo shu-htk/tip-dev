@@ -5,7 +5,6 @@
 #include <algorithm> // std::sort
 #include <numeric>   // std::iota
 #include "thl/ArgOpt.hh"
-#include "thl/ReadLine.hh"
 #include "thl/PLPlot.hh"
 #include "thl/LsFit.hh"
 #include "thl/Histogram.hh"
