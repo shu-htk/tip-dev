@@ -2,7 +2,7 @@
 //
 // CFormat : class to get c_str() by printf's format
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_CFORMAT_HH
 #define THL_CFORMAT_HH

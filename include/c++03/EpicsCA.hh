@@ -2,7 +2,7 @@
 //
 // EpicsCA : wrapper class for EPICS channel access
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_EPICS_CA_HH
 #define THL_EPICS_CA_HH

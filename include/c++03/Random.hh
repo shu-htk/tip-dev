@@ -2,7 +2,7 @@
 //
 // Random : class to make random numbers of uniform, gauss, exponential
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_RANDOM_HH
 #define THL_RANDOM_HH

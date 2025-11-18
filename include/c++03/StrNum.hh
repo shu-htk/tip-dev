@@ -2,7 +2,7 @@
 //
 // StrNum : class to convert string to number
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_STRNUM_HH
 #define THL_STRNUM_HH

@@ -2,7 +2,7 @@
 //
 // StrSplit : class to split the string by the delimiter
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_STRSPLIT_HH
 #define THL_STRSPLIT_HH

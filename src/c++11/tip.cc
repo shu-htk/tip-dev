@@ -1,6 +1,6 @@
 // tip : tiny interactive plot
 //
-// -std=c++11
+// c++11
 //
 #include <algorithm> // std::sort
 #include <numeric>   // std::iota

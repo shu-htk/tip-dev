@@ -2,7 +2,7 @@
 //
 // ArgOpt : class to take command line arguments and options 
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_ARGOPT_HH
 #define THL_ARGOPT_HH

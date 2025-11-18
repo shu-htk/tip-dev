@@ -2,7 +2,7 @@
 //
 // trim : a function to remove the edge spaces and quotations from the string
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_TRIM_HH
 #define THL_TRIM_HH

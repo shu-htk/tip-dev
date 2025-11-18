@@ -2,7 +2,7 @@
 //
 // Bracket : class to get the string between brackets 
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_BRACKET_HH
 #define THL_BRACKET_HH

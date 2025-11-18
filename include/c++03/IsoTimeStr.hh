@@ -2,7 +2,7 @@
 //
 // IsoTimeStr : class to take the time information of ISO format
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_ISOTIMESTR_HH
 #define THL_ISOTIMESTR_HH

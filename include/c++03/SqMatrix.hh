@@ -3,7 +3,7 @@
 // Vec : class of the vector as linear algebra 
 // Mat : class of the square matrix as linear algebra
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_SQ_MATRIX_HH
 #define THL_SQ_MATRIX_HH

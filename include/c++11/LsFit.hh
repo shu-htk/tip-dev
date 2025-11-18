@@ -2,7 +2,7 @@
 //
 // LsFit : class to make a fitting to the data by least square method
 //
-// -std=c++11
+// c++11
 //
 #ifndef THL_LSFIT_HH
 #define THL_LSFIT_HH

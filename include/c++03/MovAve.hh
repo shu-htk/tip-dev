@@ -2,7 +2,7 @@
 //
 // MoveAve : class to make moving average of the data
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_MOV_AVE_HH
 #define THL_MOV_AVE_HH

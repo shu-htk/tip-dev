@@ -3,7 +3,7 @@
 // Hist1D : class to make 1-dimensional histogram
 // Hist2D : class to make 2-dimensional histogram
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_HISTOGRAM_HH
 #define THL_HISTOGRAM_HH

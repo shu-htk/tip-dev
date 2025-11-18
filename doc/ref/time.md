@@ -73,7 +73,7 @@ tip> cat vn
 vn : data(num) :  1762073282
 ```
 
-## convert to year, month, day, hour, min, sec, us
+## convert to year, month, day, hour, min, sec, usec
 
 |unit|type|value|
 |:---:|:---:|:---:|
@@ -83,11 +83,11 @@ vn : data(num) :  1762073282
 |min  |floating point number|m + sec/60|
 |hour |floating point number|h + min/60|
 |day  |floating point number|D + hour/24|
-|month|floating point number|M + day/[28\|30\|31]|
+|month|floating point number|M + day/[28\|29\|30\|31]|
 |year |floating point number|Y + yday/[365\|366]|
 
-> yday is the amount of days since the beginning of the year  
-> the leap year is factored in
+> yday is the amount of days since the beginning of the year
+(the leap year is factored in)
 
 example
 ```

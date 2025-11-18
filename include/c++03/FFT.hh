@@ -2,7 +2,7 @@
 //
 // FFT : class for primitive FFT (Fast Fourier Transform)
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_FFT_HH
 #define THL_FFT_HH

@@ -1,6 +1,6 @@
 // my_macro : simple example how to use thl::MacroTool
 //
-// -std=c++03
+// c++03
 //
 #include "thl/MacroTool.hh"
 

@@ -2,7 +2,7 @@
 //
 // ReadLine : wrapper class of GNU readline
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_ReadLine_HH
 #define THL_ReadLine_HH

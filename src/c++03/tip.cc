@@ -1,6 +1,6 @@
 // tip : tiny interactive plot
 //
-// -std=c++03
+// c++03
 //
 #include <algorithm>
 #include "thl/ArgOpt.hh" // std::sort

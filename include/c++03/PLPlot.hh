@@ -3,7 +3,7 @@
 // PLAtt  : attribute for class PLPlot
 // PLPlot : another wrapper class of plplot.h
 //
-// -std=c++03
+// c++03
 //
 #ifndef THL_PLPLOT_HH
 #define THL_PLPLOT_HH

@@ -9,7 +9,7 @@
 // If        : class to control 'if', 'elif', 'else', 'fi' 
 // MacroTool : class to parse macro commands using above tools
 //
-// -std=c++11
+// c++11
 //
 #ifndef THL_MACRO_TOOL_HH
 #define THL_MACRO_TOOL_HH
