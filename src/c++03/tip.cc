@@ -1892,10 +1892,10 @@ public:
 	     "  uni,x0,x1 : uniform distribution [x0:x1] (default x0=0,x1=1)\n"
 	     "  gaus,sgm,mean : gauss distribution (default sgm=1,mean=0)\n"
 	     "  exp,tau   : exponential distribution (default tau=1)\n"
-	     " option:\n"
-	     "  sd:n   : set integer value n as random seed\n"
-	     "  sd:utime : set unix time(sec) as random seed\n"
-	     "  sd:clock : set clock(nsec) as random seed (this is default)\n"
+	     " option to set random seed:\n"
+	     "  sd:N     : set integer value N\n"
+	     "  sd:utime : set unix time(sec)\n"
+	     "  sd:clock : set clock(nsec) (this is default)\n"
 	     ); return 0;
     }
     if(args(0)=="time") {
