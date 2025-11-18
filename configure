@@ -128,10 +128,24 @@ grep '^#5:' $0 | sed "s/#5://g" \
 # targets
 echo TARGETS: $targets
 grep '^#1:' $0 | sed "s/#1://g" | sed "s|%TARGETS|$targets|g" > Makefile.1
+
+git_cmd_exist=no
+git_rep_exist=no
+if command -v git >& /dev/null; then
+    git_cmd_exist=yes
+fi
+if [ -e .git ] ; then
+    git_rep_exist=yes
+fi
+if [ $git_cmd_exist == yes ] && [ $git_rep_exist == yes ]; then
+ grep '^#11:' $0 | sed "s/#11://g" >> Makefile.1
+else
+ grep '^#12:' $0 | sed "s/#12://g" >> Makefile.1
+fi
 clk=`grep -c clock_gettime /usr/include/time.h`
 if [ $clk -ne 0 ] ; then
  echo "found clock_gettime"
- grep '^#12:' $0 | sed "s/#12://g" >> Makefile.1
+ grep '^#13:' $0 | sed "s/#13://g" >> Makefile.1
 fi
 
 cat Makefile.1 Makefile.2 > Makefile
@@ -143,14 +157,13 @@ echo "** configure normal end **"
 #1:all: $(TARGETS)
 #1:CC=g++
 ##1:CC=clang++
-##1:TAG = $(shell git describe --tags --always)
-##1:LOG = $(shell git log -1 --pretty=format:'%h, %ad, %an' --date=iso)
-#1:GIT_VER = $(shell cat version.txt)
 ##1:CFLG = -Wall -std=c++11
 #1:CFLG = -Wall
-##1:CFLG += -D GIT_VER="\"$(TAG) $(LOG)\""
-#1:CFLG += -D GIT_VER="\"$(GIT_VER)\""
-#12:CFLG += -D USE_CLOCK_GETTIME
+#11:TAG = $(shell git describe --tags --always)
+#11:LOG = $(shell git log -1 --pretty=format:'%ad, %an' --date=iso)
+#11:CFLG += -D GIT_VER="\"$(TAG) $(LOG)\""
+#12:CFLG += -D GIT_VER="\"$(shell cat version.txt)\""
+#13:CFLG += -D USE_CLOCK_GETTIME
 
 #2:INC = -I./include
 #2:LIB = -lreadline
