@@ -1537,7 +1537,7 @@ public:
 	  var.set_num(tag+".update",0);
 	}
       } else {
-	printf("data '%s' is not related to EPICS_record\n",tags.c_str());
+	printf("data '%s' is not connected to EPICS_record\n",tags.c_str());
       }
     }
   }
@@ -2382,8 +2382,7 @@ public:
 	printf("usage: caget EPICS_record [> v]\n"
 	       " get the value from EPICS_record and print contents.\n"
 	       " if '>' is specified the value is redirected to the data v.\n"
-	       " also the following macro variable related to the data v is"
-	       " created.\n"
+	       " also the following macro variable is created.\n"
 	       "macro variable:\n"
 	       "   v : the 1st element of data v\n"
 	       ); return 0;
@@ -2422,16 +2421,15 @@ public:
     if(args(0)=="cacheck") {
       if(args.size() < 2) {
 	printf("usage: cacheck v1,v2,...\n"
-	       " check if EPICS records related to data v1,v2,..."
+	       " check if EPICS records connected to data v1,v2,..."
 	       " are updated.\n (v1,v2,... should be defeined by 'camon')\n"
-	       " also the following macro variables related to the data"
-	       " v1,v2,... are created.\n"
+	       " also the following macro variables are created.\n"
 	       "macro variables:\n"
 	       "  v1        : the 1st element of data v1\n"
 	       "  v1.update : 1 if v1 updated, 0 if not updated\n"
 	       "  v2        : the 1st element of data v2\n"
 	       "  v2.update : 1 if v2 updated, 0 if not updated\n"
-	       "  ... and so on ...\n"
+	       "  ... \n"
 	       ); return 0;
       }
       epics_ca_check(args(1));
@@ -2440,7 +2438,7 @@ public:
     if(args(0)=="caclose") {
       if(args.size() < 2) {
 	printf("usage: caclose [v1,v2,...]\n"
-	       " close the connection of the EPICS record related to"
+	       " close the connection of the EPICS records to"
 	       " the data v1,v2,...\n"
 	       ); return 0;
       }

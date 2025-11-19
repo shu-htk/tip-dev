@@ -2,9 +2,9 @@
 ```
 tip> caget
 usage: caget EPICS_record [> v]
- get the value from EPICS_record and print contents.
+ get the value from EPICS_record and print contents
  if '>' is specified the value is redirected to the data v.
- also the following macro variable related to the data v is created.
+ also the following macro variable is created.
 macro variable:
    v : the 1st element of data v
 ```

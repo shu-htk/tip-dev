@@ -25,13 +25,15 @@ usage: set vs = time([vn|vs],str)
 ## option
 ### option with quoted argument by ""
 
-- `td:` set delimiters of ISO time format string 
+- `td:` set delimiters of time format string 
 >  argument of `td:` is 3 characters, "ABC"  
 >  A is delimiter among year, month, day  
 >  B is delimiter between day and hour  
 >  C is delimiter among hour, min, sec
 
-> default is "- :"
+**(note)**
+> ISO 8601 extended format is `td:"-T:"`,
+> but it is defaulted to `td:"- :"` in the tip interpreter.
 
 example
 ```
@@ -40,31 +42,35 @@ tip> set ts=time(tn,str)
 tip> cat ts
 ts : data(str) :  2025-11-05 12:26:53.353887
 
-tip> set ts=time(tn,str) (td:"/_:")
+tip> set ts=time(tn,str) (td:"-T:")   ;# ISO 8601
 tip> cat ts
-ts : data(str) :  2025/11/05_12:26:53.353887
+ts : data(str) :  2025-11-05T12:26:53.353887
+
+tip> set ts=time(tn,str) (td:"/ :")   ;# using / as the delimiter of date
+tip> cat ts
+ts : data(str) :  2025/11/05 12:26:53.353887
 ```
 
-## convert unix epoch time to ISO-time string
+## convert unix epoch time to time string
 example
 ```
 tip> set vn=time(now)    ;# convert current local time to unix epoch time
 tip> cat vn
 vn : data(num) :  1762073282
 
-tip> set vs=time(vn,str) ;# convert unix epoch time to ISO-time string
+tip> set vs=time(vn,str) ;# convert unix epoch time to time string
 tip> cat vs
 vs : data(str) :  2025-11-02 08:48:13.322786
 ```
 
-## convert ISO-time string to unix epoch time
+## convert time string to unix epoch time
 example
 ```
-tip> set vs=time(now,str)  ;# convert current local time to ISO-time string
+tip> set vs=time(now,str)  ;# convert current local time to time string
 tip> cat vs
 vs : data(str) :  2025-11-02 08:48:13.322786
 
-tip> set vn=time(vs,utime) ;# convert ISO-time string to unix epoch time
+tip> set vn=time(vs,utime) ;# convert time string to unix epoch time
 tip> cat vn
 vn : data(num) :  1762073282
 
@@ -77,7 +83,7 @@ vn : data(num) :  1762073282
 
 |unit|type|value|
 |:---:|:---:|:---:|
-|str|ISO format time string|Y-M-D h:m:s.us|
+|str| string |Y-M-D h:m:s.us|
 |usec |floating point number|us   |
 |sec  |floating point number|s + usec*0.001|
 |min  |floating point number|m + sec/60|
@@ -143,7 +149,7 @@ tip> ls s
 s : string [2025-11-05 13:18:00.500000]
 ```
 
-## omitting date/time in the ISO time format
+## omitting date/time in the time format
 
 > omitting time, it is complemented with "00:00:00.0"  
 > omitting date, it is complemented with current date  
@@ -161,17 +167,17 @@ tip>
 tip> ls ts?
 ts0 : string [2025-11-17 14:35:59.700000] ;# current time
 ts1 : string [2020-02-03 00:00:00.000000] ;# time is "00:00:00.0"
-ts2 : string [2025-11-17 13:26:49.000000] ;# date is taken as current time 
+ts2 : string [2025-11-17 13:26:49.000000] ;# date is taken from the current time 
 ```
 
 ## making data array of the time string
 
 example
 ```
-tip> @ t1 = time("1999-12-31 00:00:00.0") ;# convert to unix epoch time
-tip> @ t2 = time("2000-01-02 00:00:00.0") ;# convert to unix epoch time
-tip> set t = range(13,[t1],[t2])     ;# make data array of unix epoch time
-tip> set ts = time(t,str)            ;# convert to data array of time string
+tip> @ t1 = time("1999-12-31")    ;# convert to unix epoch time
+tip> @ t2 = time("2000-01-02")    ;# convert to unix epoch time
+tip> set t = range(13,[t1],[t2])  ;# make data array of unix epoch time
+tip> set ts = time(t,str)         ;# convert to data array of time string
 tip> cat ts (fs:"\n")
 ts : data(str) :
 1999-12-31 00:00:00.000000
