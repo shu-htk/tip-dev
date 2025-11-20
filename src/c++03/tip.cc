@@ -491,76 +491,6 @@ public:
       return 1;
     }
   }
-  int data_make_cut(const std::string vlist, const std::string &expr) {
-    thl::StrSplit sp(vlist,",");
-    thl::Logic logic;
-    std::vector<std::string> tags;
-    std::vector<bool> vbool;
-    bool flag_s=0; // =1 if it is string data
-    find_tags(tags,expr);
-    if(tags.size()>0) {
-      int quiet=1<<2;
-      for(size_t k=0; k<tags.size(); k++) {
-	if(check_data1(tags[k],quiet) == 2) flag_s=1;
-      }
-      for(size_t k=0; k<tags.size(); k++) {
-	if(check_data2(sp(0),tags[k],quiet) > 2) return 1;
-      }
-      for(size_t j=0; j<_dat[tags[0]].size(); j++) {
-	if(flag_s) {
-	  for(size_t k=0; k<tags.size(); k++) {
-	    logic.str.set_var(tags[k],_dat[tags[k]].str[j]);
-	  }
-	  vbool.push_back(logic.str.eval(expr));
-	} else {
-	  for(size_t k=0; k<tags.size(); k++) {
-	    logic.num.set_var(tags[k],_dat[tags[k]].num[j]);
-	  }
-	  vbool.push_back(logic.num.eval(expr));
-	}
-      }
-      size_t ncut=0;
-      for(size_t j=0; j<sp.size(); j++) {
-	std::string s = sp(j);
-	if(_dat.count(s+"_cut")>0) _dat[s+"_cut"].clear(); 
-	_dat[s+"_cut"].type = _dat[s].type;
-	for(size_t j=0; j<_dat[s].size(); j++) {
-	  if(vbool[j]) {
-	    if(_dat[s+"_cut"].type==Str) {
-	      _dat[s+"_cut"].str.push_back(_dat[s].str[j]);
-	    } else {
-	      _dat[s+"_cut"].num.push_back(_dat[s].num[j]);
-	    }
-	    ncut++;
-	  }
-	}
-      }
-      if(ncut==0) {
-	printf("no data after the cut\n");
-	return 1;
-      } else {
-	return 0;
-      }
-    } else {
-      printf("data tags are not in the expression\n"
-	     "data is not cut\n");
-      return 1;
-    }
-  }
-  int data_make_mave(const std::string vlist, int nave) {
-    thl::StrSplit sp(vlist,",");
-    for(size_t j=0; j<sp.size(); j++) {
-      if(check_data2(sp(0),sp(j))) return 1;
-    }
-    for(size_t j=0; j<sp.size(); j++) {
-      thl::MovAve<double> mave(_dat[sp(j)].num, nave);
-      thl::CFormat fmt;
-      std::string tag = sp(j)+"_m"+fmt("%d",nave);
-      _dat[tag].type = Num;
-      _dat[tag].num = mave.data();
-    }
-    return 0;
-  }
   void check_data_file(const std::string &fname, Option &opt) {
     std::ifstream ifs(fname.c_str());
     if(ifs) {
@@ -627,10 +557,24 @@ public:
     }
     return 0;
   }
-  int data_write(const std::vector<std::string> vlist,
+  std::vector<std::string> get_vlist(const std::string &pattern) {
+    std::vector<std::string> vlist;
+    thl::StrSplit sp(pattern,",");
+    for(size_t j=0; j<sp.size(); j++) {
+      for(std::map<std::string,Data>::iterator it=_dat.begin();
+	  it != _dat.end(); it++) {
+	if( fnmatch(sp(j).c_str(),it->first.c_str(),0)==0 ) {
+	  vlist.push_back(it->first);
+	}
+      }
+    }
+    return vlist;
+  }
+  int data_write(const std::string &pattern,
 		 const std::string &fname, Option &opt) {
     std::ofstream ofs(fname.c_str());
     if(ofs) {
+      std::vector<std::string> vlist=get_vlist(pattern);
       std::string fs = (opt.fs==" \t\n") ? " " : opt.fs;
       if(vlist.size() > 0) {
 	size_t size=_dat[vlist[0]].size();
@@ -661,6 +605,77 @@ public:
     }
     return 0;
   }
+  int data_make_cut(const std::string &pattern, const std::string &expr) {
+    std::vector<std::string> vlist=get_vlist(pattern);
+    if(vlist.size()==0) {printf("no variable list\n"); return 1;}
+    thl::Logic logic;
+    std::vector<std::string> tags;
+    std::vector<bool> vbool;
+    bool flag_s=0; // =1 if it is string data
+    find_tags(tags,expr);
+    if(tags.size()>0) {
+      int quiet=1<<2;
+      for(size_t k=0; k<tags.size(); k++) {
+	if(check_data1(tags[k],quiet) == 2) flag_s=1;
+      }
+      for(size_t k=0; k<tags.size(); k++) {
+	if(check_data2(vlist[0],tags[k],quiet) > 2) return 1;
+      }
+      for(size_t j=0; j<_dat[tags[0]].size(); j++) {
+	if(flag_s) {
+	  for(size_t k=0; k<tags.size(); k++) {
+	    logic.str.set_var(tags[k],_dat[tags[k]].str[j]);
+	  }
+	  vbool.push_back(logic.str.eval(expr));
+	} else {
+	  for(size_t k=0; k<tags.size(); k++) {
+	    logic.num.set_var(tags[k],_dat[tags[k]].num[j]);
+	  }
+	  vbool.push_back(logic.num.eval(expr));
+	}
+      }
+      size_t ncut=0;
+      for(size_t j=0; j<vlist.size(); j++) {
+	std::string s = vlist[j];
+	if(_dat.count(s+"_cut")>0) _dat[s+"_cut"].clear(); 
+	_dat[s+"_cut"].type = _dat[s].type;
+	for(size_t j=0; j<_dat[s].size(); j++) {
+	  if(vbool[j]) {
+	    if(_dat[s+"_cut"].type==Str) {
+	      _dat[s+"_cut"].str.push_back(_dat[s].str[j]);
+	    } else {
+	      _dat[s+"_cut"].num.push_back(_dat[s].num[j]);
+	    }
+	    ncut++;
+	  }
+	}
+      }
+      if(ncut==0) {
+	printf("no data after the cut\n");
+	return 1;
+      } else {
+	return 0;
+      }
+    } else {
+      printf("data tags are not in the expression\n"
+	     "data is not cut\n");
+      return 1;
+    }
+  }
+  int data_make_mave(const std::string &pattern, int nave) {
+    std::vector<std::string> vlist=get_vlist(pattern);
+    for(size_t j=0; j<vlist.size(); j++) {
+      if(check_data2(vlist[0],vlist[j])) return 1;
+    }
+    for(size_t j=0; j<vlist.size(); j++) {
+      thl::MovAve<double> mave(_dat[vlist[j]].num, nave);
+      thl::CFormat fmt;
+      std::string tag = vlist[j]+"_m"+fmt("%d",nave);
+      _dat[tag].type = Num;
+      _dat[tag].num = mave.data();
+    }
+    return 0;
+  } 
   template <class T> class VectorCompare {
     const std::vector<T> &_v;
   public:
@@ -669,7 +684,7 @@ public:
       return _v[j] < _v[k];
     }
   };
-  int data_make_sort(const std::string &v_str, const std::string &v) {
+  int data_make_sort(const std::string &pattern, const std::string &v) {
     std::vector<size_t> idx(_dat[v].size());
     for(size_t j=0; j<idx.size(); j++) idx[j]=j;
     if(_dat[v].type==Num) {
@@ -682,45 +697,29 @@ public:
 		VectorCompare<std::string>(_dat[v].str)
 		);
     }
-    thl::StrSplit sp(v_str,",");
-    int quiet=1<<2;
-    for(size_t j=0; j<sp.size(); j++) {
-      int ret=check_data2(v,sp(j),quiet);
-      if(ret > 0 && ret != 2) return 1;
-    }    
-    for(size_t j=0; j<sp.size(); j++) {
-      std::string s2 = sp(j)+"_sort";
-      if(_dat[sp(j)].type==Num) {
-	_dat[s2].type=Num;
-	_dat[s2].num.resize(idx.size());
+    std::vector<std::string> vlist=get_vlist(pattern);
+    for(size_t j=0; j<vlist.size(); j++) {
+      std::string tag=vlist[j];
+      std::string tag2 = tag+"_sort";
+      if(_dat[tag].type==Num) {
+	_dat[tag2].type=Num;
+	_dat[tag2].num.resize(idx.size());
 	for(size_t k=0; k<idx.size(); k++) {
-	  _dat[s2].num[k]=_dat[sp(j)].num[idx[k]];
+	  _dat[tag2].num[k]=_dat[tag].num[idx[k]];
 	}
       }
-      if(_dat[sp(j)].type==Str) {
-	_dat[s2].type=Str;
-	_dat[s2].str.resize(idx.size());
+      if(_dat[tag].type==Str) {
+	_dat[tag2].type=Str;
+	_dat[tag2].str.resize(idx.size());
 	for(size_t k=0; k<idx.size(); k++) {
-	  _dat[s2].str[k]=_dat[sp(j)].str[idx[k]];
+	  _dat[tag2].str[k]=_dat[tag].str[idx[k]];
 	}
       }
     }
     return 0;
   }
-  std::vector<std::string> get_vlist(const std::string &pattern) {
-    std::vector<std::string> vlist;
-    thl::StrSplit sp(pattern,",");
-    for(size_t j=0; j<sp.size(); j++) {
-      for(std::map<std::string,Data>::iterator it=_dat.begin();
-	  it != _dat.end(); it++) {
-	if( fnmatch(sp(j).c_str(),it->first.c_str(),0)==0 ) {
-	  vlist.push_back(it->first);
-	}
-      }
-    }
-    return vlist;
-  }
-  void data_ls(const std::vector<std::string> vlist, Option &opt) {
+  void data_ls(const std::string &pattern, Option &opt) {
+    std::vector<std::string> vlist=get_vlist(pattern);
     for(size_t j=0; j<vlist.size(); j++) {
       std::string v=vlist[j];
       if(_dat[v].type==Mesh) {
@@ -741,7 +740,8 @@ public:
       }
     }
   }
-  void data_show(const std::vector<std::string> vlist, Option &opt) {
+  void data_show(const std::string &pattern, Option &opt) {
+    std::vector<std::string> vlist=get_vlist(pattern);
     for(size_t i=0; i<vlist.size(); i++) {
       std::string v=vlist[i];
       int size = (int)_dat[v].size();
@@ -772,10 +772,10 @@ public:
       }
     }
   }
-  void data_cat(const std::vector<std::string> vlist, const std::string &mode,
+  void data_cat(const std::string &pattern, const std::string &mode,
 	       const std::string &vout,	Option &opt) {
+    std::vector<std::string> vlist=get_vlist(pattern);
     if(mode == ">") _dat[vout].clear();
-    
     if(_dat[vlist[0]].type==Mesh) {
       printf("mesh type can not be concatenate.\n"); return;
     }
@@ -802,7 +802,8 @@ public:
       }
     }
   }
-  void data_rm(const std::vector<std::string> vlist) {
+  void data_rm(const std::string &pattern) {
+    std::vector<std::string> vlist=get_vlist(pattern);
     for(size_t j=0; j<vlist.size(); j++) _dat.erase(vlist[j]);
   }
   void save_graph_range(void) {
@@ -1948,7 +1949,7 @@ public:
 	       ); return 0;
       }
       Option opt=get_opt(buf);
-      data_write(get_vlist(args(1)),args(2),opt);
+      data_write(args(1),args(2),opt);
       return 0;
     }
     if(args(0)=="ls") {
@@ -1961,7 +1962,7 @@ public:
       }
       Option opt=get_opt(buf);
       var.ls(args(1));
-      data_ls(get_vlist(args(1)),opt);
+      data_ls(args(1),opt);
       return 0;
     }
     if(args(0)=="cat") {
@@ -1977,9 +1978,9 @@ public:
       }
       Option opt=get_opt(buf);
       if(buf.find(">") != buf.npos) {
-	if(args.size() >= 3) data_cat(get_vlist(args(1)),args(2),args(3),opt);
+	if(args.size() >= 3) data_cat(args(1),args(2),args(3),opt);
       } else {
-	data_show(get_vlist(args(1)),opt);
+	data_show(args(1),opt);
       }
       return 0;
     }
@@ -1991,7 +1992,7 @@ public:
 	       ); return 0;
       }
       var.rm(args(1));
-      data_rm(get_vlist(args(1)));
+      data_rm(args(1));
       return 0;
     }
     if(args(0)=="clear") {
@@ -2272,11 +2273,8 @@ public:
 	       " plot x y (cc:\"0<x<1 & 1<y<2\")\n"
 	       ); return 0;
       }
-      thl::StrSplit v_list(args(1),",");
       std::string expr = thl::trim(buf.substr(args.index(2)));
-      if(v_list.size()>0 && expr.size()>0) {
-	for(size_t j=0; j<v_list.size(); j++) {data_make_cut(v_list(j), expr);}
-      }
+      if(expr.size()>0) data_make_cut(args(1), expr);
       return 0;
     }
     if(args(0)=="vp"||args(0)=="viewport") {
