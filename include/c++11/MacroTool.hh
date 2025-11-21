@@ -1081,9 +1081,16 @@ namespace thl {
 	if(args(0)=="q") {
 	  _quit=1; break;
 	}
-	if( ! add_commands(buf) ) {nline++; continue;}
-	printf("invalid command: %s\n",args(0).c_str());
-	printf("try 'help' to learn available commands\n");
+
+	int ret = add_commands(buf);
+	if(ret==0) {
+	  nline++; continue;
+	} else if (ret==1) {
+	  printf("command not found: %s\n",args(0).c_str());
+	  printf("try 'help' to learn available commands\n");
+	} else {
+	  printf("aborted by error\n");
+	}
 	break;
       }
       return 0;

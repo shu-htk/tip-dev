@@ -1481,19 +1481,21 @@ public:
       }
       var.set_num(tag,(double)ca.val(0));
     }
-    //    var.set_num(tag+".size",ca.n_elems());
   }
-  void epics_ca_get(std::string rec, std::string tag) {
+  int epics_ca_get(std::string rec, std::string tag) {
     thl::EpicsCA ca(rec.c_str());
+    if(!ca.is_connected()) return 1;
     ca.get();   
     if(tag.size()==0) {
       ca.print_val();
     } else {
       epics_ca_setval(ca,tag);
     }
+    return 0;
   }
-  void epics_ca_put(std::string rec, std::string tag) {
+  int epics_ca_put(std::string rec, std::string tag) {
     thl::EpicsCA ca(rec.c_str());
+    if(!ca.is_connected()) return 1;
     thl::CFormat fmt;
     if(_dat.count(tag)==0) {
       std::string expr=thl::trim(tag);
@@ -1517,16 +1519,20 @@ public:
       }
     }
     ca.put();
+    return 0;
   }
-  void epics_ca_mon(std::string rec, std::string tag) {
+  int epics_ca_mon(std::string rec, std::string tag) {
     if(!_ca[tag].is_connected()) {
       _ca[tag].connect(rec.c_str(),"md");
+      if(!_ca[tag].is_connected()) return 1;
     }
+    return 0;
   }
-  void epics_ca_check(std::string tags) {
+  int epics_ca_check(std::string tags) {
     thl::StrSplit sp(tags,",");
     ca_poll();
     usleep(1000);
+    int ret=0;
     for(size_t j=0; j<sp.size(); j++) {
       std::string tag = sp(j);
       if(_ca[tag].is_connected()) {
@@ -1539,8 +1545,10 @@ public:
 	}
       } else {
 	printf("data '%s' is not connected to EPICS_record\n",tags.c_str());
+	ret++;
       }
     }
+    return ret;
   }
   void epics_ca_close(std::string tags) {
     thl::StrSplit sp(tags,",");
@@ -2372,7 +2380,7 @@ public:
       }
       std::string rec = args(1);
       thl::EpicsCA ca(rec.c_str());
-      ca.print_info();
+      if(ca.is_connected()) ca.print_info();
       return 0;
     }
     if(args(0)=="caget") {
@@ -2430,7 +2438,7 @@ public:
 	       "  ... \n"
 	       ); return 0;
       }
-      epics_ca_check(args(1));
+      if(epics_ca_check(args(1)) != 0) return 2; // return of abort
       return 0;
     }
     if(args(0)=="caclose") {
@@ -2444,7 +2452,7 @@ public:
       return 0;
     }
 #endif
-    return 1;
+    return 1; // return of command not found
   }
   void set_macro_arg(std::string arg_list) {
     if(arg_list.size()>0) {
