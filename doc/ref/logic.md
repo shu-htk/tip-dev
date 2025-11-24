@@ -106,14 +106,17 @@ tip> logic [s]=[A-Z]*
 
 ## List Matching (for both of numerical and string logic)
 
+- `x = {expr1,expr2,...}`
+
 | match to       | usage |standard expr|
 |:---:|:---:|:---:|
 |one of the list of exprs|x = {expr1, expr2, ...}|(x == expr1) \|\| (x == expr2) \|\| ...|
 
+- `x != {expr1,expr2,...}`
+
 | not match to       | usage |standard expr|
 |:---:|:---:|:---:|
 |all of the list of exprs|x != {expr1, expr2, ...}|(x != expr1) && (x != expr2) && ...|
-
 
 **note 3)**
 > the list of exprs should be **at the right part** of the comparison
