@@ -1,11 +1,16 @@
 # args
 
 ```
-tip> args
-usage: args [arg1,arg2,...]
- set default argument of the macro file
- they are named like x1=val,x2=val2,...
- if it is specified only values like val1,val2,...
- they are named $1=val1,$2=val2,...
- number of argumnts is named $#
+
+> args
+usage: args [x1=v2,x2=v2,...]
+       args [v1,v2,...]
+ set default arguments of macro variables
+ if they are specified only values,
+ variables are defined as $1=v1,$2=v2,...
+ number of argument is defined as $#
+>
+ 
 ```
+
+see also [exe](exe.md)

@@ -939,12 +939,12 @@ namespace thl {
 	}
 	if(args(0)=="args") {
 	  if(args.size() < 2) {
-	    printf("usage: args [arg1,arg2,...]\n"
-		   " set default argument of the macro file\n"
-		   " they are named like x1=val,x2=val2,...\n"
-		   " if it is specified only values like val1,val2,...\n"
-		   " they are named $1=val1,$2=val2,...\n"
-		   " number of argumnts is named $#\n"
+	    printf("usage: args [x1=v2,x2=v2,...]\n"
+		   "       args [v1,v2,...]\n"
+		   " set default arguments of macro variables\n"
+		   " if they are specified only values,\n"
+		   " variables are defined as $1=v1,$2=v2,...\n"
+		   " number of arguments is defined as $#\n"
 		   );
 	  } else {
 	    bool update = (args.size()>2 && args(2)=="update") ? 1 : 0;

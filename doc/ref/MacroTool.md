@@ -3,8 +3,10 @@
 MacroTool is the header-only class library which provide
 the following command:
 ```
+
 macro commands:
  @     : define numerical or string variable
+ args  : define default arguments of the macro file
  ++    : increment(+1) numerical variable
  --    : decrement(-1) numerical variable
  for   : foreach loop
@@ -14,17 +16,20 @@ macro commands:
  fmt   : set output format of macro variable
  wait  : wait time or console input
  sys   : execute system command
+ split : split string variable
  calc  : evaluate the numerical expression
  logic : evaluate the logical expression
  q     : terminate this program
+  
 ```
 
-There is a simple example how to use MacroTool : `src/my_macro.cc`.
+There is a simple example how to use MacroTool : `src/c++03/my_macro.cc`.
 
 ```
+
 // my_macro : simple example how to use thl::MacroTool
 //
-// -std=c++03
+// c++03
 //
 #include "thl/MacroTool.hh"
 
@@ -34,8 +39,10 @@ private:
 public:
   MyMacro() : _debug(0) {}
   int add_commands(std::string buf) {// called from thl::MacroTool::parse_vbuf()
-    thl::StrSplit args(buf);
-    if(args(0)=="help") {
+    thl::StrSplit args;
+    args.set_quot_to_skip_split('"');
+    args.split(buf);
+       if(args(0)=="help") {
       printf("additional commands:\n"
 	     " exe  : execute a macro file.\n"
 	     " ls   : print macro variables.\n"
@@ -46,13 +53,12 @@ public:
     }
     if(args(0)=="exe") {
       if(args.size() < 2) {
-	printf("usage: exe [macro_file] [debug]\n"
+	printf("usage: exe [macro_file] [arg1,arg2,..]\n"
 	       " execute macro_file.\n");
 	return 0;
       }
-      _debug = (args.size()>2) ? 1 : 0;
-      if(_debug) printf("debug mode\n");
-      exec(args(1));
+      std::string arg_list=(args.size()>2) ? args(2) : "";
+      exec(args(1),arg_list);
       return 0;
     }
     if(args(0)=="ls") {
@@ -69,7 +75,7 @@ public:
       if(args.size() < 2) {
 	printf("usage: rm [pattern]\n"
 	       " remove macro variables which matches pattern.\n"
-	       " example: 'rm *'  remove all macro variables.\n");
+	       " example: 'rm *'  remvoe all macro variables.\n");
 	return 0;
       }
       var.rm(args(1));
@@ -84,7 +90,6 @@ int main() {
   macro.main_loop();
   return 0;
 }
+ 
 ```
-
-
 

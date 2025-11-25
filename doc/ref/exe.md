@@ -18,6 +18,8 @@ usage: exe [macro_file] [arg1,arg2,...] [(opt)]
 
 > arguments are separated by commas with no spaces.
 
+see also [args](args.md)
+
 ### (1) Named arguments
 
 example macro file : `gaus.tip`
