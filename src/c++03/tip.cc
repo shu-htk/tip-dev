@@ -2496,27 +2496,6 @@ public:
 #endif
     return 1; // return of command not found
   }
-  void set_macro_arg(std::string arg_list) {
-    if(arg_list.size()>0) {
-      thl::CFormat fmt;
-      thl::StrSplit sp;
-      sp.set_quot_to_skip_split('"');
-      sp.split(arg_list,",");
-      if(!var.exist_num("$#")) var.set_num("$#",(double)sp.size());
-      for(int j=0; j<(int)sp.size(); j++) {
-	thl::StrSplit sp2(sp(j),"=");
-	if(sp2.size()>1) {
-	  std::string tag=sp2(0);
-	  if(!var.exist_str(tag)) var.set_str(tag,sp2(1));
-	} else {
-	  std::string tag=fmt("$%d",j+1);
-	  if(!var.exist_str(tag)) var.set_str(tag,sp(j));
-	}
-      }
-    } else {
-      var.set_num("$#",0);
-    }
-  }
   void tip_exec(std::string fname, std::string arg_list, int mode=0) {
     Tip tip(_pl);
     std::ifstream ifs(fname.c_str());
