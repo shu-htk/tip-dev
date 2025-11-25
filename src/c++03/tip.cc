@@ -15,6 +15,49 @@
 #include "thl/EpicsCA.hh"
 #endif
 
+const char* tip_commands[] = {
+  "arc", "box", "box3", "cat", "cut", "div", "elem", "exe",
+  "fbox", "ffit", "fit", "fit3", "fill", "font", "fplot",
+  "help", "hfit", "hplot", "hplot2", "line", "ls", "mplot",
+  "mread", "mset", "mwrite", "opt", "plot", "plot3", "read",
+  "rm", "set", "sort", "stat", "symb", "text", "title", "tfmt",
+  "vp", "viewport", "write", "xerr", "xlab", "yerr", "ylab", "zlab",
+  //--macro  
+  "do", "for", "while", "end", "if", "elif", "else", "fi",
+  "@", "args", "print", "pr", "println", "prn", "fmt", "sys",
+  "wait", "calc", "logic", "split", "q",
+#if USE_EPICS_CA
+  "cainfo", "caget", "caput", "camon", "cacheck", "caclose",
+#endif
+  nullptr
+};
+
+char* tip_command_generator(const char* text, int state) {
+  static int list_index, len;
+  const char* name;
+  if (!state) {
+    list_index = 0;
+    len = strlen(text);
+  }
+  while ((name = tip_commands[list_index++]) != nullptr) {
+    if (strncmp(name, text, len) == 0) {
+      return strdup(name);
+    }
+  }
+  return nullptr;
+}
+
+char** tip_command_completion(const char* text, int start, int end) {
+  rl_attempted_completion_function = nullptr;
+  rl_attempted_completion_function = tip_command_completion; 
+  return rl_completion_matches(text, tip_command_generator);
+}
+
+void tip_initialize_readline() {
+  rl_attempted_completion_function = tip_command_completion;
+  rl_completion_append_character = ' ';
+}
+
 class Tip : public thl::MacroTool {
 private:
   enum DataType {Undef,Num,Str,Mesh};
@@ -1572,7 +1615,6 @@ public:
 	" box3  : draw the axes of 3D-graph\n"
 	" cat   : show data contents / concatenate data\n"
 	" cut   : set cut condition\n"
-//	" default: set default arguments of the macro file (abbr. dft)\n"
 	" div   : divide the drawing area\n"
 	" elem  : copy data element to macro variable\n"
 	" exe   : execute macro file\n"
@@ -2548,6 +2590,7 @@ int main(int argc, const char *argv[]) {
     pl.init(title.c_str(),geom.c_str(),dev.c_str());
   }
 
+  tip_initialize_readline();
   Tip tip(&pl);
   if(arg.find_opt("e")) {
     thl::StrSplit sp;
