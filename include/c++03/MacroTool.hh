@@ -864,6 +864,7 @@ namespace thl {
 	replace_env(buf);
 	var.replace(buf);  // to replace nested variable [x[n]]
 	StrSplit args;
+	args.set_verbose(0);
 	args.set_quot_to_skip_split('"');
 	args.split(buf);
 	if(args.size()==0) {nline++; continue;}
