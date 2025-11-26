@@ -34,13 +34,13 @@ const char* tip_commands[] = {
 };
 
 char* tip_command_generator(const char* text, int state) {
-  static int list_index, len;
+  static int index, len;
   const char* name;
   if (!state) {
-    list_index = 0;
+    index = 0;
     len = strlen(text);
   }
-  while ((name = tip_commands[list_index++]) != nullptr) {
+  while ((name = tip_commands[index++]) != nullptr) {
     if (strncmp(name, text, len) == 0) {
       return strdup(name);
     }

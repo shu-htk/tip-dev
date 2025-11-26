@@ -29,26 +29,26 @@ const char* tip_commands[] = {
 #if USE_EPICS_CA
   "cainfo", "caget", "caput", "camon", "cacheck", "caclose",
 #endif
-  nullptr
+  0
 };
 
 char* tip_command_generator(const char* text, int state) {
-  static int list_index, len;
+  static int index, len;
   const char* name;
   if (!state) {
-    list_index = 0;
+    index = 0;
     len = strlen(text);
   }
-  while ((name = tip_commands[list_index++]) != nullptr) {
+  while ((name = tip_commands[index++]) != 0) {
     if (strncmp(name, text, len) == 0) {
       return strdup(name);
     }
   }
-  return nullptr;
+  return 0;
 }
 
 char** tip_command_completion(const char* text, int start, int end) {
-  rl_attempted_completion_function = nullptr;
+  rl_attempted_completion_function = 0;
   rl_attempted_completion_function = tip_command_completion; 
   return rl_completion_matches(text, tip_command_generator);
 }
