@@ -60,7 +60,7 @@ to down/up edge of y-axis
 - `xr:` x-axis range (default 0,0 : range is automatically calculated)
 - `yr:` x-axis range (default 0,0 : range is automatically calculated)
 
-### option with quoted argument by ""
+### option with quoted argument
 
 - `tl:` title (see [title](title.md))
 - `xl:` x-label (see [xlab](xlab.md))

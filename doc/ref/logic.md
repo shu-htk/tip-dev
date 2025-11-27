@@ -77,12 +77,9 @@ tip> logic A=A!=B       ;# same to A==A && A!=B
 |any character       |  ?           | string = s?ring|
 |one of the list of chars|[abc..], [a-z] | string = [a-z]trin[efg]|
 
-**note 1)**
 > wild cards should be **at the right part** of the comparison
 
-**note 2)**
-> wild card is **not the regular expression**  
-> actually it is implemented by `fnmatch()` function
+> wild card is implemented using `fnmatch()`
 
 example
 ```
@@ -108,21 +105,19 @@ tip> logic [s]=[A-Z]*
 
 - `x = {expr1,expr2,...}`
 
-| match to       | usage |standard expr|
+| match to | list matching |standard expr|
 |:---:|:---:|:---:|
 |one of the list of exprs|x = {expr1, expr2, ...}|(x == expr1) \|\| (x == expr2) \|\| ...|
 
 - `x != {expr1,expr2,...}`
 
-| not match to       | usage |standard expr|
+| not match to | list not-matching |standard expr|
 |:---:|:---:|:---:|
 |all of the list of exprs|x != {expr1, expr2, ...}|(x != expr1) && (x != expr2) && ...|
 
-**note 3)**
-> the list of exprs should be **at the right part** of the comparison
+> the list matching should be **at the right part** of the comparison
 
-**note 4)**
-> the list of exprs **can not be concatenate** to the other exprs
+> the list matching **can not be concatenate** to the other expression
 
 example
 ```
@@ -130,11 +125,11 @@ tip> logic 6 = {1+2, 2*3}
 [6 = {1+2, 2*3}] -> num_logic -> [1]
 
 tip> logic {1+2, 2*3} = 6
-[{1+2, 2*3} = 6] -> str_logic -> [0]  ;# NG : list of expr should be at the right
+[{1+2, 2*3} = 6] -> str_logic -> [0]  ;# NG: list-matching should be at the right
 
 tip> logic abc == {a?, b*, [a-z]??}
 [abc == {a?, b*, [a-z]??}] -> str_logic -> [1]
 
-tip> logic aaabbb = aaa{bbb,ccc}    ;# NG : list can not be concatenate to the other
+tip> logic aaabbb = aaa{bbb,ccc}    ;# NG: it can't be concatenate to the other
 [aaabbb = aaa{bbb,ccc}] -> str_logic -> [0]
 ```

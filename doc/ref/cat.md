@@ -17,15 +17,14 @@ usage: cat v1,v2,... [>|>>] [v] [(opt)]
 
 - `nr:` set data range of output (1st data is begin from 1)
 
-### option with quoted argument by ""
-
-- `fs:` set field separator of output (console only)
-
-**note)**
 > if `nr:` is not specified (default `nr:0,-1`), all data is outputted  
 > if `nr:N,-1`, it it outputted from N to end
 
-example
+### option with quoted argument
+
+- `fs:` set field separator of output (console only)
+
+example using `fs:`, `nr:`
 ```
 tip> set x=range(5, 0.1, 0.5)
 tip> cat x
@@ -53,6 +52,7 @@ x : data(num) :
 0.5
 ```
 
+example of concatenating data
 ```
 tip> set x1={1,2,3}
 tip> set x2={4,5,6}

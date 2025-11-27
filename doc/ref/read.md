@@ -16,7 +16,7 @@ usage: read v1,v2,... file_name [(opt)]
 
 - `nr:` set range of line number to read (1st line is begin from 1)
 
-### option with quoted argument by ""
+### option with quoted argument
 
 - `fs:` field separator
 

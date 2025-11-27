@@ -85,8 +85,9 @@ tip> ls s
 s : string [a "b c" d]
 ```
 ## ternary operator
-**note)**
+
 > ternary operator can not be nested
+
 ```
 tip> @ x=7
 tip> @ size = [x]>5 ? L : S          ;# this is OK

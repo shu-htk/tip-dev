@@ -9,10 +9,9 @@ usage: mread x,y,z mesh-file [(opt)]
 ```
 
 ## option
-### option with quoted argument by ""
+### option with quoted argument
 
 - `fs:` field separator
-
 
 ## file format
 

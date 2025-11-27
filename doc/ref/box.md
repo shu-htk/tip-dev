@@ -23,7 +23,7 @@ draw 2-dimensional axis frame in the box shape.
 - `bp:` set box position, (from 1 to max number of divided frame)
 - `lw:` set box line width, (0=not draw, 1=draw)
 
-### option with quoted argument by ""
+### option with quoted argument
 
 - `tl:` title (see [title](title.md))
 - `xl:` x-label (see [xlab](xlab.md))

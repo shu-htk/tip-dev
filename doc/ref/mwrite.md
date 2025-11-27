@@ -9,10 +9,9 @@ usage: mwrite x,y,z mesh-file [(opt)]
 ```
 
 ## option
-### option with quoted argument by ""
+### option with quoted argument
 
 - `fs:` field separator
-
 
 ## file format
 
@@ -38,10 +37,9 @@ The default field separator is a space character.
 |xN|yM|zNM| |
 
 
-## reading mesh file by gnuplot
+## plotting the mesh file using Gnuplot
 
-The data file written by `mwrite` can be plotted by gnuplot
-using `splot`.
+The data file written by `mwrite` can be plotted by Gnuplot.
 
 example
 ```

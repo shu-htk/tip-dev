@@ -20,7 +20,6 @@ drawn on the existing graph.
 If you specify option `cp:X,Y`, the fitting information is drawn in
 the graph at (X,Y).
 
-**note)**  
 > user defined fitting function is not available
 
 ## fitting functions

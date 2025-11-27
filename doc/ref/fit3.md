@@ -8,13 +8,12 @@ usage: fit3 x y z [plane] [(opt)]
    p[lane] : z = c0 + c1*x + c2*y
 ```
 
-Fit the plane to data x, y and z after [plot3](plot3.md) command.
+Fit the plane to the data x, y and z after [plot3](plot3.md) command.
 The fitting information is outputted to console and fitting plane is
 drawn on the existing graph.
 If you specify option `cp:X,Y`, the fitting information is drawn in
 the graph at (X,Y).
 
-**note)**  
 > user defined fitting function is not available
 
 ## fitting functions

@@ -23,17 +23,16 @@ usage: set vs = time([vn|vs],str)
 ```
 
 ## option
-### option with quoted argument by ""
+### option with quoted argument
 
-- `td:` set delimiters of time format string 
->  argument of `td:` is 3 characters, "ABC"  
->  A is delimiter among year, month, day  
->  B is delimiter between day and hour  
->  C is delimiter among hour, min, sec
+- `td:` set delimiters of time format string  
+> argument of `td:` is 3 characters, "ABC"  
+> A is delimiter of date among year, month, day (default is hyphen `'-'`)  
+> B is delimiter between date and time (default is space  `' '`)  
+> C is delimiter of time among hour, min, sec (default is colon  `':'`)
 
-**(note)**
-> ISO 8601 extended format is `td:"-T:"`,
-> but it is defaulted to `td:"- :"` in the tip interpreter.
+> ISO 8601 is `td:"-T:"`, but it is defaulted to `td:"- :"`
+in the tip interpreter.
 
 example
 ```

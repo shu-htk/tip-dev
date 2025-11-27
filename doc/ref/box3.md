@@ -23,7 +23,7 @@ draw 3-dimensional axis frame.
 - `al:` altitude view angle , (default is 45 degree)
 - `az:` azimuth view angle, (default is 45 degree)
 
-### option with quoted argument by ""
+### option with quoted argument
 
 - `tl:` title (see [title](title.md))
 - `xl:` x-label (see [xlab](xlab.md))

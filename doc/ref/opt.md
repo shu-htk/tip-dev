@@ -18,7 +18,6 @@ set or show the global options
   reset     : set the default value for all items
 ```
 
-**note)**  
 > option's tag and it's argument is separated by ':' with no spaces. 
 
 

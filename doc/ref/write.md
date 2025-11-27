@@ -6,7 +6,7 @@ usage: write v1,v2,... file_name ([opt])
 ```
 
 ## option
-### option with quoted argument by ""
+### option with quoted argument
 
 - `fs:` field separator
 
