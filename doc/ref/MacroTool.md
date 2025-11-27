@@ -3,7 +3,6 @@
 MacroTool is the header-only class library which provide
 the following command:
 ```
-
 macro commands:
  @     : define numerical or string variable
  args  : define default arguments of the macro file
@@ -20,13 +19,11 @@ macro commands:
  calc  : evaluate the numerical expression
  logic : evaluate the logical expression
  q     : terminate this program
-  
 ```
 
 There is a simple example how to use MacroTool : `src/c++03/my_macro.cc`.
 
 ```
-
 // my_macro : simple example how to use thl::MacroTool
 //
 // c++03
@@ -90,6 +87,5 @@ int main() {
   macro.main_loop();
   return 0;
 }
- 
 ```
 
