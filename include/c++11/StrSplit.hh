@@ -118,8 +118,12 @@ namespace thl {
     const double stof(size_t j) {return _sn.stof(field(j));}
     const char pchar(void) {return _sn.pchar();}
     const std::string back(void) {return _field.back();}
-    std::string* begin() {return &_field[0];}
-    std::string* end() {return &_field[_field.size()];}
+    auto begin() {return _field.begin();}
+    auto end() {return _field.end();}
+    auto begin() const {return _field.begin();}
+    auto end() const {return _field.end();}
+    //    std::string* begin() {return &_field[0];}
+    //    std::string* end() {return &_field[_field.size()];}
     void print() {
       for(size_t j=0;j<size();j++) printf("%lu:[%s]\n",j,field(j).c_str());
     }

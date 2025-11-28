@@ -104,8 +104,8 @@ namespace thl {
     }
     
     T back(void) {return _v.back();}
-    T* begin() {return &_v[0];}
-    T* end() {return &_v[_v.dim()];}
+    //    T* begin() {return &_v[0];}
+    //    T* end() {return &_v[_v.dim()];}
   }; //class Vec
 
   tcT inline Vec<T> operator -(Vec<T> v) {return v.flip_sign();}

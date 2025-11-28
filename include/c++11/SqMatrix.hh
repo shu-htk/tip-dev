@@ -110,8 +110,12 @@ namespace thl {
     }
     
     T back(void) {return _v.back();}
-    T* begin() {return &_v[0];}
-    T* end() {return &_v[_v.dim()];}
+    auto begin() {return _v.begin();}
+    auto end() {return _v.end();}
+    auto begin() const {return _v.begin();}
+    auto end() const {return _v.end();}
+    //    T* begin() {return &_v[0];}
+    //    T* end() {return &_v[_v.dim()];}
   }; //class Vec
 
   tcT inline Vec<T> operator -(Vec<T> v) {return v.flip_sign();}
@@ -275,8 +279,12 @@ namespace thl {
       for(auto &&m : _m) {m.print(); printf("\n");}
     }
     Vec<T> back(void) {return _m.back();}
-    Vec<T>* begin() {return &_m[0];}
-    Vec<T>* end() {return &_m[_m.dim()];}
+    auto begin() {return _m.begin();}
+    auto end() {return _m.end();}
+    auto begin() const {return _m.begin();}
+    auto end() const {return _m.end();}
+    //    Vec<T>* begin() {return &_m[0];}
+    //    Vec<T>* end() {return &_m[_m.dim()];}
   }; //class Mat
 
   tcT inline Mat<T> operator -(Mat<T> m) {return m.flip_sign();}
