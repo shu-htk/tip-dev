@@ -259,7 +259,7 @@ namespace thl {
       if(x.size() != z.size()) {fprintf(stderr,"size of x != z\n"); return -1;}
       _type=Plane; _c.resize(3); _fx.clear();
       _x=x; _y=y; _z=z;
-      double sx=0,sy=0,sz=0,sxx=0,syy=0,szz=0,sxy=0,sxz=0,syz=0;
+      double sx=0,sy=0,sz=0,sxx=0,syy=0,sxy=0,sxz=0,syz=0;
       double size = x.size();
       for(size_t j=0; j<x.size(); j++) {
 	sx += x[j];
@@ -267,7 +267,6 @@ namespace thl {
 	sz += z[j];
 	sxx += x[j]*x[j];
 	syy += y[j]*y[j];
-	szz += z[j]*z[j];
 	sxy += x[j]*y[j];
 	sxz += x[j]*z[j];
 	syz += y[j]*z[j];
