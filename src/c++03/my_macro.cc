@@ -5,15 +5,13 @@
 #include "thl/MacroTool.hh"
 
 class MyMacro : public thl::MacroTool {
-private:
-  int _debug;
 public:
-  MyMacro() : _debug(0) {}
+  MyMacro() {}
   int add_commands(std::string buf) {// called from thl::MacroTool::parse_vbuf()
     thl::StrSplit args;
     args.set_quot_to_skip_split('"');
     args.split(buf);
-       if(args(0)=="help") {
+    if(args(0)=="help") {
       printf("additional commands:\n"
 	     " exe  : execute a macro file.\n"
 	     " ls   : print macro variables.\n"

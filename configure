@@ -46,7 +46,9 @@ grep '^#2:' $0 | sed "s/#2://g" > Makefile.2
 pkg=null
 pkg_path=null
 
-# seach PLPLOT in you home diectory or old plplot-path
+# seach PLPLOT in your home diectory and system-path
+# in the case you install it by yourself
+
 for d in $HOME/plplot/lib /usr/lib /usr/local/lib
 do
   for f in plplot plplotd
@@ -66,9 +68,13 @@ if [ -e $HOME/plplot/include/plplot ] ; then
  fi
 fi
 
-# seach PLPLOT in standard path of package manager (debian, red-hat)
+# seach PLPLOT in the standard path of the package manager
+# Ubuntu apt : /usr/lib/x86_64-linux-gnu
+# RedHat dnf : /usr/lib64
+# MacPorts port : /opt/local/lib
+
 if [ $pkg_path == null ] ; then
-  for d in /usr/lib/x86_64-linux-gnu /usr/lib64
+  for d in /usr/lib/x86_64-linux-gnu /usr/lib64 /opt/local/lib
   do
     if [ -e $d/pkgconfig/plplot.pc ] ; then
       pkg=plplot
@@ -80,8 +86,12 @@ fi
 if [ $pkg != null ] ; then
   ver=`grep Version $pkg_path/pkgconfig/$pkg.pc | awk '{print $2}'`
   echo "PLPLOT: Version $ver"
+  subver=`echo $ver | awk -F . '{print $2}'`
+  plnew=`echo $subver | awk '{if($1>12) print 1;else print 0;}'`
+  echo "subver=$subver plnew=$plnew"  
   grep '^#3:' $0 | sed "s/#3://g" | sed "s|%BASE|$pkg_path|g" >> Makefile.2
-  grep '^#31:' $0 | sed "s/#31://g"|sed "s|%PKG|$pkg|g" >> Makefile.2
+  grep '^#31:' $0 | sed "s/#31://g"|sed "s|%PKG|$pkg|g" \
+      |sed "s|%PLNEW|$plnew|g" >> Makefile.2
   echo PLPLOT: $pkg_path/pkgconfig/$pkg.pc
 fi
 
@@ -167,15 +177,15 @@ echo "** configure normal end **"
 
 #2:INC = -I./include
 #2:LIB = -lreadline
-#21:LIB += -ltermcap
-#2:LIB += -lrt
-# libtermcap.so should be linked for readline in old system
-# librt.so should be linked for clock_gettime() in old system
+#2:#LIB += -ltermcap
+#2:#LIB += -lrt
+#2:# libtermcap should be linked for readline in old system
+#2:# librt should be linked for clock_gettime() in old system
 
 #3:PKG_CONFIG_ENV = PKG_CONFIG_PATH=%BASE/pkgconfig
 #3:RPATHLMD = -Wl,-rpath -Wl,%BASE
 #31:INC_PL = `$(PKG_CONFIG_ENV) pkg-config --cflags %PKG`
-##31:INC_PL += -D PLPLOT_OPTION_NEW=%OPT
+#31:INC_PL += -D PLPLOT_OPTION_NEW=%PLNEW
 #31:LIB_PL = $(RPATHLMD) `$(PKG_CONFIG_ENV) pkg-config --libs %PKG`
 
 #32:include $(EPICS_BASE)/configure/CONFIG_BASE_VERSION
