@@ -856,8 +856,8 @@ public:
     _gopt.att.y1 = _pl->att.y1;
     _gopt.att.z0 = _pl->att.z0;
     _gopt.att.z1 = _pl->att.z1;
-    _gopt.att.logx = _pl->att.logx;
-    _gopt.att.logy = _pl->att.logy;
+    //    _gopt.att.logx = _pl->att.logx;
+    //    _gopt.att.logy = _pl->att.logy;
   }
   void flush(void) {_pl->flush();}
   void auto_label(const std::string &vx, const std::string &vy, Option &opt) {
