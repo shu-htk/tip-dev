@@ -40,13 +40,13 @@ official : https://learn.microsoft.com/windows/wsl/install
 
 - **macOS 12.7.6**
 1. install MacPorts
- https://www.macports.org
+   https://www.macports.org
 2. install XQuartz
- https://www.xquartz.org
+   https://www.xquartz.org
 3. install PLPLOT, readline from the terminal  
 ```
- $ sudo port install plplot
- $ sudo port install readline
+sudo port install plplot
+sudo port install readline
 ```
 
 ## (2) Configure and make the tip executable

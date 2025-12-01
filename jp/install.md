@@ -53,8 +53,8 @@ WSLについては以下のリンクを参考にしてください。
  [https://www.xquartz.org](https://www.xquartz.org)
 3. 端末から PLPLOT, readline のインストール  
 ```
- $ sudo port install plplot
- $ sudo port install readline
+sudo port install plplot
+sudo port install readline
 ```
 
 ## (2) tip の実行ファイルのコンパイル方法
