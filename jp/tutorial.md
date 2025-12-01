@@ -1,16 +1,20 @@
-# Tutorial
+# チュートリアル
 
-## Starting the tip interpreter
+## tipインタープリターの起動
 
-from the Linux shell,
+Linux等で端末を開き、シェルから以下のように起動します。
+
 ```
 $ tip
 ```
-where you should set the shell's command path to the executable file of tip 
 
-see [how to install](install.md) to learn making executable file.
+シェルのコマンドパスにtipの実行ファイルのパスをセットする必要があります。
 
-## Making data and plot
+実行ファイルの作成方法は、 [how to install](install.md) 
+を見て下さい。
+
+
+## データ作成とプロット
 
 ```
 tip> title "Plotting the data and fitting the curve"
@@ -21,48 +25,53 @@ tip> fit x y quad (cp:1,200 lc:blue)
 ```
 ![](../doc/fig/tut01.png)
 
-"[title](ref/title.md)" specify the text at the top of the graph.  
-"[set](ref/set.md)" create the data instance,
-where data is an array of numbers.  
-"[plot](ref/plot.md)" draw the 2D-plot using data x and y.  
-"[fit](ref/fit.md)" make the fitting curve by the specified function,
-in this example "quad" means Quadratic function. 
+"[title](ref/title.md)" はグラフ上部のタイトルテキストを指定します。  
+"[set](ref/set.md)" はデータのインスタンスを生成します。ここでデータとは数の配列です。  
+"[plot](ref/plot.md)" はデータxとyの2次元のグラフを描きます。    
+"[fit](ref/fit.md)" は指定された関数でフィッティングカーブを描きます。
+この例では二次関数(Quadratic function)"quad"を用いています。  
 
-The arguments enclosed in ( ) are options.
+( ) で囲まれた引数はコマンドオプションです。  
 
-`(lw:0)` set the line width 0, i.e. not draw the line.  
-`(st:star)` set the [symbol](#symbols) style 'star shape'.  
-`(sc:red)` set the symbol [color](#colors) red.  
-`(gd:1)` set the flag to draw the grid lines in the graph.  
-`(cp:1,200)` set the comment position about the fitting parameters
-at (x=1, y=200) in the graph coordinate.  
-`(lc:blue) `set the line [color](#colors) blue. 
+`(lw:0)` はグラフの線の幅を0にします、つまり線を描きません。    
+`(st:star)` は シンボル（[symbol](#symbols)）のスタイルを
+'star'（アスタリスク）にします。  
+`(sc:red)` はシンボルの色（ [color](#colors)）を赤にします。    
+`(gd:1)` はグラフの中にグリッドの点線を描くフラグをセットします。    
+`(cp:1,200)` はコメントの位置をしていします。ここではフィッティングで得られた係数を
+グラフの座標で(x=1, y=200)の位置に描きます。    
+`(lc:blue)` はグラフの線の色（ [color](#colors)）を青にします。   
 
-The options which are put at the back of the command are
-the local options. (i.e. they only applied to the same line).  
-On the other hand the options defined by [opt](ref/opt.md) command
-is the global options.
+上の例のようにコマンド行の後ろに指定されたオプションはローカルオプション
+（その行のコマンドにのみ適用される）です。
+一方、 以下のように、[opt](ref/opt.md) コマンドで指定されたオプションは
+グローバルオプションになります。
+
 ```
 tip> opt (lw:0 st:star sc:red gd:1)
 ```
-The global options are applied to all bellow this command.
 
-## Showing data information
+グローバルオプションは、この行以後のすべてのコマンドに適用されます。
 
-data made by user are listed by [ls](ref/ls.md) command.
+
+## データ情報の表示
+
+ユーザーが作成したデータの情報は [ls](ref/ls.md) コマンドで見ることができます。
+
 ```
 tip> ls *
 x : data(num) : size=10
 y : data(num) : size=10
 ```
 
-contents of the data is shown by [cat](ref/cat.md) command.
+データの中身は [cat](ref/cat.md)コマンドで見れます。
+ 
 ```
 tip> cat y
 y : data(num) :  2 8 18 32 50 72 98 128 162 200
 ```
 
-## Reading data from the file and plot
+## ファイルからのデータ読み出しとプロット
 
 ```
 tip> title "Reading test.csv"
@@ -72,37 +81,41 @@ tip> ylab "2nd and 3rd column data"
 tip> plot v1 v2 (lc:red)
 tip> plot v1 v3 (lc:blue rp:1)
 ```
-In this  example, `test.csv` is a CSV text file that has 3 columns of data.  
-"[read](ref/read.md)" is reading the data from the file, at that time,
-the column number is automatically added to the specified variable name
-like v1, v2, v3.  
-This feature is convenient if there are many columns in the data file.  
 
-"[xlab](ref/xlab.md)"/"[ylab](ref/ylab.md)" specify x-axis/y-axis label
-respectively.
+この例では、`test.csv` は3列のデータからなるCSVのテキストファイルです。  
 
-`(fs:",")` is option to specify the filed separator of data.  
-`(lc:red)` and `(lc:blue)` are options to specify the line color.   
-`(rp:1)` is option to do 'replot' i.e. over-drawing in the existing graph. 
+"[read](ref/read.md)" はファイルの中身を指定した変数に読み込みます。
+変数名には列の番号が v1,v2,v3のように自動的に付加されます。
+列の数が多いデータファイルの読むときに便利です。  
+"[xlab](ref/xlab.md)"/"[ylab](ref/ylab.md)" はそれぞれ x座標、y座標のラベルを指定します。  
+`(fs:",")` はフィールドセパレーターを指定するオプションで、ここではCSVファイルを列で分離するために`","`を指定しています。  
+`(lc:red)`と`(lc:blue)` は線の色を指定しています。     
+`(rp:1)`は'replot'オプションです。つまり既にあるグラフの上に上書きします。
+
 
 ![](../doc/fig/tut02b.png)
 
-If the number of columns in the file is not so large, you can specify
-variable name for each column like,
+読み込むファイルの列数がそれほど多くないときは、
+以下のように変数名をそれぞれの列で指定できます。
+
 ```
 tip> read x,y,z test.csv (fs:",")
 ```
-where data of 1st, 2nd, 3rd columns are named x, y, z respectively.
 
-In some cases, 1st column is assigned for x-axis and the rests are
-assigned for y-axis,  
-in that case you can do like,
+ここでは、1列目、2列目、3列目のデータがそれぞれ、変数 x, y, z に読み込まれています。
+
+
+場合によっては、1列目のデータをx座標に、2列目以後のデータをy座標にしたいときが
+あります。そのような場合、以下のようにすることができます。
+
 ```
 tip> read x,y test.csv (fs:",")
 ```
-where 1st column is named x and 2nd, 3rd are named to y1, y2 respectively.
 
-## Drawing fill box, line and text
+ここでは、xは１列目のデータ、yには2列目を起点とした列番号が付与されそれぞれy1,y2となります。
+
+
+## フィルボックス, 線 テキストの描画
 
 ```
 tip> title "Drawing fill box, line and text"
@@ -117,15 +130,15 @@ tip> line 0.82 0.86 0.85 0.85 (lc:blue); text 0.88 0.85 "y2"
 ```
 ![](../doc/fig/tut02c.png)
 
-"[fbox](ref/fbox.md)" draws the fill-area-box,
-"[line](ref/line.md)" draws a line,
-"[text](ref/text.md)" draws text in the graph.  
-`(ft:solid)` set the [fill-area-style](#fill-area-style) "solid".  
-`(rc:1)` set the flag of relative axis coordinate.  
-where relative axis coordinate means that the axis-range is defined
-from 0.0 to 1.0 for both of x-axis and y-axis.
+"[fbox](ref/fbox.md)" フィルボックスを描く。  
+"[line](ref/line.md)" 線を描く。  
+"[text](ref/text.md)" テキストを描く  
+`(ft:solid)` 塗りつぶしスタイル（ [fill-area-style](#fill-area-style)）を "solid"にする。  
+`(rc:1)` 相対座標に設定する。  
+ここで相対座標では、x軸、y軸の範囲が両方とも0.0から1.0となる。
 
-## Histogram 1D
+
+## 1次元ヒストグラム
 
 ```
 tip> title "Histogram of Gaussian distribution (sigm=5,mean=10)"
@@ -137,22 +150,22 @@ tip> stat x (cp:0.03,0.6 rc:1 ts:0.8)
 ```
 ![](../doc/fig/tut03.png)
 
-"[random](ref/random.md)" make random distribution with specified data size.  
-In this example,
-it is generated 100000 sizes of Gaussian distribution with sigma=5 mean=10.  
-"[hplot](ref/hplot.md)" creates a 1D-histogram of the specified data.
-In this example, a histogram with bin number 50 is generated.  
-The x-range of the histogram is calculated to include all data
-unless it is specified the option `(xr:Xmin,Xmax)`.  
-"[hfit](ref/hfit.md)" makes a fitting curve to the histogram
-with the specified function and it is drawn over the existing plot.
-`(cp:0.03,0.9 rc:1)` specify to draw the fitting information at x=0.05,y=0.9
-in the relative coordinate.  
-`(ts:0.8)` specify the text size 0.8 (default is 1.0).  
-"[stat](ref/stat.md)" make the statistics information of the specified data,
-and it is drawn over the existing plot if the option `(cp:)` is specified.
+"[random](ref/random.md)" 指定されたサイズ、関数分布で乱数データを生成する。  
+この例では
+100000のサイズの正規分布（Gaussian distribution,sigma=5 mean=10）が生成される。    
+"[hplot](ref/hplot.md)" データから1次元のヒストグラムを生成しプロットする。
+`(nb:50)` ヒストグラムのビン数を50に設定する。   
+オプション`(xr:Xmin,Xmax)`を設定するとヒストグラムの横軸の範囲を指定できる。  
+デフォルトでは、横軸の範囲はデータが全て収まるように自動的に設定される。  
+"[hfit](ref/hfit.md)" 指定された関数でヒストグラムをフィッティングして
+曲線を求めヒストグラムの上に描画する。  
+`(cp:0.03,0.9 rc:1)` フィッティングで得られた係数の情報を指定された
+座標の位置に描く。  
+ここでは相対座標でx=0.05,y=0.9の位置に描いている。   
+`(ts:0.8)`テキストのサイズを指定する（デフォルト値は1.0）。  
+"[stat](ref/stat.md)" データの統計情報を指定の位置に描く。
 
-## Histogram 2D
+## 2次元ヒストグラム
 
 ```
 tip> title "2D-Histogram of gaus.dist (sigm=5,mean=10 and sigm=8,mean=20)"
@@ -163,33 +176,37 @@ tip> hplot2 x y (nx:30 ny:30)
 ```
 ![](../doc/fig/tut04.png)
 
-"[hplot2](ref/hplot2.md)" makes 2D-histogram of a pair of data.  
-`(nx:30)` and `(ny:30)` are options to specify x-axis and y-axis
-bin number relatively.
+"[hplot2](ref/hplot2.md)" 指定された2つのデータから2次元ヒストグラムを生成しプロットする。  
+`(nx:30)` and `(ny:30)` 2次元ヒストグラムのx軸、y軸のビン数を設定する。
 
-## Quit the tip interpreter
+## tipインタープリターを終了する
 
 ```
 tip> q
 ```
-It is saved the command history to the file `.tip_history` in your
-working directory.
 
-## Making a macro file and executing it
+コマンドヒストリーファイル `.tip_history`がカレントディレクトリに
+保存される。
 
-Copy the command history to the macro file like,
+
+## マクロファイルの作成と実行
+
+
+コマンドヒストリーのファイルをマクロファイルとしてコピーする。
+
 
 ```
 $ cp .tip_history some_macro.tip
 ```
 
-and edit the file `some_macro.tip`
+コピーしたマクロファイル`some_macro.tip`を編集する。
 
-then do,
+その後、`tip`を起動して以下のようにしてマクロファイルを実行する。
 
 ```
 tip> exe some_macro.tip
 ```
+
 
 ## Colors
 

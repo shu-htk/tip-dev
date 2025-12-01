@@ -1,15 +1,16 @@
-# Install
+# インストール
 
-At the moment the following systems have been tested.
+現在、以下のシステムで動作確認しています。
 
-- Ubuntu 24.04 (both of native and WSL2 on Windows11)
-- AlmaLinux 9.5 (both of native and WSL2 on Windows11)
+- Ubuntu 24.04
+- AlmaLinux 9.5
 - macOS 12.7.6 (MacBook Air 2015 MJVM2J/A)
 
-In principle you can install the tip on the system
-which PLPLOT and GNU readline are installed.
+基本的にPLPLOT と GNU readline がインストールされていれば インストールできると思います。
 
-## (1) Install PLPLOT, GNU-readline
+## (1) PLPLOT, GNU-readlineライブラリのインストール
+
+以下のようにパッケージマネージャーを用いてインストールしてください。
 
 - **Ubuntu 24.04**
 ```
@@ -34,81 +35,94 @@ sudo dnf install readline-devel
 ```
 - **Windows 11**
 
-The easiest way is to run the Linux on WSL2.
+WSL2上に各種Linuxディストリビューションを動作させ、
+その上でパッケージマネージャーを用いてインストールしてください。
 
-official : https://learn.microsoft.com/windows/wsl/install  
+WSLについては以下のリンクを参考にしてください。
+
+[https://learn.microsoft.com/windows/wsl/install](https://learn.microsoft.com/windows/wsl/install)
+
+ちなみにCygwinにもインストールできます。
+必要なパッケージは「PLPLOT cygwin」等のキーワードでネット検索してみてください。
+（例） [https://sourceforge.net/p/plplot/wiki/Setup_cygwin/](https://sourceforge.net/p/plplot/wiki/Setup_cygwin/)
 
 - **macOS 12.7.6**
-1. install MacPorts
- https://www.macports.org
-2. install XQuartz
- https://www.xquartz.org
-3. install PLPLOT, readline from the terminal  
+1. MacPortsのインストール
+ [https://www.macports.org](https://www.macports.org)
+2. XQuartz のインストール
+ [https://www.xquartz.org](https://www.xquartz.org)
+3. 端末から PLPLOT, readline のインストール  
 ```
  $ sudo port install plplot
  $ sudo port install readline
 ```
 
-## (2) Configure and make the tip executable
+## (2) tip の実行ファイルのコンパイル方法
 
-Access to https://github.com/shu-htk/tip-dev
 
-From the **"Code"** pull-down menu, choose **"Download zip"**
+GitHubのリポジトリ： 
+[https://github.com/shu-htk/tip-dev](https://github.com/shu-htk/tip-dev)
 
-or directly download from
- https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip
+“Code” プルダウンメニューから “Download zip” 
+を選んでアーカイブファイルをダウンロードします。
 
-Copy downloaded zip file to your working directory.
+直接以下のURLからダウンロードすることもできます。
+[https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip](https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip)
 
-On the Linux terminal, extract zip file,
+ダウンロードしたファイルをご自分のワーク用ディレクトリにコピーしてください。
+
+コンソール端末を開いて以下のコマンドでzipファイルを解凍します
+
 ```
 unzip tip-dev-main.zip
 ```
 
-then do
+その後、以下のようにして、configureスクリプトを実行し、
+makeコマンドを 使ってコンパイルします。
+
 ```
 cd tip-dev-main
 ./configure
 make
 ```
-The executable is compiled and outputted to `./bin/tip`
 
-If your shell has command path to $HOME/bin,
-copy the executable file to `$HOME/bin` by
+コンパイルされた実行ファイルはカレントディレクトリ上の `./bin/tip` に出力されます。
+
+シェルに$HOME/binへのコマンドパスがある場合は、
+
 ```
 make install
 ```
-<!--
-edit $HOME/.bashrc and add the following line
-```
-export PATH=$PATH:$HOME/bin
-```
--->
 
-## (3) About my_macro 
+とすると実行ファイルが `$HOME/bin` にコピーされます。
 
-The executable file `my_macro` is also installed when you install the `tip`.  
-It is a simple example using [MacroTool](ref/MacroTool.md).
 
-## (4) Enable EPICS CA (optional)
+## (3) my_macro について
 
-If it is already installed the EPICS in your computer,
-just check if the environment variable `EPICS_BASE` is set in your shell.
-If it is set,
-the [configure script of the Tip](#2-configure-and-make-the-tip-executable)
-generate Makefile to enable the EPICS CA.
 
-If it is not installed the EPICS, you need to make and setup the
-EPICS environment as following.
+`tip` をインストールすると、実行ファイル `my_macro` もインストールされます。
+これはソースファイルに同梱されているヘッダーオンリーのクラスライブラリ
+[MacroTool](ref/MacroTool.md)
+を使った簡単なインタープリタコマンドです
 
-Download the archive of the EPICS source.
+## (4) EPICS CA の有効化 (オプション機能)
+
+お使いのコンピュータにEPICSが既にインストールされている場合は、
+環境変数 EPICS_BASE が設定されているかどうかを確認してください。
+設定されている場合、Tipのconfigureスクリプトを実行した際に、
+EPICS CAを有効化したMakefileが作成されます。
+
+EPICSがインストールされていない場合は以下の手順でEPICS環境を構築し設定する必要があります。
+
+EPICSソースのアーカイブを以下のURLからダウンロードしてください。
+
 
 - stable:: 
-https://epics-controls.org/download/base/base-3.15.9.tar.gz
+[https://epics-controls.org/download/base/base-3.15.9.tar.gz](https://epics-controls.org/download/base/base-3.15.9.tar.gz)
 - new:
-https://epics-controls.org/download/base/base-7.0.9.tar.gz
+[https://epics-controls.org/download/base/base-7.0.9.tar.gz](https://epics-controls.org/download/base/base-7.0.9.tar.gz)
 
-For example, installing new version to $HOME/epics
+たとえば、新しいバージョンを$HOME/epicsにインストールするなら、
 
 ```
 mkdir -p $HOME/epics
@@ -118,12 +132,11 @@ tar zxf base-7.0.9.tar.gz
 cd base-7.0.9
 make
 ```
-It takes for a while to complete compiling.
 
-After that you should set the environment variable as following.
+としてください。コンパイルが完了するまで少し時間がかかります。
+
+その後、環境変数を以下のように設定してください。
 
 ```
 export EPICS_BASE=$HOME/epics/base-7.0.9
 ```
-
-
