@@ -19,7 +19,7 @@ tip> set y = 2*x*x
 tip> plot x y (lw:0 st:star sc:red gd:1)
 tip> fit x y quad (cp:1,200 lc:blue)
 ```
-![](fig/tut01.png)
+![](../doc/fig/tut01.png)
 
 "[title](ref/title.md)" specify the text at the top of the graph.  
 "[set](ref/set.md)" create the data instance,
@@ -85,7 +85,7 @@ respectively.
 `(lc:red)` and `(lc:blue)` are options to specify the line color.   
 `(rp:1)` is option to do 'replot' i.e. over-drawing in the existing graph. 
 
-![](fig/tut02b.png)
+![](../doc/fig/tut02b.png)
 
 If the number of columns in the file is not so large, you can specify
 variable name for each column like,
@@ -115,7 +115,7 @@ tip> fbox 0.80 0.95 0.80 0.95 (ft:solid)
 tip> line 0.82 0.86 0.90 0.90 (lc:red);  text 0.88 0.90 "y1"
 tip> line 0.82 0.86 0.85 0.85 (lc:blue); text 0.88 0.85 "y2"
 ```
-![](fig/tut02c.png)
+![](../doc/fig/tut02c.png)
 
 "[fbox](ref/fbox.md)" draws the fill-area-box,
 "[line](ref/line.md)" draws a line,
@@ -135,7 +135,7 @@ tip> hplot x (nb:50)
 tip> hfit x gaus (lc:green cp:0.03,0.9 rc:1 ts:0.8)
 tip> stat x (cp:0.03,0.6 rc:1 ts:0.8)
 ```
-![](fig/tut03.png)
+![](../doc/fig/tut03.png)
 
 "[random](ref/random.md)" make random distribution with specified data size.  
 In this example,
@@ -161,7 +161,7 @@ tip> set x = random(100000,gaus,5,10)
 tip> set y = random(100000,gaus,8,20)
 tip> hplot2 x y (nx:30 ny:30)
 ```
-![](fig/tut04.png)
+![](../doc/fig/tut04.png)
 
 "[hplot2](ref/hplot2.md)" makes 2D-histogram of a pair of data.  
 `(nx:30)` and `(ny:30)` are options to specify x-axis and y-axis
