@@ -4,6 +4,7 @@ At the moment the following systems have been tested.
 
 - Ubuntu 24.04 (both of native and WSL2 on Windows11)
 - AlmaLinux 9.5 (both of native and WSL2 on Windows11)
+- macOS 12.7.6 (MacBook Air 2015 MJVM2J/A)
 
 In principle you can install the tip on the system
 which PLPLOT and GNU readline are installed.
@@ -37,6 +38,16 @@ The easiest way is to run the Linux on WSL2.
 
 official : https://learn.microsoft.com/windows/wsl/install  
 
+- **macOS 12.7.6**
+1. install MacPorts
+   https://www.macports.org
+2. install XQuartz
+   https://www.xquartz.org
+3. install PLPLOT, readline from the terminal  
+```
+sudo port install plplot
+sudo port install readline
+```
 
 ## (2) Configure and make the tip executable
 

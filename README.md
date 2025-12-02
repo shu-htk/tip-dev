@@ -36,3 +36,5 @@ it just aims ease of use over versatility.
 
 - [command reference](doc/reference.md)
 
+***
+*[Japanese document](jp/README.md)*

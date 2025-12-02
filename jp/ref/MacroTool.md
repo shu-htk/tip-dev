@@ -1,3 +1,29 @@
+# MacroTool
+
+MacroTool is the header-only class library which provide
+the following command:
+```
+macro commands:
+ @     : define numerical or string variable
+ args  : define default arguments of the macro file
+ ++    : increment(+1) numerical variable
+ --    : decrement(-1) numerical variable
+ for   : foreach loop
+ do    : numerical ranged loop
+ if    : conditional branch
+ print : print arguments (abbr. pr)
+ fmt   : set output format of macro variable
+ wait  : wait time or console input
+ sys   : execute system command
+ split : split string variable
+ calc  : evaluate the numerical expression
+ logic : evaluate the logical expression
+ q     : terminate this program
+```
+
+There is a simple example how to use MacroTool : `src/c++03/my_macro.cc`.
+
+```
 // my_macro : simple example how to use thl::MacroTool
 //
 // c++03
@@ -5,13 +31,15 @@
 #include "thl/MacroTool.hh"
 
 class MyMacro : public thl::MacroTool {
+private:
+  int _debug;
 public:
-  MyMacro() {}
+  MyMacro() : _debug(0) {}
   int add_commands(std::string buf) {// called from thl::MacroTool::parse_vbuf()
     thl::StrSplit args;
     args.set_quot_to_skip_split('"');
     args.split(buf);
-    if(args(0)=="help") {
+       if(args(0)=="help") {
       printf("additional commands:\n"
 	     " exe  : execute a macro file.\n"
 	     " ls   : print macro variables.\n"
@@ -59,3 +87,5 @@ int main() {
   macro.main_loop();
   return 0;
 }
+```
+

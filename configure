@@ -19,8 +19,8 @@ cp -p src/c++03/*.cc src
 cp -p include/c++03/*.hh include/thl
 
 if [ ! -e bin/check_c++11 ] ; then
-  echo "generating src/check_c++11.cc"
-  cat << END > src/check_c++11.cc
+    echo "generating src/check_c++11.cc"
+    cat << END > src/check_c++11.cc
 #include <cstdio>
 int main() {
   if(__cplusplus >= 201103L) printf("post11\n"); else printf("pre11\n");
@@ -32,9 +32,9 @@ fi
 cpp11=`bin/check_c++11`
 renew=${1:-yes}
 if [ $cpp11 == "post11" ] && [ $renew == "yes" ] ; then
-  echo "cp c++11 files"
-  cp -p src/c++11/*.cc src
-  cp -p include/c++11/*.hh include/thl
+    echo "cp c++11 files"
+    cp -p src/c++11/*.cc src
+    cp -p include/c++11/*.hh include/thl
 fi
 
 rm -f Makefile
@@ -46,50 +46,60 @@ grep '^#2:' $0 | sed "s/#2://g" > Makefile.2
 pkg=null
 pkg_path=null
 
-# seach PLPLOT in you home diectory or old plplot-path
+# seach PLPLOT in your home diectory and system-path
+# in the case you install it by yourself
+
 for d in $HOME/plplot/lib /usr/lib /usr/local/lib
 do
-  for f in plplot plplotd
-  do
-    if [ -e $d/pkgconfig/$f.pc ] ; then
-      pkg=$f
-      pkg_path=$d
+    for f in plplot plplotd
+    do
+	if [ -e $d/pkgconfig/$f.pc ] ; then
+	    pkg=$f
+	    pkg_path=$d
+	fi
+    done
+    if [ $pkg != null ] ; then
+	break
     fi
-  done
-  if [ $pkg != null ] ; then
-    break
-  fi
 done
 if [ -e $HOME/plplot/include/plplot ] ; then
- if [ ! -e $HOME/plplot/include/plplot/plplot ] ; then
-   ln -s $HOME/plplot/include/plplot $HOME/plplot/include/plplot/plplot
- fi
+    if [ ! -e $HOME/plplot/include/plplot/plplot ] ; then
+	ln -s $HOME/plplot/include/plplot $HOME/plplot/include/plplot/plplot
+    fi
 fi
 
-# seach PLPLOT in standard path of package manager (debian, red-hat)
+# seach PLPLOT in the standard path of the package manager
+# Ubuntu apt : /usr/lib/x86_64-linux-gnu
+# RedHat dnf : /usr/lib64
+# MacPorts port : /opt/local/lib
+
 if [ $pkg_path == null ] ; then
-  for d in /usr/lib/x86_64-linux-gnu /usr/lib64
-  do
-    if [ -e $d/pkgconfig/plplot.pc ] ; then
-      pkg=plplot
-      pkg_path=$d
-    fi
-  done
+    for d in /usr/lib/x86_64-linux-gnu /usr/lib64 /opt/local/lib
+    do
+	if [ -e $d/pkgconfig/plplot.pc ] ; then
+	    pkg=plplot
+	    pkg_path=$d
+	fi
+    done
 fi
 
 if [ $pkg != null ] ; then
-  ver=`grep Version $pkg_path/pkgconfig/$pkg.pc | awk '{print $2}'`
-  echo "PLPLOT: Version $ver"
-  grep '^#3:' $0 | sed "s/#3://g" | sed "s|%BASE|$pkg_path|g" >> Makefile.2
-  grep '^#31:' $0 | sed "s/#31://g"|sed "s|%PKG|$pkg|g" >> Makefile.2
-  echo PLPLOT: $pkg_path/pkgconfig/$pkg.pc
+    ver=`grep Version $pkg_path/pkgconfig/$pkg.pc | awk '{print $2}'`
+    echo "PLPLOT: Version $ver"
+    subver=`echo $ver | awk -F . '{print $2}'`
+    plnew=`echo $subver | awk '{if($1>12) print 1;else print 0;}'`
+    echo "subver=$subver plnew=$plnew"  
+    grep '^#3:' $0 | sed "s/#3://g" | sed "s|%BASE|$pkg_path|g" >> Makefile.2
+    grep '^#31:' $0 | sed "s/#31://g"|sed "s|%PKG|$pkg|g" \
+	|sed "s|%PLNEW|$plnew|g" >> Makefile.2
+    echo PLPLOT: $pkg_path/pkgconfig/$pkg.pc
 fi
 
 # headers for EPICS
 if [ -e $EPICS_BASE/include/cadef.h ] ; then
-  grep '^#32:' $0 | sed "s/#32://g" >> Makefile.2
-  base_ver=`grep ^BASE_ $EPICS_BASE/configure/CONFIG_BASE_VERSION | awk -F= '{if($2 ~ /YES/) print $1}'`
-  echo "EPICS $base_ver"
+    grep '^#32:' $0 | sed "s/#32://g" >> Makefile.2
+    base_ver=`grep ^BASE_ $EPICS_BASE/configure/CONFIG_BASE_VERSION | awk -F= '{if($2 ~ /YES/) print $1}'`
+    echo "EPICS $base_ver"
 fi
 
 # make version file
@@ -99,20 +109,20 @@ grep '^#40:' $0 | sed "s/#40://g" >> Makefile.2
 targets=""
 for t in ${t1[@]}
 do
-  grep '^#41:' $0 | sed "s/#41://g" | sed "s|%TGT|$t|g" >> Makefile.2
-  targets="$targets bin/$t"
+    grep '^#41:' $0 | sed "s/#41://g" | sed "s|%TGT|$t|g" >> Makefile.2
+    targets="$targets bin/$t"
 done
 
 if [ $pkg != null ] ; then
-  for t in ${t2[@]}
-  do
-    if [ -e $EPICS_BASE/include/cadef.h ] ; then
-      grep '^#43:' $0 | sed "s/#43://g" | sed "s|%TGT|$t|g" >> Makefile.2
-    else
-      grep '^#42:' $0 | sed "s/#42://g" | sed "s|%TGT|$t|g" >> Makefile.2
-    fi
-    targets="$targets bin/$t"
-  done
+    for t in ${t2[@]}
+    do
+	if [ -e $EPICS_BASE/include/cadef.h ] ; then
+	    grep '^#43:' $0 | sed "s/#43://g" | sed "s|%TGT|$t|g" >> Makefile.2
+	else
+	    grep '^#42:' $0 | sed "s/#42://g" | sed "s|%TGT|$t|g" >> Makefile.2
+	fi
+	targets="$targets bin/$t"
+    done
 else
     echo " ***************************************************"
     echo " tip wll not be compiled because PLPLOT is not found."
@@ -138,14 +148,17 @@ if [ -e .git ] ; then
     git_rep_exist=yes
 fi
 if [ $git_cmd_exist == yes ] && [ $git_rep_exist == yes ]; then
- grep '^#11:' $0 | sed "s/#11://g" >> Makefile.1
+    grep '^#11:' $0 | sed "s/#11://g" >> Makefile.1
 else
- grep '^#12:' $0 | sed "s/#12://g" >> Makefile.1
+    grep '^#12:' $0 | sed "s/#12://g" >> Makefile.1
 fi
-clk=`grep -c clock_gettime /usr/include/time.h`
-if [ $clk -ne 0 ] ; then
- echo "found clock_gettime"
- grep '^#13:' $0 | sed "s/#13://g" >> Makefile.1
+
+if [ -e /usr/include/time.h ] ; then
+    clk=`grep -c clock_gettime /usr/include/time.h`
+    if [ $clk -ne 0 ] ; then
+	echo "found clock_gettime"
+	grep '^#13:' $0 | sed "s/#13://g" >> Makefile.1
+    fi
 fi
 
 cat Makefile.1 Makefile.2 > Makefile
@@ -167,15 +180,15 @@ echo "** configure normal end **"
 
 #2:INC = -I./include
 #2:LIB = -lreadline
-#21:LIB += -ltermcap
-#2:LIB += -lrt
-# libtermcap.so should be linked for readline in old system
-# librt.so should be linked for clock_gettime() in old system
+#2:#LIB += -ltermcap
+#2:#LIB += -lrt
+#2:# libtermcap should be linked for readline in old system
+#2:# librt should be linked for clock_gettime() in old system
 
 #3:PKG_CONFIG_ENV = PKG_CONFIG_PATH=%BASE/pkgconfig
 #3:RPATHLMD = -Wl,-rpath -Wl,%BASE
 #31:INC_PL = `$(PKG_CONFIG_ENV) pkg-config --cflags %PKG`
-##31:INC_PL += -D PLPLOT_OPTION_NEW=%OPT
+#31:INC_PL += -D PLPLOT_OPTION_NEW=%PLNEW
 #31:LIB_PL = $(RPATHLMD) `$(PKG_CONFIG_ENV) pkg-config --libs %PKG`
 
 #32:include $(EPICS_BASE)/configure/CONFIG_BASE_VERSION
