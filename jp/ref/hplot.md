@@ -83,8 +83,8 @@ tip> plot v_hx v_hy (gt:slope) ;# the same as hplot v (ht:slope)
 ```
 
 for more examples, see
- [ex04](../ex/ex04.md),
- [ex11](../ex/ex11.md),
- [ex12](../ex/ex12.md),
- [ex19](../ex/ex19.md),
- [ex20](../ex/ex20.md)
+ [ex04](../../doc/ex/ex04.md),
+ [ex11](../../doc/ex/ex11.md),
+ [ex12](../../doc/ex/ex12.md),
+ [ex19](../../doc/ex/ex19.md),
+ [ex20](../../doc/ex/ex20.md)

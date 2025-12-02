@@ -51,6 +51,7 @@ list of commands:
  zlab  : set the z-axis label in 3D-graph
 macro commands:
  @     : define numerical or string variable
+ args  : define default arguments of the macro file
  ++    : increment(+1) numerical variable
  --    : decrement(-1) numerical variable
  for   : foreach loop

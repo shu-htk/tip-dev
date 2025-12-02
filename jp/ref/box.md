@@ -29,6 +29,6 @@ draw 2-dimensional axis frame in the box shape.
 - `xl:` x-label (see [xlab](xlab.md))
 - `yl:` y-label (see [ylab](ylab.md))
 
-see [ex16: plot divided box by vertical order](../ex/ex16.md)
+see [ex16](../../doc/ex/ex16.md)
 
 

@@ -36,5 +36,5 @@ the above script will be stopped when you do
 `$ caput monitor:str exit`
 from the shell.
 
-for more example see [ex101](../ex/ex101.md)
+for more example see [ex101](../../doc/ex/ex101.md)
 

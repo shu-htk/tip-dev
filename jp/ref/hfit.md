@@ -33,5 +33,5 @@ see [fit](fit.md)
 
 - `cp:` comment position of fitting information
 
-for example, see [ex04](../ex/ex04.md), [ex20](../ex/ex20.md)
+for example, see [ex04](../../doc/ex/ex04.md), [ex20](../../doc/ex/ex20.md)
 

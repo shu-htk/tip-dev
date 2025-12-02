@@ -51,6 +51,4 @@ hight_cut : data(num) :  172 175 178
 name_cut : data(str) :  Saburo Shiro Goro
 ```
 
-see also
-- [ex09: Data Cutting and simplified logical expression](../ex/ex09.md)
-- [ex11: Plot 1D,2D Histograms and cutting the data](../ex/ex11.md)
+see also [ex09](../../doc/ex/ex09.md), [ex11](../../doc/ex/ex11.md)

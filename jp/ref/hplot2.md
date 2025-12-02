@@ -78,5 +78,5 @@ tip> mplot x_mx y_my x_y_mz (mt:cont2)    ;# the same as hplot2 x y (mt:cont2)
 see also [mplot](mplot.md)
 
 for more example, see
- [ex11](../ex/ex11.md),
- [ex12](../ex/ex12.md)
+ [ex11](../../doc/ex/ex11.md),
+ [ex12](../../doc/ex/ex12.md)

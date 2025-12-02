@@ -89,5 +89,5 @@ v_fy : data(num) : size=512  ;# created data of power spectrum
 tip> plot v_fx v_fy            ;# the same as fplot t v
 ```
 
-for example, see [ex08](../ex/ex08.md), [ex18](../ex/ex18.md)
+for example, see [ex08](../../doc/ex/ex08.md), [ex18](../../doc/ex/ex18.md)
 

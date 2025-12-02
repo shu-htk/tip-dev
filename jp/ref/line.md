@@ -14,8 +14,8 @@ where x0, x1, y0, y1 are scalar value.
 - `ae:` draw arrow edge(0=non,1=end,2=begin,3=both)
 
 for example, see
-[ex03](../ex/ex03.md),
-[ex06](../ex/ex06.md),
-[ex09](../ex/ex09.md),
-[ex17b](../ex/ex17b.md),
-[ex21](../ex/ex21.md)
+[ex03](../../doc/ex/ex03.md),
+[ex06](../../doc/ex/ex06.md),
+[ex09](../../doc/ex/ex09.md),
+[ex17b](../../doc/ex/ex17b.md),
+[ex21](../../doc/ex/ex21.md)

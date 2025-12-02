@@ -11,5 +11,5 @@ draw a circle which center is x and y, radius is r.
 - `lt:` set line style
 - `lw:` set line width, 0=not draw, 1=draw
 
-see [ex21: Absolute coordinate and Relative coordinate](../ex/ex21.md)
+see [ex21](../../doc/ex/ex21.md)
 

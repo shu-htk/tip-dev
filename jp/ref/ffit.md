@@ -30,5 +30,5 @@ see [fit](fit.md)
 
 - `cp:` comment position of fitting information
 
-see [ex18](../ex/ex18.md)
+see [ex18](../../doc/ex/ex18.md)
 

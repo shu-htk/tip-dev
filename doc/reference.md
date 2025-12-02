@@ -1,6 +1,6 @@
 # Command Reference
 
-## (1) Usage to start up the tip interpreter from the shell
+## (1) Start up options of the tip interpreter
 
 ```
 $ tip -h
@@ -47,22 +47,33 @@ The data variable is array of number (or string) which is defined by
 ```
 tip> set n={1,2,3}
 tip> set x=sin(n)
-tip> ls x
-x : data(num) : size=3
-tip> cat x
-x : data(num) :  0.84147098481 0.90929742683 0.14112000806
 ```
-Explaining by C, the above example is doing like,
+Describing the above example by C-like, it is doing like,
 ```
 double n[]={1,2,3};
 double x[sizeof(n)]; for(int i=0; i<sizeof(n); i++) x[i]=sin(n[i]);
 ```
+
+The information of data variable is shown by [ls](ref/ls.md) command,
+and the element values are shown by [cat](ref/cat.md) command.
+
+```
+tip> ls *
+n : data(num) : size=3
+x : data(num) : size=3
+tip> cat *
+n : data(num) :  1 2 3
+x : data(num) :  0.84147098481 0.90929742683 0.14112000806
+```
+
 - **Macro variable**
 
 The macro variable is scalar of number (or string) which is defined by
 [@](ref/var.md) command.  
-Enclosing the macro variable in the brackets [ ]
-it is replaced to the string which is formatted by it's value
+Enclosing the macro variable in the brackets `[ ]`,
+it is replaced to the string which is formatted by it's value.  
+It's information and value is shown by [ls](ref/ls.md) command.
+
 ```
 tip> @ n=1
 tip> @ x=sin([n])  ;# this is parsed as "@ x=sin(1)"
@@ -70,9 +81,8 @@ tip> ls *
 n : number [1]
 x : number [0.84147098481]
 ```
-Actually, macro variable is replaced to the formatted string  before
-parsing the command.  
-so you can do like,
+Actually, macro variable is replaced to the string before
+parsing the command, you can do like,
 ```
 tip> @ n=1
 tip> @ func=sin
@@ -94,16 +104,16 @@ tip> prn ${SHELL}
 ```
 
 ## (3) Commands of MacroTool
-- [@](ref/var.md) : set macro variable
+- [@](ref/var.md) : define and set value of the macro variable
 - [args](ref/args.md) : set default argument of the macro file
 - [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical macro variable
 - [for,do,while,end](ref/loop.md) : for, do, while loop
 - [if,elif,else,fi](ref/if_fi.md) : conditional branch
-- [print](ref/print.md) : print arguments with macro variables format
+- [print](ref/print.md) : print arguments to console
 - [fmt](ref/fmt.md) : set output format of macro variable
-- [wait](ref/wait.md) : wait time or console input
+- [wait](ref/wait.md) : wait time(sec) or console input
 - [sys](ref/sys.md) : execute system command
-- [split](ref/split.md) : split string variable
+- [split](ref/split.md) : split string macro variable by specified delimiter
 - [calc](ref/calc.md) : evaluate the numerical expression
 - [logic](ref/logic.md) : evaluate the logical expression
 - q : quit the tip interpreter
@@ -139,7 +149,7 @@ tip> prn ${SHELL}
 - [plot3](ref/plot3.md) : plot the data in the 3D-graph
 - [read](ref/read.md) : read the data from the file
 - [rm](ref/rm.md) : remove macro/data variables
-- [set](ref/set.md) : set the data
+- [set](ref/set.md) : define and set value of the data variable
 - [sort](ref/sort.md) : sort the data in ascending order
 - [stat](ref/stat.md) : calc statistics from the data
 - [symb](ref/symb.md) : draw a symbol in 2D-graph

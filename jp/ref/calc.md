@@ -73,4 +73,4 @@ tip> calc [x]-[y]
 
 `abs`,`sqrt`,`exp`,`log`,`log10`,`cos`,`acos`,`sin`,`asin`,`tan`,`atan`,`cosh`,`sinh`,`tanh`,`floor`,`pow`,`atan2`
 
-see [ex02: Plot mathematical functions](../ex/ex02.md)
+see [ex02](../../doc/ex/ex02.md)

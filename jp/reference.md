@@ -1,6 +1,6 @@
-# Command Reference
+# コマンドリファレンス
 
-## (1) Usage to start up the tip interpreter from the shell
+## (1) tipインタープリタの起動オプション
 
 ```
 $ tip -h
@@ -17,52 +17,69 @@ options:(where arg is option's argument)
  --png arg : graph is drawn in png file (window is not open)
 ```
 
-## (2) Syntax of the tip interpreter
+## (2) tipインタープリタの構文規則
 
-### Multiple commands in a line
+### 1行の中に複数のコマンドを記述
 
-Separating by ";" you can put multiple command in a line
+セミコロン`;`で分離することで複数のコマンドを実行できます
+
 ```
 tip> title "x vs y1 and y2"; plot x y1; plot x y2 (rp:1) 
 ```
 
-### Comment out the line
+### 行をコメントアウトする
 
-Put the "#" at the head of the line
+`#` を行頭に置くとその行はコメントアウトされます
+
 ```
 tip> # comment out this line
 ```
 
-Comment out from the middle of the line, put ";" before "#"
+行の途中でコメントアウトするには、`;` で分離して`#`を置きます
+
 ```
 tip> plot x y ;# plotting data x and y  
 ```
 
-### Variable
+### 変数
 
-- **Data variable**
+- **データ変数**
 
-The data variable is array of number (or string) which is defined by
-[set](ref/set.md) command.
+データ変数は数値（または文字列）の配列で、[set](ref/set.md)
+コマンドによって定義されます
+
 ```
 tip> set n={1,2,3}
 tip> set x=sin(n)
-tip> ls x
-x : data(num) : size=3
-tip> cat x
-x : data(num) :  0.84147098481 0.90929742683 0.14112000806
 ```
-Explaining by C, the above example is doing like,
+
+上の例をC言語風に書くと以下のようなことをやっています
+
 ```
 double n[]={1,2,3};
 double x[sizeof(n)]; for(int i=0; i<sizeof(n); i++) x[i]=sin(n[i]);
 ```
-- **Macro variable**
 
-The macro variable is scalar of number (or string) which is defined by
-[@](ref/var.md) command.  
-Enclosing the macro variable in the brackets [ ]
-it is replaced to the string which is formatted by it's value
+データ変数の情報は [ls](ref/ls.md)コマンドで、各要素の値は
+[cat](ref/cat.md)コマンドで表示されます
+
+```
+tip> ls *
+n : data(num) : size=3
+x : data(num) : size=3
+tip> cat *
+n : data(num) :  1 2 3
+x : data(num) :  0.84147098481 0.90929742683 0.14112000806
+```
+
+- **マクロ変数**
+
+マクロ変数は数値（または文字列）のスカラー値で、
+[@](ref/var.md)コマンドによって定義されます  
+マクロ変数はブラケット`[ ]`で囲むことで、その値が
+フォーマットされた文字列に置換されます  
+[ls](ref/ls.md)コマンドで情報と値の両方が表示されます
+
 ```
 tip> @ n=1
 tip> @ x=sin([n])  ;# this is parsed as "@ x=sin(1)"
@@ -70,9 +87,10 @@ tip> ls *
 n : number [1]
 x : number [0.84147098481]
 ```
-Actually, macro variable is replaced to the formatted string  before
-parsing the command.  
-so you can do like,
+
+マクロ変数はコマンドが解釈される前に文字列に置換されるので、
+以下のようなことができます
+
 ```
 tip> @ n=1
 tip> @ func=sin
@@ -84,81 +102,81 @@ x : number [0.84147098481]
 func : string [sin]
 ret : string [x]
 ```
-- **Environment variable**
+- **環境変数**
 
-Environment variables defined in the shell are referenced by ${ }.
+シェルの環境変数は、`${ }`で参照することができます
 
 ```
 tip> prn ${SHELL}
 /bin/bash
 ```
 
-## (3) Commands of MacroTool
-- [@](ref/var.md) : set macro variable
-- [args](ref/args.md) : set default argument of the macro file
-- [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical macro variable
-- [for,do,while,end](ref/loop.md) : for, do, while loop
-- [if,elif,else,fi](ref/if_fi.md) : conditional branch
-- [print](ref/print.md) : print arguments with macro variables format
-- [fmt](ref/fmt.md) : set output format of macro variable
-- [wait](ref/wait.md) : wait time or console input
-- [sys](ref/sys.md) : execute system command
-- [split](ref/split.md) : split string variable
-- [calc](ref/calc.md) : evaluate the numerical expression
-- [logic](ref/logic.md) : evaluate the logical expression
-- q : quit the tip interpreter
+## (3) MacroToolのコマンド
+- [@](ref/var.md) : マクロ変数の定義と値の代入
+- [args](ref/args.md) : マクロファイルの引数のデフォルト値を設定
+- [++,--](ref/incr.md) : 数値型マクロ変数のインクリメント(+1), デクリメント(-1)
+- [for,do,while,end](ref/loop.md) : for, do, while ループ
+- [if,elif,else,fi](ref/if_fi.md) : 条件分岐
+- [print](ref/print.md) : 引数をコンソールに表示
+- [fmt](ref/fmt.md) : マクロ変数のフォーマットを設定
+- [wait](ref/wait.md) : 指定時間（秒）又はコンソール入力を待つ
+- [sys](ref/sys.md) : システムコマンドの実行
+- [split](ref/split.md) : 文字列型マクロ変数を指定したデリミタで分離
+- [calc](ref/calc.md) : 数値式を評価し結果を出力
+- [logic](ref/logic.md) : 論理式を評価し結果を出力
+- q : tipインタープリタを終了する
 
-## (4) Commands of drawing and handling data.
-- [arc](ref/arc.md) : draw a circle in 2D-graph
-- [box](ref/box.md) : draw the axis of 2D-graph in the box shape
-- [box3](ref/box3.md) : draw the axes of 3D-graph
-- [cat](ref/cat.md) : show data contents / concatenate data
-- [cut](ref/cut.md) : set cut condition
-- [div](ref/div.md) : divide the drawing area
-- [elem](ref/elem.md) : copy data element to macro variable
-- [exe](ref/exe.md) : execute macro file
-- [fbox](ref/fbox.md) : draw a filled pattern box in 2D-graph
-- [ffit](ref/ffit.md) : fit the frequency domain graph
-- [fit](ref/fit.md) : fit the data in 2D-graph
-- [fit3](ref/fit3.md) : fit the data in 3D-graph
-- [fill](ref/fill.md) : draw a filled pattern object in 2D-graph
-- [font](ref/font.md) : set text font
-- [fplot](ref/fplot.md) : plot the frequency domain graph from the data
-- [help](ref/help.md) : show help message
-- [hfit](ref/hfit.md) : fit the histogram
-- [hplot](ref/hplot.md) : plot the histogram from the data
-- [hplot2](ref/hplot2.md): plot the 2D-histogram from the couple of data
-- [line](ref/line.md) : draw a line in 2D-graph
-- [ls](ref/ls.md) : list macro/data variables
-- [mplot](ref/mplot.md) : plot mesh-graph(3D) or contour-graph(2D)
-- [mread](ref/mread.md) : read the mesh data from the file
-- [mset](ref/mset.md) : set mesh data
-- [mwrite](ref/mwrite.md): write the mesh data to the file
-- [opt](ref/opt.md) : set/show global options
-- [plot](ref/plot.md) : plot the data in the 2D-graph
-- [plot3](ref/plot3.md) : plot the data in the 3D-graph
-- [read](ref/read.md) : read the data from the file
-- [rm](ref/rm.md) : remove macro/data variables
-- [set](ref/set.md) : set the data
-- [sort](ref/sort.md) : sort the data in ascending order
-- [stat](ref/stat.md) : calc statistics from the data
-- [symb](ref/symb.md) : draw a symbol in 2D-graph
-- [text](ref/text.md) : draw a text in 2D-graph
-- [title](ref/title.md) : set the graph title
-- [tfmt](ref/tfmt.md) : set the x-axis time format
-- [vp](ref/vp.md) : set viewport of drawing area
-- [write](ref/write.md) : write the data to the file
-- [xerr](ref/xerr.md) : plot the x-error-bars in 2D-graph
-- [xlab](ref/xlab.md) : set the x-axis label
-- [yerr](ref/yerr.md) : plot the y-error-bars in 2D-graph
-- [ylab](ref/ylab.md) : set the y-axis label
-- [zlab](ref/zlab.md) : set the z-axis label in 3D-graph
+## (4) データの描画及び操作のコマンド
+- [arc](ref/arc.md) : 円の描画
+- [box](ref/box.md) : 矩形の2次元座標を描画
+- [box3](ref/box3.md) : 3次元座標を描画
+- [cat](ref/cat.md) : データの値を表示/連結
+- [cut](ref/cut.md) : データを指定した条件でカット
+- [div](ref/div.md) : 描画領域の分割
+- [elem](ref/elem.md) : データ変数のある要素の値をマクロ変数に代入
+- [exe](ref/exe.md) : マクロファイルの実行
+- [fbox](ref/fbox.md) : 矩形エリアを塗りつぶす
+- [ffit](ref/ffit.md) : 周波数領域のグラフ曲線を指定した関数でフィット
+- [fit](ref/fit.md) : 2次元のデータ曲線を指定した関数でフィット
+- [fit3](ref/fit3.md) : 3次元のデータ曲線を指定した関数でフィット
+- [fill](ref/fill.md) : 2次元データの領域を塗りつぶす
+- [font](ref/font.md) : テキストのフォントを指定
+- [fplot](ref/fplot.md) : データを周波数領域でプロット（FFTパワースペクトラム）
+- [help](ref/help.md) : 全コマンドリストを表示する
+- [hfit](ref/hfit.md) : 1次元ヒストグラムを指定した関数でフィット
+- [hplot](ref/hplot.md) : データの1次元ヒストグラムをプロット
+- [hplot2](ref/hplot2.md): 2つのデータの2次元ヒストグラムをプロット
+- [line](ref/line.md) : 指定した区間の線を2次元座標に描画
+- [ls](ref/ls.md) : データ変数、マクロ変数の情報を表示
+- [mplot](ref/mplot.md) : メッシュ（2次元の格子上の値）データを3次元でプロット
+- [mread](ref/mread.md) : メッシュデータをファイルから読み込む
+- [mset](ref/mset.md) : メッシュデータを定義して値を設定する
+- [mwrite](ref/mwrite.md): メッシュデータをファイルに書き込む
+- [opt](ref/opt.md) : グローバルオプションの値の表示、設定
+- [plot](ref/plot.md) : 2つのデータを2次元でプロット
+- [plot3](ref/plot3.md) : 3つのデータを3次元でプロット
+- [read](ref/read.md) : データをファイルから読み込む
+- [rm](ref/rm.md) : データ変数、マクロ変数をメモリから削除
+- [set](ref/set.md) : データ変数の定義と値の代入
+- [sort](ref/sort.md) : 指定したデータでインデックスソート（昇順）
+- [stat](ref/stat.md) : データの統計情報を表示
+- [symb](ref/symb.md) : 指定した2次元座標にシンボルマークを描画
+- [text](ref/text.md) : 指定した2次元座標にテキストを描画
+- [title](ref/title.md) : グラフのフレーム上部にタイトルを描画
+- [tfmt](ref/tfmt.md) : x軸を指定したフォーマットで時刻表示にする
+- [vp](ref/vp.md) : ウィンドウに対する描画領域を指定する
+- [write](ref/write.md) : データをファイルに書き込む
+- [xerr](ref/xerr.md) : x方向の誤差棒をプロットする
+- [xlab](ref/xlab.md) : x軸のラベルを指定する
+- [yerr](ref/yerr.md) : y方向の誤差棒をプロットする
+- [ylab](ref/ylab.md) : y軸のラベルを指定する
+- [zlab](ref/zlab.md) : z軸のラベルを指定する
 
-## (5) Commands of EPICS CA (optional)
+## (5) EPICS CA のコマンド(オプション機能)
 
-- [cainfo](ref/cainfo.md) : show information of record
-- [caget](ref/caget.md) : get value of record
-- [caput](ref/caput.md) : put value of record
-- [camon](ref/camon.md) : open monitored record
-- [cacheck](ref/cacheck.md): check if monitored record is updated
-- [caclose](ref/caclose.md): close monitored record
+- [cainfo](ref/cainfo.md) : EPICSレコードの情報を表示
+- [caget](ref/caget.md) : EPICSレコードの値を取得し表示、又は変数に代入
+- [caput](ref/caput.md) : EPICSレコードに値を式、又は変数から代入
+- [camon](ref/camon.md) : EPICSレコードに常時接続しモニタする
+- [cacheck](ref/cacheck.md): モニタしているEPICSレコードが更新したかチェック
+- [caclose](ref/caclose.md): モニタしているEPICSレコードの常時接続を閉じる

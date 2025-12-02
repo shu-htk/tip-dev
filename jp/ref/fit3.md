@@ -37,4 +37,4 @@ the graph at (X,Y).
 
 - cp: comment position of fitting information
 
-for example, see [ex10](../ex/ex10.md)
+for example, see [ex10](../../doc/ex/ex10.md)

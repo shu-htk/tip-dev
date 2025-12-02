@@ -105,4 +105,4 @@ c0 : number [1.2]
 c1 : number [3.4]
 ```
 
-see [ex7a](../ex/ex07a.md), [ex7a](../ex/ex07b.md)
+see [ex7a](../../doc/ex/ex07a.md), [ex7a](../../doc/ex/ex07b.md)
