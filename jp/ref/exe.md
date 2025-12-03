@@ -63,11 +63,11 @@ tip> exe gaus.tip title="param set 2",ndata=200000,sigma=0.2,mean=3
 
 |variable name|description|
 |:---:|:---:|
-|$#|number of arguments|
-|$1|1st argument|
-|$2|2nd argument|
-|...|...|
-|$N|Nth argument|
+| $# | number of arguments |
+| $1 | 1st argument |
+| $2 | 2nd argument |
+| ... | ... |
+| $N|Nth argument |
 
 example macro file : `args.tip`
 ```
