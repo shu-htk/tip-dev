@@ -857,12 +857,18 @@ namespace thl {
       PLFLT x0 = 0.95-0.03*_nx/_ny;
       PLFLT x1 = x0 + 0.015;
       plvpas(x0, x1, 0, 1, aspect);
-      plwind(0, 1, att.z0, att.z1);
+      plwind(0, 1, z0, z1);
+      //      plwind(0, 1, att.z0, att.z1);
       PLFLT xg[5] = {0,1,1,0,0};
-      PLFLT yg[5] = {att.z0,att.z0,att.z1,att.z1,att.z0};
+      PLFLT yg[5] = {z0,z0,z1,z1,z0};
+      //      PLFLT yg[5] = {att.z0,att.z0,att.z1,att.z1,att.z0};
       plgradient(5,xg,yg,90);
       plcol0(att.lcol);
-      plbox("bc",0, 0, "bcmstv", 0, 0);
+      if(att.logz) {
+	plbox("bc",0, 0, "bcmstvl", 0, 0);
+      } else {
+	plbox("bc",0, 0, "bcmstv", 0, 0);
+      }
 #else // the following way is too complicated so not used
       const int NAXIS 1
       PLINT n_axis_opts = NAXIS;
