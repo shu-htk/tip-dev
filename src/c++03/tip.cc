@@ -184,6 +184,8 @@ private:
       if(s=="yt"||s=="*") printf("yt: y-tick interval: [%g]\n",att.ytick);
       if(s=="yr"||s=="*") printf("yr: y-axis range: [%g,%g]\n",y0,y1);
       if(s=="zl"||s=="*") printf("zl: z-axis label: [%s]\n",att.zlab);
+      if(s=="zs"||s=="*") printf("zs: z-axis scale: [%s]\n",
+				 att.logz ? "log" : "lin");
       if(s=="zm"||s=="*") printf("zm: z margin factor: [%g]\n",att.ascz);
       if(s=="zr"||s=="*") printf("zr: z-axis range: [%g,%g]\n",z0,z1);
 
@@ -307,6 +309,7 @@ public:
       if(sp(0)=="ys") {opt.att.logy = (sp(1)=="log")? 1 : 0;}
       if(sp(0)=="yt") {opt.att.ytick = sp.stof(1);}
       if(sp(0)=="zl") {opt.att.set_zlab(thl::trim(sp(1)).c_str());}
+      if(sp(0)=="zs") {opt.att.logz = (sp(1)=="log")? 1 : 0;}
       if(sp(0)=="zm") {opt.att.ascz = sp.stof(1);}
       if(sp(0)=="zr") {get_pair(sp(1), opt.z0, opt.z1);}
     }

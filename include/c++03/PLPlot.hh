@@ -44,11 +44,12 @@ namespace thl {
     short bwid; // box(graph frame) line width
     short logx; // flag of logscale for x-axis
     short logy; // flag of logscale for y-axis
+    short logz; // flag of logscale for z-axis
     short errx; // flag to plot x-error-bars
     short erry; // flag to plot y-error-bars
     short hsty; // histogram style
     short divo; // divided frame drawing order
-    short nxsub, nysub; // x,y-axis number of sub-ticks
+    short nxsub, nysub, nzsub; // x,y,z-axis number of sub-ticks
     short grad; // gradation of contour plot
     short asty; // arrow style : 0:non, 1:end-edge, 2:start-edge, 3:both-edge
     PLFLT ssiz; // symbol size
@@ -63,7 +64,7 @@ namespace thl {
     PLFLT ascz;  // z-axis auto scale margin factor(default=0.1)
     PLFLT alt; // altitude in degree above the xy plane of 3d-plot
     PLFLT az;  // azimuth in degree of 3d-plot
-    PLFLT xtick, ytick; // x,y-axis major-tick interval
+    PLFLT xtick, ytick,ztick; // x,y,z-axis major-tick interval
     bool grid;       // flag to draw grid lines
     bool time_xaxis; // flag of time format for x-axis
     char time_fmt[32]; // time format buffer: %Y %m %d %H %M %S ...
@@ -74,13 +75,13 @@ namespace thl {
 
     PLAtt(void) : lwid(1), lcol(15), lsty(1), symb(0), scol(15),
 		  twid(1), tcol(15), font(1), fcol(0), fsty(-1),
-		  bwid(1), logx(0), logy(0), errx(0), erry(0), hsty(0),
-		  divo(0), nxsub(0), nysub(0), grad(32), asty(0),
+		  bwid(1), logx(0), logy(0), logz(0), errx(0), erry(0), hsty(0),
+		  divo(0), nxsub(0), nysub(0), nzsub(0), grad(32), asty(0),
 		  ssiz(1), tsiz(1), trot(0), tpos(0),
 		  x0(0), x1(0), y0(0), y1(0), z0(0), z1(0),
 		  vx0(0), vx1(0), vy0(0), vy1(0), vasp(0),
 		  ascx(0.02), ascy(0.1), ascz(0.1), alt(45), az(45),
-		  xtick(0), ytick(0), grid(0), time_xaxis(0) {
+		  xtick(0), ytick(0), ztick(0), grid(0), time_xaxis(0) {
       memset(title,0,sizeof(title));
       memset(xlab,0,sizeof(xlab));
       memset(ylab,0,sizeof(ylab));
@@ -231,6 +232,7 @@ namespace thl {
     std::vector<PLFLT> _erry[2]; // arrays for y error bar's edges
     std::vector<PLFLT> _lx; // arrays for logx
     std::vector<PLFLT> _ly; // arrays for logy
+    std::vector<PLFLT> _lz; // arrays for logz
     std::vector<PLFLT> _hx; // arrays for histogram x-axis
     std::vector<PLFLT> _hy; // arrays for histogram y-axis
     char _ver_str[80];
@@ -669,17 +671,33 @@ namespace thl {
       draw_box3d_sub(sub);
     }
     void draw_box3d_sub(int sub=0) {
+      //      std::string ox="bcnstu",oy="bcnstu",oz="bcdmnstuv";
+      std::string ox="bcnst",oy="bcnst",oz="bcnstv";
+      if(att.logx) {ox += "l";}
+      if(att.logy) {oy += "l";}
+      if(att.logz) {oz += "l";}
       plschr(0,att.tsiz);
       plwind(-1, 1, -1, 1.35);
       plwidth(att.bwid);
       if(att.time_xaxis) pltimefmt(att.time_fmt);
       pllsty(1); plcol0(15);
-      plw3d(1.,1.,1., att.x0,att.x1, att.y0,att.y1, att.z0,att.z1,
+      PLFLT x0=(att.logx) ? ((att.x0>0) ? log10(att.x0) : 0) : att.x0;
+      PLFLT x1=(att.logx) ? ((att.x1>0) ? log10(att.x1) : 0) : att.x1;
+      PLFLT y0=(att.logy) ? ((att.y0>0) ? log10(att.y0) : 0) : att.y0;
+      PLFLT y1=(att.logy) ? ((att.y1>0) ? log10(att.y1) : 0) : att.y1;
+      PLFLT z0=(att.logz) ? ((att.z0>0) ? log10(att.z0) : 0) : att.z0;
+      PLFLT z1=(att.logz) ? ((att.z1>0) ? log10(att.z1) : 0) : att.z1;
+      plw3d(1.,1.,1., x0,x1, y0,y1, z0,z1,
 	    att.alt, att.az);
+      // plw3d(1.,1.,1., att.x0,att.x1, att.y0,att.y1, att.z0,att.z1,
+      // 	    att.alt, att.az);
       pllab("","", att.title);
-      plbox3( "bcnstu", att.xlab, att.xtick, att.nxsub,
-	      "bcnstu", att.ylab, att.ytick, att.nysub,
-	      "bcdmnstuv", att.zlab, 0.0, 0 );
+      plbox3(ox.c_str(), att.xlab, att.xtick, att.nxsub,
+	     oy.c_str(), att.ylab, att.ytick, att.nysub,
+	     oz.c_str(), att.zlab, att.ztick, att.nzsub );
+      // plbox3( "bcnstu", att.xlab, att.xtick, att.nxsub,
+      // 	      "bcnstu", att.ylab, att.ytick, att.nysub,
+      // 	      "bcdmnstuv", att.zlab, 0.0, 0 );
       plschr(0,1);
     };
     void draw_graph3d(const std::vector<PLFLT>& x,
@@ -689,16 +707,32 @@ namespace thl {
       draw_graph3d(x.data(),y.data(),z.data(),n);
     }
     void draw_graph3d(const PLFLT* x, const PLFLT* y, const PLFLT* z, int n) {
+      const PLFLT *px=x,*py=y,*pz=z;
+      if(att.logx) {
+	_lx.resize(n);
+	for(int j=0; j<n; j++) _lx[j] = (x[j]>0) ? log10(x[j]) : 0;
+	px=&_lx[0];
+      }
+      if(att.logy) {
+	_ly.resize(n);
+	for(int j=0; j<n; j++) _ly[j] = (y[j]>0) ? log10(y[j]) : 0;
+	py=&_ly[0];
+      }
+      if(att.logz) {
+	_lz.resize(n);
+	for(int j=0; j<n; j++) _lz[j] = (z[j]>0) ? log10(z[j]) : 0;
+	pz=&_lz[0];
+      }
       if( att.lwid ) {
 	plcol0(att.lcol);
 	plwidth(att.lwid);
 	pllsty(att.lsty);
-	plline3(n,x,y,z);
+	plline3(n,px,py,pz);
       }
       if( att.symb ) {
 	plcol0(att.scol);
 	plssym(0,att.ssiz);
-	plpoin3(n,x,y,z,att.symb);
+	plpoin3(n,px,py,pz,att.symb);
       }
     }
     void auto_scale3d(const std::vector<PLFLT>& x,
@@ -738,7 +772,13 @@ namespace thl {
     void free_mesh(int nx, int ny) {
       if(_mesh_z!=0) {plFree2dGrid(_mesh_z, nx, ny); _mesh_z=0;}
     }
-    void set_mesh(int j, int k, PLFLT z) {_mesh_z[j][k] = z;}
+    void set_mesh(int j, int k, PLFLT z) {
+      if(att.logz) {
+	_mesh_z[j][k] = (z>0) ? log10(z) : 0;
+      } else {
+	_mesh_z[j][k] = z;
+      }
+    }
     PLFLT get_mesh(int j, int k) {return _mesh_z[j][k];}
     void draw_mesh(const std::vector<PLFLT> &x, const std::vector<PLFLT> &y,
 		   bool color=1) {
@@ -799,8 +839,12 @@ namespace thl {
       calc_min_max(x,nx,xmin,xmax);
       calc_min_max(y,ny,ymin,ymax);
       std::vector<PLFLT> shedge(att.grad+1);
-      PLFLT fill_width=2, dz=(att.z1-att.z0)/att.grad;
-      for (int j=0; j < att.grad+1; j++) {shedge[j] = att.z0 + dz*j;}
+      PLFLT z0=(att.logz) ? ((att.z0>0) ? log10(att.z0) : 0) : att.z0;
+      PLFLT z1=(att.logz) ? ((att.z1>0) ? log10(att.z1) : 0) : att.z1;
+      PLFLT fill_width=2, dz=(z1-z0)/att.grad;
+      for (int j=0; j < att.grad+1; j++) {shedge[j] = z0 + dz*j;}
+      // PLFLT fill_width=2, dz=(att.z1-att.z0)/att.grad;
+      // for (int j=0; j < att.grad+1; j++) {shedge[j] = att.z0 + dz*j;}
       alloc_grid(nx, ny, xmin, xmax, ymin, ymax);
       plshades((const PLFLT **)_mesh_z, nx,ny, NULL,
 	       xmin, xmax, ymin, ymax,
