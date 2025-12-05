@@ -671,8 +671,7 @@ namespace thl {
       draw_box3d_sub(sub);
     }
     void draw_box3d_sub(int sub=0) {
-      //      std::string ox="bcnstu",oy="bcnstu",oz="bcdmnstuv";
-      std::string ox="bcnst",oy="bcnst",oz="bcnstv";
+      std::string ox="bcnstu",oy="bcnstu",oz="bcnstuv";
       if(att.logx) {ox += "l";}
       if(att.logy) {oy += "l";}
       if(att.logz) {oz += "l";}
