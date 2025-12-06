@@ -7,7 +7,7 @@
 class MyMacro : public thl::MacroTool {
 public:
   MyMacro() {}
-  int add_commands(std::string buf) {// called from thl::MacroTool::parse_vbuf()
+  int add_commands(std::string buf) {
     thl::StrSplit args;
     args.set_quot_to_skip_split('"');
     args.split(buf);
@@ -27,7 +27,8 @@ public:
 	return 0;
       }
       std::string arg_list=(args.size()>2) ? args(2) : "";
-      exec(args(1),arg_list);
+      MyMacro mac;
+      mac.exec(args(1),arg_list);
       return 0;
     }
     if(args(0)=="ls") {
