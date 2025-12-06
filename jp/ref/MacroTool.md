@@ -21,8 +21,21 @@ macro commands:
  q     : terminate this program
 ```
 
-There is a simple example how to use MacroTool : `src/c++03/my_macro.cc`.
+## not adding user command
 
+```
+#include "thl/MacroTool.hh"
+
+int main() {
+  thl::MacroTool macro;
+  macro.main_loop();
+  return 0;
+}
+```
+
+## adding user commands
+
+src/c++03/my_macro.cc
 ```
 // my_macro : simple example how to use thl::MacroTool
 //
@@ -31,15 +44,13 @@ There is a simple example how to use MacroTool : `src/c++03/my_macro.cc`.
 #include "thl/MacroTool.hh"
 
 class MyMacro : public thl::MacroTool {
-private:
-  int _debug;
 public:
-  MyMacro() : _debug(0) {}
-  int add_commands(std::string buf) {// called from thl::MacroTool::parse_vbuf()
+  MyMacro() {}
+  int add_commands(std::string buf) {
     thl::StrSplit args;
     args.set_quot_to_skip_split('"');
     args.split(buf);
-       if(args(0)=="help") {
+    if(args(0)=="help") {
       printf("additional commands:\n"
 	     " exe  : execute a macro file.\n"
 	     " ls   : print macro variables.\n"
@@ -55,7 +66,8 @@ public:
 	return 0;
       }
       std::string arg_list=(args.size()>2) ? args(2) : "";
-      exec(args(1),arg_list);
+      MyMacro mac;
+      mac.exec(args(1),arg_list);
       return 0;
     }
     if(args(0)=="ls") {

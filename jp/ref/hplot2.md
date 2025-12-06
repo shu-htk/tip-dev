@@ -28,6 +28,7 @@ usage: hplot2 x y [(opt)]
 - `bp:` set box position, (from 1 to max number of divided frame)
 - `al:` altitude view angle , (default is 45 degree)
 - `az:` azimuth view angle, (default is 45 degree)
+- `zs:` z-axis scale (lin/log) 
 
 > in `xm:` x margin means distance between maximum/minimum point of data
 to left/right edge of x-axis
@@ -78,5 +79,5 @@ tip> mplot x_mx y_my x_y_mz (mt:cont2)    ;# the same as hplot2 x y (mt:cont2)
 see also [mplot](mplot.md)
 
 for more example, see
- [ex11](../../doc/ex/ex11.md),
- [ex12](../../doc/ex/ex12.md)
+ [ex11](../ex/ex11.md),
+ [ex12](../ex/ex12.md)
