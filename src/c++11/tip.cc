@@ -185,7 +185,9 @@ private:
       if(s=="zs"||s=="*") printf("zs: z-axis scale: [%s]\n",
 				 att.logz ? "log" : "lin");
       if(s=="zm"||s=="*") printf("zm: z margin factor: [%g]\n",att.ascz);
+      if(s=="zn"||s=="*") printf("zn: z-subtick num: [%d]\n",att.nzsub);
       if(s=="zr"||s=="*") printf("zr: z-axis range: [%g,%g]\n",z0,z1);
+      if(s=="zt"||s=="*") printf("zt: z-tick interval: [%g]\n",att.ztick);
 
 //-- the following tags just show the available names (not set anything)
       if(s=="color"||s=="c") {
@@ -309,7 +311,9 @@ public:
       if(sp(0)=="zl") {opt.att.set_zlab(thl::trim(sp(1)).c_str());}
       if(sp(0)=="zs") {opt.att.logz = (sp(1)=="log")? 1 : 0;}
       if(sp(0)=="zm") {opt.att.ascz = sp.stof(1);}
+      if(sp(0)=="zn") {opt.att.nzsub = sp.stoi(1);}
       if(sp(0)=="zr") {get_pair(sp(1), opt.z0, opt.z1);}
+      if(sp(0)=="zt") {opt.att.ztick = sp.stof(1);}
     }
     return opt;
   }
