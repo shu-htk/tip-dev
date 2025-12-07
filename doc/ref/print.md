@@ -13,8 +13,8 @@ the following escape sequence is available.
 
 |escape char|function|
 |:---:|:---:|
-| \t | tab |
-| \n | return line |
+| `\t` | tab |
+| `\n` | return line |
 
 ```
 tip> print Hello\tWorld\n
