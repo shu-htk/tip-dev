@@ -33,6 +33,9 @@ in the case the number of column is M,
 |v1(2)|v2(2)| ... |vM(2)|
 | ... | ... | ... | ... |
 
+## skip the line
+
+Lines beginning with # are skipped
 
 ## naming rule of valiable list
 
@@ -47,8 +50,8 @@ If it is specified a list of N variables, and file has M columns,
 
 ## read the output of the system command
 
-> If the filename is a command enclosed in backquotes,
-> its output is read through the pipe.
+> If the filename is a system command enclosed in backquotes,
+> its output is read.
 
 example,
 ```
@@ -107,5 +110,3 @@ x3 : data(num) :  21 31 41
 x4 : data(num) :  22 32 42
 x5 : data(num) :  23 33 43
 ```
-
-
