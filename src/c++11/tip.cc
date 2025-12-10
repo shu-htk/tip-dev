@@ -572,15 +572,16 @@ public:
       thl::CFormat fmt;
       thl::StrSplit v_list(v_str,","); // get list of variables
       std::map<std::string,bool> first;
-      int nline=1;
+      int nline=0;
       thl::StrSplit sp;
       sp.take_null_field(opt.nf);
       sp.set_quot_to_skip_split('"');
       check_data_file(fname,opt);
       std::string buf;
       while(std::getline(ifs,buf)) {
+	nline++;
 	if(buf.size()==0) continue;
-	if(nline <opt.n0 ) {nline++; continue;}
+	if(nline <opt.n0 ) {continue;}
 	if(opt.n1 > 0 && nline >opt.n1) {break;}
 	sp.split(buf,opt.fs);
 	if(sp(0,0)=='#') continue;
@@ -600,7 +601,6 @@ public:
 	    _dat[v_n].num.push_back(val);
 	  }
 	}
-	nline++;
       }
     } else {
       printf("can't open %s\n",fname.c_str());
