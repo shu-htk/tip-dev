@@ -1,0 +1,25 @@
+# ex23: Huge data reading and scatter plot
+#
+# Data from: https://www.minorplanetcenter.net/iau/MPCORB/MPCORB.DAT.gz
+#
+# The orignal plot is from:
+# https://shinobuamasaki.github.io/items/introduction-to-plplot-using-fortran-002.html
+#
+
+@ t0=time(now)
+
+read v MPCORB.DAT (nr:44,-1)  ;# skip header documents
+
+@ t1=time(now)
+@ dt=[t1]-[t0]
+prn reading time [dt] sec.    ;# it takes about 40sec to read
+
+title "Axis-Eccentricity Plot"
+xlab "Semimajor Axis (AU)"
+ylab "Eccentricity"
+
+plot v11 v9 (xr:0,6 yr:0,1 lw:0 st:dot sc:blue ss:0.2)
+
+@ t2=time(now)
+@ dt=[t2]-[t1]
+prn plotting time [dt] sec.   ;# it takes about 20sec to plot
