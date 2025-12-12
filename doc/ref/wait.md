@@ -10,11 +10,9 @@ example to wait console input
 ```
 tip> do n 1 10; prn [n]; wait 0; end
 1
-'b':break, others:continue >
+continue? (Y/n)>
 2
-'b':break, others:continue >
-3
-'b':break, others:continue > b  ;# break here
-tip> 
+continue? (Y/n)> n
+tip>
 ```
 
