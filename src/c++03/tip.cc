@@ -589,7 +589,6 @@ public:
       int maxline=count_maxline(fname.c_str());
       int n5=maxline/20;
       if(maxline>=100000) {
-	printf("'%s' looks large data\n",fname.c_str());
 	printf("0--------50--------100%c\n",'%');
       }
       while(std::getline(ifs,buf)) {
@@ -1609,7 +1608,7 @@ public:
       if(_ca[tag].is_connected()) {
 	if(_ca[tag].mon_flag()) {
 	  epics_ca_setval(_ca[tag],tag);
-	  var.set_num(tag+".update",1);
+	  var.set_num(tag+".update",_ca[tag].utime());
 	  _ca[tag].reset_mon_flag();
 	} else {
 	  var.set_num(tag+".update",0);
@@ -2502,9 +2501,7 @@ public:
 	       " also the following macro variables are created.\n"
 	       "macro variables:\n"
 	       "  v1        : the 1st element of data v1\n"
-	       "  v1.update : 1 if v1 updated, 0 if not updated\n"
-	       "  v2        : the 1st element of data v2\n"
-	       "  v2.update : 1 if v2 updated, 0 if not updated\n"
+	       "  v1.update : unix time if v1 updated, 0 if not updated\n"
 	       "  ... \n"
 	       ); return 0;
       }
