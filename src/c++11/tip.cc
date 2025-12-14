@@ -332,7 +332,7 @@ public:
     if(sn.nerr()==1 || sn.nerr()==3) {
       type=Num; return x;
     }
-    if(var.ts.distinguish_time_string(s) > 0 || sn.nerr()==2) {
+    if(sn.nerr()==2 || var.ts.distinguish_time_string(s) > 0) {
       type=Str; return 0;
     }
     type=Num; return x;
@@ -565,6 +565,15 @@ public:
       }
     }
   }
+  int count_maxline(const std::string &fname) {
+    int maxline=0;
+    std::ifstream ifs(fname);
+    if(ifs) {
+      std::string buf;
+      while(std::getline(ifs,buf)) ++maxline;
+    }
+    return maxline;
+  }
   int data_read(const std::string &v_str, const std::string &fname,
 	       Option &opt) {
     std::ifstream ifs(fname.c_str());
@@ -578,8 +587,16 @@ public:
       sp.set_quot_to_skip_split('"');
       check_data_file(fname,opt);
       std::string buf;
+      int maxline=count_maxline(fname.c_str());
+      int n5=maxline/20;
+      if(maxline>=100000) {
+	printf("0--------50--------100%c\n",'%');
+      }
       while(std::getline(ifs,buf)) {
 	nline++;
+	if(maxline>=100000) {
+	  if(nline%n5==0) {printf("o"); fflush(stdout);}
+	}
 	if(buf.size()==0) continue;
 	if(nline <opt.n0 ) {continue;}
 	if(opt.n1 > 0 && nline >opt.n1) {break;}
@@ -601,6 +618,9 @@ public:
 	    _dat[v_n].num.push_back(val);
 	  }
 	}
+      }
+      if(maxline>=100000) {
+	printf("\n");
       }
     } else {
       printf("can't open %s\n",fname.c_str());
