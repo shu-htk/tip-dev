@@ -7,7 +7,8 @@
 #ifndef THL_EPICS_CA_HH
 #define THL_EPICS_CA_HH
 
-#include <sys/time.h> // localtime_r(), ...
+#include <ctime> // localtime_r(), ...
+#include <sys/time.h> // gettimeofday()
 #include <unistd.h> // sleep(), usleep()
 #include <cstdarg> // vsnprintf(),...
 #include <cstdlib>
@@ -33,7 +34,11 @@ namespace thl {
     unsigned long _event_mask;
     bool _connected;
     bool _mon_flag;
+#ifdef USE_CLOCK_GETTIME
+    struct timespec _tv;
+#else
     struct timeval _tv;
+#endif
     char _time_str[128];
     int _option;
   public:
@@ -41,10 +46,12 @@ namespace thl {
 
     EpicsCA() : _chid(0), _connected(0), _mon_flag(0) {
       _event_mask = DBE_VALUE | DBE_ALARM; _option = 0;
+      tzset();
     }
     EpicsCA(const char *name, const char *opt="")
       : _chid(0), _connected(0), _mon_flag(0) {
       _event_mask = DBE_VALUE | DBE_ALARM; _option = 0;
+      tzset();
       connect(name,opt);
     }
     ~EpicsCA() {disconnect();}
@@ -325,14 +332,31 @@ namespace thl {
 
     void pend_event(double timeout=0.0) {ca_pend_event(timeout);}
 
-    void get_time() {gettimeofday(&_tv, NULL);}
+    void get_time(void) {
+#ifdef USE_CLOCK_GETTIME
+      clock_gettime(CLOCK_REALTIME,&_tv);
+#else
+      gettimeofday(&_tv, NULL);
+#endif
+    }
 
-    struct timeval get_tv() {return _tv;}
+    double utime() {
+#ifdef USE_CLOCK_GETTIME
+      return (double)(_tv.tv_sec-timezone) + 1e-9*(double)_tv.tv_nsec;
+#else
+      return (double)(_tv.tv_sec-timezone) + 1e-6*(double)_tv.tv_usec;;
+#endif
+    }
+    //    struct timeval get_tv() {return _tv;}
 
     const char *time_str() {
       struct tm t;
       localtime_r(&_tv.tv_sec, &t);
+#ifdef USE_CLOCK_GETTIME
+      int usec = 1e-3*(double)_tv.tv_nsec;
+#else
       int usec = _tv.tv_usec;
+#endif
       snprintf(_time_str,128,"%.4d-%.2d-%.2d %.2d:%.2d:%.2d.%.6d",
 	       t.tm_year+1900, t.tm_mon+1, t.tm_mday, t.tm_hour,
 	       t.tm_min, t.tm_sec, usec);
