@@ -566,7 +566,7 @@ public:
   }
   int count_maxline(const std::string &fname) {
     int maxline=0;
-    std::ifstream ifs(fname);
+    std::ifstream ifs(fname.c_str());
     if(ifs) {
       std::string buf;
       while(std::getline(ifs,buf)) ++maxline;
