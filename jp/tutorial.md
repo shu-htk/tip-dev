@@ -130,12 +130,16 @@ tip> line 0.82 0.86 0.85 0.85 (lc:blue); text 0.88 0.85 "y2"
 ```
 ![](../doc/fig/tut02c.png)
 
-"[fbox](ref/fbox.md)" フィルボックスを描く。  
-"[line](ref/line.md)" 線を描く。  
-"[text](ref/text.md)" テキストを描く  
-`(ft:solid)` 塗りつぶしスタイル（ [fill-area-style](#fill-area-style)）を "solid"にする。  
-`(rc:1)` 相対座標に設定する。  
-ここで相対座標では、x軸、y軸の範囲が両方とも0.0から1.0となる。
+`fbox`,`line`,`text`などのコマンドは`plot`などで描画されたグラフのエリア内に図形や文字を描画します。
+
+"[fbox](ref/fbox.md)" はフィルボックスを描きます。  
+"[line](ref/line.md)" は線を描きます。  
+"[text](ref/text.md)" はテキストを描きます。
+
+`(ft:solid)` のオプション指定で塗りつぶしスタイル（ [fill-area-style](#fill-area-style)）が "solid"になります。オプションが指定されないとデフォルトで塗りつぶしなしで枠のみ描画されます。
+
+`(rc:1)` のオプションは図形や文字の描画位置を相対座標に設定します。
+ここで相対座標とは、x軸、y軸の範囲が0.0から1.0と定義された座標系です。
 
 
 ## 1次元ヒストグラム
@@ -150,20 +154,20 @@ tip> stat x (cp:0.03,0.6 rc:1 ts:0.8)
 ```
 ![](../doc/fig/tut03.png)
 
-"[random](ref/random.md)" 指定されたサイズ、関数分布で乱数データを生成する。  
+"[random](ref/random.md)" は`set`コマンドで使える関数で、指定されたサイズ、関数分布で乱数データを生成します。  
 この例では
-100000のサイズの正規分布（Gaussian distribution,sigma=5 mean=10）が生成される。    
-"[hplot](ref/hplot.md)" データから1次元のヒストグラムを生成しプロットする。
-`(nb:50)` ヒストグラムのビン数を50に設定する。   
-オプション`(xr:Xmin,Xmax)`を設定するとヒストグラムの横軸の範囲を指定できる。  
-デフォルトでは、横軸の範囲はデータが全て収まるように自動的に設定される。  
-"[hfit](ref/hfit.md)" 指定された関数でヒストグラムをフィッティングして
-曲線を求めヒストグラムの上に描画する。  
-`(cp:0.03,0.9 rc:1)` フィッティングで得られた係数の情報を指定された
-座標の位置に描く。  
-ここでは相対座標でx=0.05,y=0.9の位置に描いている。   
-`(ts:0.8)`テキストのサイズを指定する（デフォルト値は1.0）。  
-"[stat](ref/stat.md)" データの統計情報を指定の位置に描く。
+100000のサイズの正規分布（Gaussian distribution,sigma=5 mean=10）が生成されます。    
+"[hplot](ref/hplot.md)"は データから1次元のヒストグラムを生成しプロットします。
+`(nb:50)` オプションでヒストグラムのビン数を50に設定しています。   
+`(xr:Xmin,Xmax)`オプションを設定するとヒストグラムの横軸の範囲を指定できます。
+デフォルトでは、横軸の範囲はデータが全て収まるように自動的に設定されます。  
+"[hfit](ref/hfit.md)"は指定された関数でヒストグラムをフィッティングして
+曲線を求めヒストグラムの上に描画します。  
+`(cp:0.03,0.9 rc:1)` オプションはフィッティングで得られた係数の情報を指定された
+座標の位置に描きます。  
+ここでは相対座標でx=0.05,y=0.9の位置に描いています。   
+`(ts:0.8)`オプションはテキストのサイズを指定します（デフォルト値は1.0）。  
+"[stat](ref/stat.md)"はデータの統計情報を指定の位置に描きます。
 
 ## 2次元ヒストグラム
 
@@ -176,8 +180,8 @@ tip> hplot2 x y (nx:30 ny:30)
 ```
 ![](../doc/fig/tut04.png)
 
-"[hplot2](ref/hplot2.md)" 指定された2つのデータから2次元ヒストグラムを生成しプロットする。  
-`(nx:30)` and `(ny:30)` 2次元ヒストグラムのx軸、y軸のビン数を設定する。
+"[hplot2](ref/hplot2.md)" は指定された2つのデータから2次元ヒストグラムを生成しプロットします。  
+`(nx:30)` と `(ny:30)`のオプションは、それぞれ2次元ヒストグラムのx軸、y軸のビン数を設定します。
 
 ## tipインタープリターを終了する
 
@@ -185,23 +189,23 @@ tip> hplot2 x y (nx:30 ny:30)
 tip> q
 ```
 
-コマンドヒストリーファイル `.tip_history`がカレントディレクトリに
-保存される。
+終了すると、コマンドヒストリーファイル `.tip_history`がカレントディレクトリに
+保存されます。
 
 
 ## マクロファイルの作成と実行
 
 
-コマンドヒストリーのファイルをマクロファイルとしてコピーする。
+コマンドヒストリーのファイルをマクロファイルとしてコピーします。
 
 
 ```
 $ cp .tip_history some_macro.tip
 ```
 
-コピーしたマクロファイル`some_macro.tip`を編集する。
+コピーしたマクロファイル`some_macro.tip`を編集します。
 
-その後、`tip`を起動して以下のようにしてマクロファイルを実行する。
+その後、`tip`を起動して以下のようにしてマクロファイルを実行します。
 
 ```
 tip> exe some_macro.tip
@@ -210,7 +214,8 @@ tip> exe some_macro.tip
 
 ## Colors
 
-To find color names defined in tip, type `opt color` or `opt c`.
+tipインタプリタで定義されている色の名前は`opt color`または略して`opt c`と
+打つことで知ることができます。  
 ```
 tip> opt color
 color names of the symbol/line/fill :
@@ -222,7 +227,8 @@ color names of the symbol/line/fill :
 
 ## Symbols
 
-To find symbols names defined in tip, type `opt symbol` or `opt s`.
+tipインタプリタで定義されているシンボルの名前は`opt symbol`または略して`opt s`と
+打つことで知ることができます。  
 ```
 tip> opt symbol
 names of the symbol :
@@ -233,8 +239,8 @@ names of the symbol :
 ```
 
 ## Fill-Area-Style
+tipインタプリタで定義されているフィルエリアの名前は`opt fill`または略して`opt f`と打つことで知ることができます。  
 
-To find fill-area names defined in tip, type `opt fill` or `opt f`.
 ```
 tip> opt fill
 names of the fill area style:
