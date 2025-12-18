@@ -153,13 +153,22 @@ else
     grep '^#12:' $0 | sed "s/#12://g" >> Makefile.1
 fi
 
-if [ -e /usr/include/time.h ] ; then
-    clk=`grep -c clock_gettime /usr/include/time.h`
-    if [ $clk -ne 0 ] ; then
-	echo "found clock_gettime"
-	grep '^#13:' $0 | sed "s/#13://g" >> Makefile.1
-    fi
+cat <<END > check_clock_gettime.cc
+#include <ctime>
+int main() {struct timespec ts; clock_gettime(CLOCK_REALTIME,&ts); return 0;}
+END
+if g++ -o /dev/null check_clock_gettime.cc >& /dev/null ; then
+    echo "clock_gettime available"
+    grep '^#13:' $0 | sed "s/#13://g" >> Makefile.1
 fi
+rm check_clock_gettime.cc
+#if [ -e /usr/include/time.h ] ; then
+#    clk=`grep -c clock_gettime /usr/include/time.h`
+#    if [ $clk -ne 0 ] ; then
+#	echo "found clock_gettime"
+#	grep '^#13:' $0 | sed "s/#13://g" >> Makefile.1
+#    fi
+#fi
 
 cat Makefile.1 Makefile.2 > Makefile
 rm Makefile.1 Makefile.2
