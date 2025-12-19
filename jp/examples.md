@@ -28,10 +28,10 @@
 
 
 
-## 実データを使用した例
+## 公開されている研究データを使用した例
 
 - [ex23: Huge data reading and scatter plot](../doc/ex/ex23.md)
-- [ex24: Single muon Cherenkov light detected in Super-Kamiokande](../doc/ex/ex24.md)
+- [ex24: Simulation of single muon Cherenkov light](../doc/ex/ex24.md)
 
 ## EPICS CA (オプション機能)
 
