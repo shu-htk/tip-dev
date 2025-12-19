@@ -478,7 +478,7 @@ namespace thl {
 	  CFormat fmt;
 	  set_str(tag,fmt("%.11g",num(tag)));
 	}
-	set_str(tag,trim(s),ope);
+	set_str(tag,s,ope);
       } else {
 	if(exist_str(tag)) {
 	  Calc calc;
@@ -576,7 +576,7 @@ namespace thl {
 	sp.set_quot_to_skip_split('"');
 	sp.split(str(tag),fs);
 	for(size_t j=0; j<sp.size(); j++) {
-	  set_str(tag+fmt("%lu",j+1),trim(sp(j)));
+	  set_str(tag+fmt("%lu",j+1),sp(j));
 	}
       } else {
 	printf("string macro variable %s is not found\n",tag.c_str());
@@ -595,10 +595,10 @@ namespace thl {
 	  sp2.split(sp(j),"=");
 	  if(sp2.size()>1) {
 	    std::string tag=sp2(0);
-	    if(update || !exist(tag)) set_expr(tag,trim(sp2(1)),0);
+	    if(update || !exist(tag)) set_str(tag,sp2(1));
 	  } else {
 	    std::string tag=fmt("$%d",j+1);
-	    if(update || !exist(tag)) set_expr(tag,trim(sp(j)),0);
+	    if(update || !exist(tag)) set_str(tag,sp(j));
 	  }
 	}
       } else {
