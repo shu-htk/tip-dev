@@ -29,6 +29,7 @@
 ## Examples using public research data
 - [ex23: Huge data reading and scatter plot](ex/ex23.md)
 - [ex24: Simulation of single muon Cherenkov light](ex/ex24.md)
+- [ex25: Weather Tokyo Japan in 2025](ex/ex25.md)
 
 ## EPICS CA (optional)
 
