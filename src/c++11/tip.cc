@@ -325,15 +325,15 @@ public:
       opt.att.time_xaxis = 0;
     }
   }
-  double str_to_val(const std::string &s,  DataType &type) {
+  double str_to_val(const std::string &s, DataType &type) {
     thl::StrNum sn;
     sn.set_verbose(0);
     double x = sn.stof(s);
-    if(sn.nerr()==1 || sn.nerr()==3) {
-      type=Num; return x;
-    }
     if(sn.nerr()==2 || var.ts.distinguish_time_string(s) > 0) {
       type=Str; return 0;
+    }
+    if(sn.nerr()==1 || sn.nerr()==3) {
+      type=Num; return x;
     }
     type=Num; return x;
   }
@@ -585,7 +585,7 @@ public:
       thl::StrSplit sp;
       sp.take_null_field(opt.nf);
       sp.set_quot_to_skip_split('"');
-      check_data_file(fname,opt);
+      //      check_data_file(fname,opt);
       std::string buf;
       int maxline=count_maxline(fname.c_str());
       int n5=maxline/20;

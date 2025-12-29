@@ -327,15 +327,15 @@ public:
       opt.att.time_xaxis = 0;
     }
   }
- double str_to_val(const std::string &s, DataType &type) {
+  double str_to_val(const std::string &s, DataType &type) {
     thl::StrNum sn;
     sn.set_verbose(0);
     double x = sn.stof(s);
-    if(sn.nerr()==1 || sn.nerr()==3) {
-      type=Num; return x;
-    }
     if(sn.nerr()==2 || var.ts.distinguish_time_string(s) > 0) {
       type=Str; return 0;
+    }
+    if(sn.nerr()==1 || sn.nerr()==3) {
+      type=Num; return x;
     }
     type=Num; return x;
   }
@@ -371,11 +371,13 @@ public:
   int data_set_list(const std::string &v, const std::string &expr) {
     thl::Bracket bc('{','}',expr); if(bc.size()<1) return 1;
     _dat[v].clear();
+    thl::Calc calc;
     thl::StrSplit sp;
     sp.set_quot_to_skip_split('"');
     sp.split(bc.contents(0),", ");
     for(size_t j=0; j<sp.size(); j++) {
-      double x = str_to_val(sp(j),_dat[v].type);
+      double x = calc.eval(sp(j));
+      _dat[v].type = calc.not_digit() ? Str : Num;
       if(_dat[v].type==Str) {
 	_dat[v].str.push_back(thl::trim(sp(j)));
       } else {
@@ -393,6 +395,7 @@ public:
       return 1;
     } else {
       DataType type0, type1;
+
       int ndata = sp.stoi(0);
       double x0 = str_to_val(sp(1),type0);
       double x1 = str_to_val(sp(2),type1);
@@ -584,7 +587,7 @@ public:
       thl::StrSplit sp;
       sp.take_null_field(opt.nf);
       sp.set_quot_to_skip_split('"');
-      check_data_file(fname,opt);
+      //      check_data_file(fname,opt);
       std::string buf;
       int maxline=count_maxline(fname.c_str());
       int n5=maxline/20;
