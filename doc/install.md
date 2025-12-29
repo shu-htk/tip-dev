@@ -34,15 +34,17 @@ sudo dnf install readline-devel
 ```
 - **Windows 11**
 
-The easiest way is to run the Linux on WSL2.
+WSL : [https://learn.microsoft.com/windows/wsl/install](https://learn.microsoft.com/windows/wsl/install  )  
 
-official : https://learn.microsoft.com/windows/wsl/install  
+Cygwin:
+[https://sourceforge.net/p/plplot/wiki/Setup_cygwin/](https://sourceforge.net/p/plplot/wiki/Setup_cygwin/)
+
 
 - **macOS 12.7.6**
-1. install MacPorts
-   https://www.macports.org
-2. install XQuartz
-   https://www.xquartz.org
+1. install MacPorts:
+   [https://www.macports.org](https://www.macports.org)
+2. install XQuartz:
+   [https://www.xquartz.org](https://www.xquartz.org)
 3. install PLPLOT, readline from the terminal  
 ```
 sudo port install plplot
@@ -51,12 +53,12 @@ sudo port install readline
 
 ## (2) Configure and make the tip executable
 
-Access to https://github.com/shu-htk/tip-dev
+Access to
+[https://github.com/shu-htk/tip-dev](https://github.com/shu-htk/tip-dev)
 
 From the **"Code"** pull-down menu, choose **"Download zip"**
 
-or directly download from
- https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip
+or directly download from [https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip](https://github.com/shu-htk/tip-dev/archive/refs/heads/main.zip)
 
 Copy downloaded zip file to your working directory.
 
@@ -95,8 +97,7 @@ It is a simple example using [MacroTool](ref/MacroTool.md).
 If it is already installed the EPICS in your computer,
 just check if the environment variable `EPICS_BASE` is set in your shell.
 If it is set,
-the [configure script of the Tip](#2-configure-and-make-the-tip-executable)
-generate Makefile to enable the EPICS CA.
+the configure script of the Tip generate Makefile to enable the EPICS CA.
 
 If it is not installed the EPICS, you need to make and setup the
 EPICS environment as following.
@@ -104,9 +105,9 @@ EPICS environment as following.
 Download the archive of the EPICS source.
 
 - stable:: 
-https://epics-controls.org/download/base/base-3.15.9.tar.gz
+[https://epics-controls.org/download/base/base-3.15.9.tar.gz](https://epics-controls.org/download/base/base-3.15.9.tar.gz)
 - new:
-https://epics-controls.org/download/base/base-7.0.9.tar.gz
+[https://epics-controls.org/download/base/base-7.0.9.tar.gz](https://epics-controls.org/download/base/base-7.0.9.tar.gz)
 
 For example, installing new version to $HOME/epics
 

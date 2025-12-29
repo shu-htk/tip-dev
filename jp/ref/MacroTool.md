@@ -10,8 +10,8 @@ macro commands:
  --    : decrement(-1) numerical variable
  for   : foreach loop
  do    : numerical ranged loop
- if    : conditional branch
  while : conditional loop
+ if    : conditional branch
  print : print arguments (abbr. pr)
  fmt   : set output format of macro variable
  wait  : wait time or console input
