@@ -787,6 +787,7 @@ namespace thl {
 	" --    : decrement(-1) numerical variable\n"
 	" for   : foreach loop\n"
 	" do    : numerical ranged loop\n"
+	" while : conditional loop\n"
 	" if    : conditional branch\n"
 	" print : print arguments (abbr. pr)\n"
 	" fmt   : set output format of macro variable\n"
