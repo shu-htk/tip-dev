@@ -26,11 +26,12 @@
 - [ex21: Absolute coordinate and Relative coordinate](../doc/ex/ex21.md)
 - [ex22: Gain curve of Low Pass Filter](../doc/ex/ex22.md)
 
-## 公開されている研究データを使用した例
+## インターネットで公開されているデータを使用した例
 
 - [ex23: Huge data reading and scatter plot](../doc/ex/ex23.md)
 - [ex24: Simulation of single muon Cherenkov light](../doc/ex/ex24.md)
 - [ex25: Weather Tokyo Japan in 2025](../doc/ex/ex25.md)
+- [ex26: World Population Trends](../doc/ex/ex26.md)
 
 ## EPICS CA (オプション機能)
 

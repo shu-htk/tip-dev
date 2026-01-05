@@ -26,10 +26,11 @@
 - [ex21: Absolute coordinate and Relative coordinate](ex/ex21.md)
 - [ex22: Gain curve of Low Pass Filter](ex/ex22.md)
 
-## Examples using public research data
+## Examples using data published online
 - [ex23: Huge data reading and scatter plot](ex/ex23.md)
 - [ex24: Simulation of single muon Cherenkov light](ex/ex24.md)
 - [ex25: Weather Tokyo Japan in 2025](ex/ex25.md)
+- [ex26: World Population Trends](ex/ex26.md)
 
 ## EPICS CA (optional)
 
