@@ -73,8 +73,9 @@ fi
 # RedHat dnf : /usr/lib64
 # MacPorts port : /opt/local/lib
 
+arch=`uname -m`
 if [ $pkg_path == null ] ; then
-    for d in /usr/lib/x86_64-linux-gnu /usr/lib64 /opt/local/lib
+    for d in /usr/lib/${arch}-linux-gnu /usr/lib64 /opt/local/lib
     do
 	if [ -e $d/pkgconfig/plplot.pc ] ; then
 	    pkg=plplot
