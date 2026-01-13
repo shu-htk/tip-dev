@@ -103,11 +103,11 @@ namespace thl {
     int color_to_index(const std::string &s) {
       if(s=="0" ||s=="whi"||s=="white") return 0;
       if(s=="1" ||s=="red") return 1;
-      if(s=="2" ||s=="yel"||s=="yellow") return 2;
+      if(s=="2" ||s=="ylw"||s=="yellow") return 2;
       if(s=="3" ||s=="grn"||s=="green") return 3;
       if(s=="4" ||s=="aqu"||s=="aqua") return 4;
       if(s=="5" ||s=="pnk"||s=="pink") return 5;
-      if(s=="6" ||s=="whe"||s=="wheat") return 6;
+      if(s=="6" ||s=="wht"||s=="wheat") return 6;
       if(s=="7" ||s=="gry"||s=="gray") return 7;
       if(s=="8" ||s=="brn"||s=="brown") return 8;
       if(s=="9" ||s=="blu"||s=="blue") return 9;
@@ -122,11 +122,11 @@ namespace thl {
     const char* index_to_color(int index, bool shortname=0) {
       if(index==0) return shortname ? "whi" : "white";
       if(index==1) return "red";
-      if(index==2) return shortname ? "yel" : "yellow";
+      if(index==2) return shortname ? "ylw" : "yellow";
       if(index==3) return shortname ? "grn" : "green";
       if(index==4) return shortname ? "aqu" : "aqua";
       if(index==5) return shortname ? "pnk" : "pink";
-      if(index==6) return shortname ? "whe" : "wheat";
+      if(index==6) return shortname ? "wht" : "wheat";
       if(index==7) return shortname ? "gry" : "gray";
       if(index==8) return shortname ? "brn" : "brown";
       if(index==9) return shortname ? "blu" : "blue";
