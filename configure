@@ -184,8 +184,8 @@ echo "** configure normal end **"
 #1:CFLG = -Wall
 #11:TAG = $(shell git describe --tags --always)
 #11:LOG = $(shell git log -1 --pretty=format:'%ad, %an' --date=iso)
-#11:CFLG += -D GIT_VER="\"$(TAG) $(LOG)\""
-#12:CFLG += -D GIT_VER="\"$(shell cat version.txt)\""
+#11:CFLG += -D TIP_VER="\"$(TAG) $(LOG)\""
+#12:CFLG += -D TIP_VER="\"$(shell cat version.txt)\""
 #13:CFLG += -D USE_CLOCK_GETTIME
 
 #2:INC = -I./include

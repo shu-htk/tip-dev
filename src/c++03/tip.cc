@@ -2582,8 +2582,9 @@ int main(int argc, const char *argv[]) {
 
   thl::PLPlot pl;
   if(arg.find_opt("v") || arg.find_opt("-version")) {
-    printf("tip (c++03) version: %s\n",GIT_VER);
+    printf("tip (c++03) version: %s\n",TIP_VER);
     printf("PLPlot version: %s\n",pl.ver_str());
+    printf("Readline version: %d.%d\n",RL_VERSION_MAJOR,RL_VERSION_MINOR);
 #if USE_EPICS_CA 
     printf("EPICS version: %s\n", EPICS_VER);
 #endif
