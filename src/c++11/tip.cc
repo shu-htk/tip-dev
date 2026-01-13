@@ -195,7 +195,7 @@ private:
 	     " red(1), yellow(ylw,2), green(grn,3), aqua(aqu,4), pink(pnk,5)\n"
 	     " wheat(wht,6), gray(gry,7), brown(brn,8), blue(blu,9), "
 	       "violet(vio,10)\n cyan(cyn,11), turquoise(tqs,12), "
-	       "magenta(mgt,13), salmon(smn,14)\n black(blk,15)\n"
+	       "magenta(mgt,13), salmon(smn,14)\n black(blk,15), white(whi,0)\n"
 	       );
       }
       if(s=="line"||s=="l") {
@@ -2040,7 +2040,7 @@ public:
       }
       Option opt=get_opt(buf);
       if(buf.find(">") != buf.npos) {
-	if(args.size()>=3) data_cat(args(1),args(2),args(3),opt);
+	if(args.size() >= 3) data_cat(args(1),args(2),args(3),opt);
       } else {
 	data_show(args(1),opt);
       }
@@ -2496,7 +2496,7 @@ public:
     if(args(0)=="caclose") {
       if(args.size() < 2) {
 	printf("usage: caclose [v1,v2,...]\n"
-	       " close the connection of the EPICS record to"
+	       " close the connection of the EPICS records to"
 	       " the data v1,v2,...\n"
 	       ); return 0;
       }

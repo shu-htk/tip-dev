@@ -197,7 +197,7 @@ private:
 	     " red(1), yellow(ylw,2), green(grn,3), aqua(aqu,4), pink(pnk,5)\n"
 	     " wheat(wht,6), gray(gry,7), brown(brn,8), blue(blu,9), "
 	       "violet(vio,10)\n cyan(cyn,11), turquoise(tqs,12), "
-	       "magenta(mgt,13), salmon(smn,14)\n black(blk,15)\n"
+	       "magenta(mgt,13), salmon(smn,14)\n black(blk,15), white(whi,0)\n"
 	       );
       }
       if(s=="line"||s=="l") {
