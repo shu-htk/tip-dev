@@ -386,19 +386,25 @@ public:
     }
     return 0;
   }
-  int data_set_range(const std::string &v, const std::string &expr) {
+  int data_set_range(const std::string &v, const std::string &expr,
+		     bool incr_mode=0) {
     thl::Bracket bc('(',')',expr); if(bc.size()<1) return 1;
     thl::StrSplit sp(bc.contents(0),",");
     if(sp.size()<3) {
-      printf("range() should have at least 3 arguments\n"
-	     " N:number of data, x0:initial value, x1:final value\n");
+      if(incr_mode) {
+	printf("usage: set x = incr(N,x0,dx)\n"
+	       " N:number of data, x0:initial value, dx:incremental value\n");
+      } else {
+	printf("usage: set x = range(N,x0,x1)\n"
+	       " N:number of data, x0:initial value, x1:final value\n");
+      }
       return 1;
     } else {
       DataType type0, type1;
-
       int ndata = sp.stoi(0);
       double x0 = str_to_val(sp(1),type0);
       double x1 = str_to_val(sp(2),type1);
+      double dx = incr_mode ?  x1 : (x1-x0)/(double)(ndata-1);
       if(type0 != Num || type1 != Num) {
 	printf("data type should be numerical\n"); return 1;
       }
@@ -410,7 +416,6 @@ public:
       if(ndata==1) {
 	_dat[v].num.push_back(x0);
       } else {
-	double dx = (x1-x0)/(double)(ndata-1);
 	for(int j=0; j<ndata; j++) {
 	  _dat[v].num.push_back(x0+dx*j);
 	}
@@ -1934,6 +1939,7 @@ public:
       if(sp.size() < 3) {
 	printf("usage: set v = {x0,x1,x2,...}\n"
 	       "       set v = range(N,x0,x1)\n"
+	       "       set v = incr(N,x0,dx)\n"
 	       "       set v = random(N,uni|gaus|exp[,params...]) [(opt)]\n"
 	       "       set v = time(t[,unit]) \n"
 	       "       set v = expression\n"
@@ -1946,7 +1952,9 @@ public:
       if(expr.find("{") == 0) {
 	data_set_list(tag,buf);
       } else if(expr.find("range(") == 0) {
-	data_set_range(tag,buf);
+	data_set_range(tag,buf,0);
+      } else if(expr.find("incr(") == 0) {
+	data_set_range(tag,buf,1);
       } else if(expr.find("random(") == 0) {
 	Option opt=get_opt(buf);
 	data_set_random(tag,buf,opt);
@@ -1963,6 +1971,12 @@ public:
 	     "  set N-size data starting from x0 and ending at x1.\n"
 	     "  data elements interval dx = (x1-x0)/(N-1)\n"
 	     "  ex.) range(5,0,2) set the data {0, 0.5, 1, 1.5, 2}.\n" 
+	     ); return 0;
+    }
+    if(args(0)=="incr") {
+      printf("usage: set v = incr(N,x0,dx)\n"
+	     "  set N-size data starting from x0 increment by dx.\n"
+	     "  ex.) incr(5,0,2) set the data {0, 2, 4, 6, 8}.\n" 
 	     ); return 0;
     }
     if(args(0)=="random") {

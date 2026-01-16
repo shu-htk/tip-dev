@@ -3,6 +3,7 @@
 tip> set
 usage: set v = {x0,x1,x2,...}
        set v = range(N,x0,x1)
+       set v = incr(N,x0,dx)
        set v = random(N,uni|gaus|exp[,params...]) [(opt)]
        set v = time(t[,unit]) 
        set v = expression
@@ -21,8 +22,11 @@ tip> set x={1,2,3}     # OK
 
 ## set data using range()
 
+set data by initial value(x0) and final value(x1)
+
 > [range](range.md)() is a function exclusive to the `set` command
 > and cannot be used in the expressions.
+
 
 example
 ```
@@ -30,6 +34,21 @@ tip> set x = range(10, 1, 10)  ;# OK: you can put spaces between value and comma
 tip> set x = range (10, 1, 10) ;# NG: you can not put spaces between range and (
 tip> set x=range(10,1,10)      ;# OK
 tip> set x = y + range(10,1,10) ;# NG: you can not use it in the expression
+```
+
+## set data using incr()
+
+set data by initial value(x0) and incremental value(dx)
+
+```
+tip> incr
+usage: set v = incr(N,x0,dx)
+  set N-size data starting from x0 increment by dx.
+  ex.) incr(5,0,2) set the data {0, 2, 4, 6, 8}.
+  
+tip> set x=incr(5,0,2)
+tip> cat x
+x : data(num) :  0 2 4 6 8
 ```
 
 ## set data using random()
