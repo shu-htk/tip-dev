@@ -2,11 +2,11 @@
 #
 # using external program:  src/c++03/mandelbrot.cc
 #
-args n=500,xr=-2:0.5,yr=-1.3:1.3
+args ndiv=500,ntry=100,xr=-2:0.5,yr=-1.3:1.3
 
-sys ./bin/mandelbrot -n [n] -xr [xr] -yr [yr]
+sys ./bin/mandelbrot -ndiv [ndiv] -ntry [ntry] -xr [xr] -yr [yr]
 
-title "a fractal of the Mandelbrot set"
+title "Fractal of the Mandelbrot set (ndiv=[ndiv],ntry=[ntry])"
 mread x,y,z mandelbrot.dat
 vp 0 0 0 0 1
 mplot x y z (xm:0 ym:0 mt:cont2)
