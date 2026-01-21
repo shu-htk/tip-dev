@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # targets w/o plplot
-t1=(my_macro)
+t1=(my_macro mandelbrot)
 
 # targets with plplot and Epics
 t2=(tip)

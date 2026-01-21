@@ -25,6 +25,7 @@
 - [ex20: plot time variation of increasing data](../doc/ex/ex20.md)
 - [ex21: Absolute coordinate and Relative coordinate](../doc/ex/ex21.md)
 - [ex22: Gain curve of Low Pass Filter](../doc/ex/ex22.md)
+- [ex27: Draw a fractal of the Mandelbrot set](../doc/ex/ex27.md)
 
 ## インターネットで公開されているデータを使用した例
 
