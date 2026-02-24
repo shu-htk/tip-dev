@@ -92,7 +92,7 @@ private:
   };
   struct Option {
     double cx={0},cy={0},x0={0},x1={0},y0={0},y1={0},z0={0},z1={0},
-           fx0={0},fx1={0},dt={1},fq={1};
+           fx0={0},fx1={0},dt={1},fq={0};
     int n0={0},n1={-1},nb={100},nx={20},ny={20},bp={0},dm={0},mv={1},ae={0};
     bool rp={0}, cr={1}, rc={0}, fl={1}, nf={0};
     std::string fs={" \t\n"},fw={"rc"},cf={""},cc={""},sd={"clock"},
@@ -982,30 +982,23 @@ public:
   double get_freq_by_fft(const std::vector<double> &vecx,
 			 const std::vector<double> &vecy) {
     double dt = vecx[1] - vecx[0];
-    thl::FFT fft(vecy.size(),dt); fft.wid = fft.BH;
+    size_t nsize=vecy.size()*100;
+    thl::FFT fft(nsize,dt); fft.wid = fft.BH;
     for(size_t j=0; j<vecy.size(); j++) fft.set(j,vecy[j]);
+// zero padding
+    for(size_t j=vecy.size(); j<nsize; j++) fft.set(j,0);
     fft.calc();
     std::vector<double> x,y;
     double df = fft.df();
+    double amp_max=0, fpeak=0;
     for(size_t j=0; j<fft.size()/2; j++) {
-      x.push_back(df*j);
-      y.push_back(fft.amp_norm(j));
-    }
-    double ymax=y[1];
-    size_t ipeak=1;
-    for(size_t j=1; j<y.size();j++) {
-      if(y[j]>ymax) {ymax=y[j]; ipeak=j;}
-    }
-    double thresh = y[ipeak]/4;
-    double xysum=0,ysum=0;
-    for(size_t j=ipeak-10; j<ipeak+10; j++) {
-      if(j<1 || j>=y.size()-1) continue;
-      if(y[j]>thresh && y[j]<=y[ipeak]) {
-	xysum += x[j]*y[j]; ysum += y[j];
+      double amp = fft.amp_norm(j);
+      if(amp > amp_max) {
+	amp_max=amp;
+	fpeak=df*j;
       }
     }
-    //    printf("ipeak=%d x=%f xmean=%f\n",ipeak,x[ipeak],xysum/ysum);
-    return xysum/ysum;
+    return fpeak;
   }
   int data_fit(const std::string &vx, const std::string &vy,
 	      const std::string &func, Option &opt) {
@@ -1057,8 +1050,8 @@ public:
 	  " c0=%g\n c1=%g\n chi2/ndf= %.3g/%d"
 	  ,fit(0), fit(1), fit.chisq(), fit.ndf());
     }
-    if(func=="s"||func=="sin"||func=="s2") {
-      if(func=="s2") opt.fq = get_freq_by_fft(vecx,vecy);
+    if(func=="s"||func=="sin") {
+      if(opt.fq==0) opt.fq = get_freq_by_fft(vecx,vecy);
       fit.calc_sin(vecx,vecy,opt.fq,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
       fmt("@ Sinusoidal Fitting:\n y = c0+c1*sin(2PI*c3*x)+c2*cos(2PI*c3*x)\n"
