@@ -1,9 +1,9 @@
 # Install
 
-At the moment the following systems have been tested.
+At the moment it is tested on the following systems.
 
 - Ubuntu 24.04 (both of native and WSL2 on Windows11)
-- AlmaLinux 9.5 (both of native and WSL2 on Windows11)
+- AlmaLinux 9.7 (both of native and WSL2 on Windows11)
 - macOS 12.7.6 (MacBook Air 2015 MJVM2J/A)
 
 In principle you can install the tip on the system
@@ -20,18 +20,24 @@ sudo apt install libplplot-dev
 sudo apt install plplot-driver-cairo
 sudo apt install libreadline-dev
 ```
-- **AlmaLinux 9**
+- **AlmaLinux 9.7**
 ```
 sudo dnf update
 sudo dnf upgrade
-sudo dnf install dnf-plugins-core     (<-- this may not be necessary)
-sudo dnf config-manager --enable crb
 sudo dnf install epel-release
-sudo dnf install epel-next-release
 sudo dnf install g++
 sudo dnf install plplot-devel
 sudo dnf install readline-devel
 ```
+
+<!-- 
+```
+sudo dnf install dnf-plugins-core
+sudo dnf config-manager --enable crb
+sudo dnf install epel-next-release
+```
+-->
+
 - **Windows 11**
 
 WSL : [https://learn.microsoft.com/windows/wsl/install](https://learn.microsoft.com/windows/wsl/install  )  
