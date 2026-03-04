@@ -96,7 +96,8 @@ private:
     int n0={0},n1={-1},nb={100},nx={20},ny={20},bp={0},dm={0},mv={1},ae={0};
     bool rp={0}, cr={1}, rc={0}, fl={1}, nf={0};
     std::string fs={" \t\n"},fw={"rc"},cf={""},cc={""},sd={"clock"},
-                gt={"slope"},ht={"bin1"},mt={"mesh1"},tf={""},td={"- :"};
+      gt={"slope"},ht={"bin1"},mt={"mesh1"},tf={""},td={"- :"},
+      ex={"1"},ey={"1"},ez={"1"};
     thl::PLAtt att;
     Option(void) {}
     void print(const std::string &s) {
@@ -112,6 +113,9 @@ private:
       if(s=="cr"||s=="*") printf("cr: clear flag : [%d]\n",cr);
       if(s=="dm"||s=="*") printf("dm: debug mode : [%d]\n",dm);
       if(s=="dt"||s=="*") printf("dt: time tick of FFT: [%g]\n",dt);
+      if(s=="ex"||s=="*") printf("ex: x-error: [%s]\n",ex.c_str());
+      if(s=="ey"||s=="*") printf("ey: y-error: [%s]\n",ey.c_str());
+      if(s=="ez"||s=="*") printf("ez: z-error: [%s]\n",ez.c_str());
       if(s=="fc"||s=="*") printf("fc: fill area color: [%s]\n",
 				 att.index_to_color(att.fcol));
       if(s=="fl"||s=="*") printf("fl: flush flag: [%d]\n",fl);
@@ -259,6 +263,9 @@ public:
       if(sp(0)=="cr") {opt.cr = sp.stoi(1);}
       if(sp(0)=="dm") {opt.dm = sp.stoi(1);}
       if(sp(0)=="dt") {opt.dt = sp.stof(1);}
+      if(sp(0)=="ex") {opt.ex = sp(1);}
+      if(sp(0)=="ey") {opt.ey = sp(1);}
+      if(sp(0)=="ez") {opt.ez = sp(1);}
       if(sp(0)=="fc") {opt.att.fcol = opt.att.color_to_index(sp(1));}
       if(sp(0)=="fl") {opt.fl = sp.stoi(1);}
       if(sp(0)=="fq") {opt.fq = sp.stof(1);}
@@ -937,6 +944,12 @@ public:
     } else if(opt.gt == "slope") {
       _pl->draw_graph(_dat[vx].num,_dat[vy].num);
     }
+    if(opt.ex != "1") {
+      _pl->draw_error_x(_dat[vx].num,_dat[vy].num,_dat[opt.ex].num);
+    }
+    if(opt.ey != "1") {
+      _pl->draw_error_y(_dat[vx].num,_dat[vy].num,_dat[opt.ey].num);
+    }
     if(opt.fl) _pl->flush();
     return 0;
   }
@@ -957,7 +970,7 @@ public:
       _pl->draw_box3d(opt.bp,opt.cr);
       save_graph_range();
     }
-    _pl->draw_graph3d(_dat[vx].num, _dat[vy].num, _dat[vz].num);
+    _pl->draw_graph3d(_dat[vx].num, _dat[vy].num, _dat[vz].num);    
     if(opt.fl) _pl->flush();
     return 0;
   }
@@ -1003,21 +1016,23 @@ public:
   int data_fit(const std::string &vx, const std::string &vy,
 	      const std::string &func, Option &opt) {
     if(check_data2(vx,vy)) return 1;
+    std::vector<double> ey(_dat[vy].size(),1);
+    if(opt.ey != "1") {ey = _dat[opt.ey].num;}
     _pl->att = opt.att;
     _pl->att.lwid=1; _pl->att.symb=0;
-    std::vector<double> &vecx = _dat[vx].num;
-    std::vector<double> &vecy = _dat[vy].num;
+    std::vector<double> &x = _dat[vx].num;
+    std::vector<double> &y = _dat[vy].num;
     thl::CFormat fmt;
     thl::LsFit fit;
     if(func=="l"||func=="lin") {
-      fit.calc_lin(vecx,vecy,opt.fx0,opt.fx1);
+      fit.calc_lin(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
       fmt("@ Linear Fitting:\n y = c0 + c1*x \n"
 	  " c0=%g\n c1=%g\n chi2/ndf= %.3g/%d"
 	  ,fit(0), fit(1), fit.chisq(), fit.ndf());
     }
     if(func=="q"||func=="quad") {
-      fit.calc_quad(vecx,vecy,opt.fx0,opt.fx1);
+      fit.calc_quad(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
       fmt("@ Quadratic Fitting:\n y = c0 + c1*x + c2*x^2 \n"
 	  " c0=%g\n c1=%g\n c2= %g\n chi2/ndf= %.3g/%d"
@@ -1026,40 +1041,40 @@ public:
     if(func=="g"||func=="gaus") {
       char c=' ';
       if(opt.fx0 == opt.fx1) {
-	fit.calc_statistics(vecx,vecy);
+	fit.calc_statistics(x,y);
 	opt.fx0 = fit(1)-fit(2)*3;
 	opt.fx1 = fit(1)+fit(2)*3; c = '*';
       }
-      fit.calc_gaus(vecx,vecy,opt.fx0,opt.fx1);
+      fit.calc_gaus(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
       fmt("@ Gaussian Fitting%c:\n y = c0*exp(-(x-c1)^2/2*c2^2) \n"
 	  " c0:amp=%g\n c1:mean=%g\n c2:sgm=%g\n chi2/ndf= %.3g/%d"
 	  ,c,fit(0), fit(1), fit(2), fit.chisq(), fit.ndf());
     }
     if(func=="e"||func=="exp") {
-      fit.calc_exp(vecx,vecy,opt.fx0,opt.fx1);
+      fit.calc_exp(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
       fmt("@ Exponential Fitting:\n y = c0*exp(c1*x) \n"
 	  " c0=%g\n c1=%g\n chi2/ndf= %.3g/%d"
 	  ,fit(0), fit(1), fit.chisq(), fit.ndf());
     }
     if(func=="log") {
-      fit.calc_log(vecx,vecy,opt.fx0,opt.fx1);
+      fit.calc_log(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
       fmt("@ Logarithm Fitting:\n y = c0+log(c1+x) \n"
 	  " c0=%g\n c1=%g\n chi2/ndf= %.3g/%d"
 	  ,fit(0), fit(1), fit.chisq(), fit.ndf());
     }
     if(func=="s"||func=="sin") {
-      if(opt.fq==0) opt.fq = get_freq_by_fft(vecx,vecy);
-      fit.calc_sin(vecx,vecy,opt.fq,opt.fx0,opt.fx1);
+      if(opt.fq==0) opt.fq = get_freq_by_fft(x,y);
+      fit.calc_sin(x,y,ey,opt.fq,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
       fmt("@ Sinusoidal Fitting:\n y = c0+c1*sin(2PI*c3*x)+c2*cos(2PI*c3*x)\n"
 	  " c0=%g\n c1=%g\n c2=%g\n c3=%g\n chi2/ndf= %.3g/%d"
 	  ,fit(0), fit(1), fit(2), fit(3), fit.chisq(), fit.ndf());
     }
     if(func=="c"||func=="circ") {
-      fit.calc_circ(vecx,vecy);
+      fit.calc_circ(x,y,ey);
       _pl->draw_circle(fit(0), fit(1), fit(2), 0);
       fmt("@ Circular Fitting:\n (x-c0)^2 + (y-c1)^2 = c2^2 \n"
 	  " c0:dx=%g\n c1:dy=%g\n c2:r=%g\n chi2/ndf= %.3g/%d"
@@ -1081,12 +1096,14 @@ public:
 		const std::string &vz, const std::string &func, Option &opt) {
     if(check_data2(vx,vy)) return 1;
     if(check_data2(vx,vz)) return 1;
+    std::vector<double> ez(_dat[vz].size(),1);
+    if(opt.ey != "1") {ez = _dat[opt.ez].num;}
     _pl->att = opt.att;
     _pl->att.lwid=1; _pl->att.symb=0;
     thl::CFormat fmt;
     thl::LsFit fit;
     if(func=="p"||func=="plane") {
-      fit.calc_plane(_dat[vx].num,_dat[vy].num,_dat[vz].num);
+      fit.calc_plane(_dat[vx].num, _dat[vy].num, _dat[vz].num, ez);
       size_t ngrid=21;
       double dx=(_pl->att.x1-_pl->att.x0)/(ngrid-1);
       double dy=(_pl->att.y1-_pl->att.y0)/(ngrid-1);
@@ -1165,6 +1182,12 @@ public:
   int hist_fit(const std::string &v, const std::string &func, Option &opt) {
     std::string hx = v + "_hx";
     std::string hy = v + "_hy";
+    opt.ey = v + "_hey";
+    _dat[opt.ey].type = Num;
+    _dat[opt.ey].num.resize(_dat[hy].size());
+    for(size_t j=0; j<_dat[opt.ey].size(); j++) {
+      _dat[opt.ey].num[j] = std::sqrt(_dat[hy].num[j]);
+    }
     data_fit(hx, hy, func, opt);
     return 0;
   }

@@ -31,6 +31,8 @@ usage: plot [x] y [(opt)]
 - `bo:` set box drawing order, (0=horizontal, 1=vertical)
 - `bp:` set box position, (from 1 to max number of divided frame)
 - `mv:` moving average number
+- `ex:` specify x-error data variable (default is "1")
+- `ey:` specify y-error data variable (default is "1")
 
 > in `xm:` x margin means distance between maximum/minimum point of data
 to left/right edge of x-axis

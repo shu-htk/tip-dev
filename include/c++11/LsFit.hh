@@ -23,6 +23,7 @@ namespace thl {
   private:
     VD _x; // x-axis data to fit
     VD _y; // y-axis data to fit
+    VD _w; // weighted error = 1/ey^2
     VD _z; // z-axis data to fit
     VD _fx; // x-axis array to draw the fitting result
     VD _fy; // y-axis array to draw the fitting result
@@ -32,18 +33,25 @@ namespace thl {
     LsFit(void) : _type(Lin) {}
     size_t ndata(void) {return _x.size();}
     size_t dim() {return _c.dim();}  // dimension of coefficient
-    void set_range(VD &x, VD &y, double x0, double x1) {
+    void set_range(VD &x, VD &y, VD &ey, double x0, double x1) {
       if(x0 < x1) {
-	_x.clear(); _y.clear();
+	VD _ey;	_x.clear(); _y.clear(); _w.clear();
 	for(size_t j=0; j<x.size(); j++) {
 	  if(x[j] >= x0 && x[j] <= x1) {
 	    _x.push_back(x[j]);
 	    _y.push_back(y[j]);
+	    _ey.push_back(ey[j]);
+	    double weight=(ey[j]>0) ? 1/(ey[j]*ey[j]) : 1;
+	    _w.push_back(weight);
 	  }
 	}
-	x=_x; y=_y;
+	x=_x; y=_y; ey=_ey;
       } else {
 	_x=x; _y=y;
+	for(size_t j=0; j<ey.size(); j++) {
+	  double weight=(ey[j]>0) ? 1/(ey[j]*ey[j]) : 1;
+	  _w.push_back(weight);
+	}
       }
     }
     double func(double x, double y=0) {
@@ -80,26 +88,15 @@ namespace thl {
 	Vec<double> c(2); c[0]=_c[0]; c[1]=_c[1]; // center position
 	for(size_t j=0; j < _y.size(); j++) {
 	  Vec<double> p(2); p[0]=_x[j]; p[1]=_y[j]; // data position
-	  double absC2 = std::abs(_c[2]);
-	  if(absC2 > DBL_MIN) {
-	    chi2 += std::pow((p-c).norm()-_c[2],2)/absC2;
-	  }
+	  chi2 += _w[j]*std::pow((p-c).norm()-_c[2],2);
 	}
       } else if(_type==Plane) {
 	for(size_t j=0; j < _z.size(); j++) {
-	  double Z = func_plane(_x[j],_y[j]);
-	  double absZ = std::abs(Z);
-	  if(absZ > DBL_MIN) {
-	    chi2 += std::pow(_z[j]-Z,2)/absZ;
-	  }
+	  chi2 += _w[j]*std::pow(_z[j]-func_plane(_x[j],_y[j]),2);
 	}
       } else {
 	for(size_t j=0; j < _y.size(); j++) {
-	  double Y = func(_x[j]);
-	  double absY = std::abs(Y);
-	  if(absY > DBL_MIN) {
-	    chi2 += std::pow(_y[j]-Y,2)/absY;
-	  }
+	  chi2 += _w[j]*std::pow(_y[j]-func(_x[j]),2);
 	}
       }
       return chi2;
@@ -118,21 +115,23 @@ namespace thl {
   //-----------------------------------------------------------------------
   // Linear Fitting :  y = c0 + c1*x
   //
-    int calc_lin(VD x, VD y, double x0=0, double x1=0) {
+    int calc_lin(VD x, VD y, VD ey, double x0=0, double x1=0) {
       if(x.size() != y.size()) {fprintf(stderr,"size of x != y\n"); return -1;}
+      if(x.size() != ey.size()) {fprintf(stderr,"size of x != ey\n");return -1;}
       _type=Lin; _c.resize(2); _fx.clear();
-      set_range(x,y, x0,x1);
-      double sx=0,sy=0,sx2=0,sxy=0, size=x.size();
+      set_range(x,y,ey, x0,x1);
+      double sx=0,sy=0,sx2=0,sxy=0,sw=0;
       for(size_t j=0; j<x.size(); j++) {
-	sx += x[j];
-	sy += y[j];
-	sx2 += x[j]*x[j];
-	sxy += x[j]*y[j];
+	sw += _w[j]; 
+	sx += _w[j]*x[j];
+	sy += _w[j]*y[j];
+	sx2 += _w[j]*x[j]*x[j];
+	sxy += _w[j]*x[j]*y[j];
       }
       Vec<double> v(2); v[0]=sy; v[1]=sxy;
       Mat<double> m(2);
-      m[0][0]=size; m[0][1]=sx;
-      m[1][0]=sx;   m[1][1]=sx2;
+      m[0][0]=sw; m[0][1]=sx;
+      m[1][0]=sx; m[1][1]=sx2;
       _c = m.inv() * v;
       return 0;
     }
@@ -140,26 +139,28 @@ namespace thl {
   //-----------------------------------------------------------------------
   // Quadratic Fitting :  y = c0 + c1*x + c2*x^2
   //
-    int calc_quad(VD x, VD y, double x0=0, double x1=0) {
+    int calc_quad(VD x, VD y, VD ey, double x0=0, double x1=0) {
       if(x.size() != y.size()) {fprintf(stderr,"size of x != y\n"); return -1;}
+      if(x.size() != ey.size()) {fprintf(stderr,"size of x != ey\n");return -1;}
       _type=Quad; _c.resize(3); _fx.clear();
-      set_range(x,y, x0,x1);
-      double sx=0,sy=0,sx2=0,sx3=0,sx4=0,sxy=0,sx2y=0,size=x.size();
+      set_range(x,y,ey, x0,x1);
+      double sx=0,sy=0,sx2=0,sx3=0,sx4=0,sxy=0,sx2y=0,sw=0;
       for(size_t j=0; j<x.size(); j++) {
 	double xx = x[j]*x[j];
-	sx += x[j];
-	sy += y[j];
-	sx2 += xx;
-	sx3 += xx*x[j];
-	sx4 += xx*xx;
-	sxy += x[j]*y[j];
-	sx2y += xx*y[j];
+	sw += _w[j];
+	sx += _w[j]*x[j];
+	sy += _w[j]*y[j];
+	sx2 += _w[j]*xx;
+	sx3 += _w[j]*xx*x[j];
+	sx4 += _w[j]*xx*xx;
+	sxy += _w[j]*x[j]*y[j];
+	sx2y += _w[j]*xx*y[j];
       }
       Vec<double> v(3); v[0]=sy; v[1]=sxy; v[2]=sx2y;
       Mat<double> m(3);
-      m[0][0]=size; m[0][1]=sx;  m[0][2]=sx2;
-      m[1][0]=sx;   m[1][1]=sx2; m[1][2]=sx3;
-      m[2][0]=sx2;  m[2][1]=sx3; m[2][2]=sx4;
+      m[0][0]=sw;  m[0][1]=sx;  m[0][2]=sx2;
+      m[1][0]=sx;  m[1][1]=sx2; m[1][2]=sx3;
+      m[2][0]=sx2; m[2][1]=sx3; m[2][2]=sx4;
       _c = m.inv() * v;
       return 0;
     }
@@ -168,15 +169,20 @@ namespace thl {
   // Gaussian Fitting :  y = c0*exp(-(x-c1)^2/2*c2^2)
   // c0:amp, c1:mean, c2:sigma        
   //
-    int calc_gaus(VD x, VD y, double x0=0, double x1=0) {
+    int calc_gaus(VD x, VD y, VD ey, double x0=0, double x1=0) {
       if(x.size() != y.size()) {fprintf(stderr,"size of x != y\n"); return -1;}
+      if(x.size() != ey.size()) {fprintf(stderr,"size of x != ey\n");return -1;}
       _type=Gaus; _c.resize(3); _fx.clear();
-      set_range(x,y, x0,x1);
-      VD x2,y2;
+      set_range(x,y,ey, x0,x1);
+      VD x2,y2,ey2;
       for(size_t j=0; j<x.size(); j++) {
-	if(y[j]>0) {x2.push_back(x[j]); y2.push_back(std::log(y[j]));}
+	if(y[j]>0) {
+	  x2.push_back(x[j]);
+	  y2.push_back(std::log(y[j]));
+	  ey2.push_back(std::log(ey[j]));
+	}
       }
-      LsFit qf; qf.calc_quad(x2, y2, x0, x1);
+      LsFit qf; qf.calc_quad(x2, y2, ey2, x0, x1);
       if(qf(2) >= 0 || -qf(2) <= DBL_MIN || ! std::isfinite(qf(2))) {
 	printf("LsFit::calc_gaus: used statistics method\n");
 	calc_statistics(x,y);
@@ -191,7 +197,8 @@ namespace thl {
     int calc_statistics(VD x, VD y, double x0=0, double x1=0) {
       if(x.size() != y.size()) {fprintf(stderr,"size of x != y\n"); return -1;}
       _type=Gaus; _c.resize(3); _fx.clear();
-      set_range(x,y, x0,x1);
+      VD ey(y.size());
+      set_range(x,y,ey, x0,x1);
       double sum=0,ssum=0,n=0;
       for(size_t j=0; j<x.size(); j++) {
 	sum += x[j]*y[j];
@@ -215,16 +222,21 @@ namespace thl {
   //-----------------------------------------------------------------------
   // Exponential Fitting : y = c0*exp(c1*x)
   //
-    int calc_exp(VD x, VD y, double x0=0, double x1=0) {
+    int calc_exp(VD x, VD y, VD ey, double x0=0, double x1=0) {
       if(x.size() != y.size()) {fprintf(stderr,"size of x != y\n"); return -1;}
+      if(x.size() != ey.size()) {fprintf(stderr,"size of x != ey\n");return -1;}
       _type=Exp; _c.resize(2); _fx.clear();
-      set_range(x,y, x0,x1);
-      VD x2,y2;
+      set_range(x,y,ey, x0,x1);
+      VD x2,y2,ey2;
       for(size_t j=0; j<x.size(); j++) {
 	bool q = (x0>=x1) ? (y[j]>0) : (x[j]>=x0 && x[j]<=x1 && y[j]>0);
-	if(q) {x2.push_back(x[j]); y2.push_back(std::log(y[j]));}
+	if(q) {
+	  x2.push_back(x[j]);
+	  y2.push_back(std::log(y[j]));
+	  ey2.push_back(std::log(ey[j]));
+	}
       }
-      LsFit lf; lf.calc_lin(x2, y2, x0, x1);
+      LsFit lf; lf.calc_lin(x2, y2, ey2, x0, x1);
       _c[0] = std::exp(lf(0));
       _c[1] = lf(1);
       return 0;
@@ -233,15 +245,18 @@ namespace thl {
   //-----------------------------------------------------------------------
   // Logarithm Fitting : y = c0 + log(c1+x)
   //
-    int calc_log(VD x, VD y, double x0=0, double x1=0) {
+    int calc_log(VD x, VD y, VD ey, double x0=0, double x1=0) {
       if(x.size() != y.size()) {fprintf(stderr,"size of x != y\n"); return -1;}
+      if(x.size() != ey.size()) {fprintf(stderr,"size of x != ey\n");return -1;}
       _type=Log; _c.resize(2); _fx.clear();
-      set_range(x,y, x0,x1);
-      VD x2,y2;
+      set_range(x,y,ey, x0,x1);
+      VD x2,y2,ey2;
       for(size_t j=0; j<x.size(); j++) {
-	x2.push_back(x[j]); y2.push_back(std::exp(y[j]));
+	x2.push_back(x[j]);
+	y2.push_back(std::exp(y[j]));
+	ey2.push_back(std::exp(ey[j]));	
       }
-      LsFit lf; lf.calc_lin(x2, y2, x0, x1);
+      LsFit lf; lf.calc_lin(x2, y2, ey2, x0, x1);
       printf("lf(0)=%f lf(1)=%f\n",lf(0),lf(1));
       _c[0] = (lf(1)>0) ? std::log(lf(1)) : 0;
       _c[1] = (lf(1)>0) ? lf(0)/lf(1) : 0;
@@ -251,28 +266,34 @@ namespace thl {
   //-----------------------------------------------------------------------
   // Plane Fitting : z = c0 + c1*x + c2*y
   //
-    int calc_plane(VD x, VD y, VD z) {
+    int calc_plane(VD x, VD y, VD z, VD ez) {
       if(x.size() != y.size()) {fprintf(stderr,"size of x != y\n"); return -1;}
       if(x.size() != z.size()) {fprintf(stderr,"size of x != z\n"); return -1;}
+      if(x.size() != ez.size()) {fprintf(stderr,"size of x != ez\n");return -1;}
       _type=Plane; _c.resize(3); _fx.clear();
       _x=x; _y=y; _z=z;
-      double sx=0,sy=0,sz=0,sxx=0,syy=0,sxy=0,sxz=0,syz=0;
-      double size = x.size();
+      _w.clear();
+      for(size_t j=0; j<ez.size(); j++) {
+	double weight=(ez[j]>0) ? 1/(ez[j]*ez[j]) : 1;
+	_w.push_back(weight);
+      }
+      double sx=0,sy=0,sz=0,sxx=0,syy=0,sxy=0,sxz=0,syz=0,sw=0;
       for(size_t j=0; j<x.size(); j++) {
-	sx += x[j];
-	sy += y[j];
-	sz += z[j];
-	sxx += x[j]*x[j];
-	syy += y[j]*y[j];
-	sxy += x[j]*y[j];
-	sxz += x[j]*z[j];
-	syz += y[j]*z[j];
+	sw += _w[j];
+	sx += _w[j]*x[j];
+	sy += _w[j]*y[j];
+	sz += _w[j]*z[j];
+	sxx += _w[j]*x[j]*x[j];
+	syy += _w[j]*y[j]*y[j];
+	sxy += _w[j]*x[j]*y[j];
+	sxz += _w[j]*x[j]*z[j];
+	syz += _w[j]*y[j]*z[j];
       }
       Vec<double> v(3); v[0]=sxz; v[1]=syz; v[2]=sz;
       Mat<double> m(3);
-      m[0][0]=sx;   m[0][1]=sxx; m[0][2]=sxy;
-      m[1][0]=sy;   m[1][1]=sxy; m[1][2]=syy;
-      m[2][0]=size; m[2][1]=sx;  m[2][2]=sy;
+      m[0][0]=sx; m[0][1]=sxx; m[0][2]=sxy;
+      m[1][0]=sy; m[1][1]=sxy; m[1][2]=syy;
+      m[2][0]=sw; m[2][1]=sx;  m[2][2]=sy;
       _c = m.inv() * v;
       return 0;
     }
@@ -287,13 +308,14 @@ namespace thl {
   // c2 : amplitude of cosine
   // c3 : frequency (this coefficient is provided by user)
   //
-    int calc_sin(VD x, VD y, double freq, double x0=0, double x1=0) {
+    int calc_sin(VD x, VD y, VD ey, double freq, double x0=0, double x1=0) {
       if(x.size() != y.size()){fprintf(stderr,"size of x != y\n"); return -1;}
+      if(x.size() != ey.size()) {fprintf(stderr,"size of x != ey\n");return -1;}
       _type=Sin; _c.resize(4); _fx.clear();
       if(freq==0) {
 	_c.set_all(0);
       } else {
-	set_range(x,y, x0,x1);
+	set_range(x,y,ey, x0,x1);
 	LsFit pf; // plane fitting
 	VD X(x.size()),Y(x.size());
 	int ntry=5, nbest=0;
@@ -306,7 +328,7 @@ namespace thl {
 	    X[j] = std::sin(omega*x[j]);
 	    Y[j] = std::cos(omega*x[j]);
 	  }
-	  pf.calc_plane(X,Y,y);
+	  pf.calc_plane(X,Y,y,ey);
 	  double chi2 = pf.chisq();
 	  if(n == -ntry) chi2_min = chi2;
 	  if(chi2 <= chi2_min && chi2 != 0) {
@@ -333,31 +355,33 @@ namespace thl {
   // Circular Fitting : (x-c0)**2 + (y-c1)**2 = c2**2
   //                c0:dx, c1:dy, c2:r
   //
-    int calc_circ(VD x, VD y) {
+    int calc_circ(VD x, VD y, VD ey) {
       if(x.size() != y.size()) {fprintf(stderr,"size of x != y\n"); return -1;}
+      if(x.size() != ey.size()) {fprintf(stderr,"size of x != ey\n");return -1;}
       _type=Circ; _c.resize(3); _fx.clear();
-      set_range(x,y, 0,0);
-      double sx=0,sy=0,sx2=0,sy2=0,sxy=0,size=x.size();
+      set_range(x,y,ey, 0,0);
+      double sx=0,sy=0,sx2=0,sy2=0,sxy=0,sw=0;
       double sx3_xy2=0,sx2y_y3=0,sx2_y2=0;
       for(size_t j=0; j<x.size(); j++) {
 	double xx = x[j]*x[j];
 	double yy = y[j]*y[j];
 	double xx_yy = xx + yy;
-	sx += x[j];
-	sy += y[j];
-	sx2 += xx;
-	sy2 += yy;
-	sxy += x[j]*y[j];
-	sx3_xy2 += (xx_yy)*x[j];
-	sx2y_y3 += (xx_yy)*y[j];
-	sx2_y2  += xx_yy;
+	sw += _w[j];
+	sx += _w[j]*x[j];
+	sy += _w[j]*y[j];
+	sx2 += _w[j]*xx;
+	sy2 += _w[j]*yy;
+	sxy += _w[j]*x[j]*y[j];
+	sx3_xy2 += _w[j]*(xx_yy)*x[j];
+	sx2y_y3 += _w[j]*(xx_yy)*y[j];
+	sx2_y2  += _w[j]*xx_yy;
       }
       Vec<double> v(3);
       v[0]=-sx3_xy2; v[1]=-sx2y_y3; v[2]=-sx2_y2;
       Mat<double> m(3);
       m[0][0]=sx2; m[0][1]=sxy; m[0][2]=sx;
       m[1][0]=sxy; m[1][1]=sy2, m[1][2]=sy;
-      m[2][0]=sx;  m[2][1]=sy;  m[2][2]=size;
+      m[2][0]=sx;  m[2][1]=sy;  m[2][2]=sw;
       Vec<double> a(3);
       a = m.inv() * v;
       _c[0] = -a[0]/2;

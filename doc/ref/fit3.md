@@ -30,6 +30,7 @@ the graph at (X,Y).
 - `lt:` line style of fitting plane
 - `rc:` flag to set relative coordinate for comment position
 - `cf:` set tag of macro variable to store fitting coefficients
+- `ez:` specify z-error data variable (default is "1")
 
 ### option with two arguments
 
