@@ -101,7 +101,7 @@ private:
 		   rp(0), cr(1), rc(0), fl(1), nf(0),
 		   fs(" "), fw("rc"), cf(""), cc(""), sd("clock"),
 		   gt("slope"), ht("bin1"), mt("mesh1"), tf(""), td("- :"),
-		   ex("1"),ey("1"),ez("1") {}
+		   ex("0"),ey("0"),ez("0") {}
     void print(const std::string &s) {
       if(s=="ae"||s=="*") printf("ae: arrow edge(0=non,1=end,2=begin,3=both):"
 				 " [%d]\n", att.asty);
@@ -115,9 +115,9 @@ private:
       if(s=="cr"||s=="*") printf("cr: clear flag : [%d]\n",cr);
       if(s=="dm"||s=="*") printf("dm: debug mode : [%d]\n",dm);
       if(s=="dt"||s=="*") printf("dt: time tick of FFT: [%g]\n",dt);
-      if(s=="ex"||s=="*") printf("ex: x-error: [%s]\n",ex.c_str());
-      if(s=="ey"||s=="*") printf("ey: y-error: [%s]\n",ey.c_str());
-      if(s=="ez"||s=="*") printf("ez: z-error: [%s]\n",ez.c_str());
+      if(s=="ex"||s=="*") printf("ex: error of x: [%s]\n",ex.c_str());
+      if(s=="ey"||s=="*") printf("ey: error of y: [%s]\n",ey.c_str());
+      if(s=="ez"||s=="*") printf("ez: error of z: [%s]\n",ez.c_str());
       if(s=="fc"||s=="*") printf("fc: fill area color: [%s]\n",
 				 att.index_to_color(att.fcol));
       if(s=="fl"||s=="*") printf("fl: flush flag: [%d]\n",fl);
@@ -960,10 +960,10 @@ public:
     } else if(opt.gt == "slope") {
       _pl->draw_graph(_dat[vx].num,_dat[vy].num);
     }
-    if(opt.ex != "1") {
+    if(opt.ex != "0") {
       _pl->draw_error_x(_dat[vx].num,_dat[vy].num,_dat[opt.ex].num);
     }
-    if(opt.ey != "1") {
+    if(opt.ey != "0") {
       _pl->draw_error_y(_dat[vx].num,_dat[vy].num,_dat[opt.ey].num);
     }
     if(opt.fl) _pl->flush();
@@ -1033,7 +1033,7 @@ public:
 	      const std::string &func, Option &opt) {
     if(check_data2(vx,vy)) return 1;
     std::vector<double> ey(_dat[vy].size(),1);
-    if(opt.ey != "1") {ey = _dat[opt.ey].num;}
+    if(opt.ey != "0") {ey = _dat[opt.ey].num;}
     _pl->att = opt.att;
     _pl->att.lwid=1; _pl->att.symb=0;
     std::vector<double> &x = _dat[vx].num;
@@ -1113,7 +1113,7 @@ public:
     if(check_data2(vx,vy)) return 1;
     if(check_data2(vx,vz)) return 1;
     std::vector<double> ez(_dat[vz].size(),1);
-    if(opt.ey != "1") {ez = _dat[opt.ez].num;}
+    if(opt.ez != "0") {ez = _dat[opt.ez].num;}
     _pl->att = opt.att;
     _pl->att.lwid=1; _pl->att.symb=0;
     thl::CFormat fmt;
