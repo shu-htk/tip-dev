@@ -64,8 +64,8 @@ to down/up edge of y-axis
 - `cc:` cut condition (see [cut](cut.md))
 
 for example, see
-[ex13a](../ex/ex13a.md),
-[ex13b](../ex/ex13b.md),
-[ex14](../ex/ex14.md)
+[ex13a](../../doc/ex/ex13a.md),
+[ex13b](../../doc/ex/ex13b.md),
+[ex14](../../doc/ex/ex14.md)
 
 

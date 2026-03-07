@@ -399,11 +399,15 @@ public:
     thl::StrSplit sp(bc.contents(0),",");
     if(sp.size()<3) {
       if(incr_mode) {
-	printf("usage: set x = incr(N,x0,dx)\n"
-	       " N:number of data, x0:initial value, dx:incremental value\n");
+	printf("Usage: set x = incr(N, x0, dx)\n"
+	       "  N  : number of data points\n"
+	       "  x0 : initial value\n"
+	       "  dx : increment value\n");	
       } else {
-	printf("usage: set x = range(N,x0,x1)\n"
-	       " N:number of data, x0:initial value, x1:final value\n");
+	printf("Usage: set x = range(N, x0, x1)\n"
+	       "  N  : number of data points\n"
+	       "  x0 : start value\n"
+	       "  x1 : end value\n");
       }
       return 1;
     } else {
@@ -1722,20 +1726,20 @@ public:
     }
     if(args(0)=="opt") {
       if(args.size() < 2) {
-	printf("usage: opt (item1:value1 item2:value2 ...)\n"
-	       "     : opt item1 item2 ...\n"
-	       "     : opt color|line|symbol|fill|reset\n"
-	       "set or show the global options\n"
-	       " if items are in the bracket (), the item values are set\n"
-	       " if not in (), the item values are shown\n"
-	       " if item is '*', all of the item names and values are shown\n"
-	       " others,\n"
-	       "  color(c)  : show list of the color names\n"
-	       "  line(l)   : show list of the line-style names\n"
-	       "  symbol(s) : show list of the symbol names\n"
-	       "  fill(f)   : show list of the fill-area-style names\n"
-	       "  reset     : set the default value for all items\n"
-	       ); return 0;
+	printf("Usage: opt (item1:value1 item2:value2 ...)\n"
+	       "       opt item1 item2 ...\n"
+	       "       opt color|line|symbol|fill|reset\n"
+	       "Configure or display global options.\n"
+	       "  Items in (...) set option values.\n"
+	       "  Items without (...) show current values.\n"
+	       "  '*' shows all option names and values.\n"
+	       "Special commands:\n"
+	       "  color(c)  : list color names\n"
+	       "  line(l)   : list line styles\n"
+	       "  symbol(s) : list symbol types\n"
+	       "  fill(f)   : list fill styles\n"
+	       "  reset     : reset all options to defaults\n");
+	return 0;
       }
       if(args(1,0)=='(') {
 	_gopt = get_opt(buf);
@@ -1751,28 +1755,30 @@ public:
     }
     if(args(0)=="div") {
       if(args.size() < 3) {
-	printf("usage: div nx ny [(bo:0|1)]\n"
-	       "divide graph area by horizontal(nx) and vertical(ny)\n"
-	       "option:\n"
-	       " bo:0  : horizontal box ordered (default)\n"
-	       " bo:1  : vertical box ordered\n"
-	       ); return 0;
+	printf("Usage: div nx ny [(bo:0|1)]\n"
+	       "Divide the graph area into nx × ny sections.\n"
+	       "Options:\n"
+	       "  bo:0  horizontal box order (default)\n"
+	       "  bo:1  vertical box order\n");
+	return 0;
       }
       _gopt=get_opt(buf);
       _pl->divide(args.stoi(1),args.stoi(2)); return 0;
     }
     if(args(0)=="tfmt") {
       if(args.size() < 2) {
-	printf("usage: tfmt \"time format\"\n"
+	printf("Usage: tfmt \"time format\"\n"
 	       "       tfmt reset\n"
-	       " set x-axis time format.\n"
-	       " equivalent to 'opt (tf:\"time format\")'\n"
-	       " tags in the format:\n"
-	       "         %s, %s, %s, %s, %s, %s\n"
-	       " reset : x-axis is reset to normal format.\n ",
+	       "Set the x-axis time format.\n"
+	       "Equivalent to: opt (tf:\"time format\")\n"
+	       "Format tags:\n"
+	       "  %s %s %s\n"
+	       "  %s %s %s\n"
+	       "reset: restore normal (non-time) x-axis format.\n",
 	       "%Y(year)","%m(month)","%d(day)",
 	       "%H(hour)","%M(min)","%S(sec)"
-	       ); return 0;
+	       );
+	return 0;
       }
       _gopt = get_opt(buf);
       if(args(1)=="reset") {_gopt.att.time_xaxis = 0; return 0;}
@@ -1787,47 +1793,48 @@ public:
     }
     if(args(0)=="title") {
       if(args.size() < 2) {
-	printf("usage: title \"strings\"\n"
-	       " set graph top label\n"
-	       " equivalent to 'opt (tl:\"strings\")'\n"
-	       ); return 0;
+	printf("Usage: title \"text\"\n"
+	       "Set the graph title.\n"
+	       "Equivalent to: opt (tl:\"text\")\n");
+	return 0;
       }
       _gopt.att.set_title(thl::trim(args(1)).c_str());
       return 0;
     }
     if(args(0)=="xlab") {
       if(args.size() < 2) {
-	printf("usage: xlab \"strings\"\n"
-	       " set x-axis label\n"
-	       " equivalent to 'opt (xl:\"strings\")'\n"
-	       ); return 0;
+	printf("Usage: xlab \"text\"\n"
+	       "Set the x-axis label.\n"
+	       "Equivalent to: opt (xl:\"text\")\n");
+	return 0;
       }
       _gopt.att.set_xlab(thl::trim(args(1)).c_str());
       return 0;
     }
     if(args(0)=="ylab") {
       if(args.size() < 2) {
-	printf("usage: ylab \"strings\"\n"
-	       " set y-axis label\n"
-	       " equivalent to 'opt (yl:\"strings\")'\n"
-	       ); return 0;
+	printf("Usage: ylab \"text\"\n"
+	       "Set the y-axis label.\n"
+	       "Equivalent to: opt (yl:\"text\")\n");
+	return 0;
       }
       _gopt.att.set_ylab(thl::trim(args(1)).c_str());
       return 0;
     }
     if(args(0)=="zlab") {
       if(args.size() < 2) {
-	printf("usage: zlab \"strings\"\n"
-	       " set z-axis label\n"
-	       " equivalent to 'opt (zl:\"strings\")'\n"
-	       ); return 0;
+	printf("Usage: zlab \"text\"\n"
+	       "Set the z-axis label.\n"
+	       "Equivalent to: opt (zl:\"text\")\n");	
+	return 0;
       }
       _gopt.att.set_zlab(thl::trim(args(1)).c_str());
       return 0;
     }
     if(args(0)=="box") {
       if(args.size() < 5) {
-	printf("usage: box x0 x1 y0 y1 [(opt)]\n"); return 0;
+	printf("Usage: box  x0 x1 y0 y1 [(opt)]\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       double x0=args.stof(1),x1=args.stof(2);
@@ -1845,7 +1852,8 @@ public:
     }
     if(args(0)=="box3") {
       if(args.size() < 7) {
-	printf("usage: box3 x0 x1 y0 y1 z0 z1 [(opt)]\n"); return 0;
+	printf("Usage: box3 x0 x1 y0 y1 z0 z1 [(opt)]\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       double x0=args.stof(1),x1=args.stof(2);
@@ -1860,10 +1868,9 @@ public:
     }
     if(args(0)=="fill") {
       if(args.size() < 3) {
-	printf("usage: fill vx vy [(opt)]\n"
-	       " fill a color or pattern in the area which is specified\n"
-	       " by the data vx and vy.\n"
-	       ); return 0;
+	printf("Usage: fill vx vy [(opt)]\n"
+	       "Fill an area defined by data vx and vy.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       draw_fill_area(args(1),args(2),opt);
@@ -1871,9 +1878,9 @@ public:
     }
     if(args(0)=="fbox") {
       if(args.size() < 3) {
-	printf("usage: fbox x0 x1 y0 y1 [(opt)]\n"
-	       " draw filled box.\n"
-	       ); return 0;
+	printf("Usage: fbox x0 x1 y0 y1 [(opt)]\n"
+	       "Draw a filled box.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       double x0=args.stof(1),x1=args.stof(2);
@@ -1885,7 +1892,8 @@ public:
     }
     if(args(0)=="line") {
       if(args.size() < 5) {
-	printf("usage: line x0 x1 y0 y1 [(opt)]\n"); return 0;
+	printf("Usage: line x0 x1 y0 y1 [(opt)]\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       double x0=args.stof(1),x1=args.stof(2);
@@ -1897,7 +1905,8 @@ public:
     }
     if(args(0)=="arc") {
       if(args.size() < 4) {
-	printf("usage: arc x y r [(opt)]\n"); return 0;
+	printf("Usage: arc x y r [(opt)]\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       double x=args.stof(1),y=args.stof(2),r=args.stof(3);
@@ -1908,15 +1917,14 @@ public:
     }
     if(args(0)=="text") {
       if(args.size() < 4) {
-	printf("usage: text x y \"strings\" [(opt)]\n"
-	       "escape sequences in the text strings:\n"
-	       " #u  : switch to the superscript (ended with #d)\n"
-	       " #d  : switch to the subscript (ended with #u)\n"
-	       " #g  : next one character become Greek\n"
-	       " #fn : switch to normal (sans-serif) font\n"
-	       " #fr : switch to Roman (serif) font\n"
-	       " #fi : switch to Italic font\n"
-	       );
+	printf("Usage: text x y \"text\" [(opt)]\n"
+	       "Escape sequences:\n"
+	       "  #u  superscript (end with #d)\n"
+	       "  #d  subscript (end with #u)\n"
+	       "  #g  next character becomes Greek\n"
+	       "  #fn normal (sans-serif) font\n"
+	       "  #fr Roman (serif) font\n"
+	       "  #fi Italic font\n");
 	return 0;
       }
       Option opt=get_opt(buf);
@@ -1930,7 +1938,8 @@ public:
     }
     if(args(0)=="symb") {
       if(args.size() < 3) {
-	printf("usage: symb x y [(opt)]\n"); return 0;
+	printf("Usage: symb x y [(opt)]\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       double x=args.stof(1),y=args.stof(2);
@@ -1941,27 +1950,27 @@ public:
     }
     if(args(0)=="seed") {
       if(args.size() < 3) {
-	printf("usage: seed N|utime|clock\n"
-	       "  N     : set random seed N (an integer number).\n"
-	       "  utime : set seed by unix time (sec).\n"
-	       "  clock : set seed by clock (usec) (this is default).\n"
-	       " equivalent to 'opt (sd:N)'\n"
-	       ); return 0;
+	printf("Usage: seed N | utime | clock\n"
+	       "  N     : set seed to integer N\n"
+	       "  utime : use Unix time (sec)\n"
+	       "  clock : use clock time (usec, default)\n"
+	       "Equivalent to: opt (sd:N)\n");
+	return 0;
       }
       _gopt.sd = args(1);
     }
     if(args(0)=="set") {
       thl::StrSplit sp(buf,"= ");
       if(sp.size() < 3) {
-	printf("usage: set v = {x0,x1,x2,...}\n"
+	printf("Usage: set v = {x0,x1,x2,...}\n"
 	       "       set v = range(N,x0,x1)\n"
 	       "       set v = incr(N,x0,dx)\n"
 	       "       set v = random(N,uni|gaus|exp[,params...]) [(opt)]\n"
-	       "       set v = time(t[,unit]) \n"
+	       "       set v = time(t[,unit])\n"
 	       "       set v = expression\n"
-	       " set the data v by some expressions.\n"
-	       " see 'range', 'random', 'time' for more information.\n"
-	       ); return 0;
+	       "Set data v using various expressions.\n"
+	       "See 'range', 'random', and 'time' for details.\n");
+ 	return 0;
       }
       std::string tag = sp(1);
       std::string expr = buf.substr(sp.index(2));
@@ -1983,61 +1992,55 @@ public:
       return 0;
     }
     if(args(0)=="range") {
-      printf("usage: set v = range(N,x0,x1)\n"
-	     "  set N-size data starting from x0 and ending at x1.\n"
-	     "  data elements interval dx = (x1-x0)/(N-1)\n"
-	     "  ex.) range(5,0,2) set the data {0, 0.5, 1, 1.5, 2}.\n" 
-	     ); return 0;
+      printf("Usage: set v = range(N,x0,x1)\n"
+	     "  Create N data points from x0 to x1.\n"
+	     "  Interval dx = (x1 - x0) / (N - 1)\n"
+	     "  Example: range(5,0,2) -> {0, 0.5, 1, 1.5, 2}\n");
+      return 0;
     }
     if(args(0)=="incr") {
-      printf("usage: set v = incr(N,x0,dx)\n"
-	     "  set N-size data starting from x0 increment by dx.\n"
-	     "  ex.) incr(5,0,2) set the data {0, 2, 4, 6, 8}.\n" 
-	     ); return 0;
+      printf("Usage: set v = incr(N,x0,dx)\n"
+	     "  Create N data points starting at x0, incremented by dx.\n"
+	     "  Example: incr(5,0,2) -> {0, 2, 4, 6, 8}\n");
+      return 0;
     }
     if(args(0)=="random") {
-      printf("usage: set v = random(N,uni[,x0,x1]) [(opt)]\n"
+      printf("Usage: set v = random(N,uni[,x0,x1]) [(opt)]\n"
 	     "       set v = random(N,gaus[,sgm,mean]) [(opt)]\n"
 	     "       set v = random(N,exp[,tau]) [(opt)]\n"
-	     " set N-size data with random numbers.\n"
-	     "  uni,x0,x1 : uniform distribution [x0:x1] (default x0=0,x1=1)\n"
-	     "  gaus,sgm,mean : gauss distribution (default sgm=1,mean=0)\n"
-	     "  exp,tau   : exponential distribution (default tau=1)\n"
-	     " option to set random seed:\n"
-	     "  sd:N     : set integer value N\n"
-	     "  sd:utime : set unix time(sec)\n"
-	     "  sd:clock : set clock(nsec) (this is default)\n"
-	     ); return 0;
+	     "Generate N random values.\n"
+	     "  uni,x0,x1     : uniform [x0:x1] (default 0–1)\n"
+	     "  gaus,sgm,mean : Gaussian (default sgm=1, mean=0)\n"
+	     "  exp,tau       : exponential (default tau=1)\n"
+	     "Seed options:\n"
+	     "  sd:N     : set integer seed\n"
+	     "  sd:utime : use Unix time\n"
+	     "  sd:clock : use clock time (default)\n"
+	     "  sd:dev   : use non‑deterministic device\n");
+      return 0;
     }
     if(args(0)=="time") {
-      printf("usage: set vn = time([vn|vs][,unit])\n"
-	     "usage: set vs = time([vn|vs],str)\n"
-	     " convert the time data\n"
-	     " vs is the string data of ISO time-format.\n"
-	     " vn is numerical data of unix-epoch time.\n"
-	     " if 1st argument is \"now\" it returns the current local time\n"
-	     " unit:\n"
-	     "   utime : return unix-epoch time in usec precision (UTC)\n"
-	     "   year  : return years with decimal (local time)\n"
-	     "   mon   : return months with decimal (local time)\n"
-	     "   day   : return days with decimal (local time)\n"
-	     "   hour  : return hours with decimal (local time)\n"
-	     "   min   : return minutes with decimal (local time)\n"
-	     "   sec   : return seconds with decimal (local time)\n"
-	     "   usec  : return micro-seconds\n"
-	     "   str   : return ISO time format string (local time)\n"
-	     "                  like \"Year-Mon-Day Hour:Min:Sec[.Usec]\"\n"
-	     " if unit is not specified, it returns unix-epoch time.\n"
-	     ); return 0;
+      printf("Usage: set vn = time([vn|vs][,unit])\n"
+	     "       set vs = time([vn|vs],str)\n"
+	     "Convert time data.\n"
+	     "  vs : ISO time strings\n"
+	     "  vn : Unix‑epoch numeric time\n"
+	     "If first argument is \"now\", return current local time.\n"
+	     "Units:\n"
+	     "  utime : epoch time (usec, UTC)\n"
+	     "  year, mon, day, hour, min, sec\n"
+	     "  usec  : microseconds\n"
+	     "  str   : ISO time string\n"
+	     "If unit is omitted, return epoch time.\n");
+      return 0;
     }
     if(args(0)=="read") {
       if(args.size() < 3) {
-	printf("usage: read v1,v2,... file_name [(opt)]\n"
+	printf("Usage: read v1,v2,... file_name [(opt)]\n"
 	       "       read v1,v2,... `command` [(opt)]\n"
-	       " where v1,v2,... are list of data to read\n"
-	       " if `command` specified instead of file_name,\n"
-	       " data are read from the out put of the system command\n"
-	       ); return 0;
+	       "Read data into v1,v2,...\n"
+	       "If a command is given, read from its output.\n");
+	return 0;
       }
       thl::Bracket bc('`','`',buf);
       Option opt=get_opt(buf);
@@ -2054,9 +2057,9 @@ public:
     }
     if(args(0)=="write") {
       if(args.size() < 3) {
-	printf("usage: write v1,v2,... file_name ([opt])\n"
-	       " where v1,v2,... is list of data to write\n"
-	       ); return 0;
+	printf("Usage: write v1,v2,... file_name [(opt)]\n"
+	       "Write data v1,v2,... to a file.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       data_write(args(1),args(2),opt);
@@ -2064,11 +2067,10 @@ public:
     }
     if(args(0)=="ls") {
       if(args.size() < 2) {
-	printf("usage: ls pattern\n"
-	       " print list of both macro and data variables"
-	       " which matches pattern\n"
-	       " 'ls *' show all data or macro variables\n"
-	       ); return 0;
+	printf("Usage: ls pattern\n"
+	       "List macro and data variables matching pattern.\n"
+	       "Use 'ls *' to show all variables.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       var.ls(args(1));
@@ -2077,14 +2079,14 @@ public:
     }
     if(args(0)=="cat") {
       if(args.size() < 2) {
-	printf("usage: cat v1,v2,... [>|>>] [v] [(opt)]\n"
-	       " concatenate data v1,v2,.. and print contents\n"
-	       " redirect to the data v:\n"
-	       "   >  : over write\n"
-	       "   >> : append\n"
-	       " option:\n"
-	       "   nr:N0,N1 : choose index number range from N0 to N1\n"
-	       ); return 0;
+	printf("Usage: cat v1,v2,... [>|>>] [v] [(opt)]\n"
+	       "Concatenate data v1,v2,... and print.\n"
+	       "Redirection:\n"
+	       "  >  overwrite v\n"
+	       "  >> append to v\n"
+	       "Options:\n"
+	       "  nr:N0,N1  select index range\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       if(buf.find(">") != buf.npos) {
@@ -2096,10 +2098,10 @@ public:
     }
     if(args(0)=="rm") {
       if(args.size() < 2) {
-	printf("usage: rm pattern\n"
-	       " remove data or macro variables which matches pattern\n"
-	       " example: 'rm *'  remove all data or macro variables\n"
-	       ); return 0;
+	printf("Usage: rm pattern\n"
+	       "Remove variables matching pattern.\n"
+	       "Example: rm *  removes all variables.\n");
+	return 0;
       }
       var.rm(args(1));
       data_rm(args(1));
@@ -2107,11 +2109,11 @@ public:
     }
     if(args(0)=="clear") {
       if(args.size() < 2) {
-	printf("usage: clear N|all\n"
-	       " clear the Nth box-area.\n"
-	       " if N is 0, current box-area is cleared.\n"
-	       " if N is 'all', all box-areas are cleared.\n"
-	       ); return 0;
+	printf("Usage: clear N | all\n"
+	       "Clear the N‑th box area.\n"
+	       "If N=0, clear the current box.\n"
+	       "If 'all', clear all boxes.\n");
+	return 0;
       }
       if(args(1)=="all") {
 	_pl->next_page();
@@ -2123,11 +2125,10 @@ public:
     }
     if(args(0)=="plot") {
       if(args.size() < 2) {
-	printf("usage: plot [x] y [(opt)]\n"
-	       " plot the 2D-graph of data x and y.\n"
-	       " if data x is not specified the index data 'y_n' is created\n"
-	       " then 'plot y_n y' is done.\n"
-	       ); return 0;
+	printf("Usage: plot [x] y [(opt)]\n"
+	       "Plot a 2D graph of x and y.\n"
+	       "If x is omitted, an index array y_n is created.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       if(args.size() < 3) {
@@ -2143,10 +2144,10 @@ public:
     }
     if(args(0)=="plot3") {
       if(args.size() < 4) {
-	printf("usage: plot3 x y z [(opt)]\n"
-	       " plot the 3d-graph of data x, y and z.\n"
-	       " those three data should be the same size.\n"
-	       ); return 0;
+	printf("Usage: plot3 x y z [(opt)]\n"
+	       "Plot a 3D graph of x, y, and z.\n"
+	       "All data must have the same size.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       data_plot3d(args(1),args(2),args(3),opt);
@@ -2155,12 +2156,11 @@ public:
     if(args(0)=="mset") {
       thl::StrSplit sp(buf,"= ");
       if(sp.size() < 3) {
-	printf("usage: mset v = {{v00,..,v0M},{v10,..,v1M},..,{vN0,..,vNM}}\n"
+	printf("Usage: mset v = {{v00,...,v0M},{v10,...,v1M},...,{vN0,...,vNM}}\n"
 	       "       mset v = expression\n"
-	       " set mesh data v which size is N*M.\n"
-	       " in the expression, there should be 2 variables\n"
-	       " of data which size are N and M.\n"
-	       ); return 0;
+	       "Set mesh data v of size N×M.\n"
+	       "The expression must contain two variables of size N and M.\n");
+	return 0;
       }
       std::string tag = sp(1);
       std::string expr = buf.substr(sp.index(2));
@@ -2173,12 +2173,12 @@ public:
     }
     if(args(0)=="mread") {
       if(args.size() < 3) {
-      printf("usage: mread x,y,z mesh-file [(opt)]\n"
-	     " read data and mesh-data\n"
-	     " where x is data of size N.\n"
-	     "       y is data of size M.\n"
-	     "       z is mesh-data of size N*M.\n"
-	     ); return 0;
+	printf("Usage: mread x,y,z mesh_file [(opt)]\n"
+	       "Read data and mesh data.\n"
+	       "  x : size N\n"
+	       "  y : size M\n"
+	       "  z : size N×M\n");
+      return 0;
       }
       Option opt=get_opt(buf);
       mesh_read(args(1),args(2),opt);
@@ -2186,12 +2186,12 @@ public:
     }
     if(args(0)=="mwrite") {
       if(args.size() < 3) {
-      printf("usage: mwrite x,y,z mesh-file [(opt)]\n"
-	     " write data and mesh-data\n"
-	     " where x is data of size N.\n"
-	     "       y is data of size M.\n"
-	     "       z is mesh-data of size N*M.\n"
-	     ); return 0;
+	printf("Usage: mwrite x,y,z mesh_file [(opt)]\n"
+	       "Write data and mesh data.\n"
+	       "  x : size N\n"
+	       "  y : size M\n"
+	       "  z : size N×M\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       mesh_write(args(1),args(2),opt);
@@ -2199,18 +2199,17 @@ public:
     }
     if(args(0)=="mplot") {
       if(args.size() < 4) {
-	printf("usage: mplot x y z [(opt)]\n"
-	       " plot the mesh-3d-graph.\n"
-	       " where x is data of size N.\n"
-	       "       y is data of size M.\n"
-	       "       z is mesh-data of size N*M.\n"
-	       " option of graph type (default is 'mesh1')\n"
-	       "  mt:mesh1  plot 3D-mesh with single color.\n"
-	       "  mt:mesh2  plot 3D-mesh with gradation color.\n"
-	       "  mt:cont1  plot 2D-mesh with gray-scaled contour.\n"
-	       "  mt:cont2  plot 2D-mesh with gradation colored contour.\n"
-	       " \n"
-	       ); return 0;
+	printf("Usage: mplot x y z [(opt)]\n"
+	       "Plot a 3D mesh graph.\n"
+	       "  x : size N\n"
+	       "  y : size M\n"
+	       "  z : size N×M\n"
+	       "Graph types (mt:):\n"
+	       "  mesh1 : 3D mesh (single color)\n"
+	       "  mesh2 : 3D mesh (gradation)\n"
+	       "  cont1 : 2D contour (gray)\n"
+	       "  cont2 : 2D contour (gradation)\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       mesh_plot(args(1),args(2),args(3),opt);
@@ -2218,18 +2217,18 @@ public:
     }
     if(args(0)=="fit") {
       if(args.size() < 3) {
-	printf("usage: fit x y [lin|quad|exp|log|gaus|sin|circ] [(opt)]\n"
-	       " do fitting to the data x and y and draw the result.\n"
-	       " you should do 'plot x y' before this command.\n"
-	       " available fitting functions:\n"
-	       "   l[in] : y = c0 + c1*x \n"
-	       "   q[uad]: y = c0 + c1*x + c2*x^2 \n"
-	       "   e[xp] : y = c0*exp(c1*x) \n"
-	       "   log   : y = c0 + log(c1*x) \n"
-	       "   g[aus]: y = c0*exp(-(x-c1)^2/2*c2^2) \n"
-	       "   s[in] : y = c0 + c1*sin(2*PI*c3*x) + c2*cos(2*PI*c3*x) \n"
-	       "   c[irc]: (x-c0)^2 + (y-c1)^2 = c2^2 \n"
-	       ); return 0;
+	printf("Usage: fit x y [lin|quad|exp|log|gaus|sin|circ] [(opt)]\n"
+	       "Fit data x and y, then draw the result.\n"
+	       "Run 'plot x y' before using this command.\n"
+	       "Available functions:\n"
+	       "  lin  : y = c0 + c1*x\n"
+	       "  quad : y = c0 + c1*x + c2*x^2\n"
+	       "  exp  : y = c0*exp(c1*x)\n"
+	       "  log  : y = c0 + log(c1*x)\n"
+	       "  gaus : y = c0*exp(-(x-c1)^2/(2*c2^2))\n"
+	       "  sin  : y = c0 + c1*sin(2*PI*c3x) + c2*cos(2*PI*c3*x)\n"
+	       "  circ : (x-c0)^2 + (y-c1)^2 = c2^2\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       std::string func = "lin";
@@ -2239,12 +2238,12 @@ public:
     }
     if(args(0)=="fit3") {
       if(args.size() < 4) {
-	printf("usage: fit3 x y z [plane] [(opt)]\n"
-	       " do fitting to the data x,y,z by plane function.\n"
-	       " you should do 'plot3 x y z' before this command.\n"
-	       " available fitting functions:\n"
-	       "   p[lane] : z = c0 + c1*x + c2*y\n"
-	       ); return 0;
+	printf("Usage: fit3 x y z [plane] [(opt)]\n"
+	       "Fit 3D data x,y,z with a plane.\n"
+	       "Run 'plot3 x y z' before using this command.\n"
+	       "Functions:\n"
+	       "  plane : z = c0 + c1*x + c2*y\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       std::string func = "plane";
@@ -2254,10 +2253,10 @@ public:
     }
     if(args(0)=="xerr") {
       if(args.size() < 4) {
-	printf("usage: xerr x y ex [(opt)]\n"
-	       " plot x-error-bars of the data ex.\n"
-	       " you should do 'plot x y' before this command.\n"
-	       ); return 0;
+	printf("Usage: xerr x y ex [(opt)]\n"
+	       "Plot x‑error bars using ex.\n"
+	       "Run 'plot x y' before using this command.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       data_xerr(args(1),args(2),args(3),opt);
@@ -2265,10 +2264,10 @@ public:
     }
     if(args(0)=="yerr") {
       if(args.size() < 4) {
-	printf("usage: yerr x y ey [(opt)]\n"
-	       " plot y-error-bars of the data ey\n"
-	       " you should do 'plot x y' before this command.\n"
-	       ); return 0;
+	printf("Usage: yerr x y ey [(opt)]\n"
+	       "Plot y‑error bars using ey.\n"
+	       "Run 'plot x y' before using this command.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       data_yerr(args(1),args(2),args(3),opt);
@@ -2276,16 +2275,14 @@ public:
     }
     if(args(0)=="hplot") {
       if(args.size() < 2) {
-	printf("usage: hplot v [(opt)]\n"
-	       " make and plot the histogram of the data v,\n"
-	       " it is created the bin data v_hx and the entry data v_hy\n"
-	       " then plot the 2D-graph of v_hx and v_hy\n"
-	       " options:\n"
-	       "  nb:N      number of the histogram bins\n"
-	       "  xr:x0,x1  x-range of the histogram\n"
-	       " if there are no options, nb is set to 100, and x0 and x1\n"
-	       " are calculated to include all values of v.\n"
-	       ); return 0;
+	printf("Usage: hplot v [(opt)]\n"
+	       "Create and plot a histogram of v.\n"
+	       "Generates v_hx (bin centers) and v_hy (entries), then plots them.\n"
+	       "Options:\n"
+	       "  nb:N      number of bins\n"
+	       "  xr:x0,x1  x‑range\n"
+	       "If omitted, nb=100 and range is auto‑detected.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       hist_plot(args(1),opt);
@@ -2293,9 +2290,9 @@ public:
     }
     if(args(0)=="hplot2") {
       if(args.size() < 3) {
-	printf("usage: hplot2 x y [(opt)]\n"
-	       " make and plot the 2D-histogram of data x and y\n"
-	       ); return 0;
+	printf("Usage: hplot2 x y [(opt)]\n"
+	       "Create and plot a 2D histogram of x and y.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       hist2d_plot(args(1),args(2),opt);
@@ -2303,12 +2300,10 @@ public:
     }
     if(args(0)=="hfit") {
       if(args.size() < 3) {
-	printf("usage: hfit v func [(opt)]\n"
-	       " you should do the 'hplot' before this command.\n"
-	       " 'hplot' create a bin data v_hx, an entry data v_hy\n"
-	       " then 'fit v_hx v_hy func' is done.\n"
-	       " see the command 'fit' for the fitting functions.\n"
-	       ); return 0;
+	printf("Usage: hfit v func [(opt)]\n"
+	       "Fit the histogram created by 'hplot'.\n"
+	       "Uses v_hx and v_hy, then runs: fit v_hx v_hy func.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       hist_fit(args(1),args(2),opt);
@@ -2316,22 +2311,21 @@ public:
     }
     if(args(0)=="fplot") {
       if(args.size() < 2) {
-	printf("usage: fplot [t] v [(opt)]\n"
-	       " do FFT with the time data t and the amplitude v.\n"
-	       " it is created the frequency data v_fx and the power"
-	       " spectrum v_fy.\n"
-	       " then 'plot v_fx v_fy' is done.\n"
-	       " if data t is not specified you should set the option 'dt:'\n"
-	       "options:\n"
-	       " dt:x   the time tick of FFT. (default is 1.0)\n"
-	       " fw:s   FFT window function. (default is 'rc'(Rectangle))\n"
-	       " name of window functions are\n"
-	       "  rc  : Rectangle (default)\n"
-	       "  hn  : Hann\n"
-	       "  hm  : Hamming\n"
-	       "  bk  : Blackman\n"
-	       "  bh  : Blackman-Haris\n"
-	       ); return 0;
+	printf("Usage: fplot [t] v [(opt)]\n"
+	       "Perform FFT using time t and amplitude v.\n"
+	       "Generates v_fx (frequency) and v_fy (power spectrum),"
+	       " then plots them.\n"
+	       "If t is omitted, specify dt: in options.\n"
+	       "Options:\n"
+	       "  dt:x   time step (default 1.0)\n"
+	       "  fw:s   window function (default 'rc')\n"
+	       "Window functions:\n"
+	       "  rc  Rectangle\n"
+	       "  hn  Hann\n"
+	       "  hm  Hamming\n"
+	       "  bk  Blackman\n"
+	       "  bh  Blackman‑Harris\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       if(args.size() < 3) {
@@ -2347,11 +2341,10 @@ public:
     }
     if(args(0)=="ffit") {
       if(args.size() < 3) {
-	printf("usage: ffit v [func] [(opt)]\n"
-	       " you should do the 'fplot' before this command.\n"
-	       " then 'fit v_fx v_fy [func]' is done.\n"
-	       " see the command 'fit' for the fitting functions.\n"
-	       ); return 0;
+	printf("Usage: ffit v [func] [(opt)]\n"
+	       "Fit FFT results created by 'fplot'.\n"
+	       "Runs: fit v_fx v_fy [func].\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       fft_fit(args(1),args(2),opt);
@@ -2359,13 +2352,11 @@ public:
     }
     if(args(0)=="stat") {
       if(args.size() < 2) {
-	printf("usage: stat v [(opt)]\n"
-	       " make the statistics information of data v.\n"
-	       " the macro variables [v_max] [v_min] [v_mean] [v_rms]\n"
-	       " and [v_entry] are created.\n"
-	       " if option 'cp:' is specified they are drawn"
-	       " in the current graph.\n"
-	       ); return 0;
+	printf("Usage: stat v [(opt)]\n"
+	       "Compute statistics of v.\n"
+	       "Creates macro variables: v_max, v_min, v_mean, v_rms, v_entry.\n"
+	       "If cp: is specified, draw them on the current graph.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       data_statistics(args(1),opt);
@@ -2373,15 +2364,14 @@ public:
     }
     if(args(0)=="cut") {
       if(args.size() < 3) {
-	printf("usage: cut v1,v2,... \"expression\"\n"
-	       " where v1,v2,... are data to cut\n"
-	       " new data v1_cut,v2_cut,... are created\n"
-	       "example:\n"
-	       " cut x,y \"0<x<1 & 1<y<2\"\n"
-	       " plot x_cut y_cut\n"
-	       "using option 'cc:' it is also done by\n"
-	       " plot x y (cc:\"0<x<1 & 1<y<2\")\n"
-	       ); return 0;
+	printf("Usage: cut v1,v2,... \"expression\"\n"
+	       "Create v1_cut, v2_cut, ... by applying the expression.\n"
+	       "Example:\n"
+	       "  cut x,y \"0<x<1 & 1<y<2\"\n"
+	       "  plot x_cut y_cut\n"
+	       "Equivalent using option:\n"
+	       "  plot x y (cc:\"0<x<1 & 1<y<2\")\n");
+	return 0;
       }
       std::string expr = thl::trim(buf.substr(args.index(2)));
       if(expr.size()>0) data_make_cut(args(1), expr);
@@ -2389,12 +2379,13 @@ public:
     }
     if(args(0)=="vp"||args(0)=="viewport") {
       if(args.size() < 2) {
-	printf("usage: vp x0 x1 y0 y1 aspect \n"
-	       "       vp show|reset\n"
-	       " where x0,x1 is x-range [0:1] of viewport\n"
-	       "       y0,y1 is y-range [0:1] of viewport\n"
-	       "       aspect is ratio: y-width/x-width\n"
-	       ); return 0;
+	printf("Usage: vp x0 x1 y0 y1 aspect\n"
+	       "       vp show | reset\n"
+	       "Set viewport range.\n"
+	       "  x0,x1 : x‑range [0–1]\n"
+	       "  y0,y1 : y‑range [0–1]\n"
+	       "  aspect: y‑width / x‑width\n");
+	return 0;
       }
       if(args(1)=="show") {
 	_pl->print_viewport();
@@ -2408,14 +2399,14 @@ public:
     }
     if(args(0)=="exe") {
       if(args.size() < 2) {
-	printf("usage: exe [macro_file] [arg1,arg2,...] [(opt)]\n"
-	       " execute macro_file\n"
-	       " arguments are referenced as macro variables\n"
-	       " they are named like x1=val,x2=val2,...\n"
-	       " if it is specified only values like val1,val2,...\n"
-	       " they are named $1=val1,$2=val2,...\n"
-	       " number of argumnts is named $#\n"
-	       ); return 0;
+	printf("Usage: exe [macro_file] [arg1,arg2,...] [(opt)]\n"
+	       "Execute a macro file.\n"
+	       "Arguments become macro variables:\n"
+	       "  x1=val1,x2=val2,...\n"
+	       "If only values are given:\n"
+	       "  $1=val1,$2=val2,...\n"
+	       "Number of arguments is stored in $#.\n");
+	return 0;
       }
       Option opt=get_opt(buf);
       std::string arg_list=(args.size()>2 && args(2,0)!='(') ? args(2) : "";
@@ -2425,10 +2416,10 @@ public:
     if(args(0)=="elem") {
       thl::StrSplit sp(buf,"= ");
       if(sp.size() < 3) {
-	printf("usage: elem x = v(N)\n"
-	       " copy Nth element of daat v to the macro variable x.\n"
-	       " (N begin from 1)\n"
-	       ); return 0;
+	printf("Usage: elem x = v(N)\n"
+	       "Copy the N‑th element of v into macro variable x.\n"
+	       "(N starts from 1)\n");
+	return 0;
       }
       std::string x = thl::trim(sp(1));
       thl::Bracket bc('(',')',buf.substr(sp.index(2)));
@@ -2453,22 +2444,22 @@ public:
     }
     if(args(0)=="font") {
       if(args.size() < 2) {
-	printf("usage: font [N]\n"
-	       "set global font\n"
-	       " N=1 : Sans-Serif\n"
-	       " N=2 : Serif\n"
-	       " N=3 : Italic\n"
-	       ); return 0;
+	printf("Usage: font [N]\n"
+	       "Set global font.\n"
+	       "  1 : Sans‑Serif\n"
+	       "  2 : Serif\n"
+	       "  3 : Italic\n");
+	return 0;
       }
       _pl->set_font(args.stoi(1));
       return 0;
     }
     if(args(0)=="sort") {
       if(args.size() < 4) {
-	printf("usage: sort v1,v2,... by v\n"
-	       " sort data v1,v2,... by v in ascending order.\n"
-	       " it is created sorted data v1_sort,v2_sort,...\n"
-	       ); return 0;
+	printf("Usage: sort v1,v2,... by v\n"
+	       "Sort v1,v2,... in ascending order using v.\n"
+	       "Creates v1_sort, v2_sort, ...\n");
+	return 0;
       }
       data_make_sort(args(1),args(3));
       return 0;
@@ -2476,9 +2467,9 @@ public:
 #if USE_EPICS_CA 
     if(args(0)=="cainfo") {
       if(args.size() < 2) {
-	printf("usage: cainfo EPICS_record\n"
-	       " show information of EPICS_record.\n"
-	       ); return 0;
+	printf("Usage: cainfo EPICS_record\n"
+	       "Show information of the EPICS record.\n");
+	return 0;
       }
       std::string rec = args(1);
       thl::EpicsCA ca(rec.c_str());
@@ -2487,13 +2478,12 @@ public:
     }
     if(args(0)=="caget") {
       if(args.size() < 2) {
-	printf("usage: caget EPICS_record [> v]\n"
-	       " get the value from EPICS_record and print contents.\n"
-	       " if '>' is specified the value is redirected to the data v.\n"
-	       " also the following macro variable is created.\n"
-	       "macro variable:\n"
-	       "   v : the 1st element of data v\n"
-	       ); return 0;
+	printf("Usage: caget EPICS_record [> v]\n"
+	       "Get the value of the EPICS record and print it.\n"
+	       "If '>' is specified, store the value into data v.\n"
+	       "Macro variable created:\n"
+	       "  v : first element of data v\n");
+	return 0;
       }
       std::string rec = args(1);
       std::string tag = (args.size()>3 && args(2)==">") ? args(3) : "";
@@ -2502,12 +2492,12 @@ public:
     }
     if(args(0)=="caput") {
       if(args.size() < 4 || (args.size() > 2 && args(2) != "<")) {
-	printf("usage: caput EPICS_record < v\n"
-	       "usage: caput EPICS_record < expression\n"
-	       " put the value to EPICS_record.\n"
-	       " if data v exist, the value of v is put to EPICS_record,\n"
-	       " if not exist, the expression value is put to EPICS_record.\n"
-	       ); return 0;
+	printf("Usage: caput EPICS_record < v\n"
+	       "       caput EPICS_record < expression\n"
+	       "Write a value to the EPICS record.\n"
+	       "If data v exists, its value is written.\n"
+	       "Otherwise, the expression value is written.\n");
+	return 0;
       }
       std::string rec = args(1);
       std::string expr = buf.substr(args.index(3));
@@ -2516,10 +2506,9 @@ public:
     }
     if(args(0)=="camon") {
       if(args.size() < 4 || (args.size() > 2 && args(2) != ">")) {
-	printf("usage: camon EPICS_record > v\n"
-	       " monitor the value of EPICS_record and redirected to"
-	       " the data v.\n"
-	       ); return 0;
+	printf("Usage: camon EPICS_record > v\n"
+	       "Monitor the EPICS record and store updates into data v.\n");
+	return 0;
       }
       std::string rec = args(1);
       std::string tag = args(3);
@@ -2528,25 +2517,22 @@ public:
     }
     if(args(0)=="cacheck") {
       if(args.size() < 2) {
-	printf("usage: cacheck v1,v2,...\n"
-	       " check if EPICS records connected to data v1,v2,..."
-	       " are updated.\n (v1,v2,... should be defeined by 'camon')\n"
-	       " also the following macro variables are created.\n"
-	       "macro variables:\n"
-	       "  v1        : the 1st element of data v1\n"
-	       "  v1.update : unix time if v1 updated, 0 if not updated\n"
-	       "  ... \n"
-	       ); return 0;
+	printf("Usage: cacheck v1,v2,...\n"
+	       "Check whether EPICS records linked to v1,v2,... have updated.\n"
+	       "(v1,v2,... must be created by 'camon')\n"
+	       "Macro variables created:\n"
+	       "  v1        : first element of v1\n"
+	       "  v1.update : update time (epoch), or 0 if not updated\n");
+	return 0;
       }
       if(epics_ca_check(args(1)) != 0) return 2; // return of abort
       return 0;
     }
     if(args(0)=="caclose") {
       if(args.size() < 2) {
-	printf("usage: caclose [v1,v2,...]\n"
-	       " close the connection of the EPICS records to"
-	       " the data v1,v2,...\n"
-	       ); return 0;
+	printf("Usage: caclose [v1,v2,...]\n"
+	       "Close EPICS connections for v1,v2,...\n");
+	return 0;
       }
       epics_ca_close(args(1));
       return 0;
@@ -2592,19 +2578,18 @@ int main(int argc, const char *argv[]) {
   thl::ArgOpt arg(argc,argv,"h,-help,v,-version,t:,g:,d:,e:,-pdf:,-png:",0);
   if(arg.find_opt("h") || arg.find_opt("-help")) {
     printf("\n"
-	   "usage: tip [options]\n"
+	   "Usage: tip [options]\n"
 	   "\n"
-	   "options:(where arg is option's argument)\n"
-	   " -h : show help message (also '--help')\n"
-	   " -v : show version (also '--version')\n"
-	   " -t arg: set window title (default is \"tip\")\n"
-	   " -g arg: set window geometry size (default is \"800x600\")\n"
-	   " -d arg: set drawing device (default is \"xcairo\")\n"
-	   " -e arg : execute a macro file\n"
-	   " --pdf arg : graph is drawn in pdf file (window is not open)\n"
-	   " --png arg : graph is drawn in png file (window is not open)\n"
-	   "\n"
-	   ); return 1;
+	   "Options (arg = option argument):\n"
+	   "  -h           show help (also --help)\n"
+	   "  -v           show version (also --version)\n"
+	   "  -t arg       set window title (default \"tip\")\n"
+	   "  -g arg       set window geometry (default \"800x600\")\n"
+	   "  -d arg       set drawing device (default \"xcairo\")\n"
+	   "  -e arg       execute a macro file\n"
+	   "  --pdf arg    output graph to PDF (no window)\n"
+	   "  --png arg    output graph to PNG (no window)\n");
+    return 1;
   }
   std::string title = arg.opt_def("t","tip");
   std::string geom = arg.opt_def("g","800x600");

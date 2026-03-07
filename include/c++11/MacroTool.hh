@@ -628,7 +628,7 @@ namespace thl {
       if(sp(0)=="for") { // loop for each items
 	if(_init) {
 	  if(sp.size()<3) {
-	    printf("usage: for s (a b c ...); ...; end\n");
+	    printf("Usage: for s (a b c ...); ...; end\n");
 	    _err=1; return;
 	  }
 	  _tag=sp(1);
@@ -651,7 +651,7 @@ namespace thl {
       if(sp(0)=="do") { // loop in the ranged number
 	if(_init) {
 	  if(sp.size()<4) {
-	    printf("usage: do n N0 N1 [dN]; ...; end\n");
+	    printf("Usage: do n N0 N1 [dN]; ...; end\n");
 	    _err=1; return;
 	  }
 	  _tag=sp(1);
@@ -686,7 +686,7 @@ namespace thl {
       }
       if(sp(0)=="while") { // loop in the conditional expression
 	if(sp.size()<2) {
-	  printf("usage: while expression; ...; end\n");
+	  printf("Usage: while expression; ...; end\n");
 	  _err=1; return;
 	}
 	std::string expr=buf.substr(sp.index(1));
@@ -926,12 +926,10 @@ namespace thl {
 	}
 	if(args(0)=="@") {
 	  if(args.size()<2) {
-	    printf("usage: @ x [=|+=|-=|*=|/=|%c=] expression\n"
+	    printf("Usage: @ x [=|+=|-=|*=|/=|%%=] expression\n"
 		   "       @ t = time(s[,unit])\n"
-		   " set the expression value to the macro variable x\n"
-		   " convert ISO time string to unix epoch time and"
-		   " vice versa\n",'%'
-		   );
+		   "Assign the expression result to macro variable x.\n"
+		   "Convert between ISO time strings and Unix epoch time.\n");
 	  } else {
 	    std::string expr = buf.substr(buf.find("@")+1);
 	    var.set_eval(expr);
@@ -940,13 +938,12 @@ namespace thl {
 	}
 	if(args(0)=="args") {
 	  if(args.size() < 2) {
-	    printf("usage: args [x1=v2,x2=v2,...]\n"
+	    printf("Usage: args [x1=v1,x2=v2,...]\n"
 		   "       args [v1,v2,...]\n"
-		   " set default arguments of macro variables\n"
-		   " if they are specified only values,\n"
-		   " variables are defined as $1=v1,$2=v2,...\n"
-		   " number of arguments is defined as $#\n"
-		   );
+		   "Set default arguments for macro variables.\n"
+		   "If only values are given, variables are assigned as\n"
+		   "  $1=v1,$2=v2,...\n"
+		   "The number of arguments is stored in $#.\n");
 	  } else {
 	    bool update = (args.size()>2 && args(2)=="update") ? 1 : 0;
 	    var.set_arg_list(args(1),update);      
@@ -956,7 +953,7 @@ namespace thl {
 	if(args(0).find("++") != buf.npos) {
 	  StrSplit sp(buf," +");
 	  if(sp.size()<1) {
-	    printf("usage: ++var\n increment numerical macro variable\n");
+	    printf("Usage: ++var\n Increment numerical macro variable\n");
 	  } else {
 	    std::string tag=trim(sp(0));
 	    if(!var.exist(tag)) var.set_num(tag,0);
@@ -968,7 +965,7 @@ namespace thl {
 	if(args(0).find("--") != buf.npos) {
 	  StrSplit sp(buf," -");
 	  if(sp.size()<1) {
-	    printf("usage: --var\n decrement numerical macro variable\n");
+	    printf("Usage: --var\n Decrement numerical macro variable\n");
 	  } else {
 	    std::string tag=trim(sp(0));
 	    if(!var.exist(tag)) var.set_num(tag,0);
@@ -980,13 +977,12 @@ namespace thl {
 	if(args(0)=="print" || args(0)=="println" ||
 	   args(0)=="pr" || args(0)=="prn") {
 	  if(args.size()<2) {
-	    printf("usage: print args...\n"
+	    printf("Usage: print args...\n"
 		   "       println args...\n"
-		   " print arguments with macro variables formated.\n"
-		   "                 (see also 'fmt' command)\n"
-		   "print  : line is not returned. (abbreviate to 'pr')\n"
-		   "println: line is returned. (abbreviate to 'prn')\n"
-		   );
+		   "Print the given arguments.\n"
+		   "(See also the 'fmt' command.)\n"
+		   "print   : does not append a newline (alias: pr)\n"
+		   "println : appends a newline (alias: prn)\n");
 	  } else {
 	    replace_esc(buf);
 	    std::string s = buf.substr(args.index(1));
@@ -998,14 +994,15 @@ namespace thl {
 	}
 	if(args(0) == "fmt") {
 	  if(args.size()<2) {
-	    printf("usage: fmt [\"format\"|reset|show]\n"
-		   " specify output format of macro variable.\n"
-		   " (it is same as printf)\n"
-		   " if \"reset\", it is set to default (\"%s\")\n"
-		   " if \"show\", print current format\n"
-		   " example: @ x=1; fmt %s; prn [x]\n"
-		   " output:  001\n","%.11g","%03.0f"
-		   );
+	    printf("Usage: fmt [\"format\" | reset | show]\n"
+		   "Specify the output format for macro variables.\n"
+		   "(Same syntax as printf.)\n"
+		   "reset : restore the default format (\"%%.11g\")\n"
+		   "show  : display the current format\n"
+		   "Example:\n"
+		   "  @ x=1; fmt \"%%03.0f\"; prn [x]\n"
+		   "Output:\n"
+		   "  001\n");
 	  } else {
 	    if(args(1)=="reset") {
 	      var.reset_fmt();
@@ -1019,9 +1016,8 @@ namespace thl {
 	}
 	if(args(0)=="sys") { // execute system command
 	  if(args.size() < 2) {
-	    printf("usage: sys [command]\n"
-		   " execute system command\n"
-		   );
+	    printf("Usage: sys [command]\n"
+		   "Execute a system command.\n");
 	  } else {
 	    size_t n = buf.find(args(0));
 	    system(buf.substr(n+args(0).size()).c_str());
@@ -1030,9 +1026,9 @@ namespace thl {
 	}
 	if(args(0)=="wait") {
 	  if(args.size() < 2) {
-	    printf("usage: wait [t]\n"
-		   " wait t seconds, (t is floating point number)\n"
-		   " if t=0 wait console input\n");
+	    printf("Usage: wait [t]\n"
+		   "Wait for t seconds (t may be a floating‑point value).\n"
+		   "If t=0, wait for console input.\n");
 	  } else {
 	    if(args.stof(1)==0) {
 	      printf("continue? (Y/n)> ");
@@ -1047,7 +1043,7 @@ namespace thl {
 	}
 	if(args(0)=="calc") { // for the debug of Calc
 	  if(args.size() < 2) {
-	    printf("usage: calc [expression]\n");
+	    printf("Usage: calc [expression]\n");
 	  } else {
 	    std::string expr = buf.substr(args.index(1));
 	    Calc calc;
@@ -1058,7 +1054,7 @@ namespace thl {
 	}
 	if(args(0)=="logic") { // for the debug of Logic
 	  if(args.size() < 2) {
-	    printf("usage: logic [expression]\n");
+	    printf("Usage: logic [expression]\n");
 	  } else {
 	    std::string expr = trim(buf.substr(args.index(1)));
 	    Logic logic; bool debug=1;
@@ -1068,12 +1064,11 @@ namespace thl {
 	}
 	if(args(0)=="split") {
 	  if(args.size() < 2) {
-	    printf("usage: split s [fs]\n"
-		   " split the string macro variable by delomiter fs\n"
-		   " default delimiter is white space\n"
-		   " splitted string variables are created named s1,..,sN\n"
-		   " (N is number of splitted string)\n"
-		   );
+	    printf("Usage: split s [fs]\n"
+		   "Split the string macro variable s using delimiter fs.\n"
+		   "If fs is omitted, whitespace is used.\n"
+		   "The results are stored in s1, s2, ..., sN\n"
+		   "(N is the number of split elements.)\n");
 	  } else {
 	    if(args.size() < 3) {var.split(args(1));}
 	    else {var.split(args(1),args(2));} 
@@ -1133,9 +1128,9 @@ namespace thl {
 	if(sp.size()==0) continue;
 	if(sp(0)=="do"|| sp(0)=="for"||sp(0)=="while") {
 	  if(sp.size()<2) {
-	    if(sp(0)=="do") printf("usage: do n N1 N2 [dN]; ...; end\n");
-	    if(sp(0)=="for") printf("usage: for s (a b ...); ...; end\n");
-	    if(sp(0)=="while") printf("usage: while expr; ...; end\n");
+	    if(sp(0)=="do") printf("Usage: do n N1 N2 [dN]; ...; end\n");
+	    if(sp(0)=="for") printf("Usage: for s (a b ...); ...; end\n");
+	    if(sp(0)=="while") printf("Usage: while expr; ...; end\n");
 	    continue;
 	  }
 	  vbuf.push_back(line);
@@ -1153,7 +1148,7 @@ namespace thl {
 	  read_line.set_prompt(prompt);
 	} else if(sp(0)=="if") {
 	  if(sp.size()<2) {
-	    printf("usage: if expr; ...; elif expr; ...; else; ...; fi\n");
+	    printf("Usage: if expr; ...; elif expr; ...; else; ...; fi\n");
 	    continue;
 	  }
 	  vbuf.push_back(line);
