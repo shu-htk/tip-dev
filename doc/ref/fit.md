@@ -43,7 +43,6 @@ the graph at (X,Y).
 - `rc:` flag to set relative coordinate for comment position
 - `cf:` set tag of macro variable to store fitting coefficients
 - `fq:` set frequency of sinusoidal (sin) fitting
-- `ex:` specify error data of x
 - `ey:` specify error data of y
 
 ### option with two arguments
