@@ -1171,7 +1171,7 @@ public:
     _pl->att = opt.att;
     thl::Hist1D hist(opt.nb, opt.x0, opt.x1);
     for(size_t j=0; j<_dat[v].num.size(); j++) {hist.fill(_dat[v].num[j]);}
-    if(hist.nentry()==0) {printf("no entry\n"); return 2;}
+    if(hist.ndata()==0) {printf("no data\n"); return 2;}
     std::string hx = v + "_hx";
     std::string hy = v + "_hy";
     _dat[hx].type = _dat[hy].type = Num;
@@ -1227,7 +1227,7 @@ public:
     for(size_t j=0; j<_dat[vx].num.size(); j++) {
       h2.fill(_dat[vx].num[j],_dat[vy].num[j]);
     }
-    if(h2.nentry()==0) {printf("no entry\n"); return 2;}
+    if(h2.ndata()==0) {printf("no data\n"); return 2;}
 
     std::string mx = vx + "_mx"; _dat[mx].clear();
     std::string my = vy + "_my"; _dat[my].clear();
@@ -1518,31 +1518,31 @@ public:
   int data_statistics(const std::string &v, Option &opt, bool print_flag=1) {
     if(check_data1(v)) return 1;
     double max=_dat[v].num[0], min=_dat[v].num[0];
-    double nentry=0, sum=0, ssum=0;
+    double ndata=0, sum=0, ssum=0;
     for(size_t j=0; j<_dat[v].num.size(); j++) {
       double x = _dat[v].num[j];
       if(x >= DBL_MAX || x <= -DBL_MAX) continue;
       if(! std::isfinite(x)) continue;
-      nentry++;
+      ndata++;
       if(x > max) max = x;
       if(x < min) min = x;
       sum += x;
       ssum += x*x;
     }
-    double mean = (nentry > 0) ? sum/nentry : 0;
-    double rms = (nentry > 0) ? ssum/nentry - mean*mean : 0;
-    rms = (rms > 0) ? std::sqrt(rms) : 0;
-    var.set_num(v+"_entry",nentry);
+    double mean = (ndata > 0) ? sum/ndata : 0;
+    double sigma = (ndata > 0) ? ssum/ndata - mean*mean : 0;
+    sigma = (sigma > 0) ? std::sqrt(sigma) : 0;
+    var.set_num(v+"_ndata",ndata);
     var.set_num(v+"_max",max);
     var.set_num(v+"_min",min);
     var.set_num(v+"_mean",mean);
-    var.set_num(v+"_rms",rms);
+    var.set_num(v+"_sigma",sigma);
     if(print_flag) {
       _pl->att = opt.att;
       thl::CFormat fmt;
       fmt("@ Statistics:\n"
-	  " entry=%g\n max= %g\n min= %g\n mean= %g\n rms= %g",
-	  nentry,max,min,mean,rms);
+	  " ndata=%g\n max= %g\n min= %g\n mean= %g\n sigma= %g",
+	  ndata,max,min,mean,sigma);
       printf("%s\n",fmt());  // print info to the console
       if(opt.cx!=0 && opt.cy!=0) { // draw info into the graph 
 	_pl->draw_text(opt.cx, opt.cy, fmt(), opt.rc);
@@ -2277,7 +2277,7 @@ public:
       if(args.size() < 2) {
 	printf("Usage: hplot v [(opt)]\n"
 	       "Create and plot a histogram of v.\n"
-	       "Generates v_hx (bin centers) and v_hy (entries), then plots them.\n"
+	       "Generates v_hx (bin centers) and v_hy (nentries), then plots them.\n"
 	       "Options:\n"
 	       "  nb:N      number of bins\n"
 	       "  xr:x0,x1  x‑range\n"
@@ -2354,7 +2354,8 @@ public:
       if(args.size() < 2) {
 	printf("Usage: stat v [(opt)]\n"
 	       "Compute statistics of v.\n"
-	       "Creates macro variables: v_max, v_min, v_mean, v_rms, v_entry.\n"
+	       "Creates macro variables: \n"
+	       "  v_max, v_min, v_mean, v_sigma, v_ndata.\n"
 	       "If cp: is specified, draw them on the current graph.\n");
 	return 0;
       }

@@ -18,9 +18,9 @@ do n 1 [num_of_data_set]
   set measure = random([num_of_trial],gaus,[sigma]) 
   stat measure
   set mean = [measure_mean] ;# error of center value
-  set rms = [measure_rms]   ;# error of root mean square
-  cat mean >> err_mean      ;# append to data array
-  cat rms >> err_rms        ;# append to data array
+  set sigma = [measure_sigma]   ;# error of root mean square
+  cat mean >> err_mean          ;# append to data array
+  cat sigma >> err_sigma        ;# append to data array
 end
 
 @ pi = 3.14159265
@@ -29,6 +29,6 @@ set y = sin([freq]*2*[pi]*x) + err_mean  ;# measured data
 
 opt (gd:1 xt:1)
 plot x y (lw:0 st:star sc:red)  ;# plot measured data
-yerr x y err_rms                ;# plot error of measured data
+yerr x y err_sigma              ;# plot error of measured data
 fit x y s (lc:blue fq:[freq])   ;# fitting to measured data
 ```

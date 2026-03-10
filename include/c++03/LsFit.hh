@@ -209,14 +209,14 @@ namespace thl {
 	n += y[j];
       }
       double mean = (n>0) ? sum/n : 0.;
-      double rms = (n>0) ? std::sqrt((ssum-sum*sum/n)/n) : 0;
+      double sigma = (n>0) ? std::sqrt((ssum-sum*sum/n)/n) : 0;
       double amp=0; n=0;
       for(size_t j=0; j<y.size(); j++) {
-	if(x[j] > mean-rms && x[j] < mean+rms) {amp += y[j]; n++;}
+	if(x[j] > mean-sigma && x[j] < mean+sigma) {amp += y[j]; n++;}
       }
       _c[0] = (n>0) ? 1.1*amp/n : 0;
       _c[1] = mean;
-      _c[2] = rms;
+      _c[2] = sigma;
       return 0;
     }
     double func_gaus(double x) {

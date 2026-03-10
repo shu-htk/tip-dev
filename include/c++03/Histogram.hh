@@ -16,14 +16,14 @@ namespace thl {
   private:
     std::vector<unsigned long> _bin;
     double _x0,_x1,_xwid;
-    unsigned long _nentry;
+    unsigned long _ndata;
   public:
     Hist1D() {}
     Hist1D(int nbin, double x0, double x1) {
       init(nbin,x0,x1);
     }
     void init(int nbin, double x0, double x1) {
-      _nentry=0;
+      _ndata=0;
       _x0=x0; _x1=x1;
       _xwid=(_x1-_x0)/nbin;
       _bin.resize(nbin,0);
@@ -32,10 +32,10 @@ namespace thl {
       if(_x0<x && x<_x1) {
 	int ix = (int)((x-_x0)/_xwid);
 	_bin[ix]++;
-	_nentry++;
+	_ndata++;
       }
     }
-    unsigned long nentry() {return _nentry;}
+    unsigned long ndata() {return _ndata;}
     int nbin() {return (int)_bin.size();}
     double x0() {return _x0;};
     double x1() {return _x1;};
@@ -50,14 +50,14 @@ namespace thl {
   private:
     std::vector<std::vector<unsigned long> > _bin;
     double _x0,_x1,_y0,_y1,_xwid,_ywid;
-    unsigned long _nentry;
+    unsigned long _ndata;
   public:
     Hist2D() {}
     Hist2D(int nx, int ny, double x0, double x1, double y0, double y1) {
       init(nx,ny,x0,x1,y0,y1);
     }
     void init(int nx, int ny, double x0, double x1, double y0, double y1) {
-      _nentry=0;
+      _ndata=0;
       _x0=x0; _x1=x1; _y0=y0; _y1=y1;
       _xwid=(_x1-_x0)/nx; _ywid=(_y1-_y0)/ny;
       _bin.resize(nx);
@@ -68,10 +68,10 @@ namespace thl {
 	int ix = (int)((x-_x0)/_xwid);
 	int iy = (int)((y-_y0)/_ywid);
 	_bin[ix][iy] ++;
-	_nentry++;
+	_ndata++;
       }
     }
-    unsigned long nentry() {return _nentry;}
+    unsigned long ndata() {return _ndata;}
     int nx() {return (int)_bin.size();}
     int ny() {return (int)_bin[0].size();}
     double x0() {return _x0;};
