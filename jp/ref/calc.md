@@ -1,7 +1,7 @@
 # calc
 ```
 tip> calc
-usage: calc [expression]
+Usage: calc [expression]
 ```
 
 this command show the result of calculation expression

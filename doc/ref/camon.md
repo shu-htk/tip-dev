@@ -1,18 +1,13 @@
 # camon
 ```
 tip> camon
-usage: camon EPICS_record > v
- monitor the value of EPICS_record and redirected to the data v.
+Usage: camon EPICS_record > v
+Monitor the EPICS record and store updates into data v.
 ```
-
-Assign the EPICS_record to the data varaible and the macro variable.
-
-- **data varaible :**  `set v = (all elements of EPICS_record)`
-- **macro variable :** `@ v = (1st element of EPICS_record)`
 
 see also [cacheck](cacheck.md) and [caclose](caclose.md) 
 
-an example of the remote control using EPICS CA
+example:
 ```
 caput monitor:str < null ;# initialize command string
 camon monitor:str > cmd  ;# assign the string-record to the variable
@@ -32,9 +27,5 @@ end
 caclose cmd,wf
 ```
 
-the above script will be stopped when you do
-`$ caput monitor:str exit`
-from the shell.
-
-for more example see [ex101](../ex/ex101.md)
+see also [ex101](../ex/ex101.md)
 

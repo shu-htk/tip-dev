@@ -1,20 +1,12 @@
 # caget
 ```
 tip> caget
-usage: caget EPICS_record [> v]
- get the value from EPICS_record and print contents
- if '>' is specified the value is redirected to the data v.
- also the following macro variable is created.
-macro variable:
-   v : the 1st element of data v
+Usage: caget EPICS_record [> v]
+Get the value of the EPICS record and print it.
+If '>' is specified, store the value into data v.
+Macro variable created:
+  v : first element of data v
 ```
-
-Get the all elements of EPICS_record and print them.
-
-If it is redirected to "> v", the following variables are created.
-
-- **data varaible :**  `set v = (all elements of EPICS_record)`
-- **macro variable :** `@ v = (1st element of EPICS_record)`
 
 exmaple
 ```

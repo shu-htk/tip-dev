@@ -1,8 +1,8 @@
 # cainfo
 ```
 tip> cainfo
-usage: cainfo EPICS_record
- show information of EPICS_record.
+Usage: cainfo EPICS_record
+Show information of the EPICS_record.
 ```
 
 example

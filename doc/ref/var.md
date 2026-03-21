@@ -2,10 +2,10 @@
 
 ```
 tip> @
-usage: @ x [=|+=|-=|*=|/=|%=] expression
-usage: @ t = time(s[,unit])
- set the expression value to the macro variable x
- convert ISO time string to unix epoch time and vice versa
+Usage: @ x [=|+=|-=|*=|/=|%=] expression
+       @ t = time(s[,unit])
+Assign the expression result to macro variable x.
+Convert between ISO time strings and Unix epoch time.
 ```
 see [calc](calc.md) to learn how expression is calulated
 

@@ -1,7 +1,7 @@
 # box
 ```
 tip> box
-usage: box x0 x1 y0 y1 [(opt)]
+Usage: box x0 x1 y0 y1 [(opt)]
 ```
 
 draw 2-dimensional axis frame in the box shape.  
