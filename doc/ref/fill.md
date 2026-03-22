@@ -1,12 +1,9 @@
 # fill
 ```
 tip> fill
-usage: fill vx vy [(opt)]
- fill a color or pattern in the area which is specified
- by the data vx and vy.
+Usage: fill vx vy [(opt)]
+Fill an area defined by data vx and vy.
 ```
-
-draw fill-area specified by data vx and vy in 2D graph.
 
 ## option
 

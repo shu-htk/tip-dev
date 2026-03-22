@@ -1,26 +1,18 @@
 # fit
 ```
 tip> fit
-usage: fit x y [lin|quad|exp|log|gaus|sin|circ] [(opt)]
- do fitting to the data x and y and draw the result.
- you should do 'plot x y' before this command.
- available fitting functions:
-   l[in] : y = c0 + c1*x 
-   q[uad]: y = c0 + c1*x + c2*x^2 
-   e[xp] : y = c0*exp(c1*x) 
-   log   : y = c0 + log(c1*x) 
-   g[aus]: y = c0*exp(-(x-c1)^2/2*c2^2) 
-   s[in] : y = c0 + c1*sin(2*PI*c3*x) + c2*cos(2*PI*c3*x) 
-   c[irc]: (x-c0)^2 + (y-c1)^2 = c2^2 
+Usage: fit x y [lin|quad|exp|log|gaus|sin|circ] [(opt)]
+Fit data x and y, then draw the result.
+Run 'plot x y' before using this command.
+Available functions:
+  lin  : y = c0 + c1*x
+  quad : y = c0 + c1*x + c2*x^2
+  exp  : y = c0*exp(c1*x)
+  log  : y = c0 + log(c1*x)
+  gaus : y = c0*exp(-(x-c1)^2/(2*c2^2))
+  sin  : y = c0 + c1*sin(2*PI*c3*x) + c2*cos(2*PI*c3*x)
+  circ : (x-c0)^2 + (y-c1)^2 = c2^2
 ```
-
-Fit the curve to data x and y after [plot](plot.md) command.
-The fitting information is outputted to console and fitting curve is
-drawn on the existing graph.
-If you specify option `cp:X,Y`, the fitting information is drawn in
-the graph at (X,Y).
-
-> user defined fitting function is not available
 
 ## fitting functions
 

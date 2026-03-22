@@ -5,7 +5,7 @@
 - **for-loop**
 ```
 tip> for
-usage: for s (a b ...); ...; end
+Usage: for s (a b ...); ...; end
 ```
 It is assigned for each value listed in the brackets ( )
 to the macro variable 's'.  
@@ -13,7 +13,7 @@ to the macro variable 's'.
 - **do-loop**
 ```
 tip> do
-usage: do n N1 N2 [dN]; ...; end
+Usage: do n N1 N2 [dN]; ...; end
 ```
 It is assigned numerical value which range is from N1 to N2 incremented dN
 to the macro variable 'n'.  
@@ -23,7 +23,7 @@ If dN is not specified, it is incremented +1
 - **while-loop**
 ```
 tip> while
-usage: while expr; ...; end
+Usage: while expr; ...; end
 ```
 It is evaluated the [logical expression](logic.md) for each time,
 if it is is true continue, if false break.

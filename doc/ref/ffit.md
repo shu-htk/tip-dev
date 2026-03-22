@@ -1,15 +1,10 @@
 # ffit
 ```
 tip> ffit
-usage: ffit v [func] [(opt)]
- you should do the 'fplot' before this command.
- then 'fit v_fx v_fy [func]' is done.
- see the command 'fit' for the fitting functions.
+Usage: ffit v [func] [(opt)]
+Fit FFT results created by 'fplot'.
+Runs: fit v_fx v_fy [func].
 ```
-
-do fitting to the curve of frequency domain after [fplot](../ref/fplot.md).
-
-- v is time domain data
 
 ## fitting functions
 

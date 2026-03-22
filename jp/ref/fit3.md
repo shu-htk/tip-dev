@@ -1,20 +1,12 @@
 # fit3
 ```
 tip> fit3
-usage: fit3 x y z [plane] [(opt)]
- do fitting to the data x,y,z by plane function.
- you should do 'plot3 x y z' before this command.
- available fitting functions:
-   p[lane] : z = c0 + c1*x + c2*y
+Usage: fit3 x y z [plane] [(opt)]
+Fit 3D data x,y,z with a plane.
+Run 'plot3 x y z' before using this command.
+Functions:
+  plane : z = c0 + c1*x + c2*y
 ```
-
-Fit the plane to the data x, y and z after [plot3](plot3.md) command.
-The fitting information is outputted to console and fitting plane is
-drawn on the existing graph.
-If you specify option `cp:X,Y`, the fitting information is drawn in
-the graph at (X,Y).
-
-> user defined fitting function is not available
 
 ## fitting functions
 
