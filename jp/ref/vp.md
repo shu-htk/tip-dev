@@ -1,14 +1,13 @@
 # viewport, vp
 ```
 tip> vp
-usage: vp x0 x1 y0 y1 aspect 
-       vp show|reset
- where x0,x1 is x-range [0:1] of viewport
-       y0,y1 is y-range [0:1] of viewport
-       aspect is ratio: y-width/x-width
+Usage: vp x0 x1 y0 y1 aspect
+       vp show | reset
+Set viewport range.
+  x0,x1 : x‑range [0–1]
+  y0,y1 : y‑range [0–1]
+  aspect: y‑width / x‑width
 ```
-
-set viewport of drawing area in the window.
 
 |argument|description |value|
 |:---:|:---:|:---:|

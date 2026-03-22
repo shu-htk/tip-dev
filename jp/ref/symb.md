@@ -1,7 +1,7 @@
 # symb
 ```
 tip> symb
-usage: symb x y [(opt)]
+Usage: symb x y [(opt)]
 ```
 put a symbol mark at the point (x,y).
 

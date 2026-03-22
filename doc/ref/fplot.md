@@ -1,20 +1,19 @@
 # fplot
 ```
 tip> fplot
-usage: fplot [t] v [(opt)]
- do FFT with the time data t and the amplitude v.
- it is created the frequency data v_fx and the power spectrum v_fy.
- then 'plot v_fx v_fy' is done.
- if data t is not specified you should set the option 'dt:'
-options:
- dt:x   the time tick of FFT. (default is 1.0)
- fw:s   FFT window function. (default is 'rc'(Rectangle))
- name of window functions are
-  rc  : Rectangle (default)
-  hn  : Hann
-  hm  : Hamming
-  bk  : Blackman
-  bh  : Blackman-Haris
+Usage: fplot [t] v [(opt)]
+Perform FFT using time t and amplitude v.
+Generates v_fx (frequency) and v_fy (power spectrum), then plots them.
+If t is omitted, specify dt: in options.
+Options:
+  dt:x   time step (default 1.0)
+  fw:s   window function (default 'rc')
+Window functions:
+  rc  Rectangle
+  hn  Hann
+  hm  Hamming
+  bk  Blackman
+  bh  Blackman‑Harris
 ```
 
 ## option

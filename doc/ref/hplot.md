@@ -1,15 +1,13 @@
 # hplot
 ```
 tip> hplot
-usage: hplot v [(opt)]
- make and plot the histogram of the data v,
- it is created the bin data v_hx and the entry data v_hy
- then plot the 2D-graph of v_hx and v_hy
- options:
-  nb:N      number of the histogram bins
-  xr:x0,x1  x-range of the histogram
- if there are no options, nb is set to 100, and x0 and x1
- are calculated to include all values of v.
+Usage: hplot v [(opt)]
+Create and plot a histogram of v.
+Generates v_hx (bin centers) and v_hy (entries), then plots them.
+Options:
+  nb:N      number of bins
+  xr:x0,x1  x‑range
+If omitted, nb=100 and range is auto‑detected.
 ```
 
 ## option

@@ -1,8 +1,8 @@
 # sys
 ```
 tip> sys
-usage: sys [command]
- execute system command
+Usage: sys [command]
+Execute a system command.
 ```
 
 `sys` execute shell command in the tip interpreter

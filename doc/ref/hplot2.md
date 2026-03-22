@@ -1,8 +1,8 @@
 # hplot2
 ```
 tip> hplot2
-usage: hplot2 x y [(opt)]
- make and plot the 2D-histogram of data x and y
+Usage: hplot2 x y [(opt)]
+Create and plot a 2D histogram of x and y.
 ```
 
 ## option

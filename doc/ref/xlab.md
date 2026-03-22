@@ -1,7 +1,7 @@
 # xlab
 ```
 tip> xlab
-usage: xlab "strings"
- set x-axis label
- equivalent to 'opt (xl:"strings")'
+Usage: xlab "text"
+Set the x-axis label.
+Equivalent to: opt (xl:"text")
 ```

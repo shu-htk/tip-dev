@@ -1,11 +1,10 @@
 # read
 ```
 tip> read
-usage: read v1,v2,... file_name [(opt)]
+Usage: read v1,v2,... file_name [(opt)]
        read v1,v2,... `command` [(opt)]
- where v1,v2,... are list of data to read
- if `command` specified instead of file_name,
- data are read from the out put of the system command
+Read data into v1,v2,...
+If a command is given, read from its output.
 ```
 
 ## option

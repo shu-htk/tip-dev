@@ -1,14 +1,14 @@
 # set
 ```
 tip> set
-usage: set v = {x0,x1,x2,...}
+Usage: set v = {x0,x1,x2,...}
        set v = range(N,x0,x1)
        set v = incr(N,x0,dx)
        set v = random(N,uni|gaus|exp[,params...]) [(opt)]
-       set v = time(t[,unit]) 
+       set v = time(t[,unit])
        set v = expression
- set the data v by some expressions.
- see 'range', 'random', 'time' for more information.
+Set data v using various expressions.
+See 'range', 'random', and 'time' for details.
 ```
 
 ## set data using initializer list {}

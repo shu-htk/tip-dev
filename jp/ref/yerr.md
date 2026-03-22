@@ -1,9 +1,9 @@
 # yerr
 ```
 tip> yerr
-usage: yerr x y ey [(opt)]
- plot y-error-bars of the data ey
- you should do 'plot x y' before this command.
+Usage: yerr x y ey [(opt)]
+Plot y‑error bars using ey.
+Run 'plot x y' before using this command.
 ```
 
 example

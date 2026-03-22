@@ -1,9 +1,9 @@
 # wait
 ```
 tip> wait
-usage: wait [t]
- wait t seconds, (t is floating point number)
- if t=0 wait console input
+Usage: wait [t]
+Wait for t seconds (t may be a floating‑point value).
+If t=0, wait for console input.
 ```
 
 example to wait console input

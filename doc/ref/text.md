@@ -1,14 +1,14 @@
 # text
 ```
 tip> text
-usage: text x y "strings" [(opt)]
-escape sequences in the text strings:
- #u  : switch to the superscript (ended with #d)
- #d  : switch to the subscript (ended with #u)
- #g  : next one character become Greek
- #fn : switch to normal (sans-serif) font
- #fr : switch to Roman (serif) font
- #fi : switch to Italic font
+Usage: text x y "text" [(opt)]
+Escape sequences:
+  #u  superscript (end with #d)
+  #d  subscript (end with #u)
+  #g  next character becomes Greek
+  #fn normal (sans-serif) font
+  #fr Roman (serif) font
+  #fi Italic font
 ```
 
 ## option

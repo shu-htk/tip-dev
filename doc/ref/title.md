@@ -1,7 +1,7 @@
 # title
 ```
 tip> title
-usage: title "strings"
- set graph top label
- equivalent to 'opt (tl:"strings")'
+Usage: title "text"
+Set the graph title.
+Equivalent to: opt (tl:"text")
 ```

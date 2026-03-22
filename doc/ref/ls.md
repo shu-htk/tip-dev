@@ -1,18 +1,10 @@
 # ls
 ```
 tip> ls
-usage: ls pattern
- print list of both macro and data variables which matches pattern
- 'ls *' show all data or macro variables
+Usage: ls pattern
+List macro and data variables matching pattern.
+Use 'ls *' to show all variables.
 ```
-
-Show the list of  information about both macro variable and data variable
-which name matches the pattern.
-
-If it is macro variable, the name and type(number, string) and it's value
-is shown.  
-If it is data variable, the name and type(num, str, mesh) and it's size is
-shown.  
 
 ## variable names in the argument
 

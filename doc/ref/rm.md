@@ -1,9 +1,9 @@
 # rm
 ```
 tip> rm
-usage: rm pattern
- remove data or macro variables which matches pattern
- example: 'rm *'  remove all data or macro variables
+Usage: rm pattern
+Remove variables matching pattern.
+Example: rm *  removes all variables.
 ```
 
 ## argument list of variable names

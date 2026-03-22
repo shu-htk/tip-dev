@@ -1,7 +1,7 @@
 # ylab
 ```
 tip> ylab
-usage: ylab "strings"
- set y-axis label
- equivalent to 'opt (yl:"strings")'
+Usage: ylab "text"
+Set the y-axis label.
+Equivalent to: opt (yl:"text")
 ```

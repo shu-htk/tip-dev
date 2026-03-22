@@ -1,27 +1,24 @@
 # fmt
 ```
 tip> fmt
-usage: fmt ["format"|reset|show]
- specify output format of macro variable.
- (it is same as printf)
- if "reset", it is set to default ("%.11g")
- if "show", print current format
- example: @ x=1; fmt %03.0f; prn [x]
- output:  001
+Usage: fmt ["format" | reset | show]
+Specify the output format for macro variables.
+(Same syntax as printf.)
+reset : restore the default format ("%.11g")
+show  : display the current format
+Example:
+  @ x=1; fmt "%03.0f"; prn [x]
+Output:
+  001
 ```
 
-available format specifiers
+format specifiers
 
 |specifier| |
 |:---:|:---:|
 | %f | OK |
 | %e | OK |
 | %g | OK |
-
-the following specifiers are not available 
-
-|specifier| |
-|:---:|:---:|
 | %c | N/A |
 | %s | N/A |
 | %d | N/A |

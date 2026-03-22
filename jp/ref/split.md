@@ -1,11 +1,11 @@
 # split
 ```
 tip> split
-usage: split s [fs]
- split the string macro variable by delomiter fs
- default delimiter is white space
- splitted string variables are created named s1,..,sN
- (N is number of splitted string)
+Usage: split s [fs]
+Split the string macro variable s using delimiter fs.
+If fs is omitted, whitespace is used.
+The results are stored in s1, s2, ..., sN
+(N is the number of split elements.)
 ```
 
 exmaple

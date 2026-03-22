@@ -1,16 +1,17 @@
 # tfmt
 ```
 tip> tfmt
-usage: tfmt "time format"
+Usage: tfmt "time format"
        tfmt reset
- set x-axis time format.
- equivalent to 'opt (tf:"time format")'
- tags in the format:
-         %Y(year), %m(month), %d(day), %H(hour), %M(min), %S(sec)
- reset : x-axis is reset to normal format.
+Set the x-axis time format.
+Equivalent to: opt (tf:"time format")
+Format tags:
+  %Y(year) %m(month) %d(day)
+  %H(hour) %M(min) %S(sec)
+reset: restore normal (non-time) x-axis format.
  ```
 
-this command is equivalent to `opt (tf:"time format")`
+This command is equivalent to `opt (tf:"time format")`
 
 example
 ```

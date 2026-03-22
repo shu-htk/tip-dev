@@ -1,9 +1,9 @@
 # plot3
 ```
 tip> plot3
-usage: plot3 x y z [(opt)]
- plot the 3d-graph of data x, y and z.
- those three data should be the same size.
+Usage: plot3 x y z [(opt)]
+Plot a 3D graph of x, y, and z.
+All data must have the same size.
 ```
 
 ## option

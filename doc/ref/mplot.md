@@ -1,16 +1,16 @@
 # mplot
 ```
 tip> mplot
-usage: mplot x y z [(opt)]
- plot the mesh-3d-graph.
- where x is data of size N.
-       y is data of size M.
-       z is mesh-data of size N*M.
- option of graph type (default is 'mesh1')
-  mt:mesh1  plot 3D-mesh with single color.
-  mt:mesh2  plot 3D-mesh with gradation color.
-  mt:cont1  plot 2D-mesh with gray-scaled contour.
-  mt:cont2  plot 2D-mesh with gradation colored contour.
+Usage: mplot x y z [(opt)]
+Plot a 3D mesh graph.
+  x : size N
+  y : size M
+  z : size N×M
+Graph types (mt:):
+  mesh1 : 3D mesh (single color)
+  mesh2 : 3D mesh (gradation)
+  cont1 : 2D contour (gray)
+  cont2 : 2D contour (gradation)
 ```
 
 ## option

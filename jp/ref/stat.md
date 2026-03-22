@@ -1,11 +1,11 @@
 # stat
 ```
 tip> stat
-usage: stat v [(opt)]
- make the statistics information of data v.
- the macro variables [v_max] [v_min] [v_mean] [v_sigma]
- and [v_ndata] are created.
- if option 'cp:' is specified they are drawn in the current graph.
+Usage: stat v [(opt)]
+Compute statistics of v.
+Creates macro variables:
+  v_max, v_min, v_mean, v_sigma, v_ndata.
+If cp: is specified, draw them on the current graph.
 ```
 
 example

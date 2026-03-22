@@ -1,9 +1,9 @@
 # sort
 ```
 tip> sort
-usage: sort v1,v2,... by v
- sort data v1,v2,... by v in ascending order.
- it is created sorted data v1_sort,v2_sort,...
+Usage: sort v1,v2,... by v
+Sort v1,v2,... in ascending order using v.
+Creates v1_sort, v2_sort, ...
 ```
 > argument list of variable names is separated by comma with no spaces.
 

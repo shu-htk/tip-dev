@@ -1,11 +1,10 @@
 # logic
 ```
 tip> logic
-usage: logic [expression]
+Usage: logic [expression]
 ```
-this command show the result of logical expression
 
-where logical expression is appear in
+Show the result of the logical expression which appears in
 
 - [if](if_fi.md) expr
 - [elif](if_fi.md) expr

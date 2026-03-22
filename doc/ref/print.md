@@ -1,15 +1,15 @@
 # print, println, pr, prn
 ```
 tip> print
-usage: print args...
+Usage: print args...
        println args...
- print arguments with macro variables format.
-                 (see also 'fmt' command)
-print  : line is not returned. (abbreviate to 'pr')
-println: line is returned. (abbreviate to 'prn')
+Print the given arguments.
+(See also the 'fmt' command.)
+print   : does not append a newline (alias: pr)
+println : appends a newline (alias: prn)
 ```
 
-the following escape sequence is available.
+escape sequence
 
 |escape char|function|
 |:---:|:---:|
