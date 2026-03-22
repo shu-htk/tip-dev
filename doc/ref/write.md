@@ -1,8 +1,8 @@
 # write
 ```
 tip> write
-usage: write v1,v2,... file_name ([opt])
- where v1,v2,... is list of data to write
+Usage: write v1,v2,... file_name [(opt)]
+Write data v1,v2,... to a file.
 ```
 
 ## option
