@@ -1942,7 +1942,7 @@ public:
       _gopt.sd = args(1);
     }
     if(args(0)=="set") {
-      thl::StrSplit sp(buf,"= ");
+      thl::StrSplit sp(buf,"= \t");
       if(sp.size() < 3) {
 	printf("Usage: set v = {x0,x1,x2,...}\n"
 	       "       set v = range(N,x0,x1)\n"
@@ -2136,7 +2136,7 @@ public:
       return 0;
     }
     if(args(0)=="mset") {
-      thl::StrSplit sp(buf,"= ");
+      thl::StrSplit sp(buf,"= \t");
       if(sp.size() < 3) {
 	printf("Usage: mset v = {{v00,...,v0M},{v10,...,v1M},...,{vN0,...,vNM}}\n"
 	       "       mset v = expression\n"
@@ -2397,7 +2397,7 @@ public:
       return 0;
     }
     if(args(0)=="elem") {
-      thl::StrSplit sp(buf,"= ");
+      thl::StrSplit sp(buf,"= \t");
       if(sp.size() < 3) {
 	printf("Usage: elem x = v(N)\n"
 	       "Copy the N‑th element of v into macro variable x.\n"
