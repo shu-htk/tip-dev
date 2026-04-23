@@ -1480,7 +1480,7 @@ public:
     size_t nx=_dat[vx].num.size();
     size_t ny=_dat[vy].num.size();
     _pl->alloc_mesh(nx, ny);
-    opt.z0=1e20; opt.z1=0;
+    opt.z0 = opt.z1 = _dat[vz].mesh[0][0];
     for(size_t j=0; j<nx; j++) {
       for(size_t k=0; k<ny; k++) {
 	double z = _dat[vz].mesh[j][k];
