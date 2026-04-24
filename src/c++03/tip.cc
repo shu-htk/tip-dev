@@ -518,7 +518,7 @@ public:
     return 0;
   }
   void find_tags(std::vector<std::string> &tags, const std::string &expr) {
-    thl::StrSplit sp(expr,"()+-*/%<>=!, \t");
+    thl::StrSplit sp(expr,"()+-*/%<>=!^, \t");
     for(size_t j=0; j<sp.size(); j++) {
       if(_dat.count(sp(j))>0) {
 	if(_dat[sp(j)].type==Mesh) {

@@ -124,12 +124,20 @@ namespace thl {
       }
       return 0;
     }
-    double muldiv(void) {
+    double power(void) {
       double ret = factor();
       while(1) {
-	if(*_cp=='*') {_cp++; ret *= factor();}
-	else if(*_cp=='/') {_cp++; ret /= factor();}
-	else if(*_cp=='%') {_cp++; ret = fmod(ret,factor());}
+	if(*_cp=='^') {_cp++; ret = std::pow(ret,factor());}
+	else if(*_cp==' '||*_cp=='\t') {_cp++;}
+	else {return ret;}
+      }
+    }
+    double muldiv(void) {
+      double ret = power();
+      while(1) {
+	if(*_cp=='*') {_cp++; ret *= power();}
+	else if(*_cp=='/') {_cp++; ret /= power();}
+	else if(*_cp=='%') {_cp++; ret = fmod(ret,power());}
 	else if(*_cp==' '||*_cp=='\t') {_cp++;}
 	else {return ret;}
       }
