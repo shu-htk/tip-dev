@@ -517,24 +517,37 @@ public:
     }
     return 0;
   }
-  void find_tags(std::vector<std::string> &tags, const std::string &expr) {
-    thl::StrSplit sp(expr,"()+-*/%<>=!^, \t");
+  int find_tags(std::vector<std::string> &tags, const std::string &expr) {
+    thl::StrSplit sp(expr,"()+-*/%<>=!^&|, \t");
+    int types=0;
     for(size_t j=0; j<sp.size(); j++) {
+      std::string s=sp(j);
       if(_dat.count(sp(j))>0) {
-	if(_dat[sp(j)].type==Mesh) {
-	  printf("'%s': type[mesh] : ignored.\n",sp(j).c_str());
-	} else {
-	  bool exist=0;
-	  for(size_t k=0; k<tags.size(); k++) {if(sp(j)==tags[k]) exist=1;}
-	  if(!exist) tags.push_back(sp(j));
-	}
+	if(_dat[s].type==Num) types |= Num;
+	if(_dat[s].type==Str) types |= Str;
+	if(_dat[s].type==Mesh) types |= Mesh;
+	bool exist=0;
+	for(size_t k=0; k<tags.size(); k++) {if(s==tags[k]) exist=1;}
+	if(!exist) tags.push_back(s);
       }
     }
+    return types;
+    // 0 000 undef
+    // 1 001 num
+    // 2 010 str
+    // 3 011 str | num
+    // 4 100 mesh
+    // 5 101 mesh | num
+    // 6 110 mesh | str
+    // 7 111 mesh | str | num
   }
   int data_set_eval(const std::string &v, const std::string &expr) {
     thl::Calc calc;
     std::vector<std::string> tags;
-    find_tags(tags,expr);
+    if(find_tags(tags,expr) != Num ) {
+      printf("variable type in the condition should be Num\n");
+      return -1;
+    }
     _dat[v].clear();
     if(tags.size()>0) {
       for(size_t k=0; k<tags.size(); k++) {
@@ -700,27 +713,30 @@ public:
     thl::Logic logic;
     std::vector<std::string> tags;
     std::vector<bool> vbool;
-    bool flag_s=0; // =1 if it is string data
-    find_tags(tags,expr);
+    int types = find_tags(tags,expr);
+    if(types == 3 || types > 4) {
+      printf("multiple variable type in the condition: [%s]\n",expr.c_str());
+      return 1;
+    }
     if(tags.size()>0) {
       int quiet=1<<2;
       for(size_t k=0; k<tags.size(); k++) {
-	if(check_data1(tags[k],quiet) == 2) flag_s=1;
-      }
-      for(size_t k=0; k<tags.size(); k++) {
 	if(check_data2(vlist[0],tags[k],quiet) > 2) return 1;
       }
-      for(size_t j=0; j<_dat[tags[0]].size(); j++) {
-	if(flag_s) {
-	  for(size_t k=0; k<tags.size(); k++) {
-	    logic.str.set_var(tags[k],_dat[tags[k]].str[j]);
-	  }
-	  vbool.push_back(logic.str.eval(expr));
-	} else {
+      if(types==Num) {
+	for(size_t j=0; j<_dat[tags[0]].size(); j++) {
 	  for(size_t k=0; k<tags.size(); k++) {
 	    logic.num.set_var(tags[k],_dat[tags[k]].num[j]);
 	  }
 	  vbool.push_back(logic.num.eval(expr));
+	}
+      }
+      if(types==Str) {
+	for(size_t j=0; j<_dat[tags[0]].size(); j++) {
+	  for(size_t k=0; k<tags.size(); k++) {
+	    logic.str.set_var(tags[k],_dat[tags[k]].str[j]);
+	  }
+	  vbool.push_back(logic.str.eval(expr));
 	}
       }
       size_t ncut=0;
@@ -1361,7 +1377,10 @@ public:
     _dat[v].clear();
     thl::Calc calc;
     std::vector<std::string> tags;
-    find_tags(tags,expr);
+    if(find_tags(tags,expr) != Num ) {
+      printf("variable type in the condition should be Num\n");
+      return -1;
+    }
     if(tags.size()!=2) {
       printf("number of variables should be 2 [%s]\n",expr.c_str());
       return 1;
