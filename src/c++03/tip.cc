@@ -60,7 +60,7 @@ void tip_initialize_readline() {
 
 class Tip : public thl::MacroTool {
 private:
-  enum DataType {Undef,Num,Str,Mesh};
+  enum DataType {Undef=0,Num=1,Str=2,Mesh=4};
   struct Data {
     DataType type;
     std::vector<double> num;
