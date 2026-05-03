@@ -6,7 +6,7 @@ set x = range(32,-3.2,3.2)
 set y = range(30,-3,3)
 
 @ expr3 = "2*exp(x)+3*sin(4*y)"
-@ expr4 = "3*(1-x)*(1-x)*exp(-(x*x)-(y+1)*(y+1)) - 10*(x/5-pow(x,3)-pow(y,5))*exp(-x*x-y*y) - 1/3*exp(-(x+1)*(x+1)-(y*y))"
+@ expr4 = "3*(1-x)^2*exp(-x^2-(y+1)^2) - 10*(x/5-x^3-y^5)*exp(-x^2-y^2) - 1/3*exp(-(x+1)^2-y^2)"
 
 div 2 2
 do n 3 4
