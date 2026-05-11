@@ -433,7 +433,7 @@ namespace thl {
       if(ope==0) _val[tag].num = x;
       if(ope==1) _val[tag].num += x;
       if(ope==2) _val[tag].num -= x;
-      if(ope==3) _val[tag].num += x;
+      if(ope==3) _val[tag].num *= x;
       if(ope==4) _val[tag].num /= x;
       if(ope==5) _val[tag].num = fmod(_val[tag].num,x);
     }
