@@ -563,18 +563,59 @@ namespace thl {
 	for(size_t j=0; j<tags.size(); j++) erase(tags[j]);
       }
     }
-    void replace(std::string &buf) {
-      CFormat fmt; 
-      for(auto &&a : _val) {
-	std::string tag = "["+a.first+"]";
-	std::string val;
-	if(a.second.type==Num) val=fmt(_fmt,a.second.num);
-	if(a.second.type==Str) val=a.second.str;
-	if(buf.find(tag) != buf.npos) {
-	  for(size_t n=0; (n=buf.find(tag))!= buf.npos;) {
-	    buf.replace(n,tag.size(),val);
+    std::vector<std::string> contents_of_brackets(const std::string &buf,
+						  char bra, char cket) {
+      std::vector<std::string> contents;
+      for(size_t index=0; index < buf.size(); index++) {
+	if(buf[index]==bra) {
+	  size_t start=++index, depth=0;
+	  while(index < buf.size()) {
+	    if(buf[index]==bra) {depth++; index++; continue;}
+	    if(buf[index]==cket && depth>0) {depth--; index++; continue;}
+	    if(buf[index]==cket && depth==0) {
+	      contents.push_back(buf.substr(start, index-start));
+	      break;
+	    }
+	    index++;
 	  }
 	}
+      }
+      return contents;
+    }
+    void replace_sub(std::string &buf, std::string &tag) {
+      static char format[256];
+      size_t n=tag.find_first_of(":");
+      snprintf(format,256,"%s",_fmt);
+      std::string var=tag;
+      if(n != tag.npos) {
+	snprintf(format,256,"%s",tag.substr(0,n).c_str());
+	var=tag.substr(n+1);
+      }
+      if(_val.count(var)>0) {
+	CFormat cfmt;
+	Val val=_val[var];
+	std::string src="["+tag+"]";
+	std::string dst;
+	if(val.type==Num) dst=cfmt(format,val.num);
+	if(val.type==Str) dst=val.str;
+	if(buf.find(src) != buf.npos) {
+	  for(size_t n=0; (n=buf.find(src))!= buf.npos;) {
+	    buf.replace(n,src.size(),dst);
+	  }
+	}
+      }
+    }
+    void replace(std::string &buf) {
+      const int ntry=2;
+      for(int j=0; j<ntry; j++) {
+	std::vector<std::string> tags = contents_of_brackets(buf,'[',']');
+	for(auto &&tag : tags) {
+	  std::vector<std::string> sub_tags = contents_of_brackets(tag,'[',']');
+	  for(auto &&sub_tag : sub_tags) {
+	    replace_sub(buf,sub_tag);
+	  }
+	  replace_sub(buf,tag);
+      }
       }
     }
     void split(const std::string &tag, std::string fs=" \t\n") {
@@ -863,7 +904,6 @@ namespace thl {
 	std::string buf=vbuf[nline];
 	var.replace(buf);
 	replace_env(buf);
-	var.replace(buf);  // to replace nested variable [x[n]]
 	StrSplit args;
 	args.set_verbose(0);
 	args.set_quot_to_skip_split('"');
