@@ -517,7 +517,7 @@ public:
     }
     return 0;
   }
-  int find_tags(std::vector<std::string> &tags, const std::string &expr) {
+  int find_tags(std::set<std::string> &tags, const std::string &expr) {
     thl::StrSplit sp(expr,"()+-*/%<>=!^&|, \t");
     int types=0;
     for(size_t j=0; j<sp.size(); j++) {
@@ -526,9 +526,7 @@ public:
 	if(_dat[s].type==Num) types |= Num;
 	if(_dat[s].type==Str) types |= Str;
 	if(_dat[s].type==Mesh) types |= Mesh;
-	bool exist=0;
-	for(size_t k=0; k<tags.size(); k++) {if(s==tags[k]) exist=1;}
-	if(!exist) tags.push_back(s);
+	tags.insert(s);
       }
     }
     return types;
@@ -543,23 +541,27 @@ public:
   }
   int data_set_eval(const std::string &v, const std::string &expr) {
     thl::Calc calc;
-    std::vector<std::string> tags;
+    std::set<std::string> tags;
     if(find_tags(tags,expr) != Num ) {
       printf("variable type in the condition should be Num\n");
       return -1;
     }
     _dat[v].clear();
     if(tags.size()>0) {
-      for(size_t k=0; k<tags.size(); k++) {
-	if(check_data2(tags[0],tags[k])) return 1;
+      std::string tag0 = *tags.begin();
+      for(std::set<std::string>::iterator it=tags.begin();
+	  it != tags.end(); it++) {
+	if(check_data2(tag0,*it)) return 1;
       }
-      for(size_t j=0; j<_dat[tags[0]].num.size(); j++) {
-	for(size_t k=0; k<tags.size(); k++) {
-	  calc.set_var_num(tags[k],_dat[tags[k]].num[j]);
+      for(size_t j=0; j<_dat[tag0].num.size(); j++) {
+	for(std::set<std::string>::iterator it=tags.begin();
+	    it != tags.end(); it++) {
+	  calc.set_var_num(*it,_dat[*it].num[j]);
+
 	}
 	_dat[v].num.push_back(calc.eval(expr));
       }
-      _dat[v].type = _dat[tags[0]].type;
+      _dat[v].type = _dat[tag0].type;
       return 0;
     } else {
       double x = calc.eval(expr);
@@ -711,7 +713,7 @@ public:
     std::vector<std::string> vlist=get_vlist(pattern);
     if(vlist.size()==0) {printf("no variable list\n"); return 1;}
     thl::Logic logic;
-    std::vector<std::string> tags;
+    std::set<std::string> tags;
     std::vector<bool> vbool;
     int types = find_tags(tags,expr);
     if(types == 3 || types > 4) {
@@ -719,22 +721,26 @@ public:
       return 1;
     }
     if(tags.size()>0) {
+      std::string tag0 = *tags.begin();
       int quiet=1<<2;
-      for(size_t k=0; k<tags.size(); k++) {
-	if(check_data2(vlist[0],tags[k],quiet) > 2) return 1;
+      for(std::set<std::string>::iterator it=tags.begin();
+	  it != tags.end(); it++) {
+	if(check_data2(vlist[0],*it,quiet) > 2) return 1;
       }
       if(types==Num) {
-	for(size_t j=0; j<_dat[tags[0]].size(); j++) {
-	  for(size_t k=0; k<tags.size(); k++) {
-	    logic.num.set_var(tags[k],_dat[tags[k]].num[j]);
+	for(size_t j=0; j<_dat[tag0].size(); j++) {
+	  for(std::set<std::string>::iterator it=tags.begin();
+	      it != tags.end(); it++) {
+	    logic.num.set_var(*it,_dat[*it].num[j]);
 	  }
 	  vbool.push_back(logic.num.eval(expr));
 	}
       }
       if(types==Str) {
-	for(size_t j=0; j<_dat[tags[0]].size(); j++) {
-	  for(size_t k=0; k<tags.size(); k++) {
-	    logic.str.set_var(tags[k],_dat[tags[k]].str[j]);
+	for(size_t j=0; j<_dat[tag0].size(); j++) {
+	  for(std::set<std::string>::iterator it=tags.begin();
+	      it != tags.end(); it++) {
+	    logic.str.set_var(*it,_dat[*it].str[j]);
 	  }
 	  vbool.push_back(logic.str.eval(expr));
 	}
@@ -1376,7 +1382,7 @@ public:
   int mesh_set_eval(const std::string &v, const std::string &expr) {
     _dat[v].clear();
     thl::Calc calc;
-    std::vector<std::string> tags;
+    std::set<std::string> tags;
     if(find_tags(tags,expr) != Num ) {
       printf("variable type in the condition should be Num\n");
       return -1;
@@ -1385,8 +1391,9 @@ public:
       printf("number of variables should be 2 [%s]\n",expr.c_str());
       return 1;
     } else {
-      std::string vx = tags[0];
-      std::string vy = tags[1];
+      std::set<std::string>::iterator it=tags.begin();
+      std::string vx = *it;
+      std::string vy = *(++it);
       if(check_data1(vx)) return 1;
       if(check_data1(vy)) return 1;
       size_t nx = _dat[vx].num.size();
