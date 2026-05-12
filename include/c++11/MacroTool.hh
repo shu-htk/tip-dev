@@ -15,6 +15,7 @@
 #define THL_MACRO_TOOL_HH
 
 #include <map>
+#include <set>
 #include <fstream>
 #include <fnmatch.h>
 #include <unistd.h> // usleep()
@@ -564,16 +565,14 @@ namespace thl {
 	for(size_t j=0; j<tags.size(); j++) erase(tags[j]);
       }
     }
-    int find_tags(std::vector<std::string> &tags, const std::string &expr) {
+    int find_tags(std::set<std::string> &tags, const std::string &expr) {
       thl::StrSplit sp(expr,"()+-*/%<>=!^&|, \t");
       int types=0;
       for(auto &&s : sp) {
 	if(_val.count(s)>0) {
 	  if(_val[s].type==Num) types |= Num;
 	  if(_val[s].type==Str) types |= Str;
-	  bool exist=0;
-	  for(auto &&tag : tags) {if(s==tag) exist=1;}
-	  if(!exist) tags.push_back(s);
+	  tags.insert(s);
 	}
       }
       return types;
@@ -613,11 +612,11 @@ namespace thl {
       CFormat cfmt;
       std::string src="["+tag+"]";
       std::string dst;
-      std::vector<std::string> tags;
+      std::set<std::string> tags;
       int types=find_tags(tags,expr);
       if(types==Str) {
-	if(n != tag.npos) dst=cfmt(format,_val[tags[0]].str.c_str());
-	else dst=_val[tags[0]].str;
+	if(n != tag.npos) dst=cfmt(format,_val[*tags.begin()].str.c_str());
+	else dst=_val[*tags.begin()].str;
       } else {
 	Calc calc;
 	if(types==Num) for(auto &&t : tags) calc.set_var_num(t,_val[t].num);
