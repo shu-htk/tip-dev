@@ -398,6 +398,7 @@ namespace thl {
 //-----------------------------------------------------
   class Var {
     enum Type {Undef=0,Num=1,Str=2};
+    enum ArraySize {FmtSize=64};
     struct Val {
       Type type;
       double num;
@@ -409,16 +410,16 @@ namespace thl {
       }
     };
     std::map<std::string,Val> _val;
-    char _fmt[256];
+    char _fmt[FmtSize];
   public:
     IsoTimeStr ts;
-    Var(void) : ts("- :") {snprintf(_fmt,256,"%s","%.11g");}
-    void reset_fmt(void) {snprintf(_fmt,256,"%s","%.11g");}
+    Var(void) : ts("- :") {snprintf(_fmt,FmtSize,"%s","%.11g");}
+    void reset_fmt(void) {snprintf(_fmt,FmtSize,"%s","%.11g");}
     void print_fmt(void) {printf("[%s]\n",_fmt);}
     void set_fmt(const std::string &s) {
       if(fnmatch("%*f",s.c_str(),0)==0 || fnmatch("%*e",s.c_str(),0)==0 ||
 	 fnmatch("%*g",s.c_str(),0)==0) {
-	snprintf(_fmt,256,"%s",s.c_str());
+	snprintf(_fmt,FmtSize,"%s",s.c_str());
       } else {
 	printf("invalid format [%s]\n"
 	       "since numerical variable type is 'double'\n"
@@ -601,12 +602,12 @@ namespace thl {
       return contents;
     }
     void replace_sub(std::string &buf, std::string &tag) {
-      static char format[256];
+      static char format[FmtSize];
       size_t n=tag.find_first_of(":");
-      snprintf(format,256,"%s",_fmt);
+      snprintf(format,FmtSize,"%s",_fmt);
       std::string expr=tag;
       if(n != tag.npos) {
-	snprintf(format,256,"%s",tag.substr(0,n).c_str());
+	snprintf(format,FmtSize,"%s",tag.substr(0,n).c_str());
 	expr=tag.substr(n+1);
       }
       CFormat cfmt;
