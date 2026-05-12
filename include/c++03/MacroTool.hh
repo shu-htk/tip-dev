@@ -402,7 +402,7 @@ namespace thl {
   };
 //-----------------------------------------------------
   class Var {
-    enum Type {Undef,Num,Str};
+    enum Type {Undef=0,Num=1,Str=2};
     struct Val {
       Type type;
       double num;
@@ -570,6 +570,25 @@ namespace thl {
 	for(size_t j=0; j<tags.size(); j++) erase(tags[j]);
       }
     }
+    int find_tags(std::vector<std::string> &tags, const std::string &expr) {
+      thl::StrSplit sp(expr,"()+-*/%<>=!^&|, \t");
+      int types=0;
+      for(size_t j=0; j<sp.size(); j++) {
+	std::string s=sp(j);
+	if(_val.count(s)>0) {
+	  if(_val[s].type==Num) types |= Num;
+	  if(_val[s].type==Str) types |= Str;
+	  bool exist=0;
+	  for(size_t k=0; k<tags.size(); k++) {if(s==tags[k]) exist=1;}
+	  if(!exist) tags.push_back(s);
+	}
+      }
+      return types;
+      // 0 000 undef
+      // 1 001 num
+      // 2 010 str
+      // 3 011 str | num
+    }
     std::vector<std::string> contents_of_brackets(const std::string &buf,
 						  char bra, char cket) {
       std::vector<std::string> contents;
@@ -593,18 +612,25 @@ namespace thl {
       static char format[256];
       size_t n=tag.find_first_of(":");
       snprintf(format,256,"%s",_fmt);
-      std::string var=tag;
+      std::string expr=tag;
       if(n != tag.npos) {
 	snprintf(format,256,"%s",tag.substr(0,n).c_str());
-	var=tag.substr(n+1);
+	expr=tag.substr(n+1);
       }
-      if(_val.count(var)>0) {
+      std::string src="["+tag+"]";
+      std::string dst;
+      std::vector<std::string> tags;
+      int types=find_tags(tags,expr);
+      if(types==Str) {
+	dst=_val[tags[0]].str;
+      } else {
+	Calc calc;
+	if(types==Num) for(auto &&t : tags) calc.set_var_num(t,_val[t].num);
+	double x=calc.eval(expr);
 	CFormat cfmt;
-	Val val=_val[var];
-	std::string src="["+tag+"]";
-	std::string dst;
-	if(val.type==Num) dst=cfmt(format,val.num);
-	if(val.type==Str) dst=val.str;
+	if(!calc.not_digit()) dst=cfmt(format,x);
+      }
+      if(dst.size()>0) {
 	if(buf.find(src) != buf.npos) {
 	  for(size_t n=0; (n=buf.find(src))!= buf.npos;) {
 	    buf.replace(n,src.size(),dst);
