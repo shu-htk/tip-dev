@@ -18,20 +18,12 @@ echo "cp c++03 files"
 cp -p src/c++03/*.cc src
 cp -p include/c++03/*.hh include/thl
 
-if [ ! -e bin/check_c++11 ] ; then
-    echo "generating src/check_c++11.cc"
-    cat << END > src/check_c++11.cc
-#include <cstdio>
-int main() {
-  if(__cplusplus >= 201103L) printf("post11\n"); else printf("pre11\n");
-}
-END
-  echo "check if c++11 avalable"
-  g++ -o bin/check_c++11 src/check_c++11.cc
-fi
-cpp11=`bin/check_c++11`
 renew=${1:-yes}
-if [ $cpp11 == "post11" ] && [ $renew == "yes" ] ; then
+cpp_ver=$(g++ -dM -E -x c++ /dev/null | grep "__cplusplus" | awk '{print $3}')
+
+if [ -z "${cpp_ver%L}" ]; then
+    echo "can't get c++ version, it is regarded as c++03"
+elif [ "${cpp_ver%L}" -ge 201103 ] && [ $renew == "yes" ]; then
     echo "cp c++11 files"
     cp -p src/c++11/*.cc src
     cp -p include/c++11/*.hh include/thl
@@ -163,13 +155,6 @@ if g++ -o /dev/null check_clock_gettime.cc >& /dev/null ; then
     grep '^#13:' $0 | sed "s/#13://g" >> Makefile.1
 fi
 rm check_clock_gettime.cc
-#if [ -e /usr/include/time.h ] ; then
-#    clk=`grep -c clock_gettime /usr/include/time.h`
-#    if [ $clk -ne 0 ] ; then
-#	echo "found clock_gettime"
-#	grep '^#13:' $0 | sed "s/#13://g" >> Makefile.1
-#    fi
-#fi
 
 cat Makefile.1 Makefile.2 > Makefile
 rm Makefile.1 Makefile.2
