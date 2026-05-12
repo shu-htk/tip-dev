@@ -543,7 +543,7 @@ public:
     thl::Calc calc;
     std::set<std::string> tags;
     if(find_tags(tags,expr) != Num ) {
-      printf("variable type in the condition should be Num\n");
+      printf("variable type in the expression should be Num\n");
       return -1;
     }
     _dat[v].clear();
@@ -1384,7 +1384,7 @@ public:
     thl::Calc calc;
     std::set<std::string> tags;
     if(find_tags(tags,expr) != Num ) {
-      printf("variable type in the condition should be Num\n");
+      printf("variable type in the expression should be Num\n");
       return -1;
     }
     if(tags.size()!=2) {
