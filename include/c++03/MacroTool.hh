@@ -617,17 +617,18 @@ namespace thl {
 	snprintf(format,256,"%s",tag.substr(0,n).c_str());
 	expr=tag.substr(n+1);
       }
+      CFormat cfmt;
       std::string src="["+tag+"]";
       std::string dst;
       std::vector<std::string> tags;
       int types=find_tags(tags,expr);
       if(types==Str) {
-	dst=_val[tags[0]].str;
+	if(n != tag.npos) dst=cfmt(format,_val[tags[0]].str.c_str());
+	else dst=_val[tags[0]].str;
       } else {
 	Calc calc;
 	if(types==Num) for(auto &&t : tags) calc.set_var_num(t,_val[t].num);
 	double x=calc.eval(expr);
-	CFormat cfmt;
 	if(!calc.not_digit()) dst=cfmt(format,x);
       }
       if(dst.size()>0) {
@@ -1067,7 +1068,7 @@ namespace thl {
 		   "println : appends a newline (alias: prn)\n");
 	  } else {
 	    replace_esc(buf);
-	    std::string s = buf.substr(args.index(1));
+	    std::string s = buf.substr(args.index(0)+args(0).size()+1);
 	    printf("%s",s.c_str());
 	    if(args(0)=="println"||args(0)=="prn") printf("\n");
 	    fflush(stdout);
