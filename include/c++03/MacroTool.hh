@@ -569,7 +569,7 @@ namespace thl {
 	    tags.push_back(it->first);
 	  }
 	}
-	for(size_t j=0; j<tags.size(); j++) erase(tags[j]);
+	for(size_t k=0; k<tags.size(); k++) erase(tags[k]);
       }
     }
     int find_tags(std::set<std::string> &tags, const std::string &expr) {
@@ -625,7 +625,7 @@ namespace thl {
       if(types==Str) {
 	if(n != tag.npos) dst=cfmt(format,_val[*tags.begin()].str.c_str());
 	else dst=_val[*tags.begin()].str;
-      } else {
+      } else if(types==Num) {
 	Calc calc;
 	if(types==Num) {
 	  for(std::set<std::string>::iterator it=tags.begin();
