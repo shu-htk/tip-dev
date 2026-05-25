@@ -540,7 +540,8 @@ public:
   int data_set_eval(const std::string &v, const std::string &expr) {
     thl::Calc calc;
     std::set<std::string> tags;
-    if(find_tags(tags,expr) != Num ) {
+    int types=find_tags(tags,expr);
+    if( !(types == Num || types == Undef) ) {
       printf("variable type in the expression should be Num\n");
       return -1;
     }
