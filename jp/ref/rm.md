@@ -16,6 +16,5 @@ Example: rm *  removes all variables.
 |:---:|:---:|
 |any string          |  *           |
 |any character       |  ?           |
-|one of the list of chars|[abc..], [a-z] |
 
 > wild card is **not the regular expression**  

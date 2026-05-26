@@ -12,15 +12,15 @@ Use 'ls *' to show all variables.
 
 example
 ```
-tip> do n 1 3; @ x[n]=[n]; set v[n]=range([n],1,[n]); end
-
-tip> ls x1,v1,v3           ;# OK: separated by commas with no spaces
+tip> @ x1 = 1
+tip> @ x2 = 2
+tip>
+tip> ls x1,x2   ;# OK: separated by commas with no spaces
 x1 : number [1]
-v1 : data(num) : size=1
-v3 : data(num) : size=3
-
-tip> ls x1, v1, v3         ;# NG: separated by commas with spaces
-x1 : number [1]            ;# only 1st argument is listed
+x2 : number [2]
+tip>
+tip> ls x1, x2  ;# NG: separated by commas with spaces
+x1 : number [1] ;# only 1st argument is listed
 ```
 
 ## wild-card matching to the variable name
@@ -29,41 +29,30 @@ x1 : number [1]            ;# only 1st argument is listed
 |:---:|:---:|
 |any string          |  *           |
 |any character       |  ?           |
-|one of the list of chars|[abc..], [a-z] |
 
 > wild card is **not the regular expression**  
 
 example
 ```
 tip> rm *
-tip> do n 1 5; set v[n]=[n]; end
-tip> for s (a b c); @ x[s]=[s]; end
-
+tip> do n 1 5; set num[n]=[n]; end
+tip> for s ("1st" "2nd" "3rd" "4th" "5th"); @ str_[s]="[s]"; end
+tip>
 tip> ls *
-xa : string [a]
-xb : string [b]
-xc : string [c]
-v1 : data(num) : size=1
-v2 : data(num) : size=1
-v3 : data(num) : size=1
-v4 : data(num) : size=1
-v5 : data(num) : size=1
-
-tip> ls x?
-xa : string [a]
-xb : string [b]
-xc : string [c]
-
-tip> ls v[135]
-v1 : data(num) : size=1
-v3 : data(num) : size=1
-v5 : data(num) : size=1
-
-tip> ls v[2-4],x*
-xa : string [a]
-xb : string [b]
-xc : string [c]
-v2 : data(num) : size=1
-v3 : data(num) : size=1
-v4 : data(num) : size=1
+str_1st : string [1st]
+str_2nd : string [2nd]
+str_3rd : string [3rd]
+str_4th : string [4th]
+str_5th : string [5th]
+num1 : data(num) : size=1
+num2 : data(num) : size=1
+num3 : data(num) : size=1
+num4 : data(num) : size=1
+num5 : data(num) : size=1
+tip>
+tip> ls str_?th,num4,num5
+str_4th : string [4th]
+str_5th : string [5th]
+num4 : data(num) : size=1
+num5 : data(num) : size=1
 ```

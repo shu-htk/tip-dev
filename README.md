@@ -32,8 +32,11 @@ it just aims ease of use over versatility.
 
 - [macro examples](doc/examples.md)
 
-## Command Reference
+## Usage
 
+- [command line option](doc/cmd_opt.md)
+- [basic syntax](doc/syntax.md)
+- [expansion of macro variable](doc/expansion.md)
 - [command reference](doc/reference.md)
 
 ***

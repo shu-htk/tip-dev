@@ -23,19 +23,22 @@ C++で記述されており
 
 ## インストール
 
-- [how to install](install.md)
+- [インストール方法](install.md)
 
 ## チュートリアル
 
-- [tutorial](tutorial.md)
+- [簡単な使用例](tutorial.md)
 
 ## マクロファイルの例
 
-- [macro examples](examples.md)
+- [マクロの例題集](examples.md)
 
-## コマンドリファレンス
+## 使用方法
 
-- [command reference](reference.md)
+- [コマンドラインオプション](cmd_opt.md)
+- [基本的な構文](syntax.md)
+- [マクロ変数の展開](expansion.md)
+- [コマンドリファレンス](reference.md)
 
 ***
 *[English document](../README.md)*

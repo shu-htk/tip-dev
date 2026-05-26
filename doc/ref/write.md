@@ -20,7 +20,6 @@ Write data v1,v2,... to a file.
 |:---:|:---:|
 |any string          |  *           |
 |any character       |  ?           |
-|one of the list of chars|[abc..], [a-z] |
 
 > wild card is **not the regular expression**  
 

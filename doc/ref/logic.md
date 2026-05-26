@@ -74,11 +74,8 @@ tip> logic A=A!=B       ;# same to A==A && A!=B
 |:---:|:---:|:---:|
 |any string          |  *           | string = str*|
 |any character       |  ?           | string = s?ring|
-|one of the list of chars|[abc..], [a-z] | string = [a-z]trin[efg]|
 
 > wild cards should be **at the right part** of the comparison
-
-> wild card is implemented using `fnmatch()`
 
 example
 ```
@@ -95,9 +92,6 @@ tip> logic [s]=B*
 
 tip> logic [s]=?BC
 [ABC=?BC] -> str_logic -> [1]
-
-tip> logic [s]=[A-Z]*
-[ABC=[A-Z]*] -> str_logic -> [1]
 ```
 
 ## List Matching (for both of numerical and string logic)
@@ -126,9 +120,9 @@ tip> logic 6 = {1+2, 2*3}
 tip> logic {1+2, 2*3} = 6
 [{1+2, 2*3} = 6] -> str_logic -> [0]  ;# NG: list-matching should be at the right
 
-tip> logic abc == {a?, b*, [a-z]??}
-[abc == {a?, b*, [a-z]??}] -> str_logic -> [1]
+tip> logic abc == {a??, b*}
+[abc == {a??, b*] -> str_logic -> [1]
 
-tip> logic aaabbb = aaa{bbb,ccc}    ;# NG: it can't be concatenate to the other
+tip> logic aaabbb = aaa{bbb,ccc}    ;# NG:
 [aaabbb = aaa{bbb,ccc}] -> str_logic -> [0]
 ```
