@@ -668,7 +668,7 @@ public:
     for(size_t j=0; j<sp.size(); j++) {
       for(std::map<std::string,Data>::iterator it=_dat.begin();
 	  it != _dat.end(); it++) {
-	if( fnmatch(sp(j).c_str(),it->first.c_str(),0)==0 ) {
+	if( thl::wc_match_str(sp(j),it->first) ) {
 	  vlist.push_back(it->first);
 	}
       }

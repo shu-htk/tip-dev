@@ -10,7 +10,7 @@
 #define THL_WILDCARD_HH
 
 namespace thl {
-  bool wc_match(const char *pattern, const char *text) {
+  bool wc_match_c_str(const char *pattern, const char *text) {
     const char *p_save = NULL;
     const char *t_save = NULL;
     while(*text) {
@@ -32,6 +32,11 @@ namespace thl {
     }
     return !*pattern;
   }
+
+  bool wc_match_str(const std::string& pattern, const std::string& text) {
+    return wc_match_c_str(pattern.c_str(), text.c_str());
+  }
+
 }//-- namespace thl
 
 #endif //THL_WILDCARD_HH

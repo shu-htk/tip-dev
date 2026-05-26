@@ -17,7 +17,7 @@
 #include <map>
 #include <set>
 #include <fstream>
-#include <fnmatch.h>
+//#include <fnmatch.h>
 #include <unistd.h> // usleep()
 #include <ctime>
 #include <cctype>
@@ -30,6 +30,7 @@
 #include "Bracket.hh"
 #include "IsoTimeStr.hh"
 #include "ReadLine.hh"
+#include "WildCard.hh"
 
 namespace thl {
 //-----------------------------------------------------
@@ -328,10 +329,10 @@ namespace thl {
 	  if(rval=="{") {//compare for each candidates
 	    ret=0;
 	    for(size_t j=0; j<_sc.size();j++) {
-	      ret = (ret || (fnmatch(_sc[j].c_str(),lval.c_str(),0)==0));
+	      ret = (ret || (wc_match_str(_sc[j],lval)));
 	    }
 	  } else {
-	    ret = (fnmatch(rval.c_str(),lval.c_str(),0)==0);
+	    ret = (wc_match_str(rval,lval));
 	  }
 	  update=1;
 	} else if(*_cp=='!' && *(_cp+1)=='=') {
@@ -339,10 +340,10 @@ namespace thl {
 	  if(rval=="{") {//compare for each candidates
 	    ret=1;
 	    for(size_t j=0; j<_sc.size();j++) {
-	      ret = (ret && (fnmatch(_sc[j].c_str(),lval.c_str(),0)!=0));
+	      ret = (ret && ! wc_match_str(_sc[j],lval));
 	    }
 	  } else {
-	    ret = (fnmatch(rval.c_str(),lval.c_str(),0)!=0);
+	    ret = ! wc_match_str(rval,lval);
 	  }
 	  update=1;
 	} else if(*_cp=='<' && *(_cp+1)!='=') {
@@ -418,8 +419,8 @@ namespace thl {
     void reset_fmt(void) {snprintf(_fmt,FmtSize,"%s","%.11g");}
     void print_fmt(void) {printf("[%s]\n",_fmt);}
     void set_fmt(const std::string &s) {
-      if(fnmatch("%*f",s.c_str(),0)==0 || fnmatch("%*e",s.c_str(),0)==0 ||
-	 fnmatch("%*g",s.c_str(),0)==0) {
+      if(wc_match_str("%*f",s) || wc_match_str("%*e",s) ||
+	 wc_match_str("%*g",s)) {
 	snprintf(_fmt,FmtSize,"%s",s.c_str());
       } else {
 	printf("invalid format [%s]\n"
@@ -547,7 +548,7 @@ namespace thl {
       StrSplit sp(pattern,",");
       for(auto &&s : sp) {
 	for(auto &&a : _val) {
-	  if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	  if( wc_match_str(s, a.first) ) {
 	    printf("%s : ",a.first.c_str()); a.second.print();
 	  }
 	}
@@ -558,7 +559,7 @@ namespace thl {
       StrSplit sp(pattern,",");
       for(auto &&s : sp) {
 	for(auto &&a : _val) {
-	  if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	  if( wc_match_str(s, a.first) ) {
 	    tags.push_back(a.first);
 	  }
 	}

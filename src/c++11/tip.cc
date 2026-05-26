@@ -662,7 +662,7 @@ public:
     thl::StrSplit sp(pattern,",");
     for(auto &&s : sp) {
       for(auto &&a : _dat) {
-	if( fnmatch(s.c_str(),a.first.c_str(),0)==0 ) {
+	if( thl::wc_match_str(s,a.first) ) {
 	  vlist.push_back(a.first);
 	}
       }
