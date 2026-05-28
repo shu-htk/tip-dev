@@ -273,7 +273,7 @@ public:
       if(sp(0)=="fq") {opt.fq = sp.stof(1);}
       if(sp(0)=="fr") {get_pair(sp(1), opt.fx0, opt.fx1);}
       if(sp(0)=="fs") {
-	opt.fs = thl::trim(sp(1)); replace_esc(opt.fs);
+	opt.fs = thl::trim(sp(1)); esc_expand(opt.fs);
 	if(opt.fs=="WS") {opt.fs=" \t\n";}
       }
       if(sp(0)=="ft") {opt.att.fsty = opt.att.fill_to_index(sp(1));}
@@ -1958,7 +1958,7 @@ public:
       double x=args.stof(1),y=args.stof(2);
       _pl->att=opt.att;
       std::string s=thl::trim(args(3));
-      replace_esc(s);
+      esc_expand(s);
       _pl->draw_text(x,y, s.c_str(), opt.rc);
       if(opt.fl) _pl->flush();
       return 0;

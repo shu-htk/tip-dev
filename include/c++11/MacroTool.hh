@@ -601,7 +601,7 @@ namespace thl {
       }
       return contents;
     }
-    void replace_sub(std::string &buf, std::string &tag) {
+    void expand_sub(std::string &buf, std::string &tag) {
       static char format[FmtSize];
       size_t n=tag.find_first_of(":");
       snprintf(format,FmtSize,"%s",_fmt);
@@ -618,7 +618,7 @@ namespace thl {
       if(types==Str) {
 	if(n != tag.npos) dst=cfmt(format,_val[*tags.begin()].str.c_str());
 	else dst=_val[*tags.begin()].str;
-      } else if(types==Num) {
+      } else if(types==Num || types==Undef) {
 	Calc calc;
 	if(types==Num) for(auto &&t : tags) calc.set_var_num(t,_val[t].num);
 	double x=calc.eval(expr);
@@ -632,16 +632,16 @@ namespace thl {
 	}
       }
     }
-    void replace(std::string &buf) {
+    void expand(std::string &buf) {
       const int ntry=2;
       for(int j=0; j<ntry; j++) {
 	std::vector<std::string> tags = contents_of_brackets(buf,'[',']');
 	for(auto &&tag : tags) {
 	  std::vector<std::string> sub_tags = contents_of_brackets(tag,'[',']');
 	  for(auto &&sub_tag : sub_tags) {
-	    replace_sub(buf,sub_tag);
+	    expand_sub(buf,sub_tag);
 	  }
-	  replace_sub(buf,tag);
+	  expand_sub(buf,tag);
       }
       }
     }
@@ -826,7 +826,7 @@ namespace thl {
     bool quit(void) {return _quit;}
     int get_break(void) {return _break;}
     void set_break(int c) {_break=c;}
-    void replace_esc(std::string &buf) {
+    void esc_expand(std::string &buf) {
       const char *s1[] = {"\\t","\\n"};
       const char *s2[] = {"\t","\n"};
       for(size_t j=0; j<2; j++) {
@@ -837,7 +837,7 @@ namespace thl {
 	}
       }
     }
-    void replace_env(std::string &buf) {
+    void env_expand(std::string &buf) {
       std::string buf_org=buf;
       Bracket bc('{','}',buf_org);
       for(size_t j=0; j<bc.size(); j++) {
@@ -929,8 +929,8 @@ namespace thl {
       while(nline < vbuf.size()) {
 	if(_break=='b') {_break=0; break;}
 	std::string buf=vbuf[nline];
-	var.replace(buf);
-	replace_env(buf);
+	var.expand(buf);
+	env_expand(buf);
 	StrSplit args;
 	args.set_verbose(0);
 	args.set_quot_to_skip_split('"');
@@ -1059,7 +1059,7 @@ namespace thl {
 		   "print   : does not append a newline (alias: pr)\n"
 		   "println : appends a newline (alias: prn)\n");
 	  } else {
-	    replace_esc(buf);
+	    esc_expand(buf);
 	    std::string s = buf.substr(args.index(0)+args(0).size()+1);
 	    printf("%s",s.c_str());
 	    if(args(0)=="println"||args(0)=="prn") printf("\n");
