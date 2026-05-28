@@ -1085,8 +1085,8 @@ public:
       char c=' ';
       if(opt.fx0 == opt.fx1) {
 	fit.calc_statistics(x,y);
-	opt.fx0 = fit(1)-fit(2)*3;
-	opt.fx1 = fit(1)+fit(2)*3; c = '*';
+	opt.fx0 = fit(1)-fit(2)*2;
+	opt.fx1 = fit(1)+fit(2)*2; c = '*';
       }
       fit.calc_gaus(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
@@ -1095,6 +1095,11 @@ public:
 	  ,c,fit(0), fit(1), fit(2), fit.chisq(), fit.ndf());
     }
     if(func=="e"||func=="exp") {
+      if(opt.fx0 == opt.fx1) {
+	double wid=opt.att.x1 - opt.att.x0;
+	opt.fx0 = opt.att.x0 + wid*0.03;
+	opt.fx1 = opt.att.x0 + wid*0.5;
+      }
       fit.calc_exp(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
       fmt("@ Exponential Fitting:\n y = c0*exp(c1*x) \n"

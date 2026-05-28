@@ -1062,18 +1062,25 @@ public:
       char c=' ';
       if(opt.fx0 == opt.fx1) {
 	fit.calc_statistics(x,y);
-	opt.fx0 = fit(1)-fit(2)*3;
-	opt.fx1 = fit(1)+fit(2)*3; c = '*';
+	opt.fx0 = fit(1)-fit(2)*2;
+	opt.fx1 = fit(1)+fit(2)*2; c = '*';
       }
       fit.calc_gaus(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
+      //      _pl->draw_error_y(x,y,_dat[opt.ey].num);
       fmt("@ Gaussian Fitting%c:\n y = c0*exp(-(x-c1)^2/2*c2^2) \n"
 	  " c0:amp=%g\n c1:mean=%g\n c2:sgm=%g\n chi2/ndf= %.3g/%d"
 	  ,c,fit(0), fit(1), fit(2), fit.chisq(), fit.ndf());
     }
     if(func=="e"||func=="exp") {
+      if(opt.fx0 == opt.fx1) {
+	double wid=opt.att.x1 - opt.att.x0;
+	opt.fx0 = opt.att.x0 + wid*0.03;
+	opt.fx1 = opt.att.x0 + wid*0.5;
+      }
       fit.calc_exp(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
+      //      _pl->draw_error_y(x,y,_dat[opt.ey].num);
       fmt("@ Exponential Fitting:\n y = c0*exp(c1*x) \n"
 	  " c0=%g\n c1=%g\n chi2/ndf= %.3g/%d"
 	  ,fit(0), fit(1), fit.chisq(), fit.ndf());
