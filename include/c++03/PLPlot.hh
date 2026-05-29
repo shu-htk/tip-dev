@@ -240,6 +240,7 @@ namespace thl {
     PLcGrid2 _cgrid2; // 2d-coordinate trans arrays for contour plot
     int _nx,_ny; // division of box
     int _nc;     // current box number
+    std::vector<PLAtt> _leg;
    public:
     PLAtt att;
 
@@ -902,6 +903,44 @@ namespace thl {
       plschr(0,1); plsmaj(0,1.0); plsmin(0,1.0); //reset text and tick
       plspal1("",1);
       free_grid(nx, ny);
+    }
+    void clear_legend() {
+      _leg.clear();
+    }
+    void add_legend(std::string &text) {
+      PLAtt leg_att = att;
+      leg_att.set_title(text.c_str());
+      _leg.push_back(leg_att);
+    }
+    void show_legend(PLFLT xoffset=0) {
+      PLFLT leg_char_wid = 0.021;
+      plschr(0,att.tsiz*0.8);
+      PLFLT dx=(att.x1-att.x0)*leg_char_wid;
+      PLFLT dy=(att.y1-att.y0)*0.05;
+      size_t text_len=0;
+      for(size_t j=0; j<_leg.size(); j++) {
+	size_t size = strlen(_leg[j].title);
+	if(size > text_len) text_len=size;
+      }
+      PLFLT x=att.x1 - dx*text_len - (att.x1-att.x0)*xoffset;
+      for(size_t j=0; j<_leg.size(); j++) {
+	PLFLT y=att.y1-dy*(j+1);
+	if(_leg[j].lwid) {
+	  PLFLT xl[2]={x-dx*2.5, x-dx*0.5};
+	  PLFLT yl[2]={y,y};
+	  plcol0(_leg[j].lcol);
+	  plline(2,&xl[0],&yl[0]);
+	}
+	if(_leg[j].symb) {
+	  PLFLT xs[1]={x-dx*1.5};
+	  PLFLT ys[1]={y};
+	  plcol0(_leg[j].scol);
+	  plpoin(1,&xs[0],&ys[0], _leg[j].symb);
+	}
+	plcol0(att.tcol);
+	plptex(x,y,0,0,0,_leg[j].title);
+      }
+      plschr(0,att.tsiz);
     }
   };//-- class PLPlot
 
