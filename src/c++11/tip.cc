@@ -19,7 +19,7 @@
 const char* tip_commands[] = {
   "arc", "box", "box3", "cat", "cut", "div", "elem", "exe",
   "fbox", "ffit", "fit", "fit3", "fill", "font", "fplot",
-  "help", "hfit", "hplot", "hplot2", "line", "ls", "mplot",
+  "help", "hfit", "hplot", "hplot2", "line", "ls", "leg", "mplot",
   "mread", "mset", "mwrite", "opt", "plot", "plot3", "read",
   "rm", "set", "sort", "stat", "symb", "text", "title", "tfmt",
   "vp", "viewport", "write", "xerr", "xlab", "yerr", "ylab", "zlab",
@@ -97,7 +97,7 @@ private:
     bool rp={0}, cr={1}, rc={0}, fl={1}, nf={0};
     std::string fs={" \t\n"},fw={"rc"},cf={""},cc={""},sd={"clock"},
       gt={"slope"},ht={"bin1"},mt={"mesh1"},tf={""},td={"- :"},
-      ex={"0"},ey={"0"},ez={"0"};
+      ex={"0"},ey={"0"},ez={"0"},lg={"*"};
     thl::PLAtt att;
     Option(void) {}
     void print(const std::string &s) {
@@ -138,6 +138,7 @@ private:
       }
       if(s=="lc"||s=="*") printf("lc: line color : [%s]\n",
 				 att.index_to_color(att.lcol));
+      if(s=="lg"||s=="*") printf("lg: legend title: [%s]\n",lg.c_str());
       if(s=="lt"||s=="*") printf("lt: line style : [%s]\n",
 				 att.index_to_line(att.lsty));
       if(s=="lw"||s=="*") printf("lw: line width : [%d]\n",att.lwid);
@@ -281,6 +282,7 @@ public:
       if(sp(0)=="gt") {opt.gt = sp(1);}
       if(sp(0)=="ht") {opt.ht = sp(1);}
       if(sp(0)=="lc") {opt.att.lcol = opt.att.color_to_index(sp(1));}
+      if(sp(0)=="lg") {opt.lg = thl::trim(sp(1));}
       if(sp(0)=="lt") {opt.att.lsty = opt.att.line_to_index(sp(1));}
       if(sp(0)=="lw") {opt.att.lwid = sp.stoi(1);}
       if(sp(0)=="mt") {opt.mt = sp(1);}
@@ -969,6 +971,10 @@ public:
     }
     if(opt.ey != "0") {
       _pl->draw_error_y(_dat[vx].num,_dat[vy].num,_dat[opt.ey].num);
+    }
+    if(opt.lg.size() > 0) {
+      std::string text = (opt.lg=="*") ? vy : opt.lg;
+      _pl->add_legend(text);
     }
     if(opt.fl) _pl->flush();
     return 0;
@@ -2471,6 +2477,22 @@ public:
 	return 0;
       }
       data_make_sort(args(1),args(3));
+      return 0;
+    }
+    if(args(0)=="leg") {
+      if(args.size() < 2) {
+	printf("Usage: leg [show|reset]\n"
+	       "Show/reset legend.\n");
+	return 0;
+      }
+      if(args(1)=="show") {
+	std::string pos=(args.size()>2) ? args(2) : "";
+	_pl->show_legend(pos);
+	if(_gopt.fl) _pl->flush();
+      }
+      if(args(1)=="reset") {
+	_pl->clear_legend();
+      }
       return 0;
     }
 #if USE_EPICS_CA 

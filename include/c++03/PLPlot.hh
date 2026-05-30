@@ -911,36 +911,53 @@ namespace thl {
       PLAtt leg_att = att;
       leg_att.set_title(text.c_str());
       _leg.push_back(leg_att);
+      //      printf("add legend [%s]\n",_leg.back().title);
     }
-    void show_legend(PLFLT xoffset=0) {
-      PLFLT leg_char_wid = 0.021;
-      plschr(0,att.tsiz*0.8);
-      PLFLT dx=(att.x1-att.x0)*leg_char_wid;
-      PLFLT dy=(att.y1-att.y0)*0.05;
-      size_t text_len=0;
+    void show_legend(std::string &pos) {
+      PLAtt att_save=att;
+      size_t max_len=0;
       for(size_t j=0; j<_leg.size(); j++) {
-	size_t size = strlen(_leg[j].title);
-	if(size > text_len) text_len=size;
+       	size_t len = strlen(_leg[j].title);
+       	if(len > max_len) max_len=len;
       }
-      PLFLT x=att.x1 - dx*text_len - (att.x1-att.x0)*xoffset;
+      PLFLT dx=0.06+0.025*max_len;
+      PLFLT dy=0.01+0.025*_leg.size();
+      PLFLT x0 =
+	(pos[0]=='R') ? 0.95 - dx :
+	(pos[0]=='M') ? 0.55 - dx:
+	(pos[0]=='L') ? 0.01 :
+	0.95 - dx;
+      PLFLT y0 =
+	(pos[1]=='T') ? 0.95 :
+	(pos[1]=='M') ? 0.50 :
+	(pos[1]=='B') ? 0.01 + dy :
+	0.95;
+
+      printf("x0=%f y0=%f\n",x0,y0);
+      att.fsty=att.fill_to_index("solid");
+      att.fcol=att.color_to_index("white");
+      fill_box(x0, x0+dx+0.01, y0, y0+dy, 1);
+      
       for(size_t j=0; j<_leg.size(); j++) {
-	PLFLT y=att.y1-dy*(j+1);
-	if(_leg[j].lwid) {
-	  PLFLT xl[2]={x-dx*2.5, x-dx*0.5};
-	  PLFLT yl[2]={y,y};
-	  plcol0(_leg[j].lcol);
-	  plline(2,&xl[0],&yl[0]);
-	}
-	if(_leg[j].symb) {
-	  PLFLT xs[1]={x-dx*1.5};
-	  PLFLT ys[1]={y};
-	  plcol0(_leg[j].scol);
-	  plpoin(1,&xs[0],&ys[0], _leg[j].symb);
-	}
+	att=_leg[j];
+	att.tsiz *= 0.8;
+	//	PLFLT y=y0 - dy/(_leg.size()+1) -0.04*j;
+	PLFLT y=y0 -0.04*j;
+	PLFLT d=0;
+       	if(att.lwid) {d=0.01; draw_line(x0+d,x0+4*d, y+d,y+d, 1);}
+       	if(att.symb) {d=0.02; draw_symbol(x0+1.5*d, y+d, 1);}
+	
+	plschr(0,att.tsiz);
 	plcol0(att.tcol);
-	plptex(x,y,0,0,0,_leg[j].title);
+	plwidth(att.twid);
+	PLFLT x=x0+4*d;
+	y += d;
+	relative_to_absolute(&x,&y);
+	plptex(x, y, 0, 0, 0, att.title);
+	plschr(0,1);
+	//	draw_text(x0+4*d,y+d,att.title,1);
       }
-      plschr(0,att.tsiz);
+      att=att_save;
     }
   };//-- class PLPlot
 
