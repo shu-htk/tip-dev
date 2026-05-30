@@ -920,10 +920,10 @@ namespace thl {
        	size_t len = strlen(_leg[j].title);
        	if(len > max_len) max_len=len;
       }
-      PLFLT dx=0.06+0.025*max_len;
-      PLFLT dy=0.01+0.025*_leg.size();
+      PLFLT dx=0.09+0.012*max_len*att.tsiz*0.8;
+      PLFLT dy=0.00+0.06*_leg.size()*att.tsiz*0.8;
       PLFLT x0 =
-	(pos[0]=='R') ? 0.95 - dx :
+	(pos[0]=='R') ? 0.94 - dx :
 	(pos[0]=='M') ? 0.55 - dx:
 	(pos[0]=='L') ? 0.01 :
 	0.95 - dx;
@@ -936,26 +936,22 @@ namespace thl {
       printf("x0=%f y0=%f\n",x0,y0);
       att.fsty=att.fill_to_index("solid");
       att.fcol=att.color_to_index("white");
-      fill_box(x0, x0+dx+0.01, y0, y0+dy, 1);
+      fill_box(x0, x0+dx*1.2, y0-dy, y0, 1);
       
       for(size_t j=0; j<_leg.size(); j++) {
 	att=_leg[j];
 	att.tsiz *= 0.8;
-	//	PLFLT y=y0 - dy/(_leg.size()+1) -0.04*j;
-	PLFLT y=y0 -0.04*j;
+	att.ssiz *= 0.6;
+	PLFLT y = y0 - (j+1)*dy/(_leg.size()+1) -0.01;
+	//	PLFLT y=y0 -0.04*j;
 	PLFLT d=0;
-       	if(att.lwid) {d=0.01; draw_line(x0+d,x0+4*d, y+d,y+d, 1);}
-       	if(att.symb) {d=0.02; draw_symbol(x0+1.5*d, y+d, 1);}
+       	if(att.lwid) {d=0.01; draw_line(x0+d, x0+4*d, y+d,y+d, 1);}
+       	if(att.symb) {d=0.01; draw_symbol(x0+2.5*d, y+d, 1);}
 	
-	plschr(0,att.tsiz);
-	plcol0(att.tcol);
-	plwidth(att.twid);
-	PLFLT x=x0+4*d;
+	PLFLT x = x0+6*d;
 	y += d;
-	relative_to_absolute(&x,&y);
-	plptex(x, y, 0, 0, 0, att.title);
-	plschr(0,1);
-	//	draw_text(x0+4*d,y+d,att.title,1);
+	printf("x=%f y=%f\n",x,y);
+	draw_text(x,y,att.title,1);
       }
       att=att_save;
     }
