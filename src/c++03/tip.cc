@@ -18,7 +18,7 @@
 const char* tip_commands[] = {
   "arc", "box", "box3", "cat", "cut", "div", "elem", "exe",
   "fbox", "ffit", "fit", "fit3", "fill", "font", "fplot",
-  "help", "hfit", "hplot", "hplot2", "line", "ls", "mplot",
+  "help", "hfit", "hplot", "hplot2", "line", "ls", "leg", "mplot",
   "mread", "mset", "mwrite", "opt", "plot", "plot3", "read",
   "rm", "set", "sort", "stat", "symb", "text", "title", "tfmt",
   "vp", "viewport", "write", "xerr", "xlab", "yerr", "ylab", "zlab",
@@ -93,7 +93,7 @@ private:
     double cx, cy, x0, x1, y0, y1, z0, z1, fx0, fx1, dt, fq;
     int n0, n1, nb, nx, ny, bp, dm, mv, ae;
     bool rp, cr, rc, fl, nf;
-    std::string fs, fw, cf, cc, sd, gt, ht, mt, tf, td, ex, ey, ez;
+    std::string fs, fw, cf, cc, sd, gt, ht, mt, tf, td, ex, ey, ez, lg;
     thl::PLAtt att;
     Option(void) : cx(0), cy(0), x0(0), x1(0), y0(0), y1(0), z0(0), z1(0),
 		   fx0(0), fx1(0), dt(1), fq(0), n0(0), n1(-1), nb(100),
@@ -101,7 +101,7 @@ private:
 		   rp(0), cr(1), rc(0), fl(1), nf(0),
 		   fs(" "), fw("rc"), cf(""), cc(""), sd("clock"),
 		   gt("slope"), ht("bin1"), mt("mesh1"), tf(""), td("- :"),
-		   ex("0"),ey("0"),ez("0") {}
+		   ex("0"),ey("0"),ez("0"), lg("") {}
     void print(const std::string &s) {
       if(s=="ae"||s=="*") printf("ae: arrow edge(0=non,1=end,2=begin,3=both):"
 				 " [%d]\n", att.asty);
@@ -140,6 +140,7 @@ private:
       }
       if(s=="lc"||s=="*") printf("lc: line color : [%s]\n",
 				 att.index_to_color(att.lcol));
+      if(s=="lg"||s=="*") printf("lg: legend title: [%s]\n",lg.c_str());
       if(s=="lt"||s=="*") printf("lt: line style : [%s]\n",
 				 att.index_to_line(att.lsty));
       if(s=="lw"||s=="*") printf("lw: line width : [%d]\n",att.lwid);
@@ -283,6 +284,7 @@ public:
       if(sp(0)=="gt") {opt.gt = sp(1);}
       if(sp(0)=="ht") {opt.ht = sp(1);}
       if(sp(0)=="lc") {opt.att.lcol = opt.att.color_to_index(sp(1));}
+      if(sp(0)=="lg") {opt.lg = thl::trim(sp(1));}
       if(sp(0)=="lt") {opt.att.lsty = opt.att.line_to_index(sp(1));}
       if(sp(0)=="lw") {opt.att.lwid = sp.stoi(1);}
       if(sp(0)=="mt") {opt.mt = sp(1);}
@@ -992,6 +994,10 @@ public:
     }
     if(opt.ey != "0") {
       _pl->draw_error_y(_dat[vx].num,_dat[vy].num,_dat[opt.ey].num);
+    }
+    if(opt.lg.size() > 0) {
+      std::string text = (opt.lg=="*") ? vy : opt.lg;
+      _pl->add_legend(text);
     }
     if(opt.fl) _pl->flush();
     return 0;
@@ -2497,6 +2503,44 @@ public:
       data_make_sort(args(1),args(3));
       return 0;
     }
+    if(args(0)=="leg") {
+      if(args.size() < 2) {
+	printf("Usage: leg show [pos] [(opt)]\n"
+	       "     : leg ls\n"
+	       "     : leg clear\n"
+	       "If 2nd arg is show, draw legend at existing graph.\n"
+	       "pos:\n"
+	       " first char:\n"
+	       " R : Rgiht (default)\n"
+	       " L : Left\n"
+	       " M : Middle\n"
+	       " second char:\n"
+	       "  T: Top (default)\n"
+	       "  B: Bottom\n"
+	       "  M: Middle\n"
+	       "other commands at 2nd arg:\n"
+	       " ls:    list legend strings.\n"
+	       " clear: clear legend strings.\n"
+	       );
+	return 0;
+      }
+      Option opt=get_opt(buf);
+      if(args(1)=="show") {
+	std::string pos=(args.size()>2) ? args(2) : "";
+	thl::PLAtt att_save=_pl->att;
+	_pl->att = opt.att;
+	_pl->show_legend(pos);
+	_pl->att=att_save;
+	if(_gopt.fl) _pl->flush();
+      }
+      if(args(1)=="ls") {
+	_pl->print_legend();
+      }
+      if(args(1)=="clear") {
+	_pl->clear_legend();
+      }
+      return 0;
+    }
 #if USE_EPICS_CA 
     if(args(0)=="cainfo") {
       if(args.size() < 2) {
@@ -2577,6 +2621,7 @@ public:
     Tip tip(_pl);
     std::ifstream ifs(fname.c_str());
     if(ifs) {
+      _pl->clear_legend();
       std::vector<std::string> vbuf;
       std::string line;
       while(std::getline(ifs,line)) {

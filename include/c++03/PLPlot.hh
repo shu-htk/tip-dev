@@ -907,43 +907,55 @@ namespace thl {
     void clear_legend() {
       _leg.clear();
     }
-    void add_legend(std::string &text) {
+    void add_legend(const std::string &text) {
       PLAtt leg_att = att;
       leg_att.set_title(text.c_str());
       _leg.push_back(leg_att);
       //      printf("add legend [%s]\n",_leg.back().title);
     }
-    void show_legend(std::string &pos) {
-      PLAtt att_save=att;
-      size_t max_len=0;
+    void print_legend() {
       for(size_t j=0; j<_leg.size(); j++) {
-       	size_t len = strlen(_leg[j].title);
-       	if(len > max_len) max_len=len;
+	printf("%lu: %s\n",j,_leg[j].title);
+      }
+    }
+    void show_legend(std::string &pos) {
+      if(_leg.size()==0) return;
+      PLAtt att_save=att;
+      size_t leg_size=0,max_len=0;
+      for(size_t j=0; j<_leg.size(); j++) {
+	StrSplit sp(_leg[j].title,"\n");
+	for(size_t k=0; k<sp.size(); k++) {
+	  leg_size++;
+	  size_t len = sp(k).size();
+	  if(len > max_len) max_len=len;
+	}
+	//       	size_t len = strlen(_leg[j].title);
+	//       	if(len > max_len) max_len=len;
       }
       PLFLT dx=0.09+0.012*max_len*att.tsiz*0.8;
-      PLFLT dy=0.00+0.06*_leg.size()*att.tsiz*0.8;
+      PLFLT dy=0.00+0.06*leg_size*att.tsiz*0.8;
       PLFLT x0 =
-	(pos[0]=='R') ? 0.94 - dx :
+	(pos[0]=='R') ? 0.95 - dx :
 	(pos[0]=='M') ? 0.55 - dx:
-	(pos[0]=='L') ? 0.01 :
+	(pos[0]=='L') ? 0.02 :
 	0.95 - dx;
       PLFLT y0 =
-	(pos[1]=='T') ? 0.95 :
-	(pos[1]=='M') ? 0.50 :
-	(pos[1]=='B') ? 0.01 + dy :
-	0.95;
+	(pos[1]=='T') ? 0.97 :
+	(pos[1]=='M') ? 0.50 + 0.5*dy:
+	(pos[1]=='B') ? 0.02 + dy :
+	0.97;
 
-      printf("x0=%f y0=%f\n",x0,y0);
-      att.fsty=att.fill_to_index("solid");
-      att.fcol=att.color_to_index("white");
-      fill_box(x0, x0+dx*1.2, y0-dy, y0, 1);
+      if(att.lwid || att.symb) {
+	fill_box(x0, x0+dx*1.2, y0-dy, y0, 1);
+      } else {
+	fill_box(x0, x0+dx, y0-dy, y0, 1);
+      }
       
       for(size_t j=0; j<_leg.size(); j++) {
 	att=_leg[j];
 	att.tsiz *= 0.8;
 	att.ssiz *= 0.6;
-	PLFLT y = y0 - (j+1)*dy/(_leg.size()+1) -0.01;
-	//	PLFLT y=y0 -0.04*j;
+	PLFLT y = y0 - (j+1)*dy/(leg_size+1) -0.01;
 	PLFLT d=0;
        	if(att.lwid) {d=0.01; draw_line(x0+d, x0+4*d, y+d,y+d, 1);}
        	if(att.symb) {d=0.01; draw_symbol(x0+2.5*d, y+d, 1);}

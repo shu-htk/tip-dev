@@ -97,7 +97,7 @@ private:
     bool rp={0}, cr={1}, rc={0}, fl={1}, nf={0};
     std::string fs={" \t\n"},fw={"rc"},cf={""},cc={""},sd={"clock"},
       gt={"slope"},ht={"bin1"},mt={"mesh1"},tf={""},td={"- :"},
-      ex={"0"},ey={"0"},ez={"0"},lg={"*"};
+      ex={"0"},ey={"0"},ez={"0"},lg={""};
     thl::PLAtt att;
     Option(void) {}
     void print(const std::string &s) {
@@ -1114,6 +1114,9 @@ public:
 	  ,fit(0), fit(1), fit(2), fit.chisq(), fit.ndf());
     }
     printf("%s\n",fmt());  // print fitting info to the console
+    //    _pl->att.lwid=0; _pl->att.symb=0;
+    //    _pl->clear_legend();
+    //    _pl->add_legend(fmt());
     if(opt.cx!=0 && opt.cy!=0) { // draw fitting info into the graph 
       _pl->draw_text(opt.cx, opt.cy, fmt(), opt.rc);
     }
@@ -2481,16 +2484,38 @@ public:
     }
     if(args(0)=="leg") {
       if(args.size() < 2) {
-	printf("Usage: leg [show|reset]\n"
-	       "Show/reset legend.\n");
+	printf("Usage: leg show [pos] [(opt)]\n"
+	       "     : leg ls\n"
+	       "     : leg clear\n"
+	       "If 2nd arg is show, draw legend at existing graph.\n"
+	       "pos:\n"
+	       " first char:\n"
+	       " R : Rgiht (default)\n"
+	       " L : Left\n"
+	       " M : Middle\n"
+	       " second char:\n"
+	       "  T: Top (default)\n"
+	       "  B: Bottom\n"
+	       "  M: Middle\n"
+	       "other commands at 2nd arg:\n"
+	       " ls:    list legend strings.\n"
+	       " clear: clear legend strings.\n"
+	       );
 	return 0;
       }
+      Option opt=get_opt(buf);
       if(args(1)=="show") {
 	std::string pos=(args.size()>2) ? args(2) : "";
+	thl::PLAtt att_save=_pl->att;
+	_pl->att = opt.att;
 	_pl->show_legend(pos);
+	_pl->att=att_save;
 	if(_gopt.fl) _pl->flush();
       }
-      if(args(1)=="reset") {
+      if(args(1)=="ls") {
+	_pl->print_legend();
+      }
+      if(args(1)=="clear") {
 	_pl->clear_legend();
       }
       return 0;
@@ -2575,6 +2600,7 @@ public:
     Tip tip(_pl);
     std::ifstream ifs(fname.c_str());
     if(ifs) {
+      _pl->clear_legend();
       std::vector<std::string> vbuf;
       std::string line;
       while(std::getline(ifs,line)) {
