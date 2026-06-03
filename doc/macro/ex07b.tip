@@ -16,7 +16,7 @@ title "Exponential Fitting" ;#------------------------------------------------
 set x = range([ndata],0,2)
 set y = [p0]*exp([p1]*x) + bg
 plot x y
-fit x y exp (cp:0.5,0.8 ts:0.8 cf:c)
+fit x y exp (cp:0.5,0.8 cf:c)
 print input  p0=[p0] p1=[p1]\n
 print fitted c0=[c0] c1=[c1]\n
 
@@ -26,7 +26,7 @@ title "Logarithm Fitting" ;#------------------------------------------------
 set x = range([ndata],0,5)
 set y = [p0]+log(x+[p1]) + bg
 plot x y
-fit x y log (cp:0.5,0.5 ts:0.8 cf:c)
+fit x y log (cp:0.5,0.5 cf:c)
 print input  p0=[p0] p1=[p1]\n
 print fitted c0=[c0] c1=[c1]\n
 
@@ -39,7 +39,7 @@ title "Sinusoidal Fitting" ;#------------------------------------------------
 set x = range([ndata],-1,1)
 set y = [p0] + [p1]*sin([pi2]*[p3]*x) + [p2]*cos([pi2]*[p3]*x) + bg
 plot x y (yr:-2,4)
-fit x y sin (fq:[p3] cp:0.1,0.9 ts:0.8 cf:c)
+fit x y sin (fq:[p3] cp:0.1,0.9 cf:c)
 print input  p0=[p0] p1=[p1] p2=[p2] p3=[p3]\n
 print fitted c0=[c0] c1=[c1] c2=[c2] c3=[c3]\n
 
@@ -52,6 +52,6 @@ set bg2 = random([ndata],gaus,[sigm]) ; # bg2 is not correrated to bg
 set x = [p2]*cos(t) + [p0] + bg
 set y = [p2]*sin(t) + [p1] + bg2
 plot x y
-fit x y circ (cp:0.25,0.7 ts:0.8 cf:c)
+fit x y circ (cp:0.25,0.7 cf:c)
 print input  p0=[p0] p1=[p1] p2=[p2]\n
 print fitted c0=[c0] c1=[c1] c2=[c2]\n

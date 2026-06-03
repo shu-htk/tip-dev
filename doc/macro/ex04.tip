@@ -18,11 +18,11 @@ xlab ""; ylab "Numebr of entries"
 
 title "(A) Histogram of random Gaussian (sigma=[sigma], mean=[mean]) v1"
 hplot v1 (ft:p45)
-hfit v1 gaus (lc:green ts:0.9)
+hfit v1 gaus (lc:green)
 
 title "(B) Histogram of random Exponential (tau=[tau]) v2"
 hplot v2 (ft:n45)
-hfit v2 exp (lc:green ts:0.9)
+hfit v2 exp (lc:green)
 
 title "(C) Histogram of concatenated distribution of v1 and v2, (D) Sum of entries of (A) and (B)"
 
