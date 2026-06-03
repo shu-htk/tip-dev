@@ -681,12 +681,13 @@ namespace thl {
 	  thl::StrSplit sp2;
 	  sp2.set_quot_to_skip_split('"');
 	  sp2.split(sp(j),"=");
-	  if(sp2.size()>1) {
-	    std::string tag=sp2(0);
-	    if(update || !exist(tag)) set_str(tag,sp2(1));
-	  } else {
-	    std::string tag=fmt("$%d",j+1);
-	    if(update || !exist(tag)) set_str(tag,sp(j));
+	  std::string tag = (sp2.size()>1) ? sp2(0) : fmt("$%d",j+1);
+	  if(update || !exist(tag)) {
+	    std::string val = (sp2.size()>1) ? sp2(1) : sp(j);
+	    StrNum sn; sn.set_verbose(0);
+	    double x = sn.stof(val);
+	    if(sn.nerr()) set_str(tag,val);
+	    else set_num(tag,x);
 	  }
 	}
       } else {

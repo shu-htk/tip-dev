@@ -658,7 +658,7 @@ namespace thl {
 	printf("string macro variable %s is not found\n",tag.c_str());
       }
     }
-    void set_arg_list(std::string arg_list, bool update=0) {
+    void set_arg_list(const std::string &arg_list, bool update=0) {
       if(arg_list.size()>0) {
 	thl::CFormat fmt;
 	thl::StrSplit sp;
@@ -669,12 +669,13 @@ namespace thl {
 	  thl::StrSplit sp2;
 	  sp2.set_quot_to_skip_split('"');
 	  sp2.split(sp(j),"=");
-	  if(sp2.size()>1) {
-	    std::string tag=sp2(0);
-	    if(update || !exist(tag)) set_str(tag,sp2(1));
-	  } else {
-	    std::string tag=fmt("$%d",j+1);
-	    if(update || !exist(tag)) set_str(tag,sp(j));
+	  std::string tag = (sp2.size()>1) ? sp2(0) : fmt("$%d",j+1);
+	  if(update || !exist(tag)) {
+	    std::string val = (sp2.size()>1) ? sp2(1) : sp(j);
+	    StrNum sn; sn.set_verbose(0);
+	    double x = sn.stof(val);
+	    if(sn.nerr()) set_str(tag,val);
+	    else set_num(tag,x);
 	  }
 	}
       } else {
