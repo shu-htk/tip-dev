@@ -97,7 +97,7 @@ private:
     bool rp={0}, cr={1}, rc={0}, fl={1}, nf={0};
     std::string fs={" \t\n"},fw={"rc"},cf={""},cc={""},sd={"clock"},
       gt={"slope"},ht={"bin1"},mt={"mesh1"},tf={""},td={"- :"},
-      ex={"0"},ey={"0"},ez={"0"},lg={""};
+      ex={"0"},ey={"0"},ez={"0"},lg={""},xo={""},yo={""},zo={""};
     thl::PLAtt att;
     Option(void) {}
     void print(const std::string &s) {
@@ -193,6 +193,10 @@ private:
       if(s=="zn"||s=="*") printf("zn: z-subtick num: [%d]\n",att.nzsub);
       if(s=="zr"||s=="*") printf("zr: z-axis range: [%g,%g]\n",z0,z1);
       if(s=="zt"||s=="*") printf("zt: z-tick interval: [%g]\n",att.ztick);
+
+      if(s=="xo"||s=="*") printf("xo: x-axis option: [%s]\n",att.xopt);
+      if(s=="yo"||s=="*") printf("xo: y-axis option: [%s]\n",att.yopt);
+      if(s=="zo"||s=="*") printf("xo: z-axis option: [%s]\n",att.zopt);
 
 //-- the following tags just show the available names (not set anything)
       if(s=="color"||s=="c") {
@@ -323,6 +327,10 @@ public:
       if(sp(0)=="zn") {opt.att.nzsub = sp.stoi(1);}
       if(sp(0)=="zr") {get_pair(sp(1), opt.z0, opt.z1);}
       if(sp(0)=="zt") {opt.att.ztick = sp.stof(1);}
+
+      if(sp(0)=="xo") {opt.att.set_xopt(thl::trim(sp(1)).c_str());}
+      if(sp(0)=="yo") {opt.att.set_yopt(thl::trim(sp(1)).c_str());}
+      if(sp(0)=="zo") {opt.att.set_zopt(thl::trim(sp(1)).c_str());}
     }
     return opt;
   }
@@ -973,7 +981,7 @@ public:
       _pl->draw_error_y(_dat[vx].num,_dat[vy].num,_dat[opt.ey].num);
     }
     if(opt.lg.size() > 0) {
-      std::string text = (opt.lg=="*") ? vy : opt.lg;
+      std::string text = (opt.lg=="*") ? vx+" : "+vy : opt.lg;
       _pl->add_legend(text);
     }
     if(opt.fl) _pl->flush();
@@ -1114,10 +1122,16 @@ public:
 	  ,fit(0), fit(1), fit(2), fit.chisq(), fit.ndf());
     }
     printf("%s\n",fmt());  // print fitting info to the console
-    //    _pl->att.lwid=0; _pl->att.symb=0;
-    //    _pl->clear_legend();
-    //    _pl->add_legend(fmt());
-    if(opt.cx!=0 && opt.cy!=0) { // draw fitting info into the graph 
+    // _pl->att.lwid=0; _pl->att.symb=0;
+    // _pl->clear_legend();
+    // thl::StrSplit sp(fmt(),"\n");
+    // for(auto &s : sp) _pl->add_legend(s);
+    if(opt.lg.size() > 0) {
+      std::string text = (opt.lg=="*") ? func+" fit" : opt.lg;
+      _pl->add_legend(text);
+    }
+    if(opt.cx!=0 && opt.cy!=0) { // draw fitting info into the graph
+      _pl->att.tsiz *= 0.8;
       _pl->draw_text(opt.cx, opt.cy, fmt(), opt.rc);
     }
     if(opt.cf.size() > 0) {
@@ -1211,6 +1225,30 @@ public:
       _pl->draw_bin(_dat[hx].num,_dat[hy].num);
     } else if(opt.ht == "slope") {
       _pl->draw_graph(_dat[hx].num,_dat[hy].num);
+    }
+    if(opt.lg.size() > 0) {
+      thl::StrSplit sp;
+      sp.set_quot_to_skip_split('"');
+      sp.split(opt.lg,"%");
+      if(sp(0)=="*") {
+	_pl->add_legend(v);
+      } else {
+	_pl->add_legend(opt.lg);
+      }
+      if(sp.size()>1 && sp(1)=="stat") {
+	double ndata,max,min,mean,sigma;
+	calc_statistics(v,ndata,max,min,mean,sigma);
+	thl::PLAtt att_save = _pl->att;
+	_pl->att.lwid=0;
+	_pl->att.symb=0;
+	thl::CFormat fmt;
+	_pl->add_legend(fmt("ndata: %g",ndata));
+	_pl->add_legend(fmt("max: %g",max));
+	_pl->add_legend(fmt("min: %g",min));
+	_pl->add_legend(fmt("mean: %g",mean));
+	_pl->add_legend(fmt("sigma: %g",sigma));
+	_pl->att = att_save;
+      }
     }
     if(opt.fl) _pl->flush();
     return 0;
@@ -1534,10 +1572,15 @@ public:
     _pl->free_mesh(nx, ny);
     return 0;
   }
-  int data_statistics(const std::string &v, Option &opt, bool print_flag=1) {
+  int calc_statistics(const std::string &v,
+		       double &ndata,
+		       double &max,
+		       double &min,
+		       double &mean,
+		       double &sigma) {
     if(check_data1(v)) return 1;
-    double max=_dat[v].num[0], min=_dat[v].num[0];
-    double ndata=0, sum=0, ssum=0;
+    max=_dat[v].num[0]; min=_dat[v].num[0]; ndata=0;
+    double sum=0, ssum=0;
     for(auto x : _dat[v].num) {
       if(x >= DBL_MAX || x <= -DBL_MAX) continue;
       if(! std::isfinite(x)) continue;
@@ -1547,9 +1590,14 @@ public:
       sum += x;
       ssum += x*x;
     }
-    double mean = (ndata > 0) ? sum/ndata : 0;
-    double sigma = (ndata > 0) ? ssum/ndata - mean*mean : 0;
+    mean = (ndata > 0) ? sum/ndata : 0;
+    sigma = (ndata > 0) ? ssum/ndata - mean*mean : 0;
     sigma = (sigma > 0) ? std::sqrt(sigma) : 0;
+    return 0;
+  }
+  int data_statistics(const std::string &v, Option &opt, bool print_flag=1) {
+    double ndata,max,min,mean,sigma;
+    if(calc_statistics(v,ndata,max,min,mean,sigma) != 0) return 1;
     var.set_num(v+"_ndata",ndata);
     var.set_num(v+"_max",max);
     var.set_num(v+"_min",min);
@@ -1557,6 +1605,7 @@ public:
     var.set_num(v+"_sigma",sigma);
     if(print_flag) {
       _pl->att = opt.att;
+      _pl->att.tsiz *= 0.8;
       thl::CFormat fmt;
       fmt("@ Statistics:\n"
 	  " ndata=%g\n max= %g\n min= %g\n mean= %g\n sigma= %g",
@@ -2487,7 +2536,7 @@ public:
 	printf("Usage: leg show [pos] [(opt)]\n"
 	       "     : leg ls\n"
 	       "     : leg clear\n"
-	       "If 2nd arg is show, draw legend at existing graph.\n"
+	       "Draw legend on the existing graph (2nd arg is show).\n"
 	       "pos:\n"
 	       " first char:\n"
 	       " R : Rgiht (default)\n"
@@ -2497,7 +2546,7 @@ public:
 	       "  T: Top (default)\n"
 	       "  B: Bottom\n"
 	       "  M: Middle\n"
-	       "other commands at 2nd arg:\n"
+	       "Other commands at 2nd arg:\n"
 	       " ls:    list legend strings.\n"
 	       " clear: clear legend strings.\n"
 	       );
@@ -2508,7 +2557,7 @@ public:
 	std::string pos=(args.size()>2) ? args(2) : "";
 	thl::PLAtt att_save=_pl->att;
 	_pl->att = opt.att;
-	_pl->show_legend(pos);
+	_pl->draw_legend(pos);
 	_pl->att=att_save;
 	if(_gopt.fl) _pl->flush();
       }

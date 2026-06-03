@@ -72,6 +72,9 @@ namespace thl {
     char xlab[64];  // x-axis label buffer
     char ylab[64];  // y-axis label buffer
     char zlab[64];  // z-axis label buffer
+    char xopt[32];  // x-axis box option
+    char yopt[32];  // y-axis box option
+    char zopt[32];  // z-axis box option
 
     PLAtt(void) : lwid(1), lcol(15), lsty(1), symb(0), scol(15),
 		  twid(1), tcol(15), font(1), fcol(0), fsty(-1),
@@ -86,6 +89,9 @@ namespace thl {
       memset(xlab,0,sizeof(xlab));
       memset(ylab,0,sizeof(ylab));
       memset(zlab,0,sizeof(zlab));
+      memset(xopt,0,sizeof(xopt));
+      memset(yopt,0,sizeof(yopt));
+      memset(zopt,0,sizeof(zopt));
       memset(time_fmt,0,sizeof(time_fmt));// "%Y/%m/%d %H:%M:%S"
     }
     void set_time_fmt(const char *str) {snprintf(time_fmt,32,"%s",str);}
@@ -93,6 +99,9 @@ namespace thl {
     void set_xlab(const char *str) {snprintf(xlab,64,"%s",str);}
     void set_ylab(const char *str) {snprintf(ylab,64,"%s",str);}
     void set_zlab(const char *str) {snprintf(zlab,64,"%s",str);}
+    void set_xopt(const char *str) {snprintf(xopt,32,"%s",str);}
+    void set_yopt(const char *str) {snprintf(yopt,32,"%s",str);}
+    void set_zopt(const char *str) {snprintf(zopt,32,"%s",str);}
     void box(PLFLT xs, PLFLT xe, PLFLT ys, PLFLT ye){x0=xs;x1=xe;y0=ys;y1=ye;}
     void box3d(PLFLT xs, PLFLT xe, PLFLT ys, PLFLT ye, PLFLT zs, PLFLT ze){
       x0=xs; x1=xe; y0=ys; y1=ye; z0=zs; z1=ze;
@@ -259,9 +268,10 @@ namespace thl {
     void set_aspect_from_geom(const char *geom) {
       StrSplit sp1(geom,"+");
       StrSplit sp2(sp1(0),"x");
-      PLFLT dx=sp2.stof(0);
-      PLFLT dy=sp2.stof(1);
-      att.vasp = (dx>0) ? dy/dx : 0; 
+      PLFLT geom_x = sp2.stof(0);
+      PLFLT geom_y = sp2.stof(1);
+      att.vasp = (geom_x>0) ? geom_y/geom_x : 0;
+      //      printf("geom x,y=%f, %f\n",geom_x,geom_y);
     }
     void init(const char *title, const char *geom, const char *device,
 	      const char *fname="") {
@@ -367,6 +377,8 @@ namespace thl {
       std::string ox="bcnst",oy="bcnstv";  // options(x,y-axis)
       std::string gx="g",gy="g";           // options(x,y-axis) for grid
       //      if(att.invtick) {ox += "i"; oy += "i";}
+      if(strlen(att.xopt)!=0) {ox=att.xopt;}
+      if(strlen(att.yopt)!=0) {oy=att.yopt;}
       if(att.time_xaxis) {gx += "d"; ox += "d";}
       if(att.logx) {ox += "l";}
       if(att.logy) {gy += "l"; oy += "l";}
@@ -673,6 +685,9 @@ namespace thl {
     }
     void draw_box3d_sub(int sub=0) {
       std::string ox="bcnstu",oy="bcnstu",oz="bcnstuv";
+      if(strlen(att.xopt)!=0) {ox=att.xopt;}
+      if(strlen(att.yopt)!=0) {oy=att.yopt;}
+      if(strlen(att.zopt)!=0) {oz=att.zopt;}
       if(att.logx) {ox += "l";}
       if(att.logy) {oy += "l";}
       if(att.logz) {oz += "l";}
@@ -918,22 +933,76 @@ namespace thl {
 	printf("%lu: %s\n",j,_leg[j].title);
       }
     }
-    void show_legend(std::string &pos) {
+    void get_char_size(PLFLT *chx, PLFLT *chy) {
+      PLFLT x0=0,x1=0,y0=0,y1=0;
+      PLFLT ch0=0, ch1=0; // ch0: default char height, ch1: current height
+      plgspa(&x0,&x1,&y0,&y1);
+      plgchr(&ch0, &ch1);
+      *chx = 1.2*ch1/(x1-x0);
+      *chy = ch1/(y1-y0);
+    }
+    void draw_leg_box(size_t xlen, size_t ylen, PLFLT chx, PLFLT chy,
+		      const std::string &pos) {
+      PLFLT xwid = 0.5*chx*xlen*att.tsiz;
+      PLFLT ywid = 1.8*chy*ylen*att.tsiz;
+      PLFLT x0,x1,y0,y1;
+      if(pos[0]=='L') {// left
+	 x0 = 0.13;
+	 x1 = x0 + xwid + 0.02;
+      } else if(pos[0]=='M') {// middle
+	 x0 = 0.53 - xwid/2;
+	 x1 = x0 + xwid + 0.02;
+      } else { // default 'R' right
+	 x1 = 0.95;
+	 x0 = x1 - xwid - 0.02;
+      }
+      if(pos[1]=='B') {// bottom
+	y0 = 0.12;
+	y1 = y0 + ywid;
+      } else if(pos[1]=='M') {// middle
+	y0 = 0.53 - ywid/2;
+	y1 = y0 + ywid;
+      } else { // default 'T' top
+	 y1 = 0.92;
+	 y0 = y1 - 1.8*chy*ylen*att.tsiz;
+      }
+      plvpor(x0,x1,y0,y1);
+      plwind(0,1,0,1);
+      plcol0(15);
+      plbox("bc",0,0,"bc",0,0);
+      PLAtt att_save=att;
+      att.lcol=15; att.fsty=0;
+      fill_box(0,1,0,1);
+      att=att_save;
+    }
+    void draw_legend(const std::string &pos) {
       if(_leg.size()==0) return;
       PLAtt att_save=att;
-      size_t leg_size=0,max_len=0;
+      size_t xlen=0,ylen=0;
       for(size_t j=0; j<_leg.size(); j++) {
-	StrSplit sp(_leg[j].title,"\n");
-	for(size_t k=0; k<sp.size(); k++) {
-	  leg_size++;
-	  size_t len = sp(k).size();
-	  if(len > max_len) max_len=len;
-	}
-	//       	size_t len = strlen(_leg[j].title);
-	//       	if(len > max_len) max_len=len;
+	ylen++;
+	size_t len = strlen(_leg[j].title);
+	if(len > xlen) xlen=len;
       }
-      PLFLT dx=0.09+0.012*max_len*att.tsiz*0.8;
-      PLFLT dy=0.00+0.06*leg_size*att.tsiz*0.8;
+#if 1
+      PLFLT chx,chy;
+      get_char_size(&chx,&chy);
+      draw_leg_box(xlen,ylen,chx,chy,pos);
+      for(size_t j=0; j<_leg.size(); j++) {
+	att=_leg[j];
+	att.tsiz *= 0.8;
+	att.ssiz *= 0.6;
+	PLFLT y = 1.0 - (j+1.0)/(ylen+1.0);
+       	if(att.lwid) {draw_line(chx, 6*chx, y+chy,y+chy);}
+       	if(att.symb) {draw_symbol(3*chx, y+chy);}
+	PLFLT x = 0.01;
+	if(att.lwid || att.symb) x += 8*chx;
+	y += chy;
+	draw_text(x,y,att.title);
+      }
+#else      
+      PLFLT dx=0.09+0.012*xlen*att.tsiz*0.8;
+      PLFLT dy=0.00+0.06*ylen*att.tsiz*0.8;
       PLFLT x0 =
 	(pos[0]=='R') ? 0.95 - dx :
 	(pos[0]=='M') ? 0.55 - dx:
@@ -950,21 +1019,19 @@ namespace thl {
       } else {
 	fill_box(x0, x0+dx, y0-dy, y0, 1);
       }
-      
       for(size_t j=0; j<_leg.size(); j++) {
 	att=_leg[j];
 	att.tsiz *= 0.8;
 	att.ssiz *= 0.6;
-	PLFLT y = y0 - (j+1)*dy/(leg_size+1) -0.01;
+	PLFLT y = y0 - (j+1)*dy/(ylen+1) -0.01;
 	PLFLT d=0;
        	if(att.lwid) {d=0.01; draw_line(x0+d, x0+4*d, y+d,y+d, 1);}
        	if(att.symb) {d=0.01; draw_symbol(x0+2.5*d, y+d, 1);}
 	
 	PLFLT x = x0+6*d;
-	y += d;
-	printf("x=%f y=%f\n",x,y);
 	draw_text(x,y,att.title,1);
       }
+#endif      
       att=att_save;
     }
   };//-- class PLPlot
