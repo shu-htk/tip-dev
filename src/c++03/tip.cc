@@ -18,13 +18,13 @@
 const char* tip_commands[] = {
   "arc", "box", "box3", "cat", "cut", "div", "elem", "exe",
   "fbox", "ffit", "fit", "fit3", "fill", "font", "fplot",
-  "help", "hfit", "hplot", "hplot2", "line", "ls", "leg", "mplot",
+  "help", "hfit", "hplot", "hplot2", "line", "ls", "legend", "mplot",
   "mread", "mset", "mwrite", "opt", "plot", "plot3", "read",
   "rm", "set", "sort", "stat", "symb", "text", "title", "tfmt",
-  "vp", "viewport", "write", "xerr", "xlab", "yerr", "ylab", "zlab",
+  "viewport", "write", "xerr", "xlab", "yerr", "ylab", "zlab",
   //--macro  
   "do", "for", "while", "end", "if", "elif", "else", "fi",
-  "@", "args", "print", "pr", "println", "prn", "fmt", "sys",
+  "@", "args", "print", "println", "fmt", "sys",
   "wait", "calc", "logic", "split", "q",
 #if USE_EPICS_CA
   "cainfo", "caget", "caput", "camon", "cacheck", "caclose",
@@ -1600,7 +1600,8 @@ public:
     if(check_data1(v)) return 1;
     max=_dat[v].num[0]; min=_dat[v].num[0]; ndata=0;
     double sum=0, ssum=0;
-    for(auto x : _dat[v].num) {
+    for(size_t j=0; j < _dat[v].size(); j++) {
+      double x=_dat[v].num[j];
       if(x >= DBL_MAX || x <= -DBL_MAX) continue;
       if(! std::isfinite(x)) continue;
       ndata++;
@@ -1751,30 +1752,31 @@ public:
     if(args(0)=="help") { // help
       const char *help =
 	"list of commands:\n"
-	" arc   : draw a circle in 2D-graph\n"
-	" box   : draw the axis of 2D-graph in the box shape\n"
-	" box3  : draw the axes of 3D-graph\n"
+	" arc   : draw a circle in the 2D-graph\n"
+	" box   : draw the axis of the 2D-graph in the box shape\n"
+	" box3  : draw the axes of the 3D-graph\n"
 	" cat   : show data contents / concatenate data\n"
 	" cut   : set cut condition\n"
 	" div   : divide the drawing area\n"
 	" elem  : copy data element to macro variable\n"
 	" exe   : execute macro file\n"
-	" fbox  : draw a filled pattern box in 2D-graph\n"
+	" fbox  : draw a filled pattern box in the 2D-graph\n"
 	" ffit  : fit the frequency domain graph\n"
-	" fit   : fit the data in 2D-graph\n"
-	" fit3  : fit the data in 3D-graph\n"
-	" fill  : draw a filled pattern object in 2D-graph\n"
+	" fit   : fit the data in the 2D-graph\n"
+	" fit3  : fit the data in the 3D-graph\n"
+	" fill  : draw a filled pattern object in the 2D-graph\n"
 	" font  : set text font\n"
 	" fplot : plot the frequency domain graph from the data\n"
 	" help  : show help message\n"
 	" hfit  : fit the histogram\n"
 	" hplot : plot the histogram from the data\n"
-	" hplot2: plot the 2D-histogram from the couple of data\n"
-	" line  : draw a line in 2D-graph\n"
+	" hplot2: plot the 2D-histogram from a couple of data\n"
+	" legend : draw legend in the 2D-graph (alias: leg)\n"
+	" line  : draw a line in the 2D-graph\n"
 	" ls    : list macro/data variables\n"
-	" mplot : plot mesh-graph(3D) or contour-graph(2D)\n"
+	" mplot : plot the mesh-graph(3D) or contour-graph(2D)\n"
 	" mread : read the mesh data from the file\n"
-	" mset  : set mesh data\n"
+	" mset  : set the mesh data\n"
 	" mwrite: write the mesh data to the file\n"
 	" opt   : set/show global options\n"
 	" plot  : plot the data in the 2D-graph\n"
@@ -1784,17 +1786,17 @@ public:
 	" set   : set the data\n"
 	" sort  : sort the data in ascending order\n"
 	" stat  : calc statistics from the data\n"
-	" symb  : draw a symbol in 2D-graph\n"
-	" text  : draw a text in 2D-graph\n"
+	" symb  : draw a symbol in the 2D-graph\n"
+	" text  : draw a text in the 2D-graph\n"
 	" title : set the graph title\n"
 	" tfmt  : set the x-axis time format\n"
-	" viewport : set drawing area in the window (abbr. vp)\n"
+	" viewport : set drawing area in the window (alias: vp)\n"
 	" write : write the data to the file\n"
-	" xerr  : plot the x-error-bars in 2D-graph\n"
+	" xerr  : plot the x-error-bars in the 2D-graph\n"
 	" xlab  : set the x-axis label\n"
-	" yerr  : plot the y-error-bars in 2D-graph\n"
+	" yerr  : plot the y-error-bars in the 2D-graph\n"
 	" ylab  : set the y-axis label\n"
-	" zlab  : set the z-axis label in 3D-graph\n"
+	" zlab  : set the z-axis label in the 3D-graph\n"
 #if USE_EPICS_CA
 	"EPICS CA commands:\n"	
 	" cainfo : show information of record\n"
@@ -2551,30 +2553,29 @@ public:
       data_make_sort(args(1),args(3));
       return 0;
     }
-    if(args(0)=="leg") {
+    if(args(0)=="legend" || args(0)=="leg") {
       if(args.size() < 2) {
-	printf("Usage: leg show [pos] [(opt)]\n"
-	       "     : leg ls\n"
-	       "     : leg clear\n"
-	       "Draw legend on the existing graph (2nd arg is show).\n"
-	       "pos:\n"
-	       " first char:\n"
-	       " R : Rgiht (default)\n"
-	       " L : Left\n"
-	       " M : Middle\n"
-	       " second char:\n"
-	       "  T: Top (default)\n"
-	       "  B: Bottom\n"
-	       "  M: Middle\n"
-	       "Other commands at 2nd arg:\n"
-	       " ls:    list legend strings.\n"
-	       " clear: clear legend strings.\n"
+	printf("Usage: legend [command] [(opt)]\n"
+	       "Draw legend on the existing graph. (alias: leg)\n"
+	       "command:\n"
+	       " show [xpos,ypos]\n"
+	       "   xpos: right(r), middle(m), left(l) : (default is right)\n"
+	       "   ypos: top(t), middle(m), bottom(b) : (default is top)\n"
+	       " ls\n"
+	       "   list legend strings.\n"
+	       " rm\n"
+	       "   remove legend strings.\n"
+	       "Example:\n"
+	       "   plot x y (st:plus lg:*)\n"
+	       "   legent show l,m\n"
+	       " draws plus marker '+' and text 'x : y'"
+	       " at left,middle of the grapgh\n"
 	       );
 	return 0;
       }
       Option opt=get_opt(buf);
       if(args(1)=="show") {
-	std::string pos=(args.size()>2) ? args(2) : "";
+	std::string pos=(args.size()>2) ? args(2) : "r,t";
 	thl::PLAtt att_save=_pl->att;
 	_pl->att = opt.att;
 	_pl->draw_legend(pos);
@@ -2584,7 +2585,7 @@ public:
       if(args(1)=="ls") {
 	_pl->print_legend();
       }
-      if(args(1)=="clear") {
+      if(args(1)=="rm") {
 	_pl->clear_legend();
       }
       return 0;

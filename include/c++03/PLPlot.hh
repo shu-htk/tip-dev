@@ -946,23 +946,26 @@ namespace thl {
       PLFLT xwid = 0.5*chx*xlen*att.tsiz;
       PLFLT ywid = 1.8*chy*ylen*att.tsiz;
       PLFLT x0,x1,y0,y1;
-      if(pos[0]=='L') {// left
+      StrSplit sp(pos,",");
+      std::string xpos = (sp(0)=="*") ? "right" : sp(0); 
+      std::string ypos = (sp.size()<2) ? "top" : sp(1); 
+      if(xpos[0]=='l') {// left
 	 x0 = 0.13;
 	 x1 = x0 + xwid + 0.02;
-      } else if(pos[0]=='M') {// middle
+      } else if(xpos[0]=='m') {// middle
 	 x0 = 0.53 - xwid/2;
 	 x1 = x0 + xwid + 0.02;
-      } else { // default 'R' right
+      } else { // default right
 	 x1 = 0.95;
 	 x0 = x1 - xwid - 0.02;
       }
-      if(pos[1]=='B') {// bottom
+      if(ypos[0]=='b') {// bottom
 	y0 = 0.12;
 	y1 = y0 + ywid;
-      } else if(pos[1]=='M') {// middle
+      } else if(ypos[0]=='m') {// middle
 	y0 = 0.53 - ywid/2;
 	y1 = y0 + ywid;
-      } else { // default 'T' top
+      } else { // default top
 	 y1 = 0.92;
 	 y0 = y1 - 1.8*chy*ylen*att.tsiz;
       }
