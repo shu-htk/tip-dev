@@ -1,20 +1,17 @@
-# leg
+# legend
 ```
-tip> leg
-Usage: leg show [pos] [(opt)]
-     : leg ls
-     : leg clear
-Draw legend on the existing graph (2nd arg is show).
-pos:
- first char:
- R : Rgiht (default)
- L : Left
- M : Middle
- second char:
-  T: Top (default)
-  B: Bottom
-  M: Middle
-Other commands at 2nd arg:
- ls:    list legend strings.
- clear: clear legend strings.
+Usage: legend [command] [(opt)]
+Draw legend on the existing graph. (alias: leg)
+command:
+ show [xpos,ypos]
+   xpos: right(r), middle(m), left(l) : (default is right)
+   ypos: top(t), middle(m), bottom(b) : (default is top)
+ ls
+   list legend strings.
+ rm
+   remove legend strings.
+Example:
+  plot x y (st:plus lg:*)
+  legent show l,m
+ draws plus marker '+' and text 'x : y' at left,middle of the grapgh
 ```

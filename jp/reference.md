@@ -35,6 +35,7 @@
 - [hplot](ref/hplot.md) : データの1次元ヒストグラムをプロット
 - [hplot2](ref/hplot2.md): 2つのデータの2次元ヒストグラムをプロット
 - [line](ref/line.md) : 指定した区間の線を2次元座標に描画
+- [legend](ref/leg.md) : 2次元グラフに凡例を描画する
 - [ls](ref/ls.md) : データ変数、マクロ変数の情報を表示
 - [mplot](ref/mplot.md) : メッシュ（2次元の格子上の値）データを3次元でプロット
 - [mread](ref/mread.md) : メッシュデータをファイルから読み込む

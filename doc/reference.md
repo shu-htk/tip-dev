@@ -14,37 +14,38 @@
 - q : quit the tip interpreter
 
 ## Commands of drawing and handling data.
-- [arc](ref/arc.md) : draw a circle in 2D-graph
-- [box](ref/box.md) : draw the axis of 2D-graph in the box shape
-- [box3](ref/box3.md) : draw the axes of 3D-graph
+- [arc](ref/arc.md) : draw a circle in the 2D-graph
+- [box](ref/box.md) : draw the axis of the 2D-graph in the box shape
+- [box3](ref/box3.md) : draw the axes of the 3D-graph
 - [cat](ref/cat.md) : show data contents / concatenate data
 - [cut](ref/cut.md) : set cut condition
 - [div](ref/div.md) : divide the drawing area
 - [elem](ref/elem.md) : copy data element to macro variable
 - [exe](ref/exe.md) : execute macro file
-- [fbox](ref/fbox.md) : draw a filled pattern box in 2D-graph
+- [fbox](ref/fbox.md) : draw a filled pattern box in the 2D-graph
 - [ffit](ref/ffit.md) : fit the frequency domain graph
-- [fit](ref/fit.md) : fit the data in 2D-graph
-- [fit3](ref/fit3.md) : fit the data in 3D-graph
-- [fill](ref/fill.md) : draw a filled pattern object in 2D-graph
+- [fit](ref/fit.md) : fit the data in the 2D-graph
+- [fit3](ref/fit3.md) : fit the data in the 3D-graph
+- [fill](ref/fill.md) : draw a filled pattern object in the 2D-graph
 - [font](ref/font.md) : set text font
 - [fplot](ref/fplot.md) : plot the frequency domain graph from the data
 - [help](ref/help.md) : show help message
 - [hfit](ref/hfit.md) : fit the histogram
 - [hplot](ref/hplot.md) : plot the histogram from the data
 - [hplot2](ref/hplot2.md): plot the 2D-histogram from the couple of data
-- [line](ref/line.md) : draw a line in 2D-graph
+- [legend](ref/leg.md) : draw a legend in the 2D-graph
+- [line](ref/line.md) : draw a line in the 2D-graph
 - [ls](ref/ls.md) : list macro/data variables
-- [mplot](ref/mplot.md) : plot mesh-graph(3D) or contour-graph(2D)
+- [mplot](ref/mplot.md) : plot the mesh-graph(3D) or contour-graph(2D)
 - [mread](ref/mread.md) : read the mesh data from the file
-- [mset](ref/mset.md) : set mesh data
+- [mset](ref/mset.md) : set the mesh data
 - [mwrite](ref/mwrite.md): write the mesh data to the file
 - [opt](ref/opt.md) : set/show global options
 - [plot](ref/plot.md) : plot the data in the 2D-graph
 - [plot3](ref/plot3.md) : plot the data in the 3D-graph
 - [read](ref/read.md) : read the data from the file
 - [rm](ref/rm.md) : remove macro/data variables
-- [set](ref/set.md) : define and set value of the data variable
+- [set](ref/set.md) : define and set the value of data variable
 - [sort](ref/sort.md) : sort the data in ascending order
 - [stat](ref/stat.md) : calc statistics from the data
 - [symb](ref/symb.md) : draw a symbol in 2D-graph
