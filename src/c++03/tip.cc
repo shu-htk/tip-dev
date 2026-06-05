@@ -1077,7 +1077,8 @@ public:
     std::vector<double> ey(_dat[vy].size(),1);
     if(opt.ey != "0") {ey = _dat[opt.ey].num;}
     _pl->att = opt.att;
-    _pl->att.lwid=1; _pl->att.symb=0;
+    if(_pl->att.lwid==0) _pl->att.lwid=1;
+    _pl->att.symb=0;
     std::vector<double> &x = _dat[vx].num;
     std::vector<double> &y = _dat[vy].num;
     thl::CFormat fmt;
@@ -1251,7 +1252,7 @@ public:
       if(sp(0)=="*") {
 	_pl->add_legend(v);
       } else {
-	_pl->add_legend(opt.lg);
+	_pl->add_legend(sp(0));
       }
       if(sp.size()>1 && sp(1)=="stat") {
 	double ndata,max,min,mean,sigma;
@@ -1624,14 +1625,14 @@ public:
     var.set_num(v+"_mean",mean);
     var.set_num(v+"_sigma",sigma);
     if(print_flag) {
-      _pl->att = opt.att;
-      _pl->att.tsiz *= 0.8;
       thl::CFormat fmt;
       fmt("@ Statistics:\n"
 	  " ndata=%g\n max= %g\n min= %g\n mean= %g\n sigma= %g",
 	  ndata,max,min,mean,sigma);
       printf("%s\n",fmt());  // print info to the console
       if(opt.cx!=0 && opt.cy!=0) { // draw info into the graph 
+	_pl->att = opt.att;
+	_pl->att.tsiz *= 0.8;
 	_pl->draw_text(opt.cx, opt.cy, fmt(), opt.rc);
 	if(opt.fl) _pl->flush();
       }
@@ -2561,6 +2562,8 @@ public:
 	       " show [xpos,ypos]\n"
 	       "   xpos: right(r), middle(m), left(l) : (default is right)\n"
 	       "   ypos: top(t), middle(m), bottom(b) : (default is top)\n"
+	       " add [string]\n"
+	       "   add legend string.\n"
 	       " ls\n"
 	       "   list legend strings.\n"
 	       " rm\n"
@@ -2576,11 +2579,15 @@ public:
       Option opt=get_opt(buf);
       if(args(1)=="show") {
 	std::string pos=(args.size()>2) ? args(2) : "r,t";
-	thl::PLAtt att_save=_pl->att;
 	_pl->att = opt.att;
 	_pl->draw_legend(pos);
-	_pl->att=att_save;
 	if(_gopt.fl) _pl->flush();
+      }
+      if(args(1)=="add") {
+	std::string text = (args.size()>2) ? args(2) : " ";
+	_pl->att.lwid=0;
+	_pl->att.symb=0;
+	_pl->add_legend(thl::trim(text));
       }
       if(args(1)=="ls") {
 	_pl->print_legend();

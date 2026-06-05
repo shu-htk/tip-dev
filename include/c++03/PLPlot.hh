@@ -625,6 +625,7 @@ namespace thl {
 	plfill(n, x, y);
 	plpsty(0); // reset to default(solid)
       }
+      plwidth(att.lwid);
       plcol0(att.lcol);
       pllsty(att.lsty);
       plline(n, x, y);
@@ -975,7 +976,7 @@ namespace thl {
       plwind(0,1,0,1);
       plcol0(15);
       plbox("bc",0,0,"bc",0,0);
-      att.lcol=15; att.fsty=0;
+      att.lwid=1; att.lcol=15; att.fsty=0;
       fill_box(0,1,0,1);
     }
     void draw_legend(const std::string &pos) {
@@ -1002,6 +1003,8 @@ namespace thl {
 	draw_text(x,y,att.title);
       }
       att=att_save;
+      plvsta();
+      plwind(att.x0, att.x1, att.y0, att.y1);
     }
   };//-- class PLPlot
 
