@@ -16,7 +16,7 @@
 #endif
 
 const char* tip_commands[] = {
-  "arc", "box", "box3", "cat", "cut", "div", "elem", "exe",
+  "arc", "box", "box3", "cat", "clear", "cut", "div", "elem", "exe",
   "fbox", "ffit", "fit", "fit3", "fill", "font", "fplot",
   "help", "hfit", "hplot", "hplot2", "line", "ls", "legend", "mplot",
   "mread", "mset", "mwrite", "opt", "plot", "plot3", "read",
@@ -1759,6 +1759,7 @@ public:
 	" box   : draw the axis of the 2D-graph in the box shape\n"
 	" box3  : draw the axes of the 3D-graph\n"
 	" cat   : show data contents / concatenate data\n"
+	" clear : clear screen\n"
 	" cut   : set cut condition\n"
 	" div   : divide the drawing area\n"
 	" elem  : copy data element to macro variable\n"
