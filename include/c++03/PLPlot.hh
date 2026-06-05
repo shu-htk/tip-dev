@@ -938,26 +938,28 @@ namespace thl {
       PLFLT ch0=0, ch1=0; // ch0: default char height, ch1: current height
       plgspa(&x0,&x1,&y0,&y1);
       plgchr(&ch0, &ch1);
-      *chx = 1.2*ch1/(x1-x0);
-      *chy = ch1/(y1-y0);
+      *chx = att.tsiz*ch1/(x1-x0);
+      *chy = att.tsiz*ch1/(y1-y0);
     }
     void draw_leg_box(size_t xlen, size_t ylen, PLFLT chx, PLFLT chy,
 		      const std::string &pos) {
-      PLFLT xwid = 0.5*chx*xlen*att.tsiz;
-      PLFLT ywid = 1.8*chy*ylen*att.tsiz;
+      PLFLT xwid = 0.7*chx;
+      xwid *= (att.lwid||att.symb) ? 1.5+xlen : 1.0*xlen;
+      xwid += 0.005;
+      PLFLT ywid = 1.8*chy*ylen;
       PLFLT x0,x1,y0,y1;
       StrSplit sp(pos,",");
       std::string xpos = (sp(0)=="*") ? "right" : sp(0); 
       std::string ypos = (sp.size()<2) ? "top" : sp(1); 
       if(xpos[0]=='l') {// left
 	 x0 = 0.13;
-	 x1 = x0 + xwid + 0.02;
+	 x1 = x0 + xwid;
       } else if(xpos[0]=='m') {// middle
 	 x0 = 0.53 - xwid/2;
-	 x1 = x0 + xwid + 0.02;
+	 x1 = x0 + xwid;
       } else { // default right
 	 x1 = 0.95;
-	 x0 = x1 - xwid - 0.02;
+	 x0 = x1 - xwid;
       }
       if(ypos[0]=='b') {// bottom
 	y0 = 0.12;
@@ -967,16 +969,14 @@ namespace thl {
 	y1 = y0 + ywid;
       } else { // default top
 	 y1 = 0.92;
-	 y0 = y1 - 1.8*chy*ylen*att.tsiz;
+	 y0 = y1 - ywid;
       }
       plvpor(x0,x1,y0,y1);
       plwind(0,1,0,1);
       plcol0(15);
       plbox("bc",0,0,"bc",0,0);
-      PLAtt att_save=att;
       att.lcol=15; att.fsty=0;
       fill_box(0,1,0,1);
-      att=att_save;
     }
     void draw_legend(const std::string &pos) {
       if(_leg.size()==0) return;
@@ -987,7 +987,6 @@ namespace thl {
 	size_t len = strlen(_leg[j].title);
 	if(len > xlen) xlen=len;
       }
-#if 1
       PLFLT chx,chy;
       get_char_size(&chx,&chy);
       draw_leg_box(xlen,ylen,chx,chy,pos);
@@ -995,46 +994,13 @@ namespace thl {
 	att=_leg[j];
 	att.tsiz *= 0.8;
 	att.ssiz *= 0.6;
-	PLFLT y = 1.0 - (j+1.0)/(ylen+1.0);
-       	if(att.lwid) {draw_line(chx, 6*chx, y+chy,y+chy);}
-       	if(att.symb) {draw_symbol(3*chx, y+chy);}
-	PLFLT x = 0.01;
-	if(att.lwid || att.symb) x += 8*chx;
-	y += chy;
+	PLFLT x = chx*5/sqrt((double)xlen);
+	PLFLT y = chy + 1.0 - (j+1.0)/(ylen+1.0);
+       	if(att.lwid) {draw_line(x, 5*x, y, y);}
+       	if(att.symb) {draw_symbol(3*x, y);}
+	if(att.lwid || att.symb) x *= 6;
 	draw_text(x,y,att.title);
       }
-#else      
-      PLFLT dx=0.09+0.012*xlen*att.tsiz*0.8;
-      PLFLT dy=0.00+0.06*ylen*att.tsiz*0.8;
-      PLFLT x0 =
-	(pos[0]=='R') ? 0.95 - dx :
-	(pos[0]=='M') ? 0.55 - dx:
-	(pos[0]=='L') ? 0.02 :
-	0.95 - dx;
-      PLFLT y0 =
-	(pos[1]=='T') ? 0.97 :
-	(pos[1]=='M') ? 0.50 + 0.5*dy:
-	(pos[1]=='B') ? 0.02 + dy :
-	0.97;
-
-      if(att.lwid || att.symb) {
-	fill_box(x0, x0+dx*1.2, y0-dy, y0, 1);
-      } else {
-	fill_box(x0, x0+dx, y0-dy, y0, 1);
-      }
-      for(size_t j=0; j<_leg.size(); j++) {
-	att=_leg[j];
-	att.tsiz *= 0.8;
-	att.ssiz *= 0.6;
-	PLFLT y = y0 - (j+1)*dy/(ylen+1) -0.01;
-	PLFLT d=0;
-       	if(att.lwid) {d=0.01; draw_line(x0+d, x0+4*d, y+d,y+d, 1);}
-       	if(att.symb) {d=0.01; draw_symbol(x0+2.5*d, y+d, 1);}
-	
-	PLFLT x = x0+6*d;
-	draw_text(x,y,att.title,1);
-      }
-#endif      
       att=att_save;
     }
   };//-- class PLPlot
