@@ -75,6 +75,7 @@ namespace thl {
     char xopt[32];  // x-axis box option
     char yopt[32];  // y-axis box option
     char zopt[32];  // z-axis box option
+    char mark[32];  // symbol marker
 
     PLAtt(void) : lwid(1), lcol(15), lsty(1), symb(0), scol(15),
 		  twid(1), tcol(15), font(1), fcol(0), fsty(-1),
@@ -92,6 +93,7 @@ namespace thl {
       memset(xopt,0,sizeof(xopt));
       memset(yopt,0,sizeof(yopt));
       memset(zopt,0,sizeof(zopt));
+      memset(mark,0,sizeof(mark));
       memset(time_fmt,0,sizeof(time_fmt));// "%Y/%m/%d %H:%M:%S"
     }
     void set_time_fmt(const char *str) {snprintf(time_fmt,32,"%s",str);}
@@ -102,6 +104,7 @@ namespace thl {
     void set_xopt(const char *str) {snprintf(xopt,32,"%s",str);}
     void set_yopt(const char *str) {snprintf(yopt,32,"%s",str);}
     void set_zopt(const char *str) {snprintf(zopt,32,"%s",str);}
+    void set_mark(const char *str) {snprintf(mark,32,"%s",str);}
     void box(PLFLT xs, PLFLT xe, PLFLT ys, PLFLT ye){x0=xs;x1=xe;y0=ys;y1=ye;}
     void box3d(PLFLT xs, PLFLT xe, PLFLT ys, PLFLT ye, PLFLT zs, PLFLT ze){
       x0=xs; x1=xe; y0=ys; y1=ye; z0=zs; z1=ze;
@@ -433,6 +436,11 @@ namespace thl {
 	plcol0(att.scol);
 	plssym(0,att.ssiz);
 	plpoin(n, px, py, att.symb);
+	plstring(n, px, py, att.mark);
+      }
+      if( strlen(att.mark) > 0 ) {
+	plcol0(att.scol);
+	plstring(n, px, py, att.mark);
       }
       if( att.errx ) {
 	plerrx(n, &_errx[0][0], &_errx[1][0], py);

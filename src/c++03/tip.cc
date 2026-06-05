@@ -94,7 +94,7 @@ private:
     int n0, n1, nb, nx, ny, bp, dm, mv, ae;
     bool rp, cr, rc, fl, nf;
     std::string fs, fw, cf, cc, sd, gt, ht, mt, tf, td, ex, ey, ez, lg,
-      xo, yo, zo;
+      xo, yo, zo, mk;
     thl::PLAtt att;
     Option(void) : cx(0), cy(0), x0(0), x1(0), y0(0), y1(0), z0(0), z1(0),
 		   fx0(0), fx1(0), dt(1), fq(0), n0(0), n1(-1), nb(100),
@@ -102,7 +102,7 @@ private:
 		   rp(0), cr(1), rc(0), fl(1), nf(0),
 		   fs(" "), fw("rc"), cf(""), cc(""), sd("clock"),
 		   gt("slope"), ht("bin1"), mt("mesh1"), tf(""), td("- :"),
-		   ex("0"),ey("0"),ez("0"),lg(""),xo(""),yo(""),zo("") {}
+		   ex("0"),ey("0"),ez("0"),lg(""),xo(""),yo(""),zo(""),mk("") {}
     void print(const std::string &s) {
       if(s=="ae"||s=="*") printf("ae: arrow edge(0=non,1=end,2=begin,3=both):"
 				 " [%d]\n", att.asty);
@@ -200,6 +200,7 @@ private:
       if(s=="xo"||s=="*") printf("xo: x-axis option: [%s]\n",att.xopt);
       if(s=="yo"||s=="*") printf("xo: y-axis option: [%s]\n",att.yopt);
       if(s=="zo"||s=="*") printf("xo: z-axis option: [%s]\n",att.zopt);
+      if(s=="mk"||s=="*") printf("mk: marker: [%s]\n",att.mark);
 
 //-- the following tags just show the available names (not set anything)
       if(s=="color"||s=="c") {
@@ -334,6 +335,7 @@ public:
       if(sp(0)=="xo") {opt.att.set_xopt(thl::trim(sp(1)).c_str());}
       if(sp(0)=="yo") {opt.att.set_yopt(thl::trim(sp(1)).c_str());}
       if(sp(0)=="zo") {opt.att.set_zopt(thl::trim(sp(1)).c_str());}
+      if(sp(0)=="mk") {opt.att.set_mark(thl::trim(sp(1)).c_str());}
     }
     return opt;
   }
@@ -2571,7 +2573,7 @@ public:
 	       "Example:\n"
 	       "   plot x y (st:plus lg:*)\n"
 	       "   legent show l,m\n"
-	       " draws plus marker '+' and text 'x : y'"
+	       " It draws plus marker '+' and text 'x : y'"
 	       " at left,middle of the grapgh\n"
 	       );
 	return 0;

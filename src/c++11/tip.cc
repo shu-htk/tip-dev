@@ -97,7 +97,7 @@ private:
     bool rp={0}, cr={1}, rc={0}, fl={1}, nf={0};
     std::string fs={" \t\n"},fw={"rc"},cf={""},cc={""},sd={"clock"},
       gt={"slope"},ht={"bin1"},mt={"mesh1"},tf={""},td={"- :"},
-      ex={"0"},ey={"0"},ez={"0"},lg={""},xo={""},yo={""},zo={""};
+      ex={"0"},ey={"0"},ez={"0"},lg={""},xo={""},yo={""},zo={""},mk={""};
     thl::PLAtt att;
     Option(void) {}
     void print(const std::string &s) {
@@ -197,6 +197,7 @@ private:
       if(s=="xo"||s=="*") printf("xo: x-axis option: [%s]\n",att.xopt);
       if(s=="yo"||s=="*") printf("xo: y-axis option: [%s]\n",att.yopt);
       if(s=="zo"||s=="*") printf("xo: z-axis option: [%s]\n",att.zopt);
+      if(s=="mk"||s=="*") printf("mk: marker: [%s]\n",att.mark);
 
 //-- the following tags just show the available names (not set anything)
       if(s=="color"||s=="c") {
@@ -331,6 +332,7 @@ public:
       if(sp(0)=="xo") {opt.att.set_xopt(thl::trim(sp(1)).c_str());}
       if(sp(0)=="yo") {opt.att.set_yopt(thl::trim(sp(1)).c_str());}
       if(sp(0)=="zo") {opt.att.set_zopt(thl::trim(sp(1)).c_str());}
+      if(sp(0)=="mk") {opt.att.set_mark(thl::trim(sp(1)).c_str());}
     }
     return opt;
   }
@@ -2546,7 +2548,7 @@ public:
 	       "Example:\n"
 	       "   plot x y (st:plus lg:*)\n"
 	       "   legent show l,m\n"
-	       " draws plus marker '+' and text 'x : y'"
+	       "It draws plus marker '+' and text 'x : y'"
 	       " at left,middle of the grapgh\n"
 	       );
 	return 0;
