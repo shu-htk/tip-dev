@@ -49,9 +49,44 @@ char* tip_command_generator(const char* text, int state) {
 }
 
 char** tip_command_completion(const char* text, int start, int end) {
-  rl_attempted_completion_function = nullptr;
-  rl_attempted_completion_function = tip_command_completion; 
-  return rl_completion_matches(text, tip_command_generator);
+  rl_attempted_completion_over = 1;
+  std::string cmd = "";
+  bool in_space = true;
+  int iarg = 0;
+
+  for(int j=0; j < start; ++j) {
+    if(rl_line_buffer[j] != ' ') {
+      if(in_space) {
+	iarg++;
+	in_space = false;
+      }
+      if(iarg == 1) {
+	cmd += rl_line_buffer[j];
+      }
+    } else {
+      in_space = true;
+    }
+  }
+  if(iarg==0 || (iarg==1 && rl_line_buffer[start] != ' ' && !in_space)) {
+    return rl_completion_matches(text, tip_command_generator);
+  }
+  if(iarg==1 || (iarg==2 && rl_line_buffer[start] != ' ')) {
+    if(cmd == "exe") {
+      rl_attempted_completion_over = 0;
+      return nullptr;
+    } else {
+      printf("\nPress return-key to show usage.\n");
+      rl_on_new_line();
+      rl_redisplay();
+    }
+  }
+  if(iarg==2 || (iarg==3 && rl_line_buffer[start] != ' ')) {
+    if(cmd == "read" || cmd == "write" || cmd == "mread" || cmd == "mwrite") {
+      rl_attempted_completion_over = 0;
+      return nullptr;
+    }
+  }
+  return nullptr;
 }
 
 void tip_initialize_readline() {
