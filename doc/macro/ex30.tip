@@ -1,0 +1,24 @@
+# ex30: Draw legends in the frequency domain
+
+@ pi = acos(-1)
+@ omega = 3
+set time = range(100,0,5)
+set data = sin([2*pi]*[omega]*time)
+
+opt (gd:1 xt:1 ts:1.1)
+div 1 2
+
+title "Time Domain"
+xlab "Time (sec)"
+ylab "Amplitude"
+plot time data (lc:red st:plus lg:*)
+leg show
+
+title "Frequency Domain"
+xlab "Frequency (Hz)"
+ylab "Amplitude (arb.)"
+fplot time data (lc:red lg:*)
+fplot time data (lc:blue fw:hm lg:*%win rp:1) ;# %win: window-func-name
+fplot time data (lc:cyan fw:bk lg:*%win rp:1)
+ffit data gaus (lc:green lg:*%fit) ;# %fit: show fitting coefficients
+leg show

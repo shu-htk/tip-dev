@@ -1,0 +1,29 @@
+# ex29: Put legends on various positions
+
+title "Put legends on various positions"
+
+set x1 = range(20,1,10)
+set y1 = 3.8*x1 -5
+
+set x2 = range(10,1,10)
+set y2 = 0.3*x2^2
+
+opt (xl:" " yl:" " gd:1 lw:0 ts:1.0)
+
+plot x1 y1 (st:plus sc:red lg:*)       ;# lg:* add "x1 : y1"
+fit x1 y1 lin (lc:pink lg:*)           ;# lg:* add "lin fit"
+
+plot x2 y2 (st:star sc:blue lg:* rp:1) ;# lg:* add "x2 : y2"
+fit x2 y2 quad (lc:cyan lg:*)          ;# lg:* add "quad fit"
+
+#-- Here we draw all added legends on variois positions
+
+opt (fc:wheat) ;# fill color in the legend box
+opt (cr:0)     ;# not clear legend
+
+leg show r,m   ;# right,middle
+leg show r,b   ;# right,bottom
+leg show m,t   ;# middle,top
+leg show m,b   ;# middle,bottom
+leg show l,t   ;# left,top
+leg show l,m   ;# left,middle

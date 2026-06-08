@@ -26,6 +26,11 @@
 - [ex21: Absolute coordinate and Relative coordinate](ex/ex21.md)
 - [ex22: Gain curve of Low Pass Filter](ex/ex22.md)
 - [ex27: Draw a fractal of the Mandelbrot set](ex/ex27.md)
+- [ex28: Draw legends of Histgrams and Statistics](ex/ex28.md)
+- [ex29: Put legends on various positions](ex/ex29.md)
+- [ex28: Draw legends of Histgrams and Statistics](ex/ex28.md)
+- [ex29: Put legends on various positions](ex/ex29.md)
+- [ex30: Draw legends in the frequency domain](ex/ex30.md)
 
 ## Examples using data published online
 - [ex23: Huge data reading and scatter plot](ex/ex23.md)
@@ -36,4 +41,3 @@
 ## EPICS CA (optional)
 
 - [ex101: plot the trend graph of the data using EPICS CA](ex/ex101.md)
-

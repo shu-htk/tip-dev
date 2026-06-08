@@ -26,6 +26,9 @@
 - [ex21: Absolute coordinate and Relative coordinate](../doc/ex/ex21.md)
 - [ex22: Gain curve of Low Pass Filter](../doc/ex/ex22.md)
 - [ex27: Draw a fractal of the Mandelbrot set](../doc/ex/ex27.md)
+- [ex28: Draw legends of Histgrams and Statistics](../doc/ex/ex28.md)
+- [ex29: Put legends on various positions](../doc/ex/ex29.md)
+- [ex30: Draw legends in the frequency domain](../doc/ex/ex30.md)
 
 ## インターネットで公開されているデータを使用した例
 
