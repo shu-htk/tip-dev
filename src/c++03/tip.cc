@@ -72,7 +72,7 @@ char** tip_command_completion(const char* text, int start, int end) {
   if(iarg==1 || (iarg==2 && rl_line_buffer[start] != ' ')) {
     if(cmd == "exe") {
       rl_attempted_completion_over = 0;
-      return nullptr;
+      return 0;
     } else {
       printf("\nPress return-key to show usage.\n");
       rl_on_new_line();
@@ -82,10 +82,10 @@ char** tip_command_completion(const char* text, int start, int end) {
   if(iarg==2 || (iarg==3 && rl_line_buffer[start] != ' ')) {
     if(cmd == "read" || cmd == "write" || cmd == "mread" || cmd == "mwrite") {
       rl_attempted_completion_over = 0;
-      return nullptr;
+      return 0;
     }
   }
-  return nullptr;
+  return 0;
 }
 
 void tip_initialize_readline() {
