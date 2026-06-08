@@ -1182,10 +1182,29 @@ public:
 	  ,fit(0), fit(1), fit(2), fit.chisq(), fit.ndf());
     }
     printf("%s\n",fmt());  // print fitting info to the console
+
     if(opt.lg.size() > 0) {
-      std::string text = (opt.lg=="*") ? func+" fit" : opt.lg;
-      _pl->add_legend(text);
+      thl::StrSplit sp;
+      sp.set_quot_to_skip_split('"');
+      sp.split(opt.lg,"%");
+      if(sp(0)=="*") {
+	_pl->add_legend(func+" fit");
+      } else {
+	_pl->add_legend(sp(0));
+      }
+      if(sp.size()>1 && sp(1)=="fit") {
+	thl::PLAtt att_save = _pl->att;
+	_pl->att.lwid=0;
+	_pl->att.symb=0;
+	thl::Vec<double> coef = fit.coef();
+	thl::CFormat fmt;
+	for(size_t j=0; j<coef.dim(); j++) {
+	  _pl->add_legend(fmt("c%d: %g",j,coef[j]));
+	}
+	_pl->att = att_save;
+      }
     }
+
     if(opt.cx!=0 && opt.cy!=0) { // draw fitting info into the graph 
       _pl->att.tsiz *= 0.8;
       _pl->draw_text(opt.cx, opt.cy, fmt(), opt.rc);
@@ -1442,6 +1461,21 @@ public:
       save_graph_range();
     }
     _pl->draw_graph(_dat[fx].num, _dat[fy].num);
+
+    if(opt.lg.size() > 0) {
+      thl::StrSplit sp;
+      sp.set_quot_to_skip_split('"');
+      sp.split(opt.lg,"%");
+      std::string text = (sp(0)=="*") ? v+" : FFT" : sp(0);
+      if(sp.size()>1 && sp(1)=="win") {
+	if(opt.fw=="rc") text += " (Rectange)";
+	if(opt.fw=="hn") text += " (Hann)";
+	if(opt.fw=="hm") text += " (Hamming)";
+	if(opt.fw=="bk") text += " (Blackman)";
+	if(opt.fw=="bh") text += " (BH)";
+      }
+      _pl->add_legend(text);
+    }
     if(opt.fl) _pl->flush();
     return 0;
   }
@@ -2620,6 +2654,7 @@ public:
 	_pl->att = opt.att;
 	_pl->draw_legend(pos);
 	if(_gopt.fl) _pl->flush();
+	if(_gopt.cr) _pl->clear_legend();
       }
       if(args(1)=="add") {
 	std::string text = (args.size()>2) ? args(2) : " ";
