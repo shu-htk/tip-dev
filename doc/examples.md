@@ -28,8 +28,6 @@
 - [ex27: Draw a fractal of the Mandelbrot set](ex/ex27.md)
 - [ex28: Draw legends of Histgrams and Statistics](ex/ex28.md)
 - [ex29: Put legends on various positions](ex/ex29.md)
-- [ex28: Draw legends of Histgrams and Statistics](ex/ex28.md)
-- [ex29: Put legends on various positions](ex/ex29.md)
 - [ex30: Draw legends in the frequency domain](ex/ex30.md)
 
 ## Examples using data published online
