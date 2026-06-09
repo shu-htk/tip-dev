@@ -1162,15 +1162,15 @@ public:
     printf("%s\n",fmt());  // print fitting info to the console
 
     if(opt.lg.size() > 0) {
-      thl::StrSplit sp;
-      sp.set_quot_to_skip_split('"');
-      sp.split(opt.lg,"%");
-      if(sp(0)=="*") {
+      std::string text = opt.lg;
+      size_t n = text.find("%fit");
+      if(n != text.npos) text.replace(n,sizeof("%fit"),"");
+      if(text == "*") {
 	_pl->add_legend(func+" fit");
       } else {
-	_pl->add_legend(sp(0));
+	_pl->add_legend(text);
       }
-      if(sp.size()>1 && sp(1)=="fit") {
+      if(n != text.npos) {
 	thl::PLAtt att_save = _pl->att;
 	_pl->att.lwid=0;
 	_pl->att.symb=0;
@@ -1280,15 +1280,15 @@ public:
       _pl->draw_graph(_dat[hx].num,_dat[hy].num);
     }
     if(opt.lg.size() > 0) {
-      thl::StrSplit sp;
-      sp.set_quot_to_skip_split('"');
-      sp.split(opt.lg,"%");
-      if(sp(0)=="*") {
+      std::string text = opt.lg;
+      size_t n = text.find("%stat");
+      if(n != text.npos) text.replace(n,sizeof("%stat"),"");
+      if(text == "*") {
 	_pl->add_legend(v);
       } else {
-	_pl->add_legend(sp(0));
+	_pl->add_legend(text);
       }
-      if(sp.size()>1 && sp(1)=="stat") {
+      if(n != text.npos) {
 	double ndata,max,min,mean,sigma;
 	calc_statistics(v,ndata,max,min,mean,sigma);
 	thl::PLAtt att_save = _pl->att;
@@ -1441,11 +1441,11 @@ public:
     _pl->draw_graph(_dat[fx].num, _dat[fy].num);
 
     if(opt.lg.size() > 0) {
-      thl::StrSplit sp;
-      sp.set_quot_to_skip_split('"');
-      sp.split(opt.lg,"%");
-      std::string text = (sp(0)=="*") ? v+" : FFT" : sp(0);
-      if(sp.size()>1 && sp(1)=="win") {
+      std::string text = opt.lg;
+      size_t n = text.find("%win");
+      if(n != text.npos) text.replace(n,sizeof("%win"),"");
+      if(text == "*") text = v + " : FFT";
+      if(n != text.npos) {
 	if(opt.fw=="rc") text += " (Rectange)";
 	if(opt.fw=="hn") text += " (Hann)";
 	if(opt.fw=="hm") text += " (Hamming)";
