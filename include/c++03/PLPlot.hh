@@ -953,26 +953,34 @@ namespace thl {
       PLFLT x0,x1,y0,y1;
       StrSplit sp(pos,",");
       std::string xpos = (sp(0)=="*") ? "right" : sp(0); 
-      std::string ypos = (sp.size()<2) ? "top" : sp(1); 
+      std::string ypos = (sp.size()<2) ? "top" : sp(1);
+      StrSplit sx(xpos,":");
       if(xpos[0]=='l') {// left
-	 x0 = 0.13;
-	 x1 = x0 + xwid;
+	x0 = 0.13;
+	x1 = x0 + xwid;
+	if(sx.size()>1) x1 -= (x1-x0)*(1-sx.stof(1));
       } else if(xpos[0]=='m') {// middle
-	 x0 = 0.53 - xwid/2;
-	 x1 = x0 + xwid;
+	x0 = 0.53 - xwid/2;
+	x1 = x0 + xwid;
+	 if(sx.size()>1) x1 -= (x1-x0)*(1-sx.stof(1));
       } else { // default right
-	 x1 = 0.94;
-	 x0 = x1 - xwid;
+	x1 = 0.94;
+	x0 = x1 - xwid;
+	if(sx.size()>1) x0 += (x1-x0)*(1-sx.stof(1));
       }
+      StrSplit sy(ypos,":");
       if(ypos[0]=='b') {// bottom
 	y0 = 0.12;
 	y1 = y0 + ywid;
+	if(sy.size()>1) y1 -= (y1-y0)*(1-sy.stof(1));
       } else if(ypos[0]=='m') {// middle
 	y0 = 0.53 - ywid/2;
 	y1 = y0 + ywid;
+	if(sy.size()>1) y1 -= (y1-y0)*(1-sy.stof(1));
       } else { // default top
-	 y1 = 0.91;
-	 y0 = y1 - ywid;
+	y1 = 0.91;
+	y0 = y1 - ywid;
+	if(sy.size()>1) y0 += (y1-y0)*(1-sy.stof(1));
       }
       plvpor(x0,x1,y0,y1);
       plwind(0,1,0,1);
@@ -997,7 +1005,7 @@ namespace thl {
       get_char_size(&chx,&chy);
       PLFLT xwid = 0.92*chx*xlen + 0.02;
       PLFLT ywid = 1.78*chy*ylen;
-      printf("xwid=%f\n",xwid);
+      //      printf("xwid=%f\n",xwid);
       if(att.lwid||att.symb) xwid += chx*3;
       draw_leg_box(xwid,ywid,pos);
       for(size_t j=0; j<_leg.size(); j++) {
