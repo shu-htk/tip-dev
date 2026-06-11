@@ -935,7 +935,6 @@ namespace thl {
       PLAtt leg_att = att;
       leg_att.set_title(text.c_str());
       _leg.push_back(leg_att);
-      //      printf("add legend [%s]\n",_leg.back().title);
     }
     void print_legend() {
       for(size_t j=0; j<_leg.size(); j++) {
@@ -947,15 +946,10 @@ namespace thl {
       PLFLT ch0=0, ch1=0; // ch0: default char height, ch1: current height
       plgspa(&x0,&x1,&y0,&y1);
       plgchr(&ch0, &ch1);
-      *chx = att.tsiz*ch1/(x1-x0);
-      *chy = att.tsiz*ch1/(y1-y0);
+      *chx = 0.72*att.tsiz*ch1/(x1-x0);
+      *chy = 0.99*att.tsiz*ch1/(y1-y0);
     }
-    void draw_leg_box(size_t xlen, size_t ylen, PLFLT chx, PLFLT chy,
-		      const std::string &pos) {
-      PLFLT xwid = 0.7*chx;
-      xwid *= (att.lwid||att.symb) ? 1.5+xlen : 1.0*xlen;
-      xwid += 0.005;
-      PLFLT ywid = 1.8*chy*ylen;
+    void draw_leg_box(PLFLT xwid, PLFLT ywid, const std::string &pos) {
       PLFLT x0,x1,y0,y1;
       StrSplit sp(pos,",");
       std::string xpos = (sp(0)=="*") ? "right" : sp(0); 
@@ -967,7 +961,7 @@ namespace thl {
 	 x0 = 0.53 - xwid/2;
 	 x1 = x0 + xwid;
       } else { // default right
-	 x1 = 0.95;
+	 x1 = 0.94;
 	 x0 = x1 - xwid;
       }
       if(ypos[0]=='b') {// bottom
@@ -977,7 +971,7 @@ namespace thl {
 	y0 = 0.53 - ywid/2;
 	y1 = y0 + ywid;
       } else { // default top
-	 y1 = 0.92;
+	 y1 = 0.91;
 	 y0 = y1 - ywid;
       }
       plvpor(x0,x1,y0,y1);
@@ -990,24 +984,31 @@ namespace thl {
     void draw_legend(const std::string &pos) {
       if(_leg.size()==0) return;
       PLAtt att_save=att;
-      size_t xlen=0,ylen=0;
+      PLFLT xlen=0,ylen=0;
       for(size_t j=0; j<_leg.size(); j++) {
 	ylen++;
-	size_t len = strlen(_leg[j].title);
-	if(len > xlen) xlen=len;
+	PLFLT len = 0;
+	for(char *c=_leg[j].title; *c != 0; ++c) {
+	  len += (std::isupper(*c)) ? 1.25 : 1;
+	}
+	if(len > xlen) xlen = len;
       }
       PLFLT chx,chy;
       get_char_size(&chx,&chy);
-      draw_leg_box(xlen,ylen,chx,chy,pos);
+      PLFLT xwid = 0.92*chx*xlen + 0.02;
+      PLFLT ywid = 1.78*chy*ylen;
+      printf("xwid=%f\n",xwid);
+      if(att.lwid||att.symb) xwid += chx*3;
+      draw_leg_box(xwid,ywid,pos);
       for(size_t j=0; j<_leg.size(); j++) {
 	att=_leg[j];
 	att.tsiz *= 0.8;
 	att.ssiz *= 0.6;
-	PLFLT x = chx*5/sqrt((double)xlen);
+	PLFLT x = 0.6/sqrt(0.5*(xlen+0.5));
 	PLFLT y = chy + 1.0 - (j+1.0)/(ylen+1.0);
-       	if(att.lwid) {draw_line(x, 5*x, y, y);}
-       	if(att.symb) {draw_symbol(3*x, y);}
-	if(att.lwid || att.symb) x *= 6;
+	if(att.lwid) draw_line(0.03, x-0.03, y, y);
+	if(att.symb) draw_symbol(0.5*x, y);
+	x = (att.lwid || att.symb) ? x+0.02 : 0.05;
 	draw_text(x,y,att.title);
       }
       att=att_save;
