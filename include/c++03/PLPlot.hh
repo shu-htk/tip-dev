@@ -1010,8 +1010,8 @@ namespace thl {
       draw_leg_box(xwid,ywid,pos);
       for(size_t j=0; j<_leg.size(); j++) {
 	att=_leg[j];
-	att.tsiz *= 0.8;
-	att.ssiz *= 0.6;
+	att.tsiz = att_save.tsiz*0.8;
+	att.ssiz = att_save.ssiz*0.6;
 	PLFLT x = 0.6/sqrt(0.5*(xlen+0.5));
 	PLFLT y = chy + 1.0 - (j+1.0)/(ylen+1.0);
 	if(att.lwid) draw_line(0.03, x-0.03, y, y);
