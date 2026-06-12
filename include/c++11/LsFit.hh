@@ -257,7 +257,7 @@ namespace thl {
 	ey2.push_back(std::exp(ey[j]));	
       }
       LsFit lf; lf.calc_lin(x2, y2, ey2, x0, x1);
-      printf("lf(0)=%f lf(1)=%f\n",lf(0),lf(1));
+      //      printf("lf(0)=%f lf(1)=%f\n",lf(0),lf(1));
       _c[0] = (lf(1)>0) ? std::log(lf(1)) : 0;
       _c[1] = (lf(1)>0) ? lf(0)/lf(1) : 0;
       return 0;
@@ -318,7 +318,7 @@ namespace thl {
 	set_range(x,y,ey, x0,x1);
 	LsFit pf; // plane fitting
 	VD X(x.size()),Y(x.size());
-	int ntry=5, nbest=0;
+	int ntry=5; //int nbest=0;
 	double df=freq*1e-6, chi2_min=0;
 	Vec<double> c_best(_c.dim());
 	for(int n=-ntry; n<ntry; n++) {
@@ -332,7 +332,7 @@ namespace thl {
 	  double chi2 = pf.chisq();
 	  if(n == -ntry) chi2_min = chi2;
 	  if(chi2 <= chi2_min && chi2 != 0) {
-	    chi2_min = chi2; nbest = n;
+	    chi2_min = chi2; //nbest = n;
 	    c_best[0] = pf.coef(0);
 	    c_best[1] = pf.coef(1);
 	    c_best[2] = pf.coef(2);
@@ -341,8 +341,8 @@ namespace thl {
 	  //	  printf("%3d chi2=%e f=%f\n",n,chi2,f);
 	  _c = c_best;
 	}
-	printf("calc_sin(): nbest=%d chi2_min=%f fbest=%f\n"
-	       ,nbest,chi2_min,c_best[3]);
+	//	printf("calc_sin(): nbest=%d chi2_min=%f fbest=%f\n"
+	//	       ,nbest,chi2_min,c_best[3]);
       }
       return 0;
     }

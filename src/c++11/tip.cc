@@ -129,7 +129,7 @@ private:
     double cx={0},cy={0},x0={0},x1={0},y0={0},y1={0},z0={0},z1={0},
            fx0={0},fx1={0},dt={1},fq={0};
     int n0={0},n1={-1},nb={100},nx={20},ny={20},bp={0},dm={0},mv={1},ae={0};
-    bool rp={0}, cr={1}, rc={0}, fl={1}, nf={0};
+    bool rp={0}, cr={1}, rc={0}, fl={1}, nf={0}, vb={1};
     std::string fs={" \t\n"},fw={"rc"},cf={""},cc={""},sd={"clock"},
       gt={"slope"},ht={"bin1"},mt={"mesh1"},tf={""},td={"- :"},
       ex={"0"},ey={"0"},ez={"0"},lg={""},xo={""},yo={""},zo={""},mk={""};
@@ -233,6 +233,7 @@ private:
       if(s=="yo"||s=="*") printf("xo: y-axis option: [%s]\n",att.yopt);
       if(s=="zo"||s=="*") printf("xo: z-axis option: [%s]\n",att.zopt);
       if(s=="mk"||s=="*") printf("mk: marker: [%s]\n",att.mark);
+      if(s=="vb"||s=="*") printf("vb: verbose mode: [%d]\n",(int)vb);
 
 //-- the following tags just show the available names (not set anything)
       if(s=="color"||s=="c") {
@@ -368,6 +369,7 @@ public:
       if(sp(0)=="yo") {opt.att.set_yopt(thl::trim(sp(1)).c_str());}
       if(sp(0)=="zo") {opt.att.set_zopt(thl::trim(sp(1)).c_str());}
       if(sp(0)=="mk") {opt.att.set_mark(thl::trim(sp(1)).c_str());}
+      if(sp(0)=="vb") {opt.vb = sp.stoi(1);}
     }
     return opt;
   }
@@ -663,15 +665,20 @@ public:
       sp.set_quot_to_skip_split('"');
       //      check_data_file(fname,opt);
       std::string buf;
-      int maxline=count_maxline(fname.c_str());
-      int n5=maxline/20;
-      if(maxline>=100000) {
-	printf("0--------50--------100%c\n",'%');
+      int maxline=0,n5=0;
+      if(opt.vb) {
+	maxline=count_maxline(fname.c_str());
+	n5=maxline/20;
+	if(maxline >= 100000) {
+	  printf("0--------50--------100%c\n",'%');
+	}
       }
       while(std::getline(ifs,buf)) {
 	nline++;
-	if(maxline>=100000) {
-	  if(nline%n5==0) {printf("o"); fflush(stdout);}
+	if(opt.vb) {
+	  if(maxline>=100000) {
+	    if(nline%n5==0) {printf("o"); fflush(stdout);}
+	  }
 	}
 	if(buf.size()==0) continue;
 	if(nline <opt.n0 ) {continue;}
@@ -695,8 +702,8 @@ public:
 	  }
 	}
       }
-      if(maxline>=100000) {
-	printf("\n");
+      if(opt.vb) {
+	if(maxline>=100000) printf("\n");
       }
     } else {
       printf("can't open %s\n",fname.c_str());
@@ -1159,7 +1166,8 @@ public:
 	  " c0:dx=%g\n c1:dy=%g\n c2:r=%g\n chi2/ndf= %.3g/%d"
 	  ,fit(0), fit(1), fit(2), fit.chisq(), fit.ndf());
     }
-    printf("%s\n",fmt());  // print fitting info to the console
+
+    if(opt.vb) printf("%s\n",fmt()); // print fitting info to the console
 
     if(opt.lg.size() > 0) {
       std::string text = opt.lg;
@@ -1226,7 +1234,7 @@ public:
 	  " c0=%g\n c1=%g\n c2=%g\n chi2/ndf= %.3g/%d"
 	  ,fit(0), fit(1), fit(2), fit.chisq(), fit.ndf());
     }
-    printf("%s\n",fmt());  // print fitting info to the console
+    if(opt.vb) printf("%s\n",fmt());  // print fitting info to the console
     if(opt.cx!=0 && opt.cy!=0) { // draw fitting info into the graph 
       _pl->draw_text(opt.cx, opt.cy, fmt(), opt.rc);
     }
@@ -1533,7 +1541,7 @@ public:
       if(opt.ny==0) _dat[vx].num.push_back(sp.stof(0));
     }
     opt.nx = _dat[vx].num.size();
-    printf("nx=%d ny=%d\n",opt.nx,opt.ny);
+    if(opt.vb) printf("nx=%d ny=%d\n",opt.nx,opt.ny);
     ifs.clear(); ifs.seekg(0,std::ios_base::beg);
     _dat[vz].mesh.resize(opt.nx);
     for(int j=0; j<opt.nx; j++) _dat[vz].mesh[j].resize(opt.ny);
@@ -1676,7 +1684,7 @@ public:
       fmt("@ Statistics:\n"
 	  " ndata=%g\n max= %g\n min= %g\n mean= %g\n sigma= %g",
 	  ndata,max,min,mean,sigma);
-      printf("%s\n",fmt());  // print info to the console
+      if(opt.vb) printf("%s\n",fmt());  // print info to the console
       if(opt.cx!=0 && opt.cy!=0) { // draw info into the graph 
 	_pl->att = opt.att;
 	_pl->att.tsiz *= 0.8;
