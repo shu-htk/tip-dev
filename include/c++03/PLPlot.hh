@@ -1014,8 +1014,9 @@ namespace thl {
 	att.ssiz = att_save.ssiz*0.6;
 	PLFLT x = 0.6/sqrt(0.5*(xlen+0.5));
 	PLFLT y = chy + 1.0 - (j+1.0)/(ylen+1.0);
-	if(att.lwid) draw_line(0.03, x-0.03, y, y);
 	if(att.symb) draw_symbol(0.5*x, y);
+	if(att.lwid && !att.fcol) draw_line(0.03, x-0.03, y, y);
+	if(att.lwid &&  att.fcol) fill_box(0.03, x-0.03, y-0.03,y+0.03);
 	x = (att.lwid || att.symb) ? x+0.02 : 0.05;
 	draw_text(x,y,att.title);
       }
