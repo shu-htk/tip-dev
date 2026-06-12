@@ -7,7 +7,7 @@ set x2=random(10000,gaus,0.5,-1.2)
 
 xlab " "
 ylab "Num of entries"
-opt (ym:0.02 xr:-4,4)
+opt (ym:0.02 xr:-4,4 ts:0.9)
 
 # Here we get statistics from 'stat' command 
 hplot x1 (lc:red fc:pink ft:p45 lg:"Histogram 1")
@@ -29,4 +29,3 @@ leg show
 hplot x2 (lc:blue fc:cyan ft:n45 lg:"Histogram 2 %stat" rp:1)
 hfit x2 gaus (lc:cyan lw:3 lg:"gaus.fitting %fit")
 leg show l,t
-

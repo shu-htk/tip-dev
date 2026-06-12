@@ -21,9 +21,9 @@ fit x2 y2 quad (lc:cyan lg:*)          ;# lg:* add "quad fit"
 opt (fc:wheat) ;# fill color in the legend box
 opt (cr:0)     ;# not clear legend
 
-leg show r,m   ;# right,middle
-leg show r,b   ;# right,bottom
-leg show m,t   ;# middle,top
-leg show m,b   ;# middle,bottom
-leg show l,t   ;# left,top
-leg show l,m   ;# left,middle
+leg show r,m           ;# right,middle
+leg show r,b (ts:0.8)  ;# right,bottom (text size 0.8)
+leg show m:1.2,t       ;# middle(xscale:1.2),top
+leg show m,b:0.9       ;# middle,bottom(yscale:0.9)
+leg show l:1.2,t:0.8   ;# left(xscale:1.2),top(yscale:0.8)
+leg show l,m           ;# left,middle
