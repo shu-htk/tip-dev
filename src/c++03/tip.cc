@@ -1004,6 +1004,20 @@ public:
       opt.att.set_zlab(vz.c_str());
     }
   }
+  int find_legend_tag(std::string &text) {
+    int ret=0;
+    size_t n;
+    n = text.find("%stat");
+    if(n != text.npos) {text.replace(n,sizeof("%stat")-1,""); ret |= 0x1;}
+
+    n = text.find("%fit");
+    if(n != text.npos) {text.replace(n,sizeof("%fit")-1,""); ret |= 0x2;}
+
+    n = text.find("%win");
+    if(n != text.npos) {text.replace(n,sizeof("%win")-1,""); ret |= 0x4;}
+
+    return ret;
+  }
   int data_plot(const std::string &v, Option &opt) {
     if(check_data1(v)) return 1;
     std::string vn = v + "_n";
@@ -1049,7 +1063,9 @@ public:
       _pl->draw_error_y(_dat[vx].num,_dat[vy].num,_dat[opt.ey].num);
     }
     if(opt.lg.size() > 0) {
-      std::string text = (opt.lg=="*") ? vx+" : "+vy : opt.lg;
+      std::string text = opt.lg;
+      find_legend_tag(text);
+      if(text=="*") text = vx+" : "+vy;
       _pl->add_legend(text);
     }
     if(opt.fl) _pl->flush();
@@ -1193,14 +1209,13 @@ public:
 
     if(opt.lg.size() > 0) {
       std::string text = opt.lg;
-      size_t n = text.find("%fit");
-      if(n != text.npos) text.replace(n,sizeof("%fit"),"");
+      int ret = find_legend_tag(text);
       if(text == "*") {
 	_pl->add_legend(func+" fit");
       } else {
 	_pl->add_legend(text);
       }
-      if(n != text.npos) {
+      if(ret & 0x2) {
 	thl::PLAtt att_save = _pl->att;
 	_pl->att.lwid=0;
 	_pl->att.symb=0;
@@ -1311,14 +1326,13 @@ public:
     }
     if(opt.lg.size() > 0) {
       std::string text = opt.lg;
-      size_t n = text.find("%stat");
-      if(n != text.npos) text.replace(n,sizeof("%stat"),"");
+      int ret = find_legend_tag(text);
       if(text == "*") {
 	_pl->add_legend(v);
       } else {
 	_pl->add_legend(text);
       }
-      if(n != text.npos) {
+      if(ret & 0x1) {
 	double ndata,max,min,mean,sigma;
 	calc_statistics(v,ndata,max,min,mean,sigma);
 	thl::PLAtt att_save = _pl->att;
@@ -1472,10 +1486,9 @@ public:
 
     if(opt.lg.size() > 0) {
       std::string text = opt.lg;
-      size_t n = text.find("%win");
-      if(n != text.npos) text.replace(n,sizeof("%win"),"");
+      int ret = find_legend_tag(text);
       if(text == "*") text = v + " : FFT";
-      if(n != text.npos) {
+      if(ret & 0x4) {      
 	if(opt.fw=="rc") text += " (Rectange)";
 	if(opt.fw=="hn") text += " (Hann)";
 	if(opt.fw=="hm") text += " (Hamming)";
