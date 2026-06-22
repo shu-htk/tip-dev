@@ -1014,9 +1014,11 @@ namespace thl {
 	att.ssiz = att_save.ssiz*0.6;
 	PLFLT x = 0.6/sqrt(0.5*(xlen+0.5));
 	PLFLT y = chy + 1.0 - (j+1.0)/(ylen+1.0);
+	PLFLT dx = 0.03;
+	PLFLT dy = 0.3*chy/ywid;
 	if(att.symb) draw_symbol(0.5*x, y);
-	if(att.lwid && (att.fsty==-1)) draw_line(0.03, x-0.03, y, y);
-	if(att.lwid && (att.fsty!=-1)) fill_box(0.03, x-0.03, y-0.03,y+0.03);
+	if(att.lwid && (att.fsty==-1)) draw_line(dx, x-dx, y, y);
+	if(att.lwid && (att.fsty!=-1)) fill_box(dx, x-dx, y-dy,y+dy);
 	x = (att.lwid || att.symb) ? x+0.02 : 0.05;
 	draw_text(x,y,att.title);
       }
