@@ -1015,7 +1015,7 @@ namespace thl {
 	PLFLT x = 0.6/sqrt(0.5*(xlen+0.5));
 	PLFLT y = chy + 1.0 - (j+1.0)/(ylen+1.0);
 	PLFLT dx = 0.03;
-	PLFLT dy = 0.3*chy/ywid;
+	PLFLT dy = 0.47*chy/ywid;
 	if(att.symb) draw_symbol(0.5*x, y);
 	if(att.lwid && (att.fsty==-1)) draw_line(dx, x-dx, y, y);
 	if(att.lwid && (att.fsty!=-1)) fill_box(dx, x-dx, y-dy,y+dy);
