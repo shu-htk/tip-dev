@@ -19,7 +19,7 @@ const char* tip_commands[] = {
   "arc", "box", "box3", "cat", "clear", "cut", "div", "elem", "exe",
   "fbox", "ffit", "fit", "fit3", "fill", "font", "fplot",
   "help", "hfit", "hplot", "hplot2", "line", "ls", "legend", "mplot",
-  "mread", "mset", "mwrite", "opt", "plot", "plot3", "read",
+  "mread", "mset", "mwrite", "opt", "order", "plot", "plot3", "read",
   "rm", "set", "sort", "stat", "symb", "text", "title", "tfmt",
   "viewport", "write", "xerr", "xlab", "yerr", "ylab", "zlab",
   //--macro  
@@ -269,9 +269,58 @@ private:
       }
     }
   };
+  struct Order { // automatic change the graph attributes
+    std::vector<std::string> color, symb, fill;  // vector list of attribute
+    size_t nc, ns, nf; // index of vector
+
+    void set_vlist(const std::string &list, std::vector<std::string> &vlist) {
+      vlist.clear();
+      if(list != "off") {
+	thl::StrSplit sp(list,",");
+	for(size_t j=0; j<sp.size(); j++) vlist.push_back(sp(j));
+      }
+    }
+    void ls() {
+      printf("color: "); for(auto &s : color) printf("%s ",s.c_str());
+      printf("\n");
+      printf("symbol: "); for(auto &s : symb) printf("%s ",s.c_str());
+      printf("\n");
+      printf("fill: "); for(auto &s : fill) printf("%s ",s.c_str());
+      printf("\n");
+    }
+    void init(const std::string &key, const std::string &list) {
+      if(key[0]=='c') {nc=0; set_vlist(list,color);}
+      if(key[0]=='s') {ns=0; set_vlist(list,symb);}
+      if(key[0]=='f') {nf=0; set_vlist(list,fill);}
+      if(key[0]=='l') {ls();}
+      if(key[0]=='r') {color.clear(); symb.clear(); fill.clear();}
+      if(key[0]=='d') {
+	nc=0; set_vlist("red,blue,green,cyan,pink,wheat,brown,violet",color);
+	ns=0; set_vlist("plus,star,cross,arc,square,triagle,diamond",symb);
+	nf=0; set_vlist("p45,n45,p30,n30,hor,ver,hv,pn45",fill);
+      }
+    }
+    void change(Option &opt) {
+      if(color.size()) {
+	opt.att.lcol = opt.att.color_to_index(color[nc]);
+	opt.att.scol = opt.att.lcol;
+	opt.att.fcol = opt.att.lcol;
+	nc = (nc < color.size()-1) ? nc+1 : 0;
+      }
+      if(symb.size()) {
+	opt.att.symb = opt.att.symbol_to_index(symb[ns]);
+	ns = (ns < symb.size()-1) ? ns+1 : 0;
+      }
+      if(fill.size()) {
+	opt.att.fsty = opt.att.fill_to_index(fill[nf]);
+	nf = (nf < fill.size()-1) ? nf+1  :  0;
+      }
+    }
+  };
   thl::PLPlot* _pl;
   std::map<std::string,Data> _dat; // data tagged by string
   Option _gopt; // global option
+  Order _order;
 #if USE_EPICS_CA
   std::map<std::string,thl::EpicsCA> _ca;
 #endif
@@ -1873,6 +1922,7 @@ public:
 	" mset  : set the mesh data\n"
 	" mwrite: write the mesh data to the file\n"
 	" opt   : set/show global options\n"
+	" order : set order of automatic graph attributes\n"
 	" plot  : plot the data in the 2D-graph\n"
 	" plot3 : plot the data in the 3D-graph\n"
 	" read  : read the data from the file\n"
@@ -1933,6 +1983,30 @@ public:
 	  _gopt.print(args(j));
 	}
       }
+      return 0;
+    }
+    if(args(0)=="order") {
+      if(args.size() < 2) {
+	printf("Usage: order [color]  [color1,color2,... | off]\n"
+	       "       order [symbol] [symb1,symb2,... | off]\n"
+	       "       order [fill]   [fill1,fill2,... | off]\n"
+	       "       order [ls | def | reset]\n"
+	       "Set order of colors/symbols/fills list.\n"
+	       "'ls' shows current lists of order.\n"
+	       "'def' set default lists of order.\n"
+	       "'reset' clears all lists.\n"
+	       "Example:\n"
+	       "  order color red,blue\n"
+	       "  plot x y1\n"
+	       "  plot x y2\n"
+	       "  plot x y3\n"
+	       "In this case, y1 is drawn with red, y2 is drawn with blue,\n"
+	       "and y3 is drawn with red again.\n"
+	       );
+	return 0;
+      }
+      std::string list = (args.size()>2) ? args(2) : "";
+      _order.init(args(1),list);
       return 0;
     }
     if(args(0)=="div") {
@@ -2313,6 +2387,7 @@ public:
 	return 0;
       }
       Option opt=get_opt(buf);
+      _order.change(opt);
       if(args.size() < 3) {
 	data_plot(args(1),opt);
       } else {
@@ -2332,6 +2407,7 @@ public:
 	return 0;
       }
       Option opt=get_opt(buf);
+      _order.change(opt);
       data_plot3d(args(1),args(2),args(3),opt);
       return 0;
     }
@@ -2394,6 +2470,7 @@ public:
 	return 0;
       }
       Option opt=get_opt(buf);
+      _order.change(opt);
       mesh_plot(args(1),args(2),args(3),opt);
       return 0;
     }
@@ -2467,6 +2544,7 @@ public:
 	return 0;
       }
       Option opt=get_opt(buf);
+      _order.change(opt);
       hist_plot(args(1),opt);
       return 0;
     }
@@ -2477,6 +2555,7 @@ public:
 	return 0;
       }
       Option opt=get_opt(buf);
+      _order.change(opt);
       hist2d_plot(args(1),args(2),opt);
       return 0;
     }
@@ -2510,6 +2589,7 @@ public:
 	return 0;
       }
       Option opt=get_opt(buf);
+      _order.change(opt);
       if(args.size() < 3) {
 	fft_plot(args(1),opt);
       } else {
