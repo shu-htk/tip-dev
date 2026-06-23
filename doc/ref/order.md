@@ -17,3 +17,5 @@ Example:
 In this case, y1 is drawn with red, y2 is drawn with blue,
 and y3 is drawn with red again.
 ```
+
+> Available in version **v1.2.2** and later
