@@ -1,0 +1,31 @@
+# ex31: Automatic Color,Symbol,Fill Order
+
+title "Automatic Color,Symbol Order"
+
+order color red,blue,green,cyan
+order symbol pls,str,crs,arc
+
+opt (gd:1 lg:*)
+
+set x = range(100,1,10)
+do n 1 4; set y[n] = sin(x+[n]); end
+
+div 1 2
+box 0 11 -1.2 1.2
+do n 1 4; plot x y[n] (rp:1); end
+legend show
+
+#--------
+
+title "Automatic Color,Fill Order"
+
+order color pink,violet
+order symb off
+order fill p45,n45
+
+set v1 = random(100000,gaus,1,0)
+set v2 = random(100000,gaus,0.5,2)
+
+box -4 6 0 5000
+do n 1 2; hplot v[n] (rp:1); end
+legend show
