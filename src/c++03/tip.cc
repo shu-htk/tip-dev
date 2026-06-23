@@ -296,7 +296,7 @@ private:
       if(key[0]=='r') {color.clear(); symb.clear(); fill.clear();}
       if(key[0]=='d') {
 	nc=0; set_vlist("red,blue,green,cyan,pink,wheat,brown,violet",color);
-	ns=0; set_vlist("plus,star,cross,arc,square,triagle,diamond",symb);
+	ns=0; set_vlist("plus,star,cross,arc,square,tri,dia,arcdot",symb);
 	nf=0; set_vlist("p45,n45,p30,n30,hor,ver,hv,pn45",fill);
       }
     }
