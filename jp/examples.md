@@ -29,6 +29,7 @@
 - [ex28: Draw legends of Histgrams and Statistics](../doc/ex/ex28.md)
 - [ex29: Put legends on various positions](../doc/ex/ex29.md)
 - [ex30: Draw legends in the frequency domain](../doc/ex/ex30.md)
+- [ex31: Automatic Color,Symbol,Fill Order](../doc/ex/ex31.md)
 
 ## インターネットで公開されているデータを使用した例
 

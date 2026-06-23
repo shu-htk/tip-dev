@@ -42,6 +42,7 @@
 - [mset](ref/mset.md) : メッシュデータを定義して値を設定する
 - [mwrite](ref/mwrite.md): メッシュデータをファイルに書き込む
 - [opt](ref/opt.md) : グローバルオプションの値の表示、設定
+- [order](ref/order.md) : グラフの色、シンボル等を自動的に変えるリストを設定する
 - [plot](ref/plot.md) : 2つのデータを2次元でプロット
 - [plot3](ref/plot3.md) : 3つのデータを3次元でプロット
 - [read](ref/read.md) : データをファイルから読み込む

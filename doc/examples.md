@@ -29,6 +29,7 @@
 - [ex28: Draw legends of Histgrams and Statistics](ex/ex28.md)
 - [ex29: Put legends on various positions](ex/ex29.md)
 - [ex30: Draw legends in the frequency domain](ex/ex30.md)
+- [ex31: Automatic Color,Symbol,Fill Order](ex/ex31.md)
 
 ## Examples using data published online
 - [ex23: Huge data reading and scatter plot](ex/ex23.md)

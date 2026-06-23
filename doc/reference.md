@@ -40,6 +40,7 @@
 - [mread](ref/mread.md) : read the mesh data from the file
 - [mset](ref/mset.md) : set the mesh data
 - [mwrite](ref/mwrite.md): write the mesh data to the file
+- [order](ref/order.md) : set order of automatic graph attributes
 - [opt](ref/opt.md) : set/show global options
 - [plot](ref/plot.md) : plot the data in the 2D-graph
 - [plot3](ref/plot3.md) : plot the data in the 3D-graph
