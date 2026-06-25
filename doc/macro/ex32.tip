@@ -1,0 +1,16 @@
+# ex32: Set default color/symbol order
+
+title "Set default color/symbol order"
+
+order color default
+order symbol default
+
+set x=range(10,1,10)
+
+box 0 11 0 4 (gd:1 xt:1 yt:0.5)
+do n 1 8
+   @ exp = "y=log([2*n]+x)"
+   set [exp]
+   plot x y (gd:1 rp:1 lg:"[exp]")
+end
+legend show r,b

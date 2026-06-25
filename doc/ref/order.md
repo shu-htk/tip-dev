@@ -1,14 +1,14 @@
 # order
 ```
-ip> order
-Usage: order [color]  [color1,color2,... | off]
-       order [symbol] [symb1,symb2,... | off]
-       order [fill]   [fill1,fill2,... | off]
-       order [ls | def | reset]
+tip> order
+Usage: order [color] [color1,color2,...| off | default | ls]
+       order [symbol] [symb1,symb2,... | off | default | ls]
+       order [fill]   [fill1,fill2,... | off | default | ls]
 Set order of colors/symbols/fills list.
-'ls' shows current lists of order.
-'def' set default lists of order.
-'reset' clears all lists.
+Special list name:
+  off : clear the list.
+  default : set the default list.
+  ls : show the current list.
 Example:
   order color red,blue
   plot x y1
