@@ -277,24 +277,43 @@ private:
 	for(auto &s : sp) vlist.push_back(s);
       }
     }
-    void ls() {
-      printf("color: "); for(auto &s : color) printf("%s ",s.c_str());
-      printf("\n");
-      printf("symbol: "); for(auto &s : symb) printf("%s ",s.c_str());
-      printf("\n");
-      printf("fill: "); for(auto &s : fill) printf("%s ",s.c_str());
-      printf("\n");
+    void ls(const std::string &key) {
+      if(key[0]=='c') {
+	for(auto &s : color) printf("%s ",s.c_str());
+	printf("\n");
+      }
+      if(key[0]=='s') {
+	for(auto &s : symb) printf("%s ",s.c_str());
+	printf("\n");
+      }
+      if(key[0]=='f') {
+	for(auto &s : fill) printf("%s ",s.c_str());
+	printf("\n");
+      }
     }
     void init(const std::string &key, const std::string &list) {
-      if(key[0]=='c') {nc=0; set_vlist(list,color);}
-      if(key[0]=='s') {ns=0; set_vlist(list,symb);}
-      if(key[0]=='f') {nf=0; set_vlist(list,fill);}
-      if(key[0]=='l') {ls();}
-      if(key[0]=='r') {color.clear(); symb.clear(); fill.clear();}
-      if(key[0]=='d') {
-	nc=0; set_vlist("red,blue,green,cyan,pink,wheat,brown,violet",color);
-	ns=0; set_vlist("plus,star,cross,arc,square,tri,dia,arcdot",symb);
-	nf=0; set_vlist("p45,n45,p30,n30,hor,ver,hv,pn45",fill);
+      if(list=="default" || list=="def") {
+	if(key[0]=='c') {
+	  nc=0; set_vlist("red,blue,green,cyan,pink,wheat,brown,violet",color);
+	}
+	if(key[0]=='s') {
+	  ns=0; set_vlist("plus,star,cross,arc,square,tri,dia,arcdot",symb);
+	}
+	if(key[0]=='f') {
+	  nf=0; set_vlist("p45,n45,p30,n30,hor,ver,hv,pn45",fill);
+	}
+      } else if (list=="off") {
+	if(key[0]=='c') {nc=0; color.clear();}
+	if(key[0]=='s') {ns=0; symb.clear();}
+	if(key[0]=='f') {nf=0; fill.clear();}
+      } else if (list=="ls") {
+	if(key[0]=='c') {ls("color");}
+	if(key[0]=='s') {ls("symbol");}
+	if(key[0]=='f') {ls("fill");}
+      } else {
+	if(key[0]=='c') {nc=0; set_vlist(list,color);}
+	if(key[0]=='s') {ns=0; set_vlist(list,symb);}
+	if(key[0]=='f') {nf=0; set_vlist(list,fill);}
       }
     }
     void change(Option &opt) {
@@ -1962,14 +1981,14 @@ public:
     }
     if(args(0)=="order") {
       if(args.size() < 2) {
-	printf("Usage: order [color]  [color1,color2,... | off]\n"
-	       "       order [symbol] [symb1,symb2,... | off]\n"
-	       "       order [fill]   [fill1,fill2,... | off]\n"
-	       "       order [ls | def | reset]\n"
+	printf("Usage: order [color] [color1,color2,...| off | default | ls]\n"
+	       "       order [symbol] [symb1,symb2,... | off | default | ls]\n"
+	       "       order [fill]   [fill1,fill2,... | off | default | ls]\n"
 	       "Set order of colors/symbols/fills list.\n"
-	       "'ls' shows current lists of order.\n"
-	       "'def' set default lists of order.\n"
-	       "'reset' clears all lists.\n"
+	       "Special list name:\n"
+	       "  off : clear the list.\n"
+	       "  default : set the default list.\n"
+	       "  ls : show the current list.\n"
 	       "Example:\n"
 	       "  order color red,blue\n"
 	       "  plot x y1\n"
