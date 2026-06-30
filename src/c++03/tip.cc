@@ -233,8 +233,8 @@ private:
       if(s=="zt"||s=="*") printf("zt: z-tick interval: [%g]\n",att.ztick);
 
       if(s=="xo"||s=="*") printf("xo: x-axis option: [%s]\n",att.xopt);
-      if(s=="yo"||s=="*") printf("xo: y-axis option: [%s]\n",att.yopt);
-      if(s=="zo"||s=="*") printf("xo: z-axis option: [%s]\n",att.zopt);
+      if(s=="yo"||s=="*") printf("yo: y-axis option: [%s]\n",att.yopt);
+      if(s=="zo"||s=="*") printf("zo: z-axis option: [%s]\n",att.zopt);
       if(s=="mk"||s=="*") printf("mk: marker: [%s]\n",att.mark);
       if(s=="vb"||s=="*") printf("vb: verbose mode: [%d]\n",(int)vb);
 
