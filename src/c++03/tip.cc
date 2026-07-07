@@ -270,40 +270,33 @@ private:
     }
   };
   struct Order { // automatic change the graph attributes
-    std::vector<std::string> color, symb, fill;  // vector list of attribute
+    thl::StrSplit color,symb,fill;
     size_t nc, ns, nf; // index of vector
 
-    void set_vlist(const std::string &list, std::vector<std::string> &vlist) {
-      vlist.clear();
-      if(list != "off") {
-	thl::StrSplit sp(list,",");
-	for(size_t j=0; j<sp.size(); j++) vlist.push_back(sp(j));
-      }
-    }
     void ls(const std::string &key) {
       if(key[0]=='c') {
-	for(size_t j=0; j<color.size(); j++) printf("%s ",color[j].c_str());
-	printf("\n");
+	for(size_t j=0; j<color.size(); j++) printf("%s ",color(j).c_str());
+	if(color.size()) printf("\n");
       }
       if(key[0]=='s') {
-	for(size_t j=0; j<symb.size(); j++) printf("%s ",symb[j].c_str());
-	printf("\n");
+	for(size_t j=0; j<symb.size(); j++) printf("%s ",symb(j).c_str());
+	if(symb.size()) printf("\n");
       }
       if(key[0]=='f') {
-	for(size_t j=0; j<fill.size(); j++) printf("%s ",fill[j].c_str());
-	printf("\n");
+	for(size_t j=0; j<fill.size(); j++) printf("%s ",fill(j).c_str());
+	if(fill.size()) printf("\n");
       }
     }
     void init(const std::string &key, const std::string &list) {
-      if(list=="default" || list=="def") {
+      if(list=="" || list=="default" || list=="def") {
 	if(key[0]=='c') {
-	  nc=0; set_vlist("red,blue,green,cyan,pink,wheat,brown,violet",color);
+	  nc=0; color.split("red,blue,green,cyan,pink,wheat,brown,violet",",");
 	}
 	if(key[0]=='s') {
-	  ns=0; set_vlist("plus,star,cross,arc,square,tri,dia,arcdot",symb);
+	  ns=0; symb.split("plus,star,cross,arc,square,tri,dia,arcdot",",");
 	}
 	if(key[0]=='f') {
-	  nf=0; set_vlist("p45,n45,p30,n30,hor,ver,hv,pn45",fill);
+	  nf=0; fill.split("p45,n45,p30,n30,hor,ver,hv,pn45",",");
 	}
       } else if (list=="off") {
 	if(key[0]=='c') {nc=0; color.clear();}
@@ -314,24 +307,24 @@ private:
 	if(key[0]=='s') {ls("symbol");}
 	if(key[0]=='f') {ls("fill");}
       } else {
-	if(key[0]=='c') {nc=0; set_vlist(list,color);}
-	if(key[0]=='s') {ns=0; set_vlist(list,symb);}
-	if(key[0]=='f') {nf=0; set_vlist(list,fill);}
+	if(key[0]=='c') {nc=0; color.split(list,",");}
+	if(key[0]=='s') {ns=0; symb.split(list,",");}
+	if(key[0]=='f') {nf=0; fill.split(list,",");}
       }
     }
     void change(Option &opt) {
       if(color.size()) {
-	opt.att.lcol = opt.att.color_to_index(color[nc]);
+	opt.att.lcol = opt.att.color_to_index(color(nc));
 	opt.att.scol = opt.att.lcol;
 	opt.att.fcol = opt.att.lcol;
 	nc = (nc < color.size()-1) ? nc+1 : 0;
       }
       if(symb.size()) {
-	opt.att.symb = opt.att.symbol_to_index(symb[ns]);
+	opt.att.symb = opt.att.symbol_to_index(symb(ns));
 	ns = (ns < symb.size()-1) ? ns+1 : 0;
       }
       if(fill.size()) {
-	opt.att.fsty = opt.att.fill_to_index(fill[nf]);
+	opt.att.fsty = opt.att.fill_to_index(fill(nf));
 	nf = (nf < fill.size()-1) ? nf+1  :  0;
       }
     }
@@ -2025,7 +2018,8 @@ public:
 	return 0;
       }
       std::string list = (args.size()>2) ? args(2) : "";
-      _order.init(args(1),list);
+      thl::StrSplit sp(args(1),",");
+      for(size_t j=0; j<sp.size(); j++) _order.init(sp(j),list);
       return 0;
     }
     if(args(0)=="div") {
@@ -2923,13 +2917,13 @@ int main(int argc, const char *argv[]) {
   std::string dev = arg.opt_def("d","xcairo");
 
   thl::PLPlot pl;
-  if(arg.find_opt("v") || arg.find_opt("-version")) {
-    printf("tip (c++03) version: %s\n",TIP_VER);
-    printf("PLPlot version: %s\n",pl.ver_str());
-    printf("Readline version: %d.%d\n",RL_VERSION_MAJOR,RL_VERSION_MINOR);
+  printf("tip (c++03) version: %s\n",TIP_VER);
+  printf("PLPlot version: %s\n",pl.ver_str());
+  printf("Readline version: %d.%d\n",RL_VERSION_MAJOR,RL_VERSION_MINOR);
 #if USE_EPICS_CA 
-    printf("EPICS version: %s\n", EPICS_VER);
+  printf("EPICS version: %s\n", EPICS_VER);
 #endif
+  if(arg.find_opt("v") || arg.find_opt("-version")) {
     return 1;
   }
   if(arg.find_opt("-pdf")) {
