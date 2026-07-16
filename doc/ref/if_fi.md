@@ -32,27 +32,6 @@ result
 ```
 - example 2
 ```
-for c (H e l l o W o r l d)
-  pr [c]
-  if [c]==[A-Z]; pr  : Capital; fi
-  pr \n
-end
-```
-result
-```
-H: Capital
-e
-l
-l
-o
-W: Capital
-o
-r
-l
-d
-```
-- example 3
-```
 for name (Greg Anna Ryan Mary Josh)
   pr [name]
   if [name]=={Greg,Ryan,Josh}
