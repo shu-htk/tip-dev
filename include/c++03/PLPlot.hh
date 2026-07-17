@@ -1017,10 +1017,10 @@ namespace thl {
 	PLFLT dx = 0.03;
 	PLFLT dy = 0.47*chy/ywid;
 	if(att.symb) draw_symbol(0.5*x, y);
-	if(att.lwid && (att.fsty==-1)) draw_line(dx, x-dx, y, y);
-	if(att.lwid && (att.fsty!=-1)) fill_box(dx, x-dx, y-dy,y+dy);
+	if(att.lwid && (att.fsty==-1)) draw_line(dx, x-dx, y, y, 1);
+	if(att.lwid && (att.fsty!=-1)) fill_box(dx, x-dx, y-dy,y+dy, 1);
 	x = (att.lwid || att.symb) ? x+0.02 : 0.05;
-	draw_text(x,y,att.title);
+	draw_text(x,y,att.title,1);
       }
       att=att_save;
       plvsta();
