@@ -987,7 +987,7 @@ namespace thl {
       plcol0(15);
       plbox("bc",0,0,"bc",0,0);
       att.lwid=1; att.lcol=15; att.fsty=0;
-      fill_box(0,1,0,1);
+      fill_box(0,1,0,1, 1);
     }
     void draw_legend(const std::string &pos) {
       if(_leg.size()==0) return;
@@ -1016,7 +1016,7 @@ namespace thl {
 	PLFLT y = chy + 1.0 - (j+1.0)/(ylen+1.0);
 	PLFLT dx = 0.03;
 	PLFLT dy = 0.47*chy/ywid;
-	if(att.symb) draw_symbol(0.5*x, y);
+	if(att.symb) draw_symbol(0.5*x, y, 1);
 	if(att.lwid && (att.fsty==-1)) draw_line(dx, x-dx, y, y, 1);
 	if(att.lwid && (att.fsty!=-1)) fill_box(dx, x-dx, y-dy,y+dy, 1);
 	x = (att.lwid || att.symb) ? x+0.02 : 0.05;
