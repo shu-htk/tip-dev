@@ -1210,6 +1210,10 @@ public:
 	  ,c,fit(0), fit(1), fit(2), fit.chisq(), fit.ndf());
     }
     if(func=="e"||func=="exp") {
+      if(opt.fx0 == opt.fx1) {
+       	opt.fx0 = 0.01;
+       	opt.fx1 = opt.att.x1;
+      }
       fit.calc_exp(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
       //      _pl->draw_error_y(x,y,_dat[opt.ey].num);
