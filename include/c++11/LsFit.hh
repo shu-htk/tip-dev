@@ -179,7 +179,8 @@ namespace thl {
 	if(y[j]>0) {
 	  x2.push_back(x[j]);
 	  y2.push_back(std::log(y[j]));
-	  ey2.push_back(std::log(ey[j]));
+	  //	  ey2.push_back(std::log(ey[j]));
+	  ey2.push_back(ey[j]/y[j]);
 	}
       }
       LsFit qf; qf.calc_quad(x2, y2, ey2, x0, x1);
@@ -233,7 +234,8 @@ namespace thl {
 	if(q) {
 	  x2.push_back(x[j]);
 	  y2.push_back(std::log(y[j]));
-	  ey2.push_back(std::log(ey[j]));
+	  //	  ey2.push_back(std::log(ey[j]));
+	  ey2.push_back(ey[j]/y[j]);
 	}
       }
       LsFit lf; lf.calc_lin(x2, y2, ey2, x0, x1);
@@ -254,7 +256,8 @@ namespace thl {
       for(size_t j=0; j<x.size(); j++) {
 	x2.push_back(x[j]);
 	y2.push_back(std::exp(y[j]));
-	ey2.push_back(std::exp(ey[j]));	
+	//	ey2.push_back(std::exp(ey[j]));	
+	ey2.push_back(ey[j]/y[j]);
       }
       LsFit lf; lf.calc_lin(x2, y2, ey2, x0, x1);
       //      printf("lf(0)=%f lf(1)=%f\n",lf(0),lf(1));

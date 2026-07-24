@@ -1198,8 +1198,9 @@ public:
       char c=' ';
       if(opt.fx0 == opt.fx1) {
 	fit.calc_statistics(x,y);
-	opt.fx0 = fit(1)-fit(2)*2;
-	opt.fx1 = fit(1)+fit(2)*2; c = '*';
+	opt.fx0 = fit(1)-fit(2)*3;
+	opt.fx1 = fit(1)+fit(2)*3;
+	c = '*'; // marker of estimating fitting-range as sigma*3
       }
       fit.calc_gaus(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
@@ -1209,11 +1210,6 @@ public:
 	  ,c,fit(0), fit(1), fit(2), fit.chisq(), fit.ndf());
     }
     if(func=="e"||func=="exp") {
-      if(opt.fx0 == opt.fx1) {
-	double wid=opt.att.x1 - opt.att.x0;
-	opt.fx0 = opt.att.x0 + wid*0.03;
-	opt.fx1 = opt.att.x0 + wid*0.5;
-      }
       fit.calc_exp(x,y,ey,opt.fx0,opt.fx1);
       _pl->draw_graph(fit.fx(), fit.fy());
       //      _pl->draw_error_y(x,y,_dat[opt.ey].num);
@@ -1392,6 +1388,17 @@ public:
   int hist_fit(const std::string &v, const std::string &func, Option &opt) {
     std::string hx = v + "_hx";
     std::string hy = v + "_hy";
+    if(func=="g"||func=="gaus"||func=="e"||func=="exp") {
+      std::vector<double> x,y;
+      for(size_t j=0; j<_dat[hy].size(); j++) {
+	if(_dat[hy].num[j]>0) {
+	  x.push_back(_dat[hx].num[j]);
+	  y.push_back(_dat[hy].num[j]);
+	}
+      }
+      _dat[hx].num = x;
+      _dat[hy].num = y;
+    }
     opt.ey = v + "_hey";
     _dat[opt.ey].type = Num;
     _dat[opt.ey].num.resize(_dat[hy].size());
