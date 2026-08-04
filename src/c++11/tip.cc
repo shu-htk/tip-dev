@@ -1263,6 +1263,7 @@ public:
 	for(size_t j=0; j<coef.dim(); j++) {
 	  _pl->add_legend(fmt("c%d: %g",j,coef[j]));
 	}
+	_pl->add_legend(fmt("chi2/ndf: %g/%d",fit.chisq(),fit.ndf()));
 	_pl->att = att_save;
       }
     }
