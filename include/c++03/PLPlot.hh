@@ -30,6 +30,8 @@ namespace thl {
   bool PLPlotReverseVideo=0;
   bool PLPlotDoubleBufferXwin=0;
 
+  PLFLT PLPlotFontWidth[128];
+
   struct PLAtt {// attribute of graph
     short lwid; // line width (if 0 not drawn)
     short lcol; // line color
@@ -299,6 +301,92 @@ namespace thl {
       divide(1,1);
       memset(&_cgrid2,0,sizeof(_cgrid2));
       set_aspect_from_geom(geom);
+      init_PLPlotFontWidth();
+    }
+    void init_PLPlotFontWidth() {
+      memset(PLPlotFontWidth,0,sizeof(PLPlotFontWidth));
+      PLPlotFontWidth['a'] = 0.95;
+      PLPlotFontWidth['b'] = 1.00;
+      PLPlotFontWidth['c'] = 0.90;
+      PLPlotFontWidth['d'] = 1.00;
+      PLPlotFontWidth['e'] = 0.95;
+      PLPlotFontWidth['f'] = 0.65;
+      PLPlotFontWidth['g'] = 1.00;
+      PLPlotFontWidth['h'] = 1.00;
+      PLPlotFontWidth['i'] = 0.50;
+      PLPlotFontWidth['j'] = 0.50;
+      PLPlotFontWidth['k'] = 0.95;
+      PLPlotFontWidth['l'] = 0.50;
+      PLPlotFontWidth['m'] = 1.50;
+      PLPlotFontWidth['n'] = 1.00;
+      PLPlotFontWidth['o'] = 0.95;
+      PLPlotFontWidth['p'] = 1.00;
+      PLPlotFontWidth['q'] = 1.00;
+      PLPlotFontWidth['r'] = 0.60;
+      PLPlotFontWidth['s'] = 0.90;
+      PLPlotFontWidth['t'] = 0.60;
+      PLPlotFontWidth['u'] = 1.00;
+      PLPlotFontWidth['v'] = 0.95;
+      PLPlotFontWidth['w'] = 1.30;
+      PLPlotFontWidth['x'] = 0.95;
+      PLPlotFontWidth['y'] = 0.95;
+      PLPlotFontWidth['z'] = 0.85;
+
+      PLPlotFontWidth['A'] = 1.10;
+      PLPlotFontWidth['B'] = 1.10;
+      PLPlotFontWidth['C'] = 1.10;
+      PLPlotFontWidth['D'] = 1.20;
+      PLPlotFontWidth['E'] = 1.00;
+      PLPlotFontWidth['F'] = 0.95;
+      PLPlotFontWidth['G'] = 1.20;
+      PLPlotFontWidth['H'] = 1.20;
+      PLPlotFontWidth['I'] = 0.50;
+      PLPlotFontWidth['J'] = 0.50;
+      PLPlotFontWidth['K'] = 1.00;
+      PLPlotFontWidth['L'] = 0.90;
+      PLPlotFontWidth['M'] = 1.40;
+      PLPlotFontWidth['N'] = 1.20;
+      PLPlotFontWidth['O'] = 1.30;
+      PLPlotFontWidth['P'] = 0.95;
+      PLPlotFontWidth['Q'] = 1.30;
+      PLPlotFontWidth['R'] = 1.10;
+      PLPlotFontWidth['S'] = 1.00;
+      PLPlotFontWidth['T'] = 0.95;
+      PLPlotFontWidth['U'] = 1.20;
+      PLPlotFontWidth['V'] = 1.10;
+      PLPlotFontWidth['W'] = 1.50;
+      PLPlotFontWidth['X'] = 1.10;
+      PLPlotFontWidth['Y'] = 0.95;
+      PLPlotFontWidth['Z'] = 1.10;
+
+      PLPlotFontWidth['0'] = 1.00;
+      PLPlotFontWidth['1'] = 1.00;
+      PLPlotFontWidth['2'] = 1.00;
+      PLPlotFontWidth['3'] = 1.00;
+      PLPlotFontWidth['4'] = 1.00;
+      PLPlotFontWidth['5'] = 1.00;
+      PLPlotFontWidth['6'] = 1.00;
+      PLPlotFontWidth['7'] = 1.00;
+      PLPlotFontWidth['8'] = 1.00;
+      PLPlotFontWidth['9'] = 1.00;
+
+      PLPlotFontWidth[' '] = 0.50;
+      PLPlotFontWidth['!'] = 0.50;
+      PLPlotFontWidth['#'] = 0.60;
+      PLPlotFontWidth['('] = 0.60;
+      PLPlotFontWidth[')'] = 0.60;
+      PLPlotFontWidth['='] = 1.40;
+      PLPlotFontWidth['~'] = 1.40;
+      PLPlotFontWidth['*'] = 0.80;
+      PLPlotFontWidth['+'] = 1.40;
+      PLPlotFontWidth[':'] = 0.50;
+      PLPlotFontWidth[';'] = 0.50;
+      PLPlotFontWidth['_'] = 0.80;
+      PLPlotFontWidth['?'] = 0.85;
+      PLPlotFontWidth['<'] = 1.40;
+      PLPlotFontWidth['>'] = 1.40;
+      PLPlotFontWidth['.'] = 0.50;
+      PLPlotFontWidth['\''] = 0.50;
     }
     ~PLPlot(void) {plend();}
     void clear(void) {plclear();}
@@ -997,7 +1085,8 @@ namespace thl {
 	ylen++;
 	PLFLT len = 0;
 	for(char *c=_leg[j].title; *c != 0; ++c) {
-	  len += (std::isupper(*c)) ? 1.25 : 1;
+	  //	  len += (std::isupper(*c)) ? 1.25 : 1;
+	  if((int)*c < 128) len += PLPlotFontWidth[(int)*c];
 	}
 	if(len > xlen) xlen = len;
       }
