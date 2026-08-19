@@ -1,0 +1,45 @@
+# ex33: Example to read from here-document
+
+font 3
+title "#u22#dNa radiation decay curve"
+
+opt (td:"/ :" gd:1 xt:1 yt:10)
+
+read date,rad << END
+# date	      uSv/h
+ 2017/08/08   65
+ 2018/09/12   44
+ 2019/09/03   35
+ 2020/08/24   28
+ 2021/09/01   20
+ 2022/09/08   15
+ 2023/07/18   11
+ 2024/09/11    8
+ 2025/08/25    6
+END
+
+@ Cd = 0.693 ;# decay constant
+@ Th = 2.605 ;# half life time of Na22 (years) 
+
+set year = time(date,year)
+set err = sqrt(rad)
+elem y1 = year(1) ;# initial date of year
+elem r1 = rad(1)  ;# initial value of rdiation
+
+set dy = year - [y1]              ;# dy is years from y1
+set rad_ex = [r1]*exp(-([Cd/Th])*dy) ;# expected radiation
+
+elem day1 = date(1)
+xlab "Time from [day1] (years)"
+ylab "(#gmSv/h)"
+
+plot dy rad (lw:0 st:star ey:err lg:"Data")
+leg add ""
+
+plot dy rad_ex (st:non lw:1 lt:dot lc:blue rp:1 lg:"Expected")
+leg add "(t#d1/2#u=[Th] years)"
+leg add ""
+
+fit dy rad exp (fr:-1,10 ey:err lt:dot :lc:green cf:c lg:"Fitting to data")
+leg add "(t#d1/2#u=[%.3f:-Cd/c1] years)"
+leg show

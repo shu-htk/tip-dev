@@ -333,11 +333,24 @@ private:
   std::map<std::string,Data> _dat; // data tagged by string
   Option _gopt; // global option
   Order _order;
+  std::ofstream _heredoc_fs; // filestream for here document
+  std::vector<std::string> _heredoc_args; // args for here document
+  Option _heredoc_opt; // option for here document
+  thl::CFormat _tmpfile;
 #if USE_EPICS_CA
   std::map<std::string,thl::EpicsCA> _ca;
 #endif
 public:
-  Tip(thl::PLPlot* pl) {_pl=pl; _pl->divide(1,1);}
+  Tip(thl::PLPlot* pl) {
+    _pl=pl;
+    _pl->divide(1,1);
+    _heredoc_args.clear();
+    _tmpfile("/tmp/tip.%d",getpid());
+  }
+  ~Tip() {
+    thl::CFormat fmt;
+    system(fmt("rm -f %s",_tmpfile()));
+  }
   template<class T> void get_pair(const std::string &s, T &left, T &right) {
     thl::StrSplit sp(s,",");
     if(sp.size() < 2) {
@@ -2326,13 +2339,26 @@ public:
       thl::Bracket bc('`','`',buf);
       Option opt=get_opt(buf);
       if(bc.size()) {
-	thl::CFormat tmpfile,fmt;
-	tmpfile("/tmp/tip.%d",getpid());
-	system(fmt("%s > %s",bc.contents(0).c_str(), tmpfile()));
-	data_read(args(1),tmpfile(),opt);
-	system(fmt("rm -f %s",tmpfile()));
+	thl::CFormat fmt;
+	system(fmt("%s > %s",bc.contents(0).c_str(), _tmpfile()));
+	data_read(args(1),_tmpfile(),opt);
+      } else if(args(2) == "<<") {
+	_heredoc_args.push_back(args(1));
+	_heredoc_args.push_back(args(3));
+	_heredoc_opt = opt;
+	_heredoc_fs.open(_tmpfile());
       } else {
 	data_read(args(1),args(2),opt);
+      }
+      return 0;
+    }
+    if(_heredoc_args.size() == 2 && _heredoc_fs) {
+      if(args(0)==_heredoc_args[1]) {
+	_heredoc_fs.close();
+	data_read(_heredoc_args[0],_tmpfile(),_heredoc_opt);
+	_heredoc_args.clear();
+      } else {
+	_heredoc_fs << buf << std::endl;
       }
       return 0;
     }
