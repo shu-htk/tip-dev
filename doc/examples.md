@@ -30,6 +30,8 @@
 - [ex29: Put legends on various positions](ex/ex29.md)
 - [ex30: Draw legends in the frequency domain](ex/ex30.md)
 - [ex31: Automatic Color,Symbol,Fill Order](ex/ex31.md)
+- [ex32: Set default order of color/symbol](ex/ex32.md)
+- [ex33: Example to read from the here-document](ex/ex33.md)
 
 ## Examples using data published online
 - [ex23: Huge data reading and scatter plot](ex/ex23.md)
