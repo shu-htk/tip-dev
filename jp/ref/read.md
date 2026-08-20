@@ -3,8 +3,10 @@
 tip> read
 Usage: read v1,v2,... file_name [(opt)]
        read v1,v2,... `command` [(opt)]
+       read v1,v2,... << END_TAG [(opt)]
 Read data into v1,v2,...
 If a command is given, read from its output.
+If << is given, read from the here-document which end with END_TAG
 ```
 
 ## option
@@ -108,4 +110,19 @@ x2 : data(str) :  B C D
 x3 : data(num) :  21 31 41
 x4 : data(num) :  22 32 42
 x5 : data(num) :  23 33 43
+```
+
+example to read from the here-document
+
+```
+tip> read x,y << END
+tip> 1 2
+tip> 2 3
+tip> 3 5
+tip> 4 7
+tip> END
+
+tip> cat *
+x : data(num) :  1 2 3 4
+y : data(num) :  2 3 5 7
 ```

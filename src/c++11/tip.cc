@@ -2307,9 +2307,12 @@ public:
       if(args.size() < 3) {
 	printf("Usage: read v1,v2,... file_name [(opt)]\n"
 	       "       read v1,v2,... `command` [(opt)]\n"
+	       "       read v1,v2,... << END_TAG [(opt)]\n"
 	       "Read data into v1,v2,...\n"
-	       "If a command is given, read from its output.\n");
- 	return 0;
+	       "If a command is given, read from its output.\n"
+	       "If << is given, read from the here-document which end with END_TAG\n"
+	       );
+	return 0;
       }
       thl::Bracket bc('`','`',buf);
       Option opt=get_opt(buf);
