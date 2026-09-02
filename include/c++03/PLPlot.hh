@@ -15,7 +15,7 @@
 #include <vector>
 #include <string>
 #include <plplot/plplot.h>
-//#include <plplot/plevent.h>
+#include <plplot/plevent.h>
 #include <unistd.h>
 #include "StrSplit.hh"
 
@@ -946,34 +946,20 @@ namespace thl {
       } else {
 	plspal1("cmap1_gray.pal", 1);
       }
-      plwind(att.x0,att.x1, att.y0,att.y1);
       PLFLT xmin,xmax,ymin,ymax;
       calc_min_max(x,nx,xmin,xmax);
       calc_min_max(y,ny,ymin,ymax);
-      std::vector<PLFLT> shedge(att.grad+1);
       PLFLT z0=(att.logz) ? ((att.z0>0) ? log10(att.z0) : 0) : att.z0;
       PLFLT z1=(att.logz) ? ((att.z1>0) ? log10(att.z1) : 0) : att.z1;
-      PLFLT fill_width=2, dz=(z1-z0)/att.grad;
-      for (int j=0; j < att.grad+1; j++) {shedge[j] = z0 + dz*j;}
-      // PLFLT fill_width=2, dz=(att.z1-att.z0)/att.grad;
-      // for (int j=0; j < att.grad+1; j++) {shedge[j] = att.z0 + dz*j;}
-      alloc_grid(nx, ny, xmin, xmax, ymin, ymax);
-      plshades((const PLFLT **)_mesh_z, nx,ny, NULL,
-	       xmin, xmax, ymin, ymax,
-	       shedge.data(), att.grad+1, fill_width,
-	       0, 0, plfill, 0, pltr2, (void *)&_cgrid2);
-      draw_box_sub(0);
+#if 1 // color bar
       plschr(0,0.6); plsmaj(0,0.5); plsmin(0,0.5);//set smaller text and ticks
-#if 1 // simple color bar
       PLFLT aspect = 36.0*_nx/_ny;
       PLFLT x0 = 0.95-0.03*_nx/_ny;
       PLFLT x1 = x0 + 0.015;
       plvpas(x0, x1, 0, 1, aspect);
       plwind(0, 1, z0, z1);
-      //      plwind(0, 1, att.z0, att.z1);
       PLFLT xg[5] = {0,1,1,0,0};
       PLFLT yg[5] = {z0,z0,z1,z1,z0};
-      //      PLFLT yg[5] = {att.z0,att.z0,att.z1,att.z1,att.z0};
       plgradient(5,xg,yg,90);
       plcol0(att.lcol);
       if(att.logz) {
@@ -981,38 +967,19 @@ namespace thl {
       } else {
 	plbox("bc",0, 0, "bcmstv", 0, 0);
       }
-#else // the following way is too complicated so not used
-      const int NAXIS 1
-      PLINT n_axis_opts = NAXIS;
-      const char *axis_opts[] = {"bcvtm"};
-      PLINT num_values[NAXIS];
-      PLFLT colorbar_width, colorbar_height;
-      PLFLT *values[NAXIS];
-      PLFLT axis_ticks[NAXIS] = {0};
-      PLINT axis_subticks[NAXIS] = {0};
-      PLINT n_labels = NAXIS;
-      PLINT label_opts[] = {PL_COLORBAR_LABEL_BOTTOM};
-      const char *labels[] = {""};
-      num_values[0] = att.grad + 1;
-      values[0] = shedge.data();
-      plcolorbar(&colorbar_width, &colorbar_height,
-		 PL_COLORBAR_SHADE | PL_COLORBAR_SHADE_LABEL,
-		 //		 PL_COLORBAR_GRADIENT,
-		 PL_POSITION_VIEWPORT | PL_POSITION_RIGHT,
-		 0.01,-0.02, // x,y offset
-		 0.03, 0.99, // x,y length
-		 0,  // bg color (white)
-		 15, // box color (black)
-		 1,  // box style
-		 0.0, // color of cap at the bottom of box
-		 0.0, // color of cap at the top of box
-		 cont_color, cont_width,
-		 n_labels, label_opts, labels,
-		 n_axis_opts, axis_opts,
-		 axis_ticks, axis_subticks,
-		 num_values, (const PLFLT * const *)values);
+      plschr(0,1); plsmaj(0,1.0); plsmin(0,1.0); //set normal text and ticks
 #endif
-      plschr(0,1); plsmaj(0,1.0); plsmin(0,1.0); //reset text and tick
+      set_auto_aspect(0);
+      plwind(att.x0,att.x1, att.y0,att.y1);
+      std::vector<PLFLT> shedge(att.grad+1);
+      PLFLT fill_width=2, dz=(z1-z0)/att.grad;
+      for (int j=0; j < att.grad+1; j++) {shedge[j] = z0 + dz*j;}
+      alloc_grid(nx, ny, xmin, xmax, ymin, ymax);
+      plshades((const PLFLT **)_mesh_z, nx,ny, NULL,
+	       xmin, xmax, ymin, ymax,
+	       shedge.data(), att.grad+1, fill_width,
+	       0, 0, plfill, 0, pltr2, (void *)&_cgrid2);
+      draw_box_sub(0);
       plspal1("",1);
       free_grid(nx, ny);
     }

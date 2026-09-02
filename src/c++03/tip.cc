@@ -17,7 +17,7 @@
 
 const char* tip_commands[] = {
   "arc", "box", "box3", "cat", "clear", "cut", "div", "elem", "exe",
-  "fbox", "ffit", "fit", "fit3", "fill", "font", "fplot",
+  "fbox", "ffit", "fit", "fit3", "fill", "font", "fplot", "getpos",
   "help", "hfit", "hplot", "hplot2", "line", "ls", "legend", "mplot",
   "mread", "mset", "mwrite", "opt", "order", "plot", "plot3", "read",
   "rm", "set", "sort", "stat", "symb", "text", "title", "tfmt",
@@ -1947,6 +1947,7 @@ public:
 	" fill  : draw a filled pattern object in the 2D-graph\n"
 	" font  : set text font\n"
 	" fplot : plot the frequency domain graph from the data\n"
+	" getpos: get the position on the graph using the mouse cursor"
 	" help  : show help message\n"
 	" hfit  : fit the histogram\n"
 	" hplot : plot the histogram from the data\n"
@@ -2825,6 +2826,23 @@ public:
       }
       return 0;
     }
+    if(args(0)=="getpos") {
+      if(args.size() < 3) {
+	printf("Usage: getpos x y\n"
+	       " Get the position on the graph using the mouse cursor\n"
+	       " and save it to macro variables x and y.\n"
+	       );
+	return 0;
+      }
+      printf("** Click the mouse on the graph **\n");
+      PLGraphicsIn gin;
+      while(!plGetCursor(&gin)) {usleep(1000);}
+      plGetCursor(&gin);
+//    printf("wX=%f, wY=%f  dX=%f, dY=%f\n",gin.wX, gin.wY,gin.dX, gin.dY);
+      var.set_num(args(1),gin.wX);
+      var.set_num(args(2),gin.wY);
+      return 0;
+    }
 #if USE_EPICS_CA 
     if(args(0)=="cainfo") {
       if(args.size() < 2) {
@@ -2910,7 +2928,9 @@ public:
       std::string line;
       while(std::getline(ifs,line)) {
 	if(line.size()>0) {
-	  if(line[line.find_first_not_of(' ')]=='#') continue;
+	  size_t n = line.find_first_not_of(' ');
+	  if(n < 0 || n >= line.size() ) continue;
+	  if(line[n]=='#') continue;
 	  thl::StrSplit sp;
 	  sp.set_quot_to_skip_split('"');
 	  sp.split(line,";");
