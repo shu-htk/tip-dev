@@ -2,8 +2,9 @@
 #
 # using Mandelbrot plotting macro: doc/macro/ex27.tip
 #
-args ndiv=500,ntry=100
+args ndiv=100,ntry=50
 
+fmt %.15g
 # Initial range to show Mandelbrot plot
 @ x0 = -2
 @ x1 = 0.5
@@ -33,9 +34,18 @@ while 1
 
 # draw "zoom-out" button
   @ x3 = [x2+0.2*dx]
-  @ y3 = [y2+0.1*dy]
   fbox [x2] [x3] [y0] [y2] (fc:gray ft:solid)
   text [x2+dx*0.01] [y0+dy*0.05] "zoom-out"
+
+# draw "fine" button
+  @ x4 = [x3+0.2*dx]
+  fbox [x3] [x4] [y0] [y2] (fc:gray ft:solid)
+  text [x3+dx*0.05] [y0+dy*0.05] "fine"
+
+# draw "coarse" button
+  @ x5 = [x4+0.2*dx]
+  fbox [x4] [x5] [y0] [y2] (fc:gray ft:solid)
+  text [x4+dx*0.01] [y0+dy*0.05] "coarse"
 
   getpos x y ;# get x,y position at the mouse cursor
 
@@ -53,6 +63,12 @@ while 1
       prn !! Cannot zoom-out any further (zwsize=[zwsize])
       @ inhibit = 1
     fi
+  elif [x3]<[x]<[x4] & [y0]<[y]<[y2] ;# area of "fine vutton"
+     @ ndiv = 1000
+     @ ntry = 500
+  elif [x4]<[x]<[x5] & [y0]<[y]<[y2] ;# area of "coarse button"
+     @ ndiv = 100
+     @ ntry = 50
   else
     if [zwsize] > 1e-6
       @ x0 = [x-zwsize]
