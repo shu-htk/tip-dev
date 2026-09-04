@@ -32,6 +32,7 @@
 - [ex31: Automatic Color,Symbol,Fill Order](ex/ex31.md)
 - [ex32: Set default order of color/symbol](ex/ex32.md)
 - [ex33: Example to read from the here-document](ex/ex33.md)
+- [ex34: Demonstration to obtain the positon at the mouse cursor](ex/ex34.md)
 
 ## Examples using data published online
 - [ex23: Huge data reading and scatter plot](ex/ex23.md)

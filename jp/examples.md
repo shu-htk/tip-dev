@@ -32,6 +32,7 @@
 - [ex31: Automatic Color,Symbol,Fill Order](../doc/ex/ex31.md)
 - [ex32: Set default order of color/symbol](../doc/ex/ex32.md)
 - [ex33: Example to read from the here-document](../doc/ex/ex33.md)
+- [ex34: Demonstration to obtain the positon at the mouse cursor](../doc/ex/ex34.md)
 
 ## インターネットで公開されているデータを使用した例
 
