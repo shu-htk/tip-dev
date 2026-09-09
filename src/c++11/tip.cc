@@ -2803,19 +2803,33 @@ public:
     }
     if(args(0)=="getpos") {
       if(args.size() < 3) {
-	printf("Usage: getpos x y\n"
-	       " Get the position on the graph using the mouse cursor\n"
-	       " and save it to macro variables x and y.\n"
+	printf("Usage: getpos x y [nkey] [nbox]\n"
+	       " Get the position on the graph using the mouse cursor.\n"
+	       " Positon is saved to macro variables x and y.\n"
+	       " Mouse button or key number is saved to macro variable nkey\n"
+	       " where,\n"
+	       "  - Left button number is 1.\n"
+	       "  - Middle button number is 2.\n"
+	       "  - Right button number is 3.\n"
+	       " Box number is saved to macro variable nbox.\n"
 	       );
 	return 0;
       }
-      printf("** Click the mouse on the graph **\n");
+      printf("** Click the mouse or enter any key on the graph **\n");
       PLGraphicsIn gin;
-      while(!plGetCursor(&gin)) {usleep(1000);}
+      if(!plGetCursor(&gin)) {
+	printf("getpos: out of graph.\n");
+	var.set_num(args(1),0);
+	var.set_num(args(2),0);
+	if(args.size() > 3) var.set_num(args(3),0);
+	if(args.size() > 4) var.set_num(args(4),0);
+	return 0;
+      }
       plGetCursor(&gin);
-//    printf("wX=%f, wY=%f  dX=%f, dY=%f\n",gin.wX, gin.wY,gin.dX, gin.dY);
       var.set_num(args(1),gin.wX);
       var.set_num(args(2),gin.wY);
+      if(args.size() > 3) var.set_num(args(3),(double)gin.button);
+      if(args.size() > 4) var.set_num(args(4),(double)gin.subwindow);
       return 0;
     }
 #if USE_EPICS_CA 

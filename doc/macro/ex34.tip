@@ -1,86 +1,92 @@
 # ex34: Demonstration to obtain the positon at the mouse cursor
 #
-# using Mandelbrot plotting macro: doc/macro/ex27.tip
+# using external program:  src/c++03/mandelbrot.cc
 #
 args ndiv=100,ntry=50
 
+@ cmd = "sys ./bin/mandelbrot"
+
+title "key 'ENTR':zoom, 'BS':back, 'f':fine, 'c':coarse, 'ESC':exit"
+
+@ left_click = 1   ;# left button of mouse
+@ enter_key = 36   ;# 'ENTR' key
+@ back_key  = 22   ;# 'BS' key
+@ escape_key = 9   ;# 'ESC' key
+@ fine_key   = 41  ;# 'f' key
+@ coarse_key = 54  ;# 'c' key
+@ up_key = 111     ;# 'UP' key
+@ down_key = 116   ;# 'DWN' key
+@ left_key = 113   ;# 'LFT' key
+@ right_key = 114  ;# 'RGT' key
+
 fmt %.15g
+vp 0 0 0 0 1
+
 # Initial range to show Mandelbrot plot
-@ x0 = -2
-@ x1 = 0.5
-@ y0 = -1.3
-@ y1 = 1.3
+@ n = 0
+@ x0[n] = -2
+@ x1[n] = 0.5
+@ y0[n] = -1.3
+@ y1[n] = 1.3
 
-@ zwsize = 0.1 ;# zoom window size
-
-@ inhibit = 0  ;# flag to inhibit plotting
+@ zwsize = 0.2 ;# zoom window size
 
 while 1
-  prn zoom-window-size = [zwsize]
+  prn "next zwsize=[zwsize] x0=[x0[n]],x1=[x1[n]],y0=[y0[n]],y1=[y1[n]]"
 
 # draw Mandelbrot
-  if ![inhibit]
-    exe doc/macro/ex27.tip ndiv=[ndiv],ntry=[ntry],xr="[x0]:[x1]",yr="[y0]:[y1]"
-  fi
-# calc graph-span of x and y
-  @ dx = [x1-x0]
-  @ dy = [y1-y0]
+  [cmd] -ndiv [ndiv] -ntry [ntry] -xr "[x0[n]]:[x1[n]]" -yr "[y0[n]]:[y1[n]]"
+  mread x,y,z mandelbrot.dat
+  mplot x y z (xm:0 ym:0 mt:cont2)
 
-# draw "exit button"
-  @ x2 = [x0+0.2*dx]
-  @ y2 = [y0+0.1*dy]
-  fbox [x0] [x2] [y0] [y2] (fc:gray ft:solid)
-  text [x0+dx*0.05] [y0+dy*0.05] "exit"
+  getpos x y nkey; # get x,y position at the mouse cursor and key number
 
-# draw "zoom-out" button
-  @ x3 = [x2+0.2*dx]
-  fbox [x2] [x3] [y0] [y2] (fc:gray ft:solid)
-  text [x2+dx*0.01] [y0+dy*0.05] "zoom-out"
-
-# draw "fine" button
-  @ x4 = [x3+0.2*dx]
-  fbox [x3] [x4] [y0] [y2] (fc:gray ft:solid)
-  text [x3+dx*0.05] [y0+dy*0.05] "fine"
-
-# draw "coarse" button
-  @ x5 = [x4+0.2*dx]
-  fbox [x4] [x5] [y0] [y2] (fc:gray ft:solid)
-  text [x4+dx*0.01] [y0+dy*0.05] "coarse"
-
-  getpos x y ;# get x,y position at the mouse cursor
-
-  if [x0]<[x]<[x2] & [y0]<[y]<[y2]   ;# area of "exit button"
-    break
-  elif [x2]<[x]<[x3] & [y0]<[y]<[y2] ;# area of "zoom-out button"
-    if [zwsize] < 10
-      @ zwsize *= 10
-      @ x0 = [x0+dx/2-zwsize]
-      @ x1 = [x1-dx/2+zwsize]
-      @ y0 = [y0+dy/2-zwsize]
-      @ y1 = [y1-dy/2+zwsize]
-      @ inhibit = 0
-    else
-      prn !! Cannot zoom-out any further (zwsize=[zwsize])
-      @ inhibit = 1
-    fi
-  elif [x3]<[x]<[x4] & [y0]<[y]<[y2] ;# area of "fine button"
-     @ ndiv = 1000
-     @ ntry = 500
-  elif [x4]<[x]<[x5] & [y0]<[y]<[y2] ;# area of "coarse button"
-     @ ndiv = 100
-     @ ntry = 50
-  else
+  if [nkey]=={[left_click],[enter_key]}
     if [zwsize] > 1e-6
-      @ x0 = [x-zwsize]
-      @ x1 = [x+zwsize]
-      @ y0 = [y-zwsize]
-      @ y1 = [y+zwsize]
-      fbox [x0] [x1] [y0] [y1] (lc:pink lw:2)
-      @ zwsize *= 0.1
-      @ inhibit = 0
+      ++n
+      @ x0[n] = [x-zwsize]
+      @ x1[n] = [x+zwsize]
+      @ y0[n] = [y-zwsize]
+      @ y1[n] = [y+zwsize]
+      fbox [x0[n]] [x1[n]] [y0[n]] [y1[n]] (lc:pink lw:2)
+      @ zwsize *= 0.2
     else
       prn !! Cannot zoom-in any further (zwsize=[zwsize])
-      @ inhibit = 1
     fi
+  elif [nkey]==[up_key]
+    @ y0[n] += [zwsize]
+    @ y1[n] += [zwsize]
+  elif [nkey]==[down_key]
+    @ y0[n] -= [zwsize]
+    @ y1[n] -= [zwsize]
+  elif [nkey]==[left_key]
+    @ x0[n] -= [zwsize]
+    @ x1[n] -= [zwsize]
+  elif [nkey]==[right_key]
+    @ x0[n] += [zwsize]
+    @ x1[n] += [zwsize]
+  elif [nkey]==[back_key] 
+    if [n] > 0 & [zwsize] < 5
+      --n
+      @ zwsize *= 5
+    else
+      prn !! Cannot go back any further (zwsize=[zwsize])
+    fi
+  elif [nkey]==[escape_key]
+    break
+  elif [nkey]==[fine_key]
+    if [nrty]<2000
+      @ ntry += 50
+    fi
+    if [ndiv]<=500
+      @ ndiv = [ntry*2]
+    fi
+  elif [nkey]==[coarse_key]
+    if [nrty]>100
+      @ ntry -= 50
+    fi
+    @ ndiv = [ntry*2]
+  else
+    break
   fi
 end
