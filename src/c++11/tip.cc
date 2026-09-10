@@ -17,7 +17,7 @@
 #endif
 
 const char* tip_commands[] = {
-  "arc", "box", "box3", "cat", "clear", "cut", "div", "elem", "exe",
+  "arc", "box", "box3", "cat", "cin", "clear", "cut", "div", "elem", "exe",
   "fbox", "ffit", "fit", "fit3", "fill", "font", "fplot", "getpos", 
   "help", "hfit", "hplot", "hplot2", "line", "ls", "legend", "mplot",
   "mread", "mset", "mwrite", "opt", "order", "plot", "plot3", "read",

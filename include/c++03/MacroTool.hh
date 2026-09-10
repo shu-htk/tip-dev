@@ -17,6 +17,7 @@
 #include <map>
 #include <set>
 #include <fstream>
+#include <iostream>
 //#include <fnmatch.h>
 #include <unistd.h> // usleep()
 #include <ctime>
@@ -873,6 +874,7 @@ namespace thl {
       const char *help =
 	"macro commands:\n"
 	" @     : define numerical or string variable\n"
+	" cin   : input expression from console to macro variable\n"
 	" args  : define default arguments of the macro file\n"
 	" ++    : increment(+1) numerical variable\n"
 	" --    : decrement(-1) numerical variable\n"
@@ -1021,6 +1023,18 @@ namespace thl {
 	  } else {
 	    std::string expr = buf.substr(buf.find("@")+1);
 	    var.set_eval(expr);
+	  }
+	  nline++; continue;
+	}
+	if(args(0)=="cin") {
+	  if(args.size()<2) {
+	    printf("Usage: cin v [prompt]\n"
+		   "Input expression from console to macro variable v.\n");
+	  } else {
+	    printf("%s > ",(args.size()<3) ? "cin" : trim(args(2)).c_str());
+	    std::string expr;
+	    std::getline(std::cin,expr);
+	    var.set_expr(args(1),expr,0);
 	  }
 	  nline++; continue;
 	}
