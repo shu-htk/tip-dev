@@ -30,6 +30,7 @@
 - [fill](ref/fill.md) : 2次元データの領域を塗りつぶす
 - [font](ref/font.md) : テキストのフォントを指定
 - [fplot](ref/fplot.md) : データを周波数領域でプロット（FFTパワースペクトラム）
+- [getpos](ref/getpos.md) : マウスカーソルの位置を取得する
 - [help](ref/help.md) : 全コマンドリストを表示する
 - [hfit](ref/hfit.md) : 1次元ヒストグラムを指定した関数でフィット
 - [hplot](ref/hplot.md) : データの1次元ヒストグラムをプロット

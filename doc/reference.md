@@ -29,6 +29,7 @@
 - [fill](ref/fill.md) : draw a filled pattern object in the 2D-graph
 - [font](ref/font.md) : set text font
 - [fplot](ref/fplot.md) : plot the frequency domain graph from the data
+- [getpos](ref/getpos.md) : get the position at the mouse cursor
 - [help](ref/help.md) : show help message
 - [hfit](ref/hfit.md) : fit the histogram
 - [hplot](ref/hplot.md) : plot the histogram from the data
