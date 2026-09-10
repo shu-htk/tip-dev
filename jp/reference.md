@@ -1,6 +1,7 @@
 
 ## MacroToolのコマンド
 - [@](ref/var.md) : マクロ変数の定義と値の代入
+- [cin](ref/cin.md) : コンソールから式を入力して結果をマクロ変数に代入する
 - [args](ref/args.md) : マクロファイルの引数のデフォルト値を設定
 - [++,--](ref/incr.md) : 数値型マクロ変数のインクリメント(+1), デクリメント(-1)
 - [for,do,while,end](ref/loop.md) : for, do, while ループ

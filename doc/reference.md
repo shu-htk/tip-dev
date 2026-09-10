@@ -1,5 +1,6 @@
 ## Commands of MacroTool
 - [@](ref/var.md) : define and set value of the macro variable
+- [cin](ref/cin.md) : input expression from console to macro variable
 - [args](ref/args.md) : set default argument of the macro file
 - [++,--](ref/incr.md) : increment(+1), decrement(-1) numerical macro variable
 - [for,do,while,end](ref/loop.md) : for, do, while loop
