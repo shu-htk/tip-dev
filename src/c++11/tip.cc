@@ -2803,14 +2803,13 @@ public:
     }
     if(args(0)=="getpos") {
       if(args.size() < 3) {
-	printf("Usage: getpos x y [nkey] [nbox]\n"
+	printf("Usage: getpos x y [key] [nbox]\n"
 	       " Get the position on the graph using the mouse cursor.\n"
 	       " Positon is saved to macro variables x and y.\n"
-	       " Mouse button or key number is saved to macro variable nkey\n"
-	       " where,\n"
-	       "  - Left button number is 1.\n"
-	       "  - Middle button number is 2.\n"
-	       "  - Right button number is 3.\n"
+	       " Mouse or keyboard label is saved to macro variable key\n"
+	       " key strings:\n"
+	       "   Mouse_L, Mouse_M, Mouse_R \n"
+	       "   BackSpace, Enter, Escape, Tab, Space, A, B, ... and so on.\n"
 	       " Box number is saved to macro variable nbox.\n"
 	       );
 	return 0;
@@ -2821,14 +2820,35 @@ public:
 	printf("getpos: out of graph.\n");
 	var.set_num(args(1),0);
 	var.set_num(args(2),0);
-	if(args.size() > 3) var.set_num(args(3),0);
+	if(args.size() > 3) var.set_str(args(3),"NULL");
 	if(args.size() > 4) var.set_num(args(4),0);
 	return 0;
       }
       plGetCursor(&gin);
       var.set_num(args(1),gin.wX);
       var.set_num(args(2),gin.wY);
-      if(args.size() > 3) var.set_num(args(3),(double)gin.button);
+      if(args.size() > 3) {
+	thl::CFormat fmt;
+	if(gin.button==1) fmt("Mouse_L");
+	else if(gin.button==2) fmt("Mouse_M");
+	else if(gin.button==3) fmt("Mouse_R");
+	else {
+	  int key=gin.keysym;
+	  if(key==8) fmt("BackSpace");
+	  else if(key==9) fmt("Tab");
+	  else if(key==13) fmt("Enter");
+	  else if(key==27) fmt("Escape");
+	  else if(key==32) fmt("Space");
+	  else if(key==65361) fmt("Arrow_L");
+	  else if(key==65362) fmt("Arrow_U");
+	  else if(key==65363) fmt("Arrow_R");
+	  else if(key==65364) fmt("Arrow_D");
+	  else if(65470<=key && key<=65481) fmt("F%d",key-65469);
+	  else if(key>=126) fmt("%d",key);
+	  else fmt("%c",key);
+	}
+	var.set_str(args(3),fmt());
+      }
       if(args.size() > 4) var.set_num(args(4),(double)gin.subwindow);
       return 0;
     }

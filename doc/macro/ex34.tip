@@ -8,17 +8,6 @@ args ndiv=100,ntry=50
 
 title "key 'ENTR':zoom, 'BS':back, 'f':fine, 'c':coarse, 'ESC':exit"
 
-@ left_click = 1   ;# left button of mouse
-@ enter_key = 36   ;# 'ENTR' key
-@ back_key  = 22   ;# 'BS' key
-@ escape_key = 9   ;# 'ESC' key
-@ fine_key   = 41  ;# 'f' key
-@ coarse_key = 54  ;# 'c' key
-@ up_key = 111     ;# 'UP' key
-@ down_key = 116   ;# 'DWN' key
-@ left_key = 113   ;# 'LFT' key
-@ right_key = 114  ;# 'RGT' key
-
 fmt %.15g
 vp 0 0 0 0 1
 
@@ -32,16 +21,17 @@ vp 0 0 0 0 1
 @ zwsize = 0.2 ;# zoom window size
 
 while 1
-  prn "next zwsize=[zwsize] x0=[x0[n]],x1=[x1[n]],y0=[y0[n]],y1=[y1[n]]"
+#  prn "next zwsize=[zwsize] x0=[x0[n]],x1=[x1[n]],y0=[y0[n]],y1=[y1[n]]"
+  prn "next zwsize=[zwsize] ndiv=[ndiv] ntry=[ntry]"
 
 # draw Mandelbrot
   [cmd] -ndiv [ndiv] -ntry [ntry] -xr "[x0[n]]:[x1[n]]" -yr "[y0[n]]:[y1[n]]"
   mread x,y,z mandelbrot.dat
   mplot x y z (xm:0 ym:0 mt:cont2)
 
-  getpos x y nkey; # get x,y position at the mouse cursor and key number
+  getpos x y key; # get x,y position at the mouse cursor and key label
 
-  if [nkey]=={[left_click],[enter_key]}
+  if [key] == {Mouse_L, Enter}
     if [zwsize] > 1e-6
       ++n
       @ x0[n] = [x-zwsize]
@@ -53,39 +43,33 @@ while 1
     else
       prn !! Cannot zoom-in any further (zwsize=[zwsize])
     fi
-  elif [nkey]==[up_key]
+  elif [key] == Arrow_U
     @ y0[n] += [zwsize]
     @ y1[n] += [zwsize]
-  elif [nkey]==[down_key]
+  elif [key] == Arrow_D
     @ y0[n] -= [zwsize]
     @ y1[n] -= [zwsize]
-  elif [nkey]==[left_key]
+  elif [key] == Arrow_L
     @ x0[n] -= [zwsize]
     @ x1[n] -= [zwsize]
-  elif [nkey]==[right_key]
+  elif [key] == Arrow_R
     @ x0[n] += [zwsize]
     @ x1[n] += [zwsize]
-  elif [nkey]==[back_key] 
+  elif [key] == BackSpace
     if [n] > 0 & [zwsize] < 5
       --n
       @ zwsize *= 5
     else
       prn !! Cannot go back any further (zwsize=[zwsize])
     fi
-  elif [nkey]==[escape_key]
+  elif [key] == Escape
     break
-  elif [nkey]==[fine_key]
-    if [nrty]<2000
-      @ ntry += 50
-    fi
-    if [ndiv]<=500
-      @ ndiv = [ntry*2]
-    fi
-  elif [nkey]==[coarse_key]
-    if [nrty]>100
-      @ ntry -= 50
-    fi
-    @ ndiv = [ntry*2]
+  elif [key] == f  ;# fine
+    if [ntry]<2000; @ ntry += 50;  fi
+    if [ndiv]<=500; @ ndiv += 100; fi
+  elif [key] == c ;# Coarse
+    if [ntry]>=100; @ ntry -= 50;  fi
+    if [ndiv]>=200; @ ndiv -= 100; fi
   else
     break
   fi

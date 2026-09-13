@@ -1,14 +1,13 @@
 # getpos
 ```
 tip> getpos
-Usage: getpos x y [nkey] [nbox]
+Usage: getpos x y [key] [nbox]
  Get the position on the graph using the mouse cursor.
  Positon is saved to macro variables x and y.
- Mouse button or key number is saved to macro variable nkey
- where,
-  - Left button number is 1.
-  - Middle button number is 2.
-  - Right button number is 3.
+ Mouse or keyboard label is saved to macro variable key
+ key strings:
+   Mouse_L, Mouse_M, Mouse_R
+   BackSpace, Enter, Escape, Tab, Space, A, B, ... and so on.
  Box number is saved to macro variable nbox.
 ```
 
@@ -18,48 +17,46 @@ You should draw at least one box (subpage) to do this command.
 
 The obtained positon (x,y) is the graph coordinate.
 
-## Definition of key number (nkey)
+## Definition of key string
 
 ### Mouse button
 
-|Button |`Left`|`Middle`|`Right`|
-|:---:  |:---: |:---:   |:---:  |
-|Number | 1 | 2 | 3 |
+|Button        |key string|
+|:-:           |:-:       |
+|Left Button   | `Mouse_L` |
+|Middle Button | `Mouse_M` |
+|Right Button  | `Mouse_R` |
 
 ### Keyboard button
 
-|Button|`ESC`|
-|:-:   |:-:  |
-|Number|9    |
+|Key Label     |key string  |
+|:-:           |:-:         |
+|Back Space    | `BackSpace`|
+|Enter (Return)| `Enter`    |
+|Esc           | `Escape`   |
+|Tab           | `Tab`      |
+|Space         | `Space`    |
+|←             | `Arrow_L`  |
+|↑             | `Arrow_U`  |
+|→             | `Arrow_R`  |
+|↓             | `Arrow_D`  |
+|F1            | `F1`       |
+|F2            | `F2`       |
 
-|Button|`1`|`2`|`3`|`4`|`5`|`6`|`7`|`8`|`9`|`0`|`-`|`^`|`BS`|
-|:-:   |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|Number|10 |11 |12 |13 |14 |15 |16 |17 |18 |19 |20 |21 |22 |
+The key string of single character is same as itself.
 
-|Button|`TAB`|`q`|`w`|`e`|`r`|`t`|`y`|`u`|`i`|`o`|`p`|`@`|`[`|`ENTER`|
-|:-:   |:-:  |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|Number|23   |24 |25 |26 |27 |28 |29 |30 |31 |32 |33 |34 |35 |36|
+|Key Label |key string|
+|:-:       |:-:       |
+|0         | `0`      |
+|1         | `1`      |
+|A         | `A`      |
+|B         | `B`      |
+|a         | `a`      |
+|b         | `b`      |
+|@         |`@`       |
+|/         |`/`       |
 
-|Button|`CTR`|`a`|`s`|`d`|`f`|`g`|`h`|`j`|`k`|`l`|`;`|`:`|
-|:-:   |:-:  |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|Number|37   |38 |39 |40 |41 |42 |43 |44 |45 |46 |47 |48 |
-
-|Button|`SHIFT`|`]`|`z`|`x`|`c`|`v`|`b`|`n`|`m`|`,`|`.`|`/`|
-|:-:   |:-:    |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|Number|50     |51 |52 |53 |54 |55 |56 |57 |58 |59 |60 |61 |
-
-|Button|`ALT`|`SPACE`|
-|:-:   |:-:  |:-:    |
-|Number|64   |65     |
-
-|Button|`F1`|`F2`|`F3`|`F4`|`F5`|`F6`|`F7`|`F8`|`F9`|`F10`|`F11`|`F12`|
-|:-:   |:-: |:-: |:-: |:-: |:-: |:-: |:-: |:-: |:-: |:-:  |:-:  |:-:  |
-|Number|67  |68  |69  |70  |71  |72  |73  |74  |75  |76   |95   |96   |
-
-|Button|`UP`|`LEFT`|`RIGHT`|`DOWN`|
-|:-:   |:-: |:-:   |:-:    |:-:   |
-|Number|111 |113   |114    |116   |
-
+Undefined key string is represented as a code number.
 
 ## Definition of box number (nbox)
 
@@ -87,10 +84,3 @@ nbox : number [3]
 
 macro examples:
 [ex34](../ex/ex34.md)
-
-
-
-
-
-
-
