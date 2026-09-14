@@ -69,16 +69,16 @@ For example,
 tip> div 2 2
 tip> do n 1 4; box 0 1 0 1; end
 
-tip> getpos x y nkey nbox; ls nbox ;# click mouse on the 1st box
+tip> getpos x y key nbox; ls nbox ;# click mouse on the 1st box
 nbox : number [0]
 
-tip> getpos x y nkey nbox; ls nbox ;# click mouse on the 2nd box
+tip> getpos x y key nbox; ls nbox ;# click mouse on the 2nd box
 nbox : number [1]
 
-tip> getpos x y nkey nbox; ls nbox ;# click mouse on the 3rd box
+tip> getpos x y key nbox; ls nbox ;# click mouse on the 3rd box
 nbox : number [2]
 
-tip> getpos x y nkey nbox; ls nbox ;# click mouse on the 4th box
+tip> getpos x y key nbox; ls nbox ;# click mouse on the 4th box
 nbox : number [3]
 ```
 
