@@ -1947,7 +1947,7 @@ public:
 	" fill  : draw a filled pattern object in the 2D-graph\n"
 	" font  : set text font\n"
 	" fplot : plot the frequency domain graph from the data\n"
-	" getpos: get the position on the graph using the mouse cursor"
+	" getpos: get the position on the graph using the mouse cursor\n"
 	" help  : show help message\n"
 	" hfit  : fit the histogram\n"
 	" hplot : plot the histogram from the data\n"
