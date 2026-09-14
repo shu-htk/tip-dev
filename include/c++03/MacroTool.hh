@@ -1031,10 +1031,15 @@ namespace thl {
 	    printf("Usage: cin v [prompt]\n"
 		   "Input expression from console to macro variable v.\n");
 	  } else {
-	    printf("%s > ",(args.size()<3) ? "cin" : trim(args(2)).c_str());
+	    std::string v=args(1);
+	    if (args.size() < 3) {
+	      printf("%s = ", v.c_str());
+	    } else {
+	      printf("%s: %s = ",trim(args(2)).c_str(), v.c_str());
+	    }
 	    std::string expr;
 	    std::getline(std::cin,expr);
-	    var.set_expr(args(1),expr,0);
+	    var.set_expr(v,expr,0);
 	  }
 	  nline++; continue;
 	}
