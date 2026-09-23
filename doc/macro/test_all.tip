@@ -1,7 +1,7 @@
-# test of executing all macro files
+# test to execute all macro files
 
 fmt %02.0f
-do n 1 30
+do n 1 33
   if [n]==07 | [n]==13 | [n]==17
     exe doc/macro/ex[n]a.tip
     wait 1
@@ -13,3 +13,6 @@ do n 1 30
   fi
   wait 1
 end
+
+# remvoe temporary data
+sys rm -f mesh.dat mandelbrot.dat
