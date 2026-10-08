@@ -70,7 +70,7 @@ char** tip_command_completion(const char* text, int start, int end) {
     return rl_completion_matches(text, tip_command_generator);
   }
   if(iarg==1 || (iarg==2 && rl_line_buffer[start] != ' ')) {
-    if(cmd == "exe") {
+    if(cmd == "exe" || cmd == "sys") {
       rl_attempted_completion_over = 0;
       return 0;
     } else {
