@@ -499,26 +499,35 @@ public:
     }
     return 0;
   }
-  int data_set_list(const std::string &v, const std::string &expr) {
+  int data_set_list(const std::string &v, const std::string &expr,
+		    bool append=0) {
     thl::Bracket bc('{','}',expr); if(bc.size()<1) return 1;
-    _dat[v].clear();
+    if(!append) _dat[v].clear();
     thl::Calc calc;
     thl::StrSplit sp;
     sp.set_quot_to_skip_split('"');
     sp.split(bc.contents(0),", ");
     for(size_t j=0; j<sp.size(); j++) {
-      double x = calc.eval(sp(j));
-      _dat[v].type = calc.not_digit() ? Str : Num;
-      if(_dat[v].type==Str) {
-	_dat[v].str.push_back(thl::trim(sp(j)));
+      std::string s=sp(j);
+      double x = calc.eval(s);
+      if(calc.not_digit()) {
+	if(append && _dat[v].type != Str) {
+	  printf("can't append number to string data\n"); return 1;
+	}
+	_dat[v].type=Str;
+	_dat[v].str.push_back(thl::trim(s));
       } else {
+	if(append && _dat[v].type != Num) {
+	  printf("can't append string to numerical data\n"); return 1;
+	}
+	_dat[v].type=Num;
 	_dat[v].num.push_back(x);
       }
     }
     return 0;
   }
   int data_set_range(const std::string &v, const std::string &expr,
-		     bool incr_mode=0) {
+		     bool incr_mode=0, bool append=0) {
     thl::Bracket bc('(',')',expr); if(bc.size()<1) return 1;
     thl::StrSplit sp(bc.contents(0),",");
     if(sp.size()<3) {
@@ -547,7 +556,7 @@ public:
 	printf("N > 0 required\n"); return 1;
       } 
       _dat[v].type = type0;
-      _dat[v].clear();
+      if(!append) _dat[v].clear();
       if(ndata==1) {
 	_dat[v].num.push_back(x0);
       } else {
@@ -559,9 +568,10 @@ public:
     }
   }
   int data_set_random(const std::string &v, const std::string &expr,
-		     Option &opt) {
+		      Option &opt, bool append=0) {
     thl::Bracket bc('(',')',expr); if(bc.size()<1) return 1;
-    _dat[v].clear(); _dat[v].type = Num;
+    if(!append) _dat[v].clear();
+    _dat[v].type = Num;
     thl::StrSplit sp(bc.contents(0),",");
     if(sp.size()<2) {
       printf("random() should have at least 2 arguments\n"); return 1;
@@ -596,7 +606,7 @@ public:
     }
   }
   int data_set_time(const std::string &v, const std::string &expr,
-		    Option &opt) {
+		    Option &opt, bool append=0) {
     var.ts.set_delimiters(opt.td);
     thl::Bracket bc('(',')',expr); if(bc.size()<1) return 1;
     thl::StrSplit sp(bc.contents(0),",");
@@ -605,34 +615,35 @@ public:
     }
     std::string tag = sp(0);
     std::string unit = (sp.size()>1) ? sp(1) : "";
+    if(!append) _dat[v].clear();
     if(tag=="now") {
       double utime = var.ts.str_to_num("now","utime");
       std::string ts = var.ts.utime_to_str(utime,1);
       if(unit=="str") {
-	_dat[v].type = Str; _dat[v].clear();
+	_dat[v].type = Str;
 	_dat[v].str.push_back(ts);
       } else {
-	_dat[v].type = Num; _dat[v].clear();
+	_dat[v].type = Num;
 	_dat[v].num.push_back(var.ts.str_to_num(ts,unit));
       }
     } else {
       if(_dat.count(tag)==0) {
 	printf("[%s] not found.\n",tag.c_str()); return 1;
       }
-      if(_dat[tag].type==Str) {
-	_dat[v].type = Num; _dat[v].clear();
+      if(_dat[tag].type == Str) {
+	_dat[v].type = Num;
 	for(size_t j=0; j<_dat[tag].str.size(); j++) {
 	  _dat[v].num.push_back(var.ts.str_to_num(_dat[tag].str[j],unit));
 	}
       }
-      if(_dat[tag].type==Num) {
+      if(_dat[tag].type == Num) {
 	if(unit=="str") {
-	  _dat[v].type = Str; _dat[v].clear();
+	  _dat[v].type = Str;
 	  for(size_t j=0; j<_dat[tag].num.size(); j++) {
 	    _dat[v].str.push_back(var.ts.utime_to_str(_dat[tag].num[j],1));
 	  }
 	} else {
-	  _dat[v].type = Num; _dat[v].clear();
+	  _dat[v].type = Num;
 	  for(size_t j=0; j<_dat[tag].num.size(); j++) {
 	    _dat[v].num.push_back(var.ts.utime_to_num(_dat[tag].num[j],unit));
 	  }
@@ -663,7 +674,8 @@ public:
     // 6 110 mesh | str
     // 7 111 mesh | str | num
   }
-  int data_set_eval(const std::string &v, const std::string &expr) {
+  int data_set_eval(const std::string &v, const std::string &expr,
+		    bool append=0) {
     thl::Calc calc;
     std::set<std::string> tags;
     int types=find_tags(tags,expr);
@@ -671,7 +683,12 @@ public:
       printf("variable type in the expression should be Num\n");
       return -1;
     }
-    _dat[v].clear();
+    if(tags.count(v)) {
+      printf("error: '%s' in the expression is identical to left value\n"
+	     ,v.c_str());
+      return -1;
+    }
+    if(!append) _dat[v].clear();
     if(tags.size()>0) {
       std::string tag0 = *tags.begin();
       for(std::set<std::string>::iterator it=tags.begin();
@@ -2255,34 +2272,35 @@ public:
       _gopt.sd = args(1);
     }
     if(args(0)=="set") {
-      thl::StrSplit sp(buf,"= \t");
+      thl::StrSplit sp(buf,"=+ \t");
       if(sp.size() < 3) {
-	printf("Usage: set v = {x0,x1,x2,...}\n"
-	       "       set v = range(N,x0,x1)\n"
-	       "       set v = incr(N,x0,dx)\n"
-	       "       set v = random(N,uni|gaus|exp[,params...]) [(opt)]\n"
-	       "       set v = time(t[,unit])\n"
-	       "       set v = expression\n"
+	printf("Usage: set v [=|+=] {x0,x1,x2,...}\n"
+	       "       set v [=|+=] range(N,x0,x1)\n"
+	       "       set v [=|+=] incr(N,x0,dx)\n"
+	       "       set v [=|+=] random(N,uni|gaus|exp[,params...]) [(opt)]\n"
+	       "       set v [=|+=] time(t[,unit])\n"
+	       "       set v [=|+=] expression\n"
 	       "Set data v using various expressions.\n"
 	       "See 'range', 'random', and 'time' for details.\n");
- 	return 0;
+	return 0;
       }
+      bool append = (buf.find("+=") != buf.npos) ? 1 : 0;
       std::string tag = sp(1);
       std::string expr = buf.substr(sp.index(2));
       if(expr.find("{") == 0) {
-	data_set_list(tag,buf);
+	data_set_list(tag,buf,append);
       } else if(expr.find("range(") == 0) {
-	data_set_range(tag,buf,0);
+	data_set_range(tag,buf,0,append);
       } else if(expr.find("incr(") == 0) {
-	data_set_range(tag,buf,1);
+	data_set_range(tag,buf,1,append);
       } else if(expr.find("random(") == 0) {
 	Option opt=get_opt(buf);
-	data_set_random(tag,buf,opt);
+	data_set_random(tag,buf,opt,append);
       } else if(expr.find("time(") == 0) {
 	Option opt=get_opt(buf);
-	data_set_time(tag,buf,opt);
+	data_set_time(tag,buf,opt,append);
       } else {
-	data_set_eval(tag,expr);
+	data_set_eval(tag,expr,append);
       }
       return 0;
     }
