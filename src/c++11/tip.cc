@@ -508,13 +508,13 @@ public:
       double x = calc.eval(s);
       if(calc.not_digit()) {
 	if(append && _dat[v].type != Str) {
-	  printf("can't append number to string data\n"); return 1;
+	  printf("can't append string to numerical data\n"); return 1;
 	}
 	_dat[v].type=Str;
 	_dat[v].str.push_back(thl::trim(s));
       } else {
 	if(append && _dat[v].type != Num) {
-	  printf("can't append string to numerical data\n"); return 1;
+	  printf("can't append number to string data\n"); return 1;
 	}
 	_dat[v].type=Num;
 	_dat[v].num.push_back(x);
@@ -540,6 +540,9 @@ public:
       }
       return 1;
     } else {
+      if(append && _dat[v].type != Num) {
+	printf("can't append number to string data\n"); return 1;
+      }
       DataType type0, type1;
       int ndata = sp.stoi(0);
       double x0 = str_to_val(sp(1),type0);
@@ -572,6 +575,9 @@ public:
     if(sp.size()<2) {
       printf("random() should have at least 2 arguments\n"); return 1;
     } else {
+      if(append && _dat[v].type != Num) {
+	printf("can't append number to string data\n"); return 1;
+      }
       thl::Random rdm;
       thl::StrNum sn;
       if(opt.sd=="utime") rdm.set_seed_by_utime();
@@ -684,6 +690,9 @@ public:
 	     ,v.c_str());
       return -1;
     }
+    if(append && _dat[v].type != Num) {
+      printf("can't append number to string data\n"); return 1;
+    }
     if(!append) _dat[v].clear();
     if(tags.size()>0) {
       std::string tag0 = *tags.begin();
@@ -723,10 +732,9 @@ public:
 	     "  N1 : the ending index of src (default is size of src)\n");
       return 1;
     }
-    if(!append) _dat[v].clear();
     std::string src = sp(0);
     if(!_dat.count(src)) {printf("%s not exist\n",src.c_str()); return 1;}
-    _dat[v].type = _dat[src].type;
+    if(!append) _dat[v].clear();
     int n0 = (sp.size()>1) ? sp.stoi(1) : 1;
     int n1 = (sp.size()>2) ? sp.stoi(2) : _dat[src].size();
     int ndata = (int)_dat[src].size();
@@ -737,10 +745,18 @@ public:
     if(n0 > n1) n0 = n1;
 
     if(_dat[src].type == Str) {
+      if(append && _dat[v].type == Num) {
+	printf("can't append string to numerical data\n"); return 1;
+      }
+      _dat[v].type = _dat[src].type;
       for(int j=n0-1; j<n1; j++) {
 	_dat[v].str.push_back(_dat[src].str[j]);
       }
     } else {
+      if(append && _dat[v].type == Str) {
+	printf("can't append number to string data\n"); return 1;
+      }
+      _dat[v].type = _dat[src].type;
       for(int j=n0-1; j<n1; j++) {
 	_dat[v].num.push_back(_dat[src].num[j]);
       }
@@ -2283,20 +2299,21 @@ public:
       _gopt.sd = args(1);
     }
     if(args(0)=="set") {
-      thl::StrSplit sp(buf,"=+ \t");
+      thl::StrSplit sp(buf,"=< \t");
       if(sp.size() < 3) {
-	printf("Usage: set v [=|+=] {x0,x1,x2,...}\n"
-	       "       set v [=|+=] range(N,x0,x1)\n"
-	       "       set v [=|+=] incr(N,x0,dx)\n"
-	       "       set v [=|+=] random(N,uni|gaus|exp[,...]) [(opt)]\n"
-	       "       set v [=|+=] time(t[,unit])\n"
-	       "       set v [=|+=] copy(src,N0,N1)\n"
-	       "       set v [=|+=] expression\n"
+	printf("Usage: set v [=|<<] {x0,x1,x2,...}\n"
+	       "       set v [=|<<] range(N,x0,x1)\n"
+	       "       set v [=|<<] incr(N,x0,dx)\n"
+	       "       set v [=|<<] random(N,uni|gaus|exp[,...]) [(opt)]\n"
+	       "       set v [=|<<] time(t[,unit])\n"
+	       "       set v [=|<<] copy(src,N0,N1)\n"
+	       "       set v [=|<<] expression\n"
 	       "Set data v using various expressions.\n"
+	       "Operator '=' create new data, '<<' append data.\n"
 	       "See 'range','incr','random','time','copy' for details.\n");
 	return 0;
       }
-      bool append = (buf.find("+=") != buf.npos) ? 1 : 0;
+      bool append = (buf.find("<<") != buf.npos) ? 1 : 0;
       std::string tag = sp(1);
       std::string expr = buf.substr(sp.index(2));
       if(expr.find("{") == 0) {

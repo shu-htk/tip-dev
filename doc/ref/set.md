@@ -1,14 +1,16 @@
 # set
 ```
 tip> set
-Usage: set v = {x0,x1,x2,...}
-       set v = range(N,x0,x1)
-       set v = incr(N,x0,dx)
-       set v = random(N,uni|gaus|exp[,params...]) [(opt)]
-       set v = time(t[,unit])
-       set v = expression
+Usage: set v [=|<<] {x0,x1,x2,...}
+       set v [=|<<] range(N,x0,x1)
+       set v [=|<<] incr(N,x0,dx)
+       set v [=|<<] random(N,uni|gaus|exp[,...]) [(opt)]
+       set v [=|<<] time(t[,unit])
+       set v [=|<<] copy(src,N0,N1)
+       set v [=|<<] expression
 Set data v using various expressions.
-See 'range', 'random', and 'time' for details.
+Operator '=' create new data, '<<' append data.
+See 'range','incr','random','time','copy' for details.
 ```
 
 ## set data using initializer list {}
@@ -114,3 +116,40 @@ tip> cat x
 x : data(num) :  2.7182818285
 tip>
 ```
+
+## append data (available in version v1.2.6 and later)
+
+```
+tip> set x = {1,2,3}
+tip> cat x
+x : data(num) :  1 2 3
+
+tip> set x << {4,5,6}
+tip> cat x
+x : data(num) :  1 2 3 4 5 6
+
+tip> set x << incr(5,10,1)
+tip> cat x
+x : data(num) :  1 2 3 4 5 6 10 11 12 13 14
+```
+
+## copy data (available in version v1.2.6 and later)
+
+```
+tip> set x = range(10,1,10)
+tip> set y = copy(x)
+tip> cat *
+x : data(num) :  1 2 3 4 5 6 7 8 9 10
+y : data(num) :  1 2 3 4 5 6 7 8 9 10
+
+tip> set y = copy(x,3)
+tip> cat *
+x : data(num) :  1 2 3 4 5 6 7 8 9 10
+y : data(num) :  3 4 5 6 7 8 9 10
+
+tip> set y = copy(x,3,7)
+tip> cat *
+x : data(num) :  1 2 3 4 5 6 7 8 9 10
+y : data(num) :  3 4 5 6 7
+```
+

@@ -5,10 +5,10 @@ opt (fl:0) ;# disable flush to avoid screen flickering
 div 1 2
 @ nmax = 1000
 do n 1 [nmax]
- set t += time(now)              ;# append timestamp of now
- set v += random(1,gaus,0.1,0.7) ;# append dummy data (random gaussian)
- plot t v (tf:"%H:%M:%S" tl:"Time variation of v ([n]/[nmax])")
- hplot v (xr:0,2 ft:solid tl:"Histogram of v")
+   set t << time(now)              ;# append timestamp of now
+   set v << random(1,gaus,0.1,0.7) ;# append dummy data (random gaussian)
+   plot t v (tf:"%H:%M:%S" tl:"Time variation of v ([n]/[nmax])")
+   hplot v (xr:0,2 ft:solid tl:"Histogram of v")
 end
 
 opt (fl:1) ;# enable flush
