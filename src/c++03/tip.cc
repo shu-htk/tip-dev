@@ -717,6 +717,43 @@ public:
       return 1;
     }
   }
+  int data_set_copy(const std::string &v, const std::string &expr,
+		    bool append=0) {
+    bool usage_flag=0;
+    thl::Bracket bc('(',')',expr); if(bc.size()<1) usage_flag=1;
+    thl::StrSplit sp(bc.contents(0),","); if(sp.size()<1) usage_flag=1;
+    if(usage_flag || expr=="_print_usage_") {
+      printf("Usage: set x = copy(src [,N0] [,N1])\n"
+	     "Copy data within the specified index range.\n"
+	     "  src: source data\n"
+	     "  N0 : the begining index of src (default is 1)\n"
+	     "  N1 : the ending index of src (default is size of src)\n");
+      return 1;
+    }
+    if(!append) _dat[v].clear();
+    std::string src = sp(0);
+    if(!_dat.count(src)) {printf("%s not exist\n",src.c_str()); return 1;}
+    _dat[v].type = _dat[src].type;
+    int n0 = (sp.size()>1) ? sp.stoi(1) : 1;
+    int n1 = (sp.size()>2) ? sp.stoi(2) : _dat[src].size();
+    int ndata = (int)_dat[src].size();
+    if(n0 < 1) n0 = 1;
+    if(n0 > ndata) n0 = ndata;
+    if(n1 < 1) n1 = 1;
+    if(n1 > ndata) n1 = ndata;
+    if(n0 > n1) n0 = n1;
+
+    if(_dat[src].type == Str) {
+      for(int j=n0-1; j<n1; j++) {
+	_dat[v].str.push_back(_dat[src].str[j]);
+      }
+    } else {
+      for(int j=n0-1; j<n1; j++) {
+	_dat[v].num.push_back(_dat[src].num[j]);
+      }
+    }
+    return 1;
+  }
   void check_data_file(const std::string &fname, Option &opt) {
     std::ifstream ifs(fname.c_str());
     if(ifs) {
@@ -2277,11 +2314,12 @@ public:
 	printf("Usage: set v [=|+=] {x0,x1,x2,...}\n"
 	       "       set v [=|+=] range(N,x0,x1)\n"
 	       "       set v [=|+=] incr(N,x0,dx)\n"
-	       "       set v [=|+=] random(N,uni|gaus|exp[,params...]) [(opt)]\n"
+	       "       set v [=|+=] random(N,uni|gaus|exp[,...]) [(opt)]\n"
 	       "       set v [=|+=] time(t[,unit])\n"
+	       "       set v [=|+=] copy(src,N0,N1)\n"
 	       "       set v [=|+=] expression\n"
 	       "Set data v using various expressions.\n"
-	       "See 'range', 'random', and 'time' for details.\n");
+	       "See 'range','incr','random','time','copy' for details.\n");
 	return 0;
       }
       bool append = (buf.find("+=") != buf.npos) ? 1 : 0;
@@ -2299,6 +2337,8 @@ public:
       } else if(expr.find("time(") == 0) {
 	Option opt=get_opt(buf);
 	data_set_time(tag,buf,opt,append);
+      } else if(expr.find("copy(") == 0) {
+	data_set_copy(tag,buf,append);
       } else {
 	data_set_eval(tag,expr,append);
       }
@@ -2345,6 +2385,11 @@ public:
 	     "  usec  : microseconds\n"
 	     "  str   : ISO time string\n"
 	     "If unit is omitted, return epoch time.\n");
+      return 0;
+    }
+    if(args(0)=="copy") {
+      std::string dummy;
+      data_set_copy(dummy,"_print_usage_");
       return 0;
     }
     if(args(0)=="read") {
