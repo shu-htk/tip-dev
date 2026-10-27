@@ -43,7 +43,7 @@ namespace thl {
     std::map<std::string,double> _var_num;
     enum Func {
       ABS,SQRT,EXP,LOG,LOG10,COS,ACOS,SIN,ASIN,TAN,ATAN,COSH,SINH,TANH,FLOOR,
-      POW,ATAN2
+      ROUND,POW,ATAN2
     };
   public:
     Calc(void) {}
@@ -82,6 +82,7 @@ namespace thl {
       if(s.find("sinh(")==0) {return func(s,SINH);}
       if(s.find("tanh(")==0) {return func(s,TANH);}
       if(s.find("floor(")==0) {return func(s,FLOOR);}
+      if(s.find("round(")==0) {return func(s,ROUND);}
       if(s.find("pow(")==0) {return func(s,POW);}
       if(s.find("atan2(")==0) {return func(s,ATAN2);}
       for(auto &&a : _tag) {
@@ -123,6 +124,7 @@ namespace thl {
 	  if(ifunc==SINH) {return std::sinh(x);}
 	  if(ifunc==TANH) {return std::tanh(x);}
 	  if(ifunc==FLOOR) {return std::floor(x);}
+	  if(ifunc==ROUND) {return std::round(x);}
 	}
       }
       return 0;
