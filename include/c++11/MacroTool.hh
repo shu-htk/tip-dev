@@ -1046,7 +1046,7 @@ namespace thl {
 	  nline++; continue;
 	}
 	if(args(0).find("++") != buf.npos) {
-	  StrSplit sp(buf," +");
+	  StrSplit sp(buf," \t+");
 	  if(sp.size()<1) {
 	    printf("Usage: ++var\n Increment numerical macro variable\n");
 	  } else {
@@ -1058,7 +1058,7 @@ namespace thl {
 	  nline++; continue;
 	}
 	if(args(0).find("--") != buf.npos) {
-	  StrSplit sp(buf," -");
+	  StrSplit sp(buf," \t-");
 	  if(sp.size()<1) {
 	    printf("Usage: --var\n Decrement numerical macro variable\n");
 	  } else {
