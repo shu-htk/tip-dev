@@ -1966,7 +1966,7 @@ public:
     std::vector<std::string> vlist;
     thl::StrSplit sp(pattern,",");
     for(size_t j=0; j<sp.size(); j++) {
-      for(std::map<std::string,Data>::iterator it=_ca.begin();
+      for(std::map<std::string,thl::EpicsCA>::iterator it=_ca.begin();
 	  it != _ca.end(); it++) {
 	if( thl::wc_match_str(sp(j),it->first) ) {
 	  vlist.push_back(it->first);
