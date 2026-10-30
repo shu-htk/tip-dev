@@ -2797,8 +2797,8 @@ public:
       thl::Bracket bc('(',')',buf.substr(sp.index(2)));
       if(bc.size()==0) {printf("unbalanced '(' and ')'\n"); return 0;}
       std::string v = thl::trim(bc.before(0));
-      thl::Calc calc;
-      int index = (int)calc.eval(bc.contents(0));
+      thl::StrNum sn;
+      int index = sn.stoi(bc.contents(0));
       if(_dat.count(v)>0) {
 	if(index > 0 && index <= (int)_dat[v].size()) {
 	  if(_dat[v].type==Str) {
