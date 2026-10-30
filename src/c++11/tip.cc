@@ -1940,18 +1940,17 @@ public:
   std::vector<std::string> epics_get_vlist(const std::string &pattern) {
     std::vector<std::string> vlist;
     thl::StrSplit sp(pattern,",");
-    for(size_t j=0; j<sp.size(); j++) {
-      for(std::map<std::string,Data>::iterator it=_ca.begin();
-	  it != _ca.end(); it++) {
-	if( thl::wc_match_str(sp(j),it->first) ) {
-	  vlist.push_back(it->first);
+    for(auto &&s : sp) {
+      for(auto &&a : _ca) {
+	if( thl::wc_match_str(s,a.first) ) {
+	  vlist.push_back(a.first);
 	}
       }
     }
     return vlist;
   }
-  int epics_ca_check(std::string pattern) {
-    std::vector<std::string> vlist=get_vlist(pattern);
+  int epics_ca_check(const std::string &pattern) {
+    std::vector<std::string> vlist=epics_get_vlist(pattern);
     ca_poll();
     usleep(1000);
     int ret=0;
@@ -1971,8 +1970,8 @@ public:
     }
     return ret;
   }
-  void epics_ca_close(std::string pattern) {
-    std::vector<std::string> vlist=get_vlist(pattern);
+  void epics_ca_close(const std::string &pattern) {
+    std::vector<std::string> vlist=epics_get_vlist(pattern);
     for(size_t j=0; j<vlist.size(); j++) {
       std::string tag = vlist[j];
       if(_ca[tag].is_connected()) {
