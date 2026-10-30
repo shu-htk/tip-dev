@@ -690,7 +690,7 @@ public:
 	     ,v.c_str());
       return -1;
     }
-    if(append && _dat[v].type != Num) {
+    if(append && _dat[v].type == Str) {
       printf("can't append number to string data\n"); return 1;
     }
     if(!append) _dat[v].clear();
