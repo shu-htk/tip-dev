@@ -1962,8 +1962,21 @@ public:
     }
     return 0;
   }
-  int epics_ca_check(std::string pattern) {
-    std::vector<std::string> vlist=get_vlist(pattern);
+  std::vector<std::string> epics_get_vlist(const std::string &pattern) {
+    std::vector<std::string> vlist;
+    thl::StrSplit sp(pattern,",");
+    for(size_t j=0; j<sp.size(); j++) {
+      for(std::map<std::string,Data>::iterator it=_ca.begin();
+	  it != _ca.end(); it++) {
+	if( thl::wc_match_str(sp(j),it->first) ) {
+	  vlist.push_back(it->first);
+	}
+      }
+    }
+    return vlist;
+  }
+  int epics_ca_check(const std::string &pattern) {
+    std::vector<std::string> vlist=epics_get_vlist(pattern);
     ca_poll();
     usleep(1000);
     int ret=0;
@@ -1978,14 +1991,14 @@ public:
 	  var.set_num(tag+".update",0);
 	}
       } else {
-	printf("data '%s' is not connected to EPICS_record\n",tags.c_str());
+	printf("data '%s' is not connected to EPICS_record\n",tag.c_str());
 	ret++;
       }
     }
     return ret;
   }
-  void epics_ca_close(std::string pattern) {
-    std::vector<std::string> vlist=get_vlist(pattern);
+  void epics_ca_close(const std::string &pattern) {
+    std::vector<std::string> vlist=epics_get_vlist(pattern);
     for(size_t j=0; j<vlist.size(); j++) {
       std::string tag = vlist[j];
       if(_ca[tag].is_connected()) {
