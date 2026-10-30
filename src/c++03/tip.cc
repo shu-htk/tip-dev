@@ -1962,13 +1962,13 @@ public:
     }
     return 0;
   }
-  int epics_ca_check(std::string tags) {
-    thl::StrSplit sp(tags,",");
+  int epics_ca_check(std::string pattern) {
+    std::vector<std::string> vlist=get_vlist(pattern);
     ca_poll();
     usleep(1000);
     int ret=0;
-    for(size_t j=0; j<sp.size(); j++) {
-      std::string tag = sp(j);
+    for(size_t j=0; j<vlist.size(); j++) {
+      std::string tag = vlist[j];
       if(_ca[tag].is_connected()) {
 	if(_ca[tag].mon_flag()) {
 	  epics_ca_setval(_ca[tag],tag);
@@ -1984,10 +1984,10 @@ public:
     }
     return ret;
   }
-  void epics_ca_close(std::string tags) {
-    thl::StrSplit sp(tags,",");
-    for(size_t j=0; j<sp.size(); j++) {
-      std::string tag = sp(j);
+  void epics_ca_close(std::string pattern) {
+    std::vector<std::string> vlist=get_vlist(pattern);
+    for(size_t j=0; j<vlist.size(); j++) {
+      std::string tag = vlist[j];
       if(_ca[tag].is_connected()) {
 	_ca[tag].disconnect();
       }
