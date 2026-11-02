@@ -41,3 +41,5 @@ it just aims ease of use over versatility.
 
 ***
 *[Japanese document](jp/README.md)*
+
+last update: v1.2.7-2-g13d488e 2026-11-02 12:03:13 +0900, shu-htk

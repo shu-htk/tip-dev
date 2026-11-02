@@ -42,3 +42,6 @@ C++で記述されており
 
 ***
 *[English document](../README.md)*
+
+last update: v1.2.7-2-g13d488e 2026-11-02 12:03:13 +0900, shu-htk
+
