@@ -12,6 +12,14 @@ if [ -e .git ] ; then
 	    if [ $update == 1 ] && [ ${ans:-"n"} == "y" ] ; then
 		echo "version.txt is updated"
 		cp ver.tmp version.txt
+		cat README.md |\
+		    sed "s%last update:.*%last update: $git_tag $git_log%g" \
+			> tmp.txt
+		mv tmp.txt README.md
+		cat jp/README.md |\
+		    sed "s%last update:.*%last update: $git_tag $git_log%g" \
+			> tmp.txt
+		mv tmp.txt jp/README.md
 	    else
 		echo "version.txt is not updated"
 	    fi
