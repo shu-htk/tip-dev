@@ -127,7 +127,7 @@ namespace thl {
 	  if(ifunc==SINH) {return std::sinh(x);}
 	  if(ifunc==TANH) {return std::tanh(x);}
 	  if(ifunc==FLOOR) {return std::floor(x);}
-	  if(ifunc==ROUND) {return std::round(x);}
+	  if(ifunc==ROUND) {return round(x);}
 	}
       }
       return 0;
