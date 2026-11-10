@@ -1019,7 +1019,7 @@ namespace thl {
 	x1 = x0 + xwid;
 	 if(sx.size()>1) x1 -= (x1-x0)*(1-sx.stof(1));
       } else { // default right
-	x1 = 0.94;
+	x1 = (att.vx1==0) ? 0.94 : att.vx1+0.01;
 	x0 = x1 - xwid;
 	if(sx.size()>1) x0 += (x1-x0)*(1-sx.stof(1));
       }
@@ -1033,7 +1033,7 @@ namespace thl {
 	y1 = y0 + ywid;
 	if(sy.size()>1) y1 -= (y1-y0)*(1-sy.stof(1));
       } else { // default top
-	y1 = 0.91;
+	y1 = (att.vy1==0) ? 0.91 : att.vy1+0.01;
 	y0 = y1 - ywid;
 	if(sy.size()>1) y0 += (y1-y0)*(1-sy.stof(1));
       }
