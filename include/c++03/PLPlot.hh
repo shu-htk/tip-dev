@@ -954,7 +954,8 @@ namespace thl {
 #if 1 // color bar
       plschr(0,0.6); plsmaj(0,0.5); plsmin(0,0.5);//set smaller text and ticks
       PLFLT aspect = 36.0*_nx/_ny;
-      PLFLT x0 = 0.95-0.03*_nx/_ny;
+      PLFLT x00 = (att.vx1==0) ? 0.96 : att.vx1 + 0.04;
+      PLFLT x0 = x00-0.03*_nx/_ny;
       PLFLT x1 = x0 + 0.015;
       plvpas(x0, x1, 0, 1, aspect);
       plwind(0, 1, z0, z1);
@@ -1011,7 +1012,9 @@ namespace thl {
       std::string ypos = (sp.size()<2) ? "top" : sp(1);
       StrSplit sx(xpos,":");
       if(xpos[0]=='l') {// left
-	x0 = 0.13;
+	x0 = (att.vx1==0) ? 0.13
+	   : (att.vx0>0.99) ? 0.0
+	   : att.vx0+0.01;
 	x1 = x0 + xwid;
 	if(sx.size()>1) x1 -= (x1-x0)*(1-sx.stof(1));
       } else if(xpos[0]=='m') {// middle
@@ -1019,13 +1022,17 @@ namespace thl {
 	x1 = x0 + xwid;
 	 if(sx.size()>1) x1 -= (x1-x0)*(1-sx.stof(1));
       } else { // default right
-	x1 = (att.vx1==0) ? 0.94 : att.vx1+0.01;
+	x1 = (att.vx1==0) ? 0.94
+	   : (att.vx1>0.99) ? 1.0
+	   : att.vx1+0.01;
 	x0 = x1 - xwid;
 	if(sx.size()>1) x0 += (x1-x0)*(1-sx.stof(1));
       }
       StrSplit sy(ypos,":");
       if(ypos[0]=='b') {// bottom
-	y0 = 0.12;
+	y0 = (att.vy1==0) ? 0.12
+	   : (att.vy0>0.99) ? 0.0
+	   : att.vy0+0.01;
 	y1 = y0 + ywid;
 	if(sy.size()>1) y1 -= (y1-y0)*(1-sy.stof(1));
       } else if(ypos[0]=='m') {// middle
@@ -1033,7 +1040,9 @@ namespace thl {
 	y1 = y0 + ywid;
 	if(sy.size()>1) y1 -= (y1-y0)*(1-sy.stof(1));
       } else { // default top
-	y1 = (att.vy1==0) ? 0.91 : att.vy1+0.01;
+	y1 = (att.vy1==0) ? 0.91
+	   : (att.vy1>0.99) ? 1.0
+	   : att.vy1+0.01;
 	y0 = y1 - ywid;
 	if(sy.size()>1) y0 += (y1-y0)*(1-sy.stof(1));
       }
