@@ -512,13 +512,13 @@ public:
       double x = calc.eval(s);
       if(calc.not_digit()) {
 	if(append && _dat[v].type != Str) {
-	  printf("can't append string to numerical data\n"); return 1;
+	  printf("can't append string to %s\n",_dat[v].type_name()); return 1;
 	}
 	_dat[v].type=Str;
 	_dat[v].str.push_back(thl::trim(s));
       } else {
 	if(append && _dat[v].type != Num) {
-	  printf("can't append number to string data\n"); return 1;
+	  printf("can't append number to %s\n",_dat[v].type_name()); return 1;
 	}
 	_dat[v].type=Num;
 	_dat[v].num.push_back(x);
@@ -545,7 +545,7 @@ public:
       return 1;
     } else {
       if(append && _dat[v].type != Num) {
-	printf("can't append number to string data\n"); return 1;
+	printf("can't append number to %s\n",_dat[v].type_name()); return 1;
       }
       DataType type0, type1;
       int ndata = sp.stoi(0);
@@ -574,14 +574,14 @@ public:
 		      Option &opt, bool append=0) {
     thl::Bracket bc('(',')',expr); if(bc.size()<1) return 1;
     if(!append) _dat[v].clear();
-    _dat[v].type = Num;
     thl::StrSplit sp(bc.contents(0),",");
     if(sp.size()<2) {
       printf("random() should have at least 2 arguments\n"); return 1;
     } else {
       if(append && _dat[v].type != Num) {
-	printf("can't append number to string data\n"); return 1;
+	printf("can't append number to %s\n",_dat[v].type_name()); return 1;
       }
+      _dat[v].type = Num;
       thl::Random rdm;
       thl::StrNum sn;
       if(opt.sd=="utime") rdm.set_seed_by_utime();
@@ -693,9 +693,6 @@ public:
       printf("error: '%s' in the expression is identical to left value\n"
 	     ,v.c_str());
       return -1;
-    }
-    if(append && _dat[v].type == Str) {
-      printf("can't append number to string data\n"); return 1;
     }
     if(!append) _dat[v].clear();
     if(tags.size()>0) {
