@@ -648,10 +648,66 @@ namespace thl {
       }
       plschr(0,1);
     }
+    void draw_filled_arrow_edge(PLFLT x0, PLFLT y0, PLFLT x1, PLFLT y1) {
+      //-- Thanks to Gemini
+      PLFLT head_len_mm = 4.0;   // [mm]
+      PLFLT head_width_mm = 2.5; // [mm]
+      PLFLT wx_min, wx_max, wy_min, wy_max;
+      PLFLT nx_min, nx_max, ny_min, ny_max;
+      PLFLT mm_xmin, mm_xmax, mm_ymin, mm_ymax;
+      plgvpw(&wx_min, &wx_max, &wy_min, &wy_max);
+      plgvpd(&nx_min, &nx_max, &ny_min, &ny_max);
+      plgspa(&mm_xmin, &mm_xmax, &mm_ymin, &mm_ymax);
+      PLFLT vp_w_mm = (nx_max - nx_min) * (mm_xmax - mm_xmin);
+      PLFLT vp_h_mm = (ny_max - ny_min) * (mm_ymax - mm_ymin);
+      PLFLT scale_x = vp_w_mm / (wx_max - wx_min) * _nx;
+      PLFLT scale_y = vp_h_mm  / (wy_max - wy_min) * _ny;
+      PLFLT mx0 = (x0 - wx_min) * scale_x;
+      PLFLT my0 = (y0 - wy_min) * scale_y;
+      PLFLT mx1 = (x1 - wx_min) * scale_x;
+      PLFLT my1 = (y1 - wy_min) * scale_y;
+      PLFLT dx = mx1 - mx0;
+      PLFLT dy = my1 - my0;
+      PLFLT d = std::sqrt(dx*dx + dy*dy);
+      if (d == 0.0) return;
+      PLFLT ux = dx / d;
+      PLFLT uy = dy / d;
+      PLFLT px = -uy;
+      PLFLT py =  ux;
+      PLFLT half_w = head_width_mm * 0.5;
+
+      if ( (att.asty>>0) & 1 ) { // edge of end point
+        PLFLT poly_x[3] = {
+	  x1,
+	  wx_min + (mx1 - head_len_mm * ux + half_w * px) / scale_x,
+	  wx_min + (mx1 - head_len_mm * ux - half_w * px) / scale_x
+        };
+        PLFLT poly_y[3] = {
+	  y1,
+	  wy_min + (my1 - head_len_mm * uy + half_w * py) / scale_y,
+	  wy_min + (my1 - head_len_mm * uy - half_w * py) / scale_y
+        };
+        plfill(3, poly_x, poly_y);
+      }
+      if ( (att.asty>>1) & 1 ) { // edge of start point
+        PLFLT poly_x[3] = {
+	  x0,
+	  wx_min + (mx0 + head_len_mm * ux + half_w * px) / scale_x,
+	  wx_min + (mx0 + head_len_mm * ux - half_w * px) / scale_x
+        };
+        PLFLT poly_y[3] = {
+	  y0,
+	  wy_min + (my0 + head_len_mm * uy + half_w * py) / scale_y,
+	  wy_min + (my0 + head_len_mm * uy - half_w * py) / scale_y
+        };
+        plfill(3, poly_x, poly_y);
+      }
+    }
     void draw_line(PLFLT x0, PLFLT x1, PLFLT y0, PLFLT y1, bool rc=0) {
       plwidth(att.lwid);
       plcol0(att.lcol);
       pllsty(att.lsty);
+
       if(rc) {
 	relative_to_absolute(&x0,&y0);
 	relative_to_absolute(&x1,&y1);
@@ -660,11 +716,15 @@ namespace thl {
 	if(att.logy) {y0=log10(y0); y1=log10(y1);}
       }
       pljoin(x0, y0, x1, y1);
-      double dx=x1-x0, dy=y1-y0;
-      plschr(0,1.0+0.5*(att.lwid-1));
-      if((att.asty>>0)&1) plptex(x1, y1, dx, dy, 1, ">");
-      if((att.asty>>1)&1) plptex(x0, y0, dx, dy, 0, "<");
-      plschr(0,1);
+
+      if(att.asty) draw_filled_arrow_edge(x0, y0,  x1,  y1);
+
+      //-- obsolete method to draw arrow edge
+      //      double dx=x1-x0, dy=y1-y0;
+      //      plschr(0,1.0+0.5*(att.lwid-1));
+      //      if((att.asty>>0)&1) plptex(x1, y1, dx, dy, 1, ">");
+      //      if((att.asty>>1)&1) plptex(x0, y0, dx, dy, 0, "<");
+      //      plschr(0,1);
     }
     void draw_square(PLFLT x0, PLFLT x1, PLFLT y0, PLFLT y1, bool rc=0) {
       draw_line(x0,x0,y0,y1,rc);
