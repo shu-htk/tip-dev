@@ -659,9 +659,7 @@ namespace thl {
 	if(att.logx) {x0=log10(x0); x1=log10(x1);}
 	if(att.logy) {y0=log10(y0); y1=log10(y1);}
       }
-      PLFLT x[2] = {x0,x1};
-      PLFLT y[2] = {y0,y1};
-      plline(2,x,y);
+      pljoin(x0, y0, x1, y1);
       double dx=x1-x0, dy=y1-y0;
       plschr(0,1.0+0.5*(att.lwid-1));
       if((att.asty>>0)&1) plptex(x1, y1, dx, dy, 1, ">");
